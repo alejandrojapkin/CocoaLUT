@@ -63,6 +63,10 @@
     return [LUT LUTWithLattice:lattice];
 }
 
+- (id)copyWithZone:(NSZone *)zone {
+    return [LUT LUTWithLattice:[self.lattice copyWithZone:zone]];
+}
+
 - (CIFilter *)coreImageFilter {
     
     if (_coreImageFilter)

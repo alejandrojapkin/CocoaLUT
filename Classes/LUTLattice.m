@@ -22,6 +22,12 @@
     return self;
 }
 
+- (id)copyWithZone:(NSZone *)zone {
+    LUTLattice *lattice = [[LUTLattice alloc] initWithSize:self.size];
+    lattice.latticeArray = [self.latticeArray copy];
+    return lattice;
+}
+
 - (NSMutableArray *)blankLatticeOfSize:(NSUInteger)size {
     NSMutableArray *blankArray = [NSMutableArray arrayWithCapacity:_size];
     for (int i = 0; i < _size; i++) {

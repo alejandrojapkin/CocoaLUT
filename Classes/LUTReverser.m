@@ -18,12 +18,6 @@ double remapint01(int value, int maxValue) {
 
 @implementation LUTReverser
 
-+ (instancetype)reverserForLUT:(LUT *)lut {
-    LUTReverser *r = [[self alloc] init];
-    r.lut = lut;
-    return r;
-}
-
 - (void)buildSearchTreeWithSize:(NSUInteger)newSize {
     NSLog(@"Building input array...");
     self.progressDescription = @"Building input array...";
@@ -68,7 +62,7 @@ double remapint01(int value, int maxValue) {
     self.progress = 0.66;
 }
 
-- (void)reverseLUTWithCompletionHandler:(void(^)(LUT *reversedLUT))completionHandler {
+- (void)process {
     
     NSUInteger outputSize = self.lut.lattice.size;
     
@@ -103,10 +97,7 @@ double remapint01(int value, int maxValue) {
         
         NSLog(@"LUT built in: %f s", -[startTime2 timeIntervalSinceNow]);
         
-        LUT *newLUT = [LUT LUTWithLattice:newLattice];
-        dispatch_async(dispatch_get_main_queue(), ^{
-            completionHandler(newLUT);
-        });
+        [self completedWithLUT:[LUT LUTWithLattice:newLattice]];
 
     }];
     

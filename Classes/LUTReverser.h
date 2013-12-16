@@ -7,16 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "LUT.h"
 #import "KDTree.h"
+#import "LUTProcessor.h"
 
-@interface LUTReverser : NSObject
-
-@property (strong) LUT *lut;
-@property (strong) NSString *progressDescription;
-@property (assign) float progress;
-
-+ (instancetype)reverserForLUT:(LUT *)lut;
-- (void)reverseLUTWithCompletionHandler:(void(^)(LUT *reversedLUT))completionHandler;
+@interface LUTReverser : LUTProcessor
 
 @end
