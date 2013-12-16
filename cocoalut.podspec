@@ -12,7 +12,7 @@ Pod::Spec.new do |s|
   s.screenshots  = "www.example.com/screenshots_1", "www.example.com/screenshots_2"
   s.license      = 'MIT'
   s.author       = { "Wil Gieseler" => "wil@wilgieseler.com" }
-  s.source       = { :git => "https://github.com/wilg/CocoaLUT.git", :tag => s.version.to_s }
+  s.source       = { :git => "http://github.com/wilg/CocoaLUT.git", :tag => s.version.to_s }
 
   # s.platform     = :ios, '5.0'
   # s.ios.deployment_target = '5.0'
