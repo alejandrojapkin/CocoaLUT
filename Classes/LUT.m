@@ -8,6 +8,11 @@
 
 #import "LUT.h"
 
+@interface LUT () {
+    CIFilter *_coreImageFilter;
+}
+@end
+
 @implementation LUT
 
 + (LUT *)LUTWithLattice:(LUTLattice *)lattice {
@@ -41,6 +46,9 @@
 
 - (CIFilter *)coreImageFilter {
     
+    if (_coreImageFilter)
+        return _coreImageFilter;
+    
     NSUInteger size = self.lattice.size;
     size_t cubeDataSize = size * size * size * sizeof ( float ) * 4;
     float *cubeData = (float *) malloc ( cubeDataSize );
@@ -66,8 +74,26 @@
     CIFilter *colorCube = [CIFilter filterWithName:@"CIColorCube"];
     [colorCube setValue:@(size) forKey:@"inputCubeDimension"];
     [colorCube setValue:data forKey:@"inputCubeData"];
+    
+    _coreImageFilter = colorCube;
 
-    return colorCube;
+    return _coreImageFilter;
+}
+
+- (CIImage *)processCIImage:(CIImage *)image {
+    CIFilter *filter = [self coreImageFilter];
+    [filter setValue:image forKey:@"inputImage"];
+    return [filter valueForKey:@"outputImage"];
+}
+
+- (NSImage *)processNSImage:(NSImage *)image {
+    NSRect rect = NSMakeRect(0, 0, image.size.width, image.size.height);
+    CGImageRef cgImage = [image CGImageForProposedRect:&rect context:[NSGraphicsContext currentContext] hints:nil];
+    CIImage *ciImage = [self processCIImage:[CIImage imageWithCGImage:cgImage]];
+    NSCIImageRep *rep = [NSCIImageRep imageRepWithCIImage:ciImage];
+    NSImage *nsImage = [[NSImage alloc] initWithSize:rep.size];
+    [nsImage addRepresentation:rep];
+    return nsImage;
 }
 
 @end

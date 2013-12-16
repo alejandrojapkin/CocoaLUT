@@ -54,8 +54,6 @@
                 
                 [lattice setColor:color r:redIndex g:greenIndex b:blueIndex];
 
-//                NSLog(@"Set color (%@) for index (%lu) at %lu R %lu G %lu B", color, (unsigned long)currentCubeIndex, redIndex, greenIndex, blueIndex);
-
                 currentCubeIndex++;
             }
         }

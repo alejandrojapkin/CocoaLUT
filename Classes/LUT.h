@@ -19,4 +19,7 @@
 
 - (CIFilter *)coreImageFilter;
 
+- (CIImage *)processCIImage:(CIImage *)image;
+- (NSImage *)processNSImage:(NSImage *)image;
+
 @end
