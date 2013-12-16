@@ -69,9 +69,10 @@
     
     NSUInteger cubeSize = lut.lattice.size;
     
-    [string appendString:[NSString stringWithFormat:@"LUT_3D_SIZE %i", (int)cubeSize]];
+    [string appendString:[NSString stringWithFormat:@"LUT_3D_SIZE %i\n", (int)cubeSize]];
 
-    for (int i = 0; i < (cubeSize ^ 3); i++) {
+    NSUInteger arrayLength = cubeSize * cubeSize * cubeSize;
+    for (int i = 0; i < arrayLength; i++) {
         int redIndex = i % cubeSize;
         int greenIndex = ((i % (cubeSize * cubeSize)) / (cubeSize) );
         int blueIndex = i / (cubeSize * cubeSize);
@@ -80,7 +81,7 @@
 
         [string appendString:[NSString stringWithFormat:@"%.6f %.6f %.6f", color.red, color.green, color.blue]];
 
-        if(i != (cubeSize ^ 3) - 1) {
+        if(i != arrayLength - 1) {
             [string appendString:@"\n"];
         }
 
