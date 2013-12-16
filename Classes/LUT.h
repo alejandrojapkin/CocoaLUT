@@ -16,6 +16,7 @@
 
 + (LUT *)LUTWithLattice:(LUTLattice *)lattice;
 + (LUT *)identityLutOfSize:(NSUInteger)size;
+- (LUT *)LUTByResizingToSize:(NSUInteger)newSize;
 
 - (CIFilter *)coreImageFilter;
 
