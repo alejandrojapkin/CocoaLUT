@@ -7,6 +7,8 @@
 //
 
 #import "LUTFormatterCube.h"
+#import "LUTLattice.h"
+#import "LUT.h"
 
 @implementation LUTFormatterCube
 
