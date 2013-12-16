@@ -1,0 +1,565 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		3BA69148185E82A3007A5A65 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3BA69147185E82A3007A5A65 /* Cocoa.framework */; };
+		3BA69152185E82A3007A5A65 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 3BA69150185E82A3007A5A65 /* InfoPlist.strings */; };
+		3BA69154185E82A3007A5A65 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 3BA69153185E82A3007A5A65 /* main.m */; };
+		3BA69158185E82A3007A5A65 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 3BA69156185E82A3007A5A65 /* Credits.rtf */; };
+		3BA6915E185E82A4007A5A65 /* LUTDocument.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3BA6915C185E82A4007A5A65 /* LUTDocument.xib */; };
+		3BA69161185E82A4007A5A65 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3BA6915F185E82A4007A5A65 /* MainMenu.xib */; };
+		3BA69163185E82A4007A5A65 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3BA69162185E82A4007A5A65 /* Images.xcassets */; };
+		3BA6916A185E82A4007A5A65 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3BA69169185E82A4007A5A65 /* XCTest.framework */; };
+		3BA6916B185E82A4007A5A65 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3BA69147185E82A3007A5A65 /* Cocoa.framework */; };
+		3BA69173185E82A4007A5A65 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 3BA69171185E82A4007A5A65 /* InfoPlist.strings */; };
+		3BA69175185E82A4007A5A65 /* DropLUTTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3BA69174185E82A4007A5A65 /* DropLUTTests.m */; };
+		3BA6918F185E8F01007A5A65 /* LUTDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 3BA6918E185E8F01007A5A65 /* LUTDocument.m */; };
+		3BA69192185E93FA007A5A65 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3BA69191185E93FA007A5A65 /* QuartzCore.framework */; };
+		3BB2F7B1185EAE020097C22F /* testimage.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 3BB2F7B0185EAE020097C22F /* testimage.jpg */; };
+		3BB2F7C4185EAEA10097C22F /* .gitkeep in Resources */ = {isa = PBXBuildFile; fileRef = 3BB2F7B7185EAEA10097C22F /* .gitkeep */; };
+		3BB2F7C5185EAEA10097C22F /* LUT.m in Sources */ = {isa = PBXBuildFile; fileRef = 3BB2F7B9185EAEA10097C22F /* LUT.m */; };
+		3BB2F7C6185EAEA10097C22F /* LUTColor.m in Sources */ = {isa = PBXBuildFile; fileRef = 3BB2F7BB185EAEA10097C22F /* LUTColor.m */; };
+		3BB2F7C7185EAEA10097C22F /* LUTFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 3BB2F7BD185EAEA10097C22F /* LUTFormatter.m */; };
+		3BB2F7C8185EAEA10097C22F /* LUTFormatterCube.m in Sources */ = {isa = PBXBuildFile; fileRef = 3BB2F7BF185EAEA10097C22F /* LUTFormatterCube.m */; };
+		3BB2F7C9185EAEA10097C22F /* LUTLattice.m in Sources */ = {isa = PBXBuildFile; fileRef = 3BB2F7C1185EAEA10097C22F /* LUTLattice.m */; };
+		3BB2F7CA185EAEA10097C22F /* .gitkeep in Resources */ = {isa = PBXBuildFile; fileRef = 3BB2F7C3185EAEA10097C22F /* .gitkeep */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		3BA6916C185E82A4007A5A65 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3BA6913C185E82A3007A5A65 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 3BA69143185E82A3007A5A65;
+			remoteInfo = DropLUT;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		3BA69144185E82A3007A5A65 /* DropLUT.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DropLUT.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		3BA69147185E82A3007A5A65 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
+		3BA6914A185E82A3007A5A65 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
+		3BA6914B185E82A3007A5A65 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		3BA6914C185E82A3007A5A65 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		3BA6914F185E82A3007A5A65 /* DropLUT-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "DropLUT-Info.plist"; sourceTree = "<group>"; };
+		3BA69151185E82A3007A5A65 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		3BA69153185E82A3007A5A65 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		3BA69155185E82A3007A5A65 /* DropLUT-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "DropLUT-Prefix.pch"; sourceTree = "<group>"; };
+		3BA69157185E82A3007A5A65 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = en; path = en.lproj/Credits.rtf; sourceTree = "<group>"; };
+		3BA6915D185E82A4007A5A65 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LUTDocument.xib; sourceTree = "<group>"; };
+		3BA69160185E82A4007A5A65 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		3BA69162185E82A4007A5A65 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		3BA69168185E82A4007A5A65 /* DropLUTTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DropLUTTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		3BA69169185E82A4007A5A65 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
+		3BA69170185E82A4007A5A65 /* DropLUTTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "DropLUTTests-Info.plist"; sourceTree = "<group>"; };
+		3BA69172185E82A4007A5A65 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		3BA69174185E82A4007A5A65 /* DropLUTTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DropLUTTests.m; sourceTree = "<group>"; };
+		3BA6918D185E8F01007A5A65 /* LUTDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LUTDocument.h; sourceTree = "<group>"; };
+		3BA6918E185E8F01007A5A65 /* LUTDocument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LUTDocument.m; sourceTree = "<group>"; };
+		3BA69191185E93FA007A5A65 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		3BB2F7B0185EAE020097C22F /* testimage.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = testimage.jpg; sourceTree = "<group>"; };
+		3BB2F7B7185EAEA10097C22F /* .gitkeep */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .gitkeep; sourceTree = "<group>"; };
+		3BB2F7B8185EAEA10097C22F /* LUT.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LUT.h; sourceTree = "<group>"; };
+		3BB2F7B9185EAEA10097C22F /* LUT.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LUT.m; sourceTree = "<group>"; };
+		3BB2F7BA185EAEA10097C22F /* LUTColor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LUTColor.h; sourceTree = "<group>"; };
+		3BB2F7BB185EAEA10097C22F /* LUTColor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LUTColor.m; sourceTree = "<group>"; };
+		3BB2F7BC185EAEA10097C22F /* LUTFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LUTFormatter.h; sourceTree = "<group>"; };
+		3BB2F7BD185EAEA10097C22F /* LUTFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LUTFormatter.m; sourceTree = "<group>"; };
+		3BB2F7BE185EAEA10097C22F /* LUTFormatterCube.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LUTFormatterCube.h; sourceTree = "<group>"; };
+		3BB2F7BF185EAEA10097C22F /* LUTFormatterCube.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LUTFormatterCube.m; sourceTree = "<group>"; };
+		3BB2F7C0185EAEA10097C22F /* LUTLattice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LUTLattice.h; sourceTree = "<group>"; };
+		3BB2F7C1185EAEA10097C22F /* LUTLattice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LUTLattice.m; sourceTree = "<group>"; };
+		3BB2F7C3185EAEA10097C22F /* .gitkeep */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .gitkeep; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		3BA69141185E82A3007A5A65 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3BA69192185E93FA007A5A65 /* QuartzCore.framework in Frameworks */,
+				3BA69148185E82A3007A5A65 /* Cocoa.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3BA69165185E82A4007A5A65 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3BA6916B185E82A4007A5A65 /* Cocoa.framework in Frameworks */,
+				3BA6916A185E82A4007A5A65 /* XCTest.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		3BA6913B185E82A3007A5A65 = {
+			isa = PBXGroup;
+			children = (
+				3BB2F7B5185EAEA10097C22F /* Classes */,
+				3BA6914D185E82A3007A5A65 /* DropLUT */,
+				3BA6916E185E82A4007A5A65 /* DropLUTTests */,
+				3BA69146185E82A3007A5A65 /* Frameworks */,
+				3BA69145185E82A3007A5A65 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		3BA69145185E82A3007A5A65 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				3BA69144185E82A3007A5A65 /* DropLUT.app */,
+				3BA69168185E82A4007A5A65 /* DropLUTTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		3BA69146185E82A3007A5A65 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				3BA69191185E93FA007A5A65 /* QuartzCore.framework */,
+				3BA69147185E82A3007A5A65 /* Cocoa.framework */,
+				3BA69169185E82A4007A5A65 /* XCTest.framework */,
+				3BA69149185E82A3007A5A65 /* Other Frameworks */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		3BA69149185E82A3007A5A65 /* Other Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				3BA6914A185E82A3007A5A65 /* AppKit.framework */,
+				3BA6914B185E82A3007A5A65 /* CoreData.framework */,
+				3BA6914C185E82A3007A5A65 /* Foundation.framework */,
+			);
+			name = "Other Frameworks";
+			sourceTree = "<group>";
+		};
+		3BA6914D185E82A3007A5A65 /* DropLUT */ = {
+			isa = PBXGroup;
+			children = (
+				3BB2F7B0185EAE020097C22F /* testimage.jpg */,
+				3BA6918D185E8F01007A5A65 /* LUTDocument.h */,
+				3BA6918E185E8F01007A5A65 /* LUTDocument.m */,
+				3BA6915C185E82A4007A5A65 /* LUTDocument.xib */,
+				3BA6915F185E82A4007A5A65 /* MainMenu.xib */,
+				3BA69162185E82A4007A5A65 /* Images.xcassets */,
+				3BA6914E185E82A3007A5A65 /* Supporting Files */,
+			);
+			path = DropLUT;
+			sourceTree = "<group>";
+		};
+		3BA6914E185E82A3007A5A65 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				3BA6914F185E82A3007A5A65 /* DropLUT-Info.plist */,
+				3BA69150185E82A3007A5A65 /* InfoPlist.strings */,
+				3BA69153185E82A3007A5A65 /* main.m */,
+				3BA69155185E82A3007A5A65 /* DropLUT-Prefix.pch */,
+				3BA69156185E82A3007A5A65 /* Credits.rtf */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		3BA6916E185E82A4007A5A65 /* DropLUTTests */ = {
+			isa = PBXGroup;
+			children = (
+				3BA69174185E82A4007A5A65 /* DropLUTTests.m */,
+				3BA6916F185E82A4007A5A65 /* Supporting Files */,
+			);
+			path = DropLUTTests;
+			sourceTree = "<group>";
+		};
+		3BA6916F185E82A4007A5A65 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				3BA69170185E82A4007A5A65 /* DropLUTTests-Info.plist */,
+				3BA69171185E82A4007A5A65 /* InfoPlist.strings */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		3BB2F7B5185EAEA10097C22F /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				3BB2F7B6185EAEA10097C22F /* ios */,
+				3BB2F7B8185EAEA10097C22F /* LUT.h */,
+				3BB2F7B9185EAEA10097C22F /* LUT.m */,
+				3BB2F7BA185EAEA10097C22F /* LUTColor.h */,
+				3BB2F7BB185EAEA10097C22F /* LUTColor.m */,
+				3BB2F7BC185EAEA10097C22F /* LUTFormatter.h */,
+				3BB2F7BD185EAEA10097C22F /* LUTFormatter.m */,
+				3BB2F7BE185EAEA10097C22F /* LUTFormatterCube.h */,
+				3BB2F7BF185EAEA10097C22F /* LUTFormatterCube.m */,
+				3BB2F7C0185EAEA10097C22F /* LUTLattice.h */,
+				3BB2F7C1185EAEA10097C22F /* LUTLattice.m */,
+				3BB2F7C2185EAEA10097C22F /* osx */,
+			);
+			name = Classes;
+			path = ../Classes;
+			sourceTree = "<group>";
+		};
+		3BB2F7B6185EAEA10097C22F /* ios */ = {
+			isa = PBXGroup;
+			children = (
+				3BB2F7B7185EAEA10097C22F /* .gitkeep */,
+			);
+			path = ios;
+			sourceTree = "<group>";
+		};
+		3BB2F7C2185EAEA10097C22F /* osx */ = {
+			isa = PBXGroup;
+			children = (
+				3BB2F7C3185EAEA10097C22F /* .gitkeep */,
+			);
+			path = osx;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		3BA69143185E82A3007A5A65 /* DropLUT */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3BA69178185E82A4007A5A65 /* Build configuration list for PBXNativeTarget "DropLUT" */;
+			buildPhases = (
+				3BA69140185E82A3007A5A65 /* Sources */,
+				3BA69141185E82A3007A5A65 /* Frameworks */,
+				3BA69142185E82A3007A5A65 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = DropLUT;
+			productName = DropLUT;
+			productReference = 3BA69144185E82A3007A5A65 /* DropLUT.app */;
+			productType = "com.apple.product-type.application";
+		};
+		3BA69167185E82A4007A5A65 /* DropLUTTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3BA6917B185E82A4007A5A65 /* Build configuration list for PBXNativeTarget "DropLUTTests" */;
+			buildPhases = (
+				3BA69164185E82A4007A5A65 /* Sources */,
+				3BA69165185E82A4007A5A65 /* Frameworks */,
+				3BA69166185E82A4007A5A65 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				3BA6916D185E82A4007A5A65 /* PBXTargetDependency */,
+			);
+			name = DropLUTTests;
+			productName = DropLUTTests;
+			productReference = 3BA69168185E82A4007A5A65 /* DropLUTTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		3BA6913C185E82A3007A5A65 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				CLASSPREFIX = DL;
+				LastUpgradeCheck = 0500;
+				ORGANIZATIONNAME = "Wil Gieseler";
+				TargetAttributes = {
+					3BA69167185E82A4007A5A65 = {
+						TestTargetID = 3BA69143185E82A3007A5A65;
+					};
+				};
+			};
+			buildConfigurationList = 3BA6913F185E82A3007A5A65 /* Build configuration list for PBXProject "DropLUT" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 3BA6913B185E82A3007A5A65;
+			productRefGroup = 3BA69145185E82A3007A5A65 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				3BA69143185E82A3007A5A65 /* DropLUT */,
+				3BA69167185E82A4007A5A65 /* DropLUTTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		3BA69142185E82A3007A5A65 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3BA69152185E82A3007A5A65 /* InfoPlist.strings in Resources */,
+				3BA69163185E82A4007A5A65 /* Images.xcassets in Resources */,
+				3BA6915E185E82A4007A5A65 /* LUTDocument.xib in Resources */,
+				3BA69158185E82A3007A5A65 /* Credits.rtf in Resources */,
+				3BA69161185E82A4007A5A65 /* MainMenu.xib in Resources */,
+				3BB2F7B1185EAE020097C22F /* testimage.jpg in Resources */,
+				3BB2F7C4185EAEA10097C22F /* .gitkeep in Resources */,
+				3BB2F7CA185EAEA10097C22F /* .gitkeep in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3BA69166185E82A4007A5A65 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3BA69173185E82A4007A5A65 /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		3BA69140185E82A3007A5A65 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3BB2F7C5185EAEA10097C22F /* LUT.m in Sources */,
+				3BB2F7C7185EAEA10097C22F /* LUTFormatter.m in Sources */,
+				3BB2F7C6185EAEA10097C22F /* LUTColor.m in Sources */,
+				3BA6918F185E8F01007A5A65 /* LUTDocument.m in Sources */,
+				3BA69154185E82A3007A5A65 /* main.m in Sources */,
+				3BB2F7C8185EAEA10097C22F /* LUTFormatterCube.m in Sources */,
+				3BB2F7C9185EAEA10097C22F /* LUTLattice.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3BA69164185E82A4007A5A65 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3BA69175185E82A4007A5A65 /* DropLUTTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		3BA6916D185E82A4007A5A65 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 3BA69143185E82A3007A5A65 /* DropLUT */;
+			targetProxy = 3BA6916C185E82A4007A5A65 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		3BA69150185E82A3007A5A65 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				3BA69151185E82A3007A5A65 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		3BA69156185E82A3007A5A65 /* Credits.rtf */ = {
+			isa = PBXVariantGroup;
+			children = (
+				3BA69157185E82A3007A5A65 /* en */,
+			);
+			name = Credits.rtf;
+			sourceTree = "<group>";
+		};
+		3BA6915C185E82A4007A5A65 /* LUTDocument.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				3BA6915D185E82A4007A5A65 /* Base */,
+			);
+			name = LUTDocument.xib;
+			sourceTree = "<group>";
+		};
+		3BA6915F185E82A4007A5A65 /* MainMenu.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				3BA69160185E82A4007A5A65 /* Base */,
+			);
+			name = MainMenu.xib;
+			sourceTree = "<group>";
+		};
+		3BA69171185E82A4007A5A65 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				3BA69172185E82A4007A5A65 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		3BA69176185E82A4007A5A65 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		3BA69177185E82A4007A5A65 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		3BA69179185E82A4007A5A65 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "DropLUT/DropLUT-Prefix.pch";
+				INFOPLIST_FILE = "DropLUT/DropLUT-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		3BA6917A185E82A4007A5A65 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "DropLUT/DropLUT-Prefix.pch";
+				INFOPLIST_FILE = "DropLUT/DropLUT-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+		3BA6917C185E82A4007A5A65 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/DropLUT.app/Contents/MacOS/DropLUT";
+				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+					"$(inherited)",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "DropLUT/DropLUT-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = "DropLUTTests/DropLUTTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = xctest;
+			};
+			name = Debug;
+		};
+		3BA6917D185E82A4007A5A65 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/DropLUT.app/Contents/MacOS/DropLUT";
+				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+					"$(inherited)",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "DropLUT/DropLUT-Prefix.pch";
+				INFOPLIST_FILE = "DropLUTTests/DropLUTTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = xctest;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		3BA6913F185E82A3007A5A65 /* Build configuration list for PBXProject "DropLUT" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3BA69176185E82A4007A5A65 /* Debug */,
+				3BA69177185E82A4007A5A65 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		3BA69178185E82A4007A5A65 /* Build configuration list for PBXNativeTarget "DropLUT" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3BA69179185E82A4007A5A65 /* Debug */,
+				3BA6917A185E82A4007A5A65 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		3BA6917B185E82A4007A5A65 /* Build configuration list for PBXNativeTarget "DropLUTTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3BA6917C185E82A4007A5A65 /* Debug */,
+				3BA6917D185E82A4007A5A65 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 3BA6913C185E82A3007A5A65 /* Project object */;
+}

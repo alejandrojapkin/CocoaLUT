@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workspace
+   version = "1.0">
+   <FileRef
+      location = "group:DropLUT/DropLUT.xcodeproj">
+   </FileRef>
+   <Group
+      location = "group:Classes"
+      name = "Classes">
+      <Group
+         location = "group:ios"
+         name = "ios">
+      </Group>
+      <FileRef
+         location = "group:LUT.h">
+      </FileRef>
+      <FileRef
+         location = "group:LUT.m">
+      </FileRef>
+      <FileRef
+         location = "group:LUTColor.h">
+      </FileRef>
+      <FileRef
+         location = "group:LUTColor.m">
+      </FileRef>
+      <FileRef
+         location = "group:LUTFormatter.h">
+      </FileRef>
+      <FileRef
+         location = "group:LUTFormatter.m">
+      </FileRef>
+      <FileRef
+         location = "group:LUTFormatterCube.h">
+      </FileRef>
+      <FileRef
+         location = "group:LUTFormatterCube.m">
+      </FileRef>
+      <FileRef
+         location = "group:LUTLattice.h">
+      </FileRef>
+      <FileRef
+         location = "group:LUTLattice.m">
+      </FileRef>
+      <Group
+         location = "group:osx"
+         name = "osx">
+      </Group>
+   </Group>
+</Workspace>
