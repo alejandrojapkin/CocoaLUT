@@ -1,4 +1,4 @@
-pod "cocoalut", :path => "../"
+pod "CocoaLUT", :path => "../"
 
 target "Demo" do
 end

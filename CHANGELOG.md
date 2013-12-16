@@ -1,4 +1,4 @@
-# cocoalut CHANGELOG
+# CocoaLUT CHANGELOG
 
 ## 0.1.0
 
