@@ -34,8 +34,10 @@ double remapint01(int value, int maxValue) {
     for (int r = 0; r < newSize; r++) {
         for (int g = 0; g < newSize; g++) {
             for (int b = 0; b < newSize; b++) {
-                LUTColor *color = [self.lut.lattice colorAtInterpolatedR:r * ratio g:g * ratio b:b * ratio];
-                [array addObject:@[@(remapint01(r, maxValue)), @(remapint01(g, maxValue)), @(remapint01(b, maxValue)), color]];
+                LUTColor *reverseColor = [self.lut.lattice colorAtInterpolatedR:remapint01(r, maxValue)
+                                                                              g:remapint01(g, maxValue)
+                                                                              b:remapint01(b, maxValue)];
+                [array addObject:@[@(r * ratio), @(g * ratio), @(b * ratio), reverseColor]];
             }
         }
     }
