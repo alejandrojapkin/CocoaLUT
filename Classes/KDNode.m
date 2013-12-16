@@ -16,39 +16,41 @@
 # pragma mark Initialize
 
 -(id)initWithArray:(NSArray*)array withDimensions:(NSUInteger)dimensions andWithCurrentDimension:(NSUInteger)currentDimension {
-    //Check to make sure we stay within the coordinate dimensions
-    if (currentDimension >= dimensions) {
-        currentDimension = 0;
-    }
-    dimension = currentDimension;
-    
-    //Sort the array along the current dimension and find the center point
-    array = [self sortArray:array inDimension:currentDimension];
-    int centerPoint = [self findCenter:array inDimension:currentDimension];
-    
-    
-    //Set the mean value for this node
-    splitPoint = [self findMean:array inLayer:currentDimension];
-    
-    //create children till we reach the end of the array (i.e. the array only holds one or two objects).
-    if ([array count] > 2) {
-        //Move to the next dimension
-        currentDimension++;
+    if (self = [super init]) {
+        //Check to make sure we stay within the coordinate dimensions
+        if (currentDimension >= dimensions) {
+            currentDimension = 0;
+        }
+        dimension = currentDimension;
         
-        //Split off a left array and star building nodes on it.
-        NSRange leftRange = NSMakeRange(0, centerPoint);
-        NSArray *leftArray = [array subarrayWithRange: leftRange];
-        left = [[KDNode alloc] initWithArray:leftArray withDimensions:dimensions andWithCurrentDimension:currentDimension];
+        //Sort the array along the current dimension and find the center point
+        array = [self sortArray:array inDimension:currentDimension];
+        int centerPoint = [self findCenter:array inDimension:currentDimension];
         
-        NSUInteger offsetLength = [array count] - centerPoint;
-        //Split off the right array and start building nodes on it.
-        NSRange rightRange = NSMakeRange(centerPoint, offsetLength);
-        NSArray *rightArray = [array subarrayWithRange: rightRange];
-        right = [[KDNode alloc] initWithArray:rightArray withDimensions:dimensions andWithCurrentDimension:currentDimension];
-    } else {
-        leftLeaf = [[KDLeaf alloc] initWithArray:[array objectAtIndex:0]];
-        if ([array count] > 1) {
-            rightLeaf = [[KDLeaf alloc] initWithArray:[array objectAtIndex:1]];
+        
+        //Set the mean value for this node
+        splitPoint = [self findMean:array inLayer:currentDimension];
+        
+        //create children till we reach the end of the array (i.e. the array only holds one or two objects).
+        if ([array count] > 2) {
+            //Move to the next dimension
+            currentDimension++;
+            
+            //Split off a left array and star building nodes on it.
+            NSRange leftRange = NSMakeRange(0, centerPoint);
+            NSArray *leftArray = [array subarrayWithRange: leftRange];
+            left = [[KDNode alloc] initWithArray:leftArray withDimensions:dimensions andWithCurrentDimension:currentDimension];
+            
+            NSUInteger offsetLength = [array count] - centerPoint;
+            //Split off the right array and start building nodes on it.
+            NSRange rightRange = NSMakeRange(centerPoint, offsetLength);
+            NSArray *rightArray = [array subarrayWithRange: rightRange];
+            right = [[KDNode alloc] initWithArray:rightArray withDimensions:dimensions andWithCurrentDimension:currentDimension];
+        } else {
+            leftLeaf = [[KDLeaf alloc] initWithArray:[array objectAtIndex:0]];
+            if ([array count] > 1) {
+                rightLeaf = [[KDLeaf alloc] initWithArray:[array objectAtIndex:1]];
+            }
         }
     }
     return self;

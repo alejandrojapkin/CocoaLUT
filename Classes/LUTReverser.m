@@ -25,58 +25,96 @@ double remapint01(int value, int maxValue) {
 }
 
 - (void)buildSearchTreeWithSize:(NSUInteger)newSize {
+    NSLog(@"Building input array...");
+    self.progressDescription = @"Building input array...";
+    NSDate *startTime = [NSDate date];
+
     NSMutableArray *array = [NSMutableArray arrayWithCapacity:pow(newSize, 3)];
     
     double ratio = ((double)self.lut.lattice.size - 1.0) / ((float)newSize - 1.0);
     
     int maxValue = (int)newSize - 1;
     
-    for (int r = 0; r < newSize; r++) {
+    
+    NSLock *arrayLock = [[NSLock alloc] init];
+    
+    int __block completedRs = 0;
+    
+    dispatch_apply(newSize, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0) , ^(size_t r){
+        NSMutableArray *thisArray = [NSMutableArray array];
         for (int g = 0; g < newSize; g++) {
             for (int b = 0; b < newSize; b++) {
-                LUTColor *reverseColor = [self.lut.lattice colorAtInterpolatedR:remapint01(r, maxValue)
+                LUTColor *reverseColor = [self.lut.lattice colorAtInterpolatedR:remapint01((int)r, maxValue)
                                                                               g:remapint01(g, maxValue)
                                                                               b:remapint01(b, maxValue)];
-                [array addObject:@[@(r * ratio), @(g * ratio), @(b * ratio), reverseColor]];
+                [thisArray addObject:@[@(r * ratio), @(g * ratio), @(b * ratio), reverseColor]];
             }
         }
-    }
+        [arrayLock lock];
+        [array addObjectsFromArray: thisArray];
+        [arrayLock unlock];
+        completedRs++;
+        self.progress = (float)completedRs / (float)newSize * 0.33;
+    });
     
+    NSLog(@"array built in: %f s", -[startTime timeIntervalSinceNow]);
+
+    NSLog(@"Building search tree...");
+    self.progressDescription = @"Building search tree...";
+    NSDate *startTime2 = [NSDate date];
+
     self.kdTree = [[KDTree alloc] initWithArray:array];
+    NSLog(@"Tree built in: %f s", -[startTime2 timeIntervalSinceNow]);
+    self.progress = 0.66;
 }
 
-- (LUT *)reversedLUT {
+- (void)reverseLUTWithCompletionHandler:(void(^)(LUT *reversedLUT))completionHandler {
     
     NSUInteger outputSize = self.lut.lattice.size;
     
-    NSLog(@"Building search tree...");
-    NSDate *startTime = [NSDate date];
-    
-    [self buildSearchTreeWithSize:outputSize * 3];
-    
-    NSLog(@"Tree built in: %f s", -[startTime timeIntervalSinceNow]);
+    NSOperationQueue* operationQueue = [[NSOperationQueue alloc] init];
 
-    NSLog(@"Building LUT from tree...");
-    NSDate *startTime2 = [NSDate date];
+    NSBlockOperation *buildOperation = [NSBlockOperation blockOperationWithBlock:^{
+        [self buildSearchTreeWithSize:outputSize * 3];
+    }];
     
-    LUTLattice *newLattice = [[LUTLattice alloc] initWithSize:outputSize];
-    
-    int maxValue = (int)outputSize - 1;
-    
-    for (int r = 0; r < outputSize; r++) {
-        for (int g = 0; g < outputSize; g++) {
-            for (int b = 0; b < outputSize; b++) {
-                KDLeaf *leaf = [self.kdTree findNearestNeighbor:@[@(remapint01(r, maxValue)),
-                                                                  @(remapint01(g, maxValue)),
-                                                                  @(remapint01(b, maxValue))]];
-                [newLattice setColor:leaf.metadata r:r g:g b:b];
+
+    NSBlockOperation *findOperation = [NSBlockOperation blockOperationWithBlock:^{
+        
+        NSLog(@"Building LUT from tree...");
+        self.progressDescription = @"Building LUT...";
+        NSDate *startTime2 = [NSDate date];
+        
+        LUTLattice *newLattice = [[LUTLattice alloc] initWithSize:outputSize];
+        
+        int maxValue = (int)outputSize - 1;
+        
+        for (int r = 0; r < outputSize; r++) {
+            for (int g = 0; g < outputSize; g++) {
+                for (int b = 0; b < outputSize; b++) {
+                    KDLeaf *leaf = [self.kdTree findNearestNeighbor:@[@(remapint01(r, maxValue)),
+                                                                      @(remapint01(g, maxValue)),
+                                                                      @(remapint01(b, maxValue))]];
+                    [newLattice setColor:leaf.metadata r:r g:g b:b];
+                }
             }
+            self.progress = (float)r / (float)outputSize * 0.33 + 0.66;
         }
-    }
-    
-    NSLog(@"LUT built in: %f s", -[startTime2 timeIntervalSinceNow]);
+        
+        NSLog(@"LUT built in: %f s", -[startTime2 timeIntervalSinceNow]);
+        
+        LUT *newLUT = [LUT LUTWithLattice:newLattice];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            completionHandler(newLUT);
+        });
 
-    return [LUT LUTWithLattice:newLattice];
+    }];
+    
+    [findOperation addDependency:buildOperation];
+    
+    [operationQueue addOperation:buildOperation];
+    [operationQueue addOperation:findOperation];
+
 }
 
 @end

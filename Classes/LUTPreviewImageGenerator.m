@@ -52,7 +52,9 @@
     
     CGContextDrawImage(context, rect, maskedImage);
     
-    
+    CGImageRelease(imageMask);
+    CGImageRelease(maskedImage);
+
     CGContextSetLineWidth(context, 2.0f);
     CGContextMoveToPoint(context, 0, 0);
     CGContextAddLineToPoint(context, baseImage.size.width, baseImage.size.height);

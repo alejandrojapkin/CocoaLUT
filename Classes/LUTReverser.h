@@ -13,8 +13,10 @@
 @interface LUTReverser : NSObject
 
 @property (strong) LUT *lut;
+@property (strong) NSString *progressDescription;
+@property (assign) float progress;
 
 + (instancetype)reverserForLUT:(LUT *)lut;
-- (LUT *)reversedLUT;
+- (void)reverseLUTWithCompletionHandler:(void(^)(LUT *reversedLUT))completionHandler;
 
 @end

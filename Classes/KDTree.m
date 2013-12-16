@@ -15,7 +15,9 @@
 # pragma mark Initialize
 
 -(id)initWithArray:(NSArray*)array {
-    root = [[KDNode alloc] initWithArray:array];
+    if (self = [super init]) {
+        root = [[KDNode alloc] initWithArray:array];
+    }
     return self;
 }
 
