@@ -16,4 +16,7 @@
 + (LUT *)LUTFromString:(NSString *)string;
 + (LUT *)LUTFromLines:(NSArray *)lines;
 
++ (NSData *)dataFromLUT:(LUT *)lut;
++ (NSString *)stringFromLUT:(LUT *)lut;
+
 @end

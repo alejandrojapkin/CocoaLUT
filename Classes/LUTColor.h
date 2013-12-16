@@ -18,4 +18,6 @@ typedef double LUTColorValue;
 
 + (LUTColor *)colorWithRed:(LUTColorValue)r green:(LUTColorValue)g blue:(LUTColorValue)b;
 
+- (LUTColor *)clampedO1;
+
 @end

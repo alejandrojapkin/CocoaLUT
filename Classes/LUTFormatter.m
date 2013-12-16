@@ -29,4 +29,13 @@
     return nil;
 }
 
++ (NSData *)dataFromLUT:(LUT *)lut {
+    return [[self stringFromLUT:lut] dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES];
+}
+
++ (NSString *)stringFromLUT:(LUT *)lut {
+    return nil;
+}
+
+
 @end
