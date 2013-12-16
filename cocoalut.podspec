@@ -5,20 +5,14 @@
 # To learn more about the attributes see http://docs.cocoapods.org/specification.html
 #
 Pod::Spec.new do |s|
-  s.name         = "cocoalut"
-  s.version      = "0.1.0"
-  s.summary      = "A short description of cocoalut."
-  s.description  = <<-DESC
-                    An optional longer description of cocoalut
-
-                    * Markdown format.
-                    * Don't worry about the indent, we strip it!
-                   DESC
-  s.homepage     = "http://EXAMPLE/NAME"
+  s.name         = "CocoaLUT"
+  s.version      = "0.0.1"
+  s.summary      = "LUT (3D lookup tables) for Cocoa applications."
+  s.homepage     = "http://github.com/wilg/CocoaLUT"
   s.screenshots  = "www.example.com/screenshots_1", "www.example.com/screenshots_2"
   s.license      = 'MIT'
   s.author       = { "Wil Gieseler" => "wil@wilgieseler.com" }
-  s.source       = { :git => "http://EXAMPLE/NAME.git", :tag => s.version.to_s }
+  s.source       = { :git => "http://github.com/wilg/CocoaLUT.git", :tag => s.version.to_s }
 
   # s.platform     = :ios, '5.0'
   # s.ios.deployment_target = '5.0'
