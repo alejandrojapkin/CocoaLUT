@@ -16,6 +16,7 @@
 
 @property (strong) LUTLattice *lattice;
 
++ (LUT *)LUTFromURL:(NSURL *)url;
 + (LUT *)LUTWithLattice:(LUTLattice *)lattice;
 + (LUT *)identityLutOfSize:(NSUInteger)size;
 - (LUT *)LUTByResizingToSize:(NSUInteger)newSize;

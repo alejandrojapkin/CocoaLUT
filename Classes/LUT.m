@@ -8,6 +8,8 @@
 
 #import "LUT.h"
 #import "CocoaLUT.h"
+#import "LUTFormatterCube.h"
+#import "LUTFormatter3DL.h"
 
 @interface LUT () {
     CIFilter *_coreImageFilter;
@@ -15,6 +17,16 @@
 @end
 
 @implementation LUT
+
++ (LUT *)LUTFromURL:(NSURL *)url {
+    if ([url.pathExtension.lowercaseString isEqualToString:@"cube"]){
+        return [LUTFormatterCube LUTFromFile:url];
+    }
+    else if ([url.pathExtension.lowercaseString isEqualToString:@"3dl"]) {
+        return [LUTFormatter3DL LUTFromFile:url];
+    }
+    return nil;
+}
 
 + (LUT *)LUTWithLattice:(LUTLattice *)lattice {
     LUT *lut = [[LUT alloc] init];
