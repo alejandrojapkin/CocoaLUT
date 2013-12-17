@@ -11,6 +11,8 @@
 @interface LUTReverser ()
 @property (strong) KDTree *kdTree;
 @property (strong) NSArray *inputArray;
+@property (assign) BOOL useTree;
+@property (assign) NSUInteger outputSize;
 @end
 
 float distancecalc(float x1, float y1, float z1, float x2, float y2, float z2) {
@@ -20,19 +22,72 @@ float distancecalc(float x1, float y1, float z1, float x2, float y2, float z2) {
     return sqrt((float)(dx * dx + dy * dy + dz * dz));
 }
 
+void timer(NSString* name, void (^block)()) {
+    NSLog(@"Starting %@", name);
+    NSDate *startTime = [NSDate date];
+    block();
+    NSLog(@"%@ finished in %fs", name, -[startTime timeIntervalSinceNow]);
+}
+
+
 @implementation LUTReverser
 
+- (void)process {
+    NSOperationQueue* operationQueue = [[NSOperationQueue alloc] init];
+
+    self.useTree = YES;
+    
+    self.outputSize = self.lut.lattice.size;
+    
+    // RESIZE LUT
+    NSBlockOperation *resizeOperation = [NSBlockOperation blockOperationWithBlock:^{
+        timer(@"Enlarging", ^{
+            self.progressDescription = @"Enlarging LUT...";
+            self.lut = [self.lut LUTByResizingToSize:self.outputSize * 3];
+        });
+    }];
+
+    // BUILD INPUT LUT
+    NSBlockOperation *buildOperation = [NSBlockOperation blockOperationWithBlock:^{
+        timer(@"Building Array", ^{
+            self.progressDescription = @"Building input array...";
+            [self buildInputArray:self.outputSize * 3];
+        });
+    }];
+    [buildOperation addDependency:resizeOperation];
+    
+    // FIND OUTPUTS
+    NSBlockOperation *findOperation = [NSBlockOperation blockOperationWithBlock:^{
+        timer(@"Searching", ^{
+            self.progressDescription = @"Searching and building new LUT...";
+            [self search];
+        });
+    }];
+    [findOperation addDependency:buildOperation];
+
+    // BUILD KD TREE IF NECCESSARY
+    if (self.useTree) {
+        NSBlockOperation *buildTreeOperation = [NSBlockOperation blockOperationWithBlock:^{
+            timer(@"Build Tree", ^{
+                self.kdTree = [[KDTree alloc] initWithArray:self.inputArray];
+                self.progressDescription = @"Building search tree...";
+                self.progress = 0.66;
+            });
+        }];
+        [buildTreeOperation addDependency:buildOperation];
+        [findOperation addDependency:buildTreeOperation];
+        [operationQueue addOperation:buildTreeOperation];
+    }
+    
+    [operationQueue addOperation:resizeOperation];
+    [operationQueue addOperation:findOperation];
+    [operationQueue addOperation:buildOperation];
+    
+}
+
 - (void)buildInputArray:(NSUInteger)newSize {
-    NSLog(@"Building input array...");
-    self.progressDescription = @"Building input array...";
-    NSDate *startTime = [NSDate date];
 
     NSMutableArray *array = [NSMutableArray arrayWithCapacity:pow(newSize, 3)];
-    
-    double ratio = ((double)self.lut.lattice.size - 1.0) / ((float)newSize - 1.0);
-    
-    int maxValue = (int)newSize - 1;
-    
     
     NSLock *arrayLock = [[NSLock alloc] init];
     
@@ -42,10 +97,9 @@ float distancecalc(float x1, float y1, float z1, float x2, float y2, float z2) {
         NSMutableArray *thisArray = [NSMutableArray array];
         for (int g = 0; g < newSize; g++) {
             for (int b = 0; b < newSize; b++) {
-                LUTColor *reverseColor = [self.lut.lattice colorAtInterpolatedR:remapint01((int)r, maxValue)
-                                                                              g:remapint01(g, maxValue)
-                                                                              b:remapint01(b, maxValue)];
-                [thisArray addObject:@[@(r * ratio), @(g * ratio), @(b * ratio), reverseColor]];
+                LUTColor *latticePointReference = [LUTColor colorWithRed:r green:g blue:b];
+                LUTColor *outputColor = [self.lut.lattice colorAtR:r g:g b:b];
+                [thisArray addObject:@[@(outputColor.red), @(outputColor.green), @(outputColor.blue), latticePointReference]];
             }
         }
         [arrayLock lock];
@@ -57,7 +111,53 @@ float distancecalc(float x1, float y1, float z1, float x2, float y2, float z2) {
     
     self.inputArray = array;
     
-    NSLog(@"array built in: %f s", -[startTime timeIntervalSinceNow]);
+}
+
+- (void)search {
+    
+    LUTLattice *newLattice = [[LUTLattice alloc] initWithSize:self.outputSize];
+    
+    int maxValue = (int)self.outputSize - 1;
+    
+    int __block completedOperations = 0;
+    NSUInteger totalOps = self.outputSize * self.outputSize * self.outputSize;
+    
+    NSLock *latticeLock = [[NSLock alloc] init];
+    
+    dispatch_apply(self.outputSize, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0) , ^(size_t rl){
+        int r = (int)rl;
+        dispatch_apply(self.outputSize, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0) , ^(size_t gl){
+            int g = (int)gl;
+            for (int b = 0; b < self.outputSize; b++) {
+                if (self.useTree) {
+                    KDLeaf *leaf = [self.kdTree findNearestNeighbor:@[@(remapint01(r, maxValue)),
+                                                                      @(remapint01(g, maxValue)),
+                                                                      @(remapint01(b, maxValue))]];
+                    [latticeLock lock];
+                    [newLattice setColor:leaf.metadata r:r g:g b:b];
+                    [latticeLock unlock];
+                }
+                else {
+                    LUTColor *color = [self colorNearestToR:remapint01(r, maxValue) g:remapint01(g, maxValue) b:remapint01(b, maxValue)];
+                    [latticeLock lock];
+                    [newLattice setColor:color r:r g:g b:b];
+                    [latticeLock unlock];
+                }
+            }
+            completedOperations += self.outputSize;
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (self.useTree) {
+                    self.progress = (float)completedOperations / (float)totalOps * 0.33 + 0.66;
+                }
+                else {
+                    self.progress = (float)completedOperations / (float)totalOps * 0.66 + 0.33;
+                }
+            });
+        });
+    });
+    
+    [self completedWithLUT:[LUT LUTWithLattice:newLattice]];
+
 }
 
 - (LUTColor *)colorNearestToR:(int)r g:(int)g b:(int)b {
@@ -74,93 +174,5 @@ float distancecalc(float x1, float y1, float z1, float x2, float y2, float z2) {
     return subArray[3];
 }
 
-- (void)process {
-    
-    BOOL useTree = NO;
-    
-    NSUInteger outputSize = self.lut.lattice.size;
-    
-    NSOperationQueue* operationQueue = [[NSOperationQueue alloc] init];
-
-    NSBlockOperation *buildOperation = [NSBlockOperation blockOperationWithBlock:^{
-        [self buildInputArray:outputSize * 3];
-    }];
-
-    NSBlockOperation *findOperation = [NSBlockOperation blockOperationWithBlock:^{
-        
-        NSLog(@"Building LUT...");
-        self.progressDescription = @"Building LUT...";
-        NSDate *startTime2 = [NSDate date];
-        
-        LUTLattice *newLattice = [[LUTLattice alloc] initWithSize:outputSize];
-        
-        int maxValue = (int)outputSize - 1;
-        
-        int __block completedOperations = 0;
-        NSUInteger totalOps = outputSize * outputSize * outputSize;
-        
-        NSLock *latticeLock = [[NSLock alloc] init];
-        
-        dispatch_apply(outputSize, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0) , ^(size_t rl){
-            int r = (int)rl;
-            dispatch_apply(outputSize, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0) , ^(size_t gl){
-                int g = (int)gl;
-                for (int b = 0; b < outputSize; b++) {
-                    if (useTree) {
-                        KDLeaf *leaf = [self.kdTree findNearestNeighbor:@[@(remapint01(r, maxValue)),
-                                                                          @(remapint01(g, maxValue)),
-                                                                          @(remapint01(b, maxValue))]];
-                        [latticeLock lock];
-                        [newLattice setColor:leaf.metadata r:r g:g b:b];
-                        [latticeLock unlock];
-                    }
-                    else {
-                        LUTColor *color = [self colorNearestToR:remapint01(r, maxValue) g:remapint01(g, maxValue) b:remapint01(b, maxValue)];
-                        [latticeLock lock];
-                        [newLattice setColor:color r:r g:g b:b];
-                        [latticeLock unlock];
-                    }
-                }
-                completedOperations += outputSize;
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    if (useTree) {
-                        self.progress = (float)completedOperations / (float)totalOps * 0.33 + 0.66;
-                    }
-                    else {
-                        self.progress = (float)completedOperations / (float)totalOps * 0.66 + 0.33;
-                    }
-                });
-            });
-        });
-        
-        NSLog(@"LUT built in: %f s", -[startTime2 timeIntervalSinceNow]);
-        
-        [self completedWithLUT:[LUT LUTWithLattice:newLattice]];
-
-    }];
-    
-    [findOperation addDependency:buildOperation];
-
-    if (useTree) {
-        NSBlockOperation *buildTreeOperation = [NSBlockOperation blockOperationWithBlock:^{
-            [self buildInputArray:outputSize * 3];
-            
-            NSLog(@"Building search tree...");
-            self.progressDescription = @"Building search tree...";
-            NSDate *startTime2 = [NSDate date];
-            
-            self.kdTree = [[KDTree alloc] initWithArray:self.inputArray];
-            NSLog(@"Tree built in: %f s", -[startTime2 timeIntervalSinceNow]);
-            self.progress = 0.66;
-
-        }];
-        [findOperation addDependency:buildTreeOperation];
-        [operationQueue addOperation:buildTreeOperation];
-    }
-
-    [operationQueue addOperation:findOperation];
-    [operationQueue addOperation:buildOperation];
-
-}
 
 @end
