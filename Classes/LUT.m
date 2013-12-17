@@ -31,16 +31,12 @@
     
     LUTLattice *lattice = [[LUTLattice alloc] initWithSize:size];
 
-    for (int r = 0; r < size; r++) {
-        for (int g = 0; g < size; g++) {
-            for (int b = 0; b < size; b++) {
-                LUTColorValue rv = [indices[r] doubleValue];
-                LUTColorValue gv = [indices[g] doubleValue];
-                LUTColorValue bv = [indices[b] doubleValue];
-                [lattice setColor:[LUTColor colorWithRed:rv green:gv blue:bv] r:r g:g b:b];
-            }
-        }
-    }
+    LUTConcurrentCubeLoop(size, ^(NSUInteger r, NSUInteger g, NSUInteger b) {
+        LUTColorValue rv = [indices[r] doubleValue];
+        LUTColorValue gv = [indices[g] doubleValue];
+        LUTColorValue bv = [indices[b] doubleValue];
+        [lattice setColor:[LUTColor colorWithRed:rv green:gv blue:bv] r:r g:g b:b];
+    });
 
     return [LUT LUTWithLattice:lattice];
 }
