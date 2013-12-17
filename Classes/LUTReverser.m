@@ -55,8 +55,8 @@
     if (self.useTree) {
         NSBlockOperation *buildTreeOperation = [NSBlockOperation blockOperationWithBlock:^{
             timer(@"Build Tree", ^{
-                self.kdTree = [[KDTree alloc] initWithArray:self.inputArray];
                 self.progressDescription = @"Building search tree...";
+                self.kdTree = [[KDTree alloc] initWithArray:self.inputArray];
                 self.progress = 0.66;
             });
         }];
@@ -114,35 +114,31 @@
     
     NSLock *latticeLock = [[NSLock alloc] init];
     
-    dispatch_apply(self.outputSize, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0) , ^(size_t rl){
-        int r = (int)rl;
-        dispatch_apply(self.outputSize, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0) , ^(size_t gl){
-            int g = (int)gl;
-            for (int b = 0; b < self.outputSize; b++) {
-                if (self.useTree) {
-                    KDLeaf *leaf = [self.kdTree findNearestNeighbor:@[@(remapint01(r, maxValue)),
-                                                                      @(remapint01(g, maxValue)),
-                                                                      @(remapint01(b, maxValue))]];
-                    [latticeLock lock];
-                    [newLattice setColor:leaf.metadata r:r g:g b:b];
-                    [latticeLock unlock];
-                }
-                else {
-                    LUTColor *color = [self colorNearestToR:remapint01(r, maxValue) g:remapint01(g, maxValue) b:remapint01(b, maxValue)];
-                    [latticeLock lock];
-                    [newLattice setColor:color r:r g:g b:b];
-                    [latticeLock unlock];
-                }
+    LUTConcurrentCubeLoop(self.outputSize, ^(NSUInteger r, NSUInteger g, NSUInteger b) {
+        if (self.useTree) {
+            KDLeaf *leaf = [self.kdTree findNearestNeighbor:@[@(nsremapint01(r, maxValue)),
+                                                              @(nsremapint01(g, maxValue)),
+                                                              @(nsremapint01(b, maxValue))]];
+            [latticeLock lock];
+            [newLattice setColor:leaf.metadata r:r g:g b:b];
+            [latticeLock unlock];
+        }
+        else {
+            LUTColor *color = [self colorNearestToR:nsremapint01(r, maxValue)
+                                                  g:nsremapint01(g, maxValue)
+                                                  b:nsremapint01(b, maxValue)];
+            [latticeLock lock];
+            [newLattice setColor:color r:r g:g b:b];
+            [latticeLock unlock];
+        }
+        completedOperations += self.outputSize;
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (self.useTree) {
+                self.progress = (float)completedOperations / (float)totalOps * 0.33 + 0.66;
             }
-            completedOperations += self.outputSize;
-            dispatch_async(dispatch_get_main_queue(), ^{
-                if (self.useTree) {
-                    self.progress = (float)completedOperations / (float)totalOps * 0.33 + 0.66;
-                }
-                else {
-                    self.progress = (float)completedOperations / (float)totalOps * 0.66 + 0.33;
-                }
-            });
+            else {
+                self.progress = (float)completedOperations / (float)totalOps * 0.66 + 0.33;
+            }
         });
     });
     

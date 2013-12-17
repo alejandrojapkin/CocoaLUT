@@ -17,6 +17,7 @@ double nsremapint01(NSInteger value, NSInteger maxValue);
 double lerp1d(double beginning, double end, double value01);
 float distancecalc(float x1, float y1, float z1, float x2, float y2, float z2);
 void timer(NSString* name, void (^block)());
+void LUTConcurrentCubeLoop(NSUInteger cubeSize, void (^block)(NSUInteger r, NSUInteger g, NSUInteger b));
 
 @interface LUTHelper : NSObject
 

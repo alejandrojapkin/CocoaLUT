@@ -53,14 +53,11 @@
 
     double ratio = ((double)self.lattice.size - 1.0) / ((float)newSize - 1.0);
     
-    for (double r = 0; r < newSize; r++) {
-        for (double g = 0; g < newSize; g++) {
-            for (double b = 0; b < newSize; b++) {
-                LUTColor *color = [self.lattice colorAtInterpolatedR:r * ratio g:g * ratio b:b * ratio];
-                [lattice setColor:color r:r g:g b:b];
-            }
-        }
-    }
+    LUTConcurrentCubeLoop(newSize, ^(NSUInteger r, NSUInteger g, NSUInteger b) {
+        LUTColor *color = [self.lattice colorAtInterpolatedR:r * ratio g:g * ratio b:b * ratio];
+        [lattice setColor:color r:r g:g b:b];
+    });
+    
     return [LUT LUTWithLattice:lattice];
 }
 

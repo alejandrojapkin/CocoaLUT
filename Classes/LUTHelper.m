@@ -46,6 +46,16 @@ void timer(NSString* name, void (^block)()) {
     NSLog(@"%@ finished in %fs", name, -[startTime timeIntervalSinceNow]);
 }
 
+void LUTConcurrentCubeLoop(NSUInteger cubeSize, void (^block)(NSUInteger r, NSUInteger g, NSUInteger b)) {
+    dispatch_apply(cubeSize, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0) , ^(size_t r){
+        dispatch_apply(cubeSize, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0) , ^(size_t g){
+            for (int b = 0; b < cubeSize; b++) {
+                block(r, g, b);
+            }
+        });
+    });
+}
+
 @implementation LUTHelper
 
 @end
