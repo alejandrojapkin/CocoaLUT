@@ -100,11 +100,11 @@
 
 -(CGFloat)euclidianDistance:(NSArray*)firstCoordinates to:(NSArray*)secondCoordinates {
     CGFloat distance = 0.0;
-    for (int i = 0; i < [firstCoordinates count]; i++) {
-        distance += pow([[firstCoordinates objectAtIndex:i] doubleValue] - [[secondCoordinates objectAtIndex:i] doubleValue], 2);
+    for (int i = 0; i < firstCoordinates.count; i++) {
+        double n = [firstCoordinates[i] doubleValue] - [secondCoordinates[i] doubleValue];
+        distance += n * n;
     }
-    distance = sqrt(distance);
-    return distance;
+    return sqrt(distance);
 }
 
 @end
