@@ -12,7 +12,7 @@
 
 + (SCNScene *)sceneForLUT:(LUT *)lut {
     
-    lut = [lut LUTByResizingToSize:10];
+    lut = [lut LUTByResizingToSize:12];
     
     SCNScene *scene = [SCNScene scene];
     
@@ -24,7 +24,7 @@
     LUTConcurrentCubeLoop(size, ^(NSUInteger r, NSUInteger g, NSUInteger b) {
         LUTColor *color = [lut.lattice colorAtR:r g:g b:b];
         
-        SCNSphere *dot = [SCNSphere sphereWithRadius:0.005f];
+        SCNSphere *dot = [SCNSphere sphereWithRadius:0.0015f];
         dot.firstMaterial.diffuse.contents = color.NSColor;
         
         SCNNode *node = [SCNNode nodeWithGeometry:dot];
