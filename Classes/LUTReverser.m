@@ -12,9 +12,6 @@
 @property (strong) KDTree *kdTree;
 @end
 
-double remapint01(int value, int maxValue) {
-    return (double)value / (double)maxValue;
-}
 
 @implementation LUTReverser
 

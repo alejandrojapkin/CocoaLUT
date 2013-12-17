@@ -16,6 +16,14 @@ double clamp01(double value) {
     return clamp(value, 0, 1);
 }
 
+double nsremapint01(NSInteger value, NSInteger maxValue) {
+    return (double)value / (double)maxValue;
+}
+
+double remapint01(int value, int maxValue) {
+    return nsremapint01(value, maxValue);
+}
+
 double lerp1d(double beginning, double end, double value01) {
     if (value01 < 0 || value01 > 1){
         @throw [NSException exceptionWithName:@"Invalid Lerp" reason:@"Valye out of bounds" userInfo:nil];
@@ -34,6 +42,11 @@ double lerp1d(double beginning, double end, double value01) {
     return color;
 }
 
++ (LUTColor *)colorFromIntegersWithBitDepth:(NSUInteger)bitdepth red:(NSUInteger)r green:(NSUInteger)g blue:(NSUInteger)b {
+    NSUInteger maxBits = pow(2, bitdepth) - 1;
+    return [LUTColor colorWithRed:nsremapint01(r, maxBits) green:nsremapint01(g, maxBits) blue:nsremapint01(b, maxBits)];
+}
+
 - (LUTColor *)clampedO1 {
     return [LUTColor colorWithRed:clamp01(self.red) green:clamp01(self.green) blue:clamp01(self.blue)];
 }
@@ -44,7 +57,7 @@ double lerp1d(double beginning, double end, double value01) {
                              blue:lerp1d(self.blue, otherColor.blue, amount)];
 }
 
-- (NSColor *)nsColor {
+- (NSColor *)NSColor {
     return [NSColor colorWithRed:self.red green:self.green blue:self.blue alpha:1];
 }
 
