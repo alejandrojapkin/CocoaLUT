@@ -70,12 +70,14 @@
     size_t cubeDataSize = size * size * size * sizeof ( float ) * 4;
     float *cubeData = (float *) malloc ( cubeDataSize );
     
+    LUT *usedLut = self.lattice.size > 64 ? [self LUTByResizingToSize:64] : self;
+    
     size_t offset = 0;
     for (int z = 0; z < size; z++) {
         for (int y = 0; y < size; y++) {
             for (int x = 0; x < size; x++) {
                 
-                LUTColor *color = [self.lattice colorAtR:x g:y b:z];
+                LUTColor *color = [usedLut.lattice colorAtR:x g:y b:z];
                 
                 cubeData[offset]   = color.red;
                 cubeData[offset+1] = color.green;
