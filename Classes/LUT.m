@@ -7,6 +7,7 @@
 //
 
 #import "LUT.h"
+#import "CocoaLUT.h"
 
 @interface LUT () {
     CIFilter *_coreImageFilter;

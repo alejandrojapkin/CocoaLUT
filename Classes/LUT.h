@@ -7,8 +7,10 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "LUTLattice.h"
 #import <QuartzCore/CoreImage.h>
+#import "LUTLattice.h"
+
+@class LUTLattice;
 
 @interface LUT : NSObject <NSCopying>
 

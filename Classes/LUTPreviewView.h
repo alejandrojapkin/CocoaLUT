@@ -14,5 +14,6 @@
 
 @property (assign, nonatomic) float maskAmount;
 @property (strong, nonatomic) LUT *lut;
+@property (strong, nonatomic) NSImage *previewImage;
 
 @end

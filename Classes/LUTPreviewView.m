@@ -79,6 +79,12 @@
 
 }
 
+- (void)setPreviewImage:(NSImage *)previewImage {
+    _previewImage = previewImage;
+    [_normalImageView setImage:self.previewImage];
+    [_lutImageView setImage:self.previewImage];
+}
+
 - (BOOL)acceptsFirstResponder {
     return YES;
 }
@@ -105,12 +111,11 @@
     self.layer.backgroundColor = NSColor.blackColor.CGColor;
     
     _normalImageView = [[NSImageView alloc] initWithFrame:self.bounds];
-    [_normalImageView setImage:[NSImage imageNamed:@"testimage.jpg"]];
+    [_normalImageView setImage:self.previewImage];
     _normalImageView.imageScaling = NSImageScaleProportionallyUpOrDown;
     [self addSubview:_normalImageView];
     
     _lutImageView = [[NSImageView alloc] initWithFrame:self.bounds];
-    [_lutImageView setImage:[NSImage imageNamed:@"testimage.jpg"]];
     _lutImageView.imageScaling = NSImageScaleProportionallyUpOrDown;
     [self addSubview:_lutImageView];
 

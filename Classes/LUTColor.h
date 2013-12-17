@@ -7,13 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "CocoaLUT.h"
 
 typedef double LUTColorValue;
-
-double clamp(double value, double min, double max);
-double clamp01(double value);
-double remapint01(int value, int maxValue);
-double nsremapint01(NSInteger value, NSInteger maxValue);
 
 @interface LUTColor : NSObject
 

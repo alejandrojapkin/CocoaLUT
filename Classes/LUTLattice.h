@@ -9,6 +9,8 @@
 #import <Foundation/Foundation.h>
 #import "LUTColor.h"
 
+@class LUTColor;
+
 @interface LUTLattice : NSObject <NSCopying>
 
 @property (readonly) NSUInteger size;

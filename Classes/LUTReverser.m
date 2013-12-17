@@ -7,6 +7,7 @@
 //
 
 #import "LUTReverser.h"
+#import "LUTHelper.h"
 
 @interface LUTReverser ()
 @property (strong) KDTree *kdTree;
@@ -14,21 +15,6 @@
 @property (assign) BOOL useTree;
 @property (assign) NSUInteger outputSize;
 @end
-
-float distancecalc(float x1, float y1, float z1, float x2, float y2, float z2) {
-    float dx = x2 - x1;
-    float dy = y2 - y1;
-    float dz = z2 - z1;
-    return sqrt((float)(dx * dx + dy * dy + dz * dz));
-}
-
-void timer(NSString* name, void (^block)()) {
-    NSLog(@"Starting %@", name);
-    NSDate *startTime = [NSDate date];
-    block();
-    NSLog(@"%@ finished in %fs", name, -[startTime timeIntervalSinceNow]);
-}
-
 
 @implementation LUTReverser
 
@@ -86,8 +72,10 @@ void timer(NSString* name, void (^block)()) {
 }
 
 - (void)buildInputArray:(NSUInteger)newSize {
+    
+    NSUInteger maxValue = newSize - 1;
 
-    NSMutableArray *array = [NSMutableArray arrayWithCapacity:pow(newSize, 3)];
+    NSMutableArray *array = [NSMutableArray arrayWithCapacity:newSize * newSize * newSize];
     
     NSLock *arrayLock = [[NSLock alloc] init];
     
@@ -97,7 +85,9 @@ void timer(NSString* name, void (^block)()) {
         NSMutableArray *thisArray = [NSMutableArray array];
         for (int g = 0; g < newSize; g++) {
             for (int b = 0; b < newSize; b++) {
-                LUTColor *latticePointReference = [LUTColor colorWithRed:r green:g blue:b];
+                LUTColor *latticePointReference = [LUTColor colorWithRed:nsremapint01(r, maxValue)
+                                                                   green:nsremapint01(g, maxValue)
+                                                                    blue:nsremapint01(b, maxValue)];
                 LUTColor *outputColor = [self.lut.lattice colorAtR:r g:g b:b];
                 [thisArray addObject:@[@(outputColor.red), @(outputColor.green), @(outputColor.blue), latticePointReference]];
             }

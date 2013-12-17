@@ -10,9 +10,9 @@
 
 @implementation LUTPreviewImageGenerator
 
-- (NSImage *)renderPreviewImageOfSize:(NSSize)size {
+- (NSImage *)renderPreviewImageFromImage:(NSImage *)image resizedToSize:(NSSize)size {
     
-    NSImage *baseImage = [[NSImage imageNamed:@"testimage.jpg"] copy];
+    NSImage *baseImage = [image copy];
     NSImage *processedImage = [self.lut processNSImage:[baseImage copy]];
     
     NSRect rect = NSMakeRect(0, 0, processedImage.size.width, processedImage.size.height);

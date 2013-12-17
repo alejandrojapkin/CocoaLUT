@@ -7,30 +7,7 @@
 //
 
 #import "LUTColor.h"
-
-double clamp(double value, double min, double max){
-    return (value > max) ? max : ((value < min) ? min : value);
-}
-
-double clamp01(double value) {
-    return clamp(value, 0, 1);
-}
-
-double nsremapint01(NSInteger value, NSInteger maxValue) {
-    return (double)value / (double)maxValue;
-}
-
-double remapint01(int value, int maxValue) {
-    return nsremapint01(value, maxValue);
-}
-
-double lerp1d(double beginning, double end, double value01) {
-    if (value01 < 0 || value01 > 1){
-        @throw [NSException exceptionWithName:@"Invalid Lerp" reason:@"Valye out of bounds" userInfo:nil];
-    }
-    float range = end - beginning;
-    return beginning + range * value01;
-}
+#import "LUTHelper.h"
 
 @implementation LUTColor
 

@@ -13,7 +13,7 @@
 
 @property (strong) LUT *lut;
 
-- (NSImage *)renderPreviewImageOfSize:(NSSize)size;
+- (NSImage *)renderPreviewImageFromImage:(NSImage *)image resizedToSize:(NSSize)size;
 
 
 @end
