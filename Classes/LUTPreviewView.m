@@ -14,6 +14,7 @@
     NSView *_borderView;
     NSImageView *_normalImageView;
     NSImageView *_lutImageView;
+    AVPlayerLayer *_avPlayerLayer;
 }
 
 @end
@@ -48,6 +49,8 @@
     
     _borderView.frame = CGRectMake(self.bounds.size.width * self.maskAmount, 0, 1, self.bounds.size.height);
     
+    _avPlayerLayer.bounds = self.bounds;
+
     [CATransaction commit];
 
     [super layout];
@@ -83,6 +86,12 @@
     _previewImage = previewImage;
     [_normalImageView setImage:self.previewImage];
     [_lutImageView setImage:self.previewImage];
+    [self setupPlaybackLayers];
+}
+
+- (void)setAvPlayer:(AVPlayer *)avPlayer {
+    _avPlayer = avPlayer;
+    [self setupPlaybackLayers];
 }
 
 - (BOOL)acceptsFirstResponder {
@@ -129,8 +138,34 @@
     _borderView.frame = CGRectMake(self.bounds.size.width * self.maskAmount, 0, 1, self.bounds.size.height);
     [self addSubview:_borderView];
 
-    _lutImageView.layer.mask = _maskLayer;
-    
+    [self setupPlaybackLayers];
+}
+
+- (BOOL)isVideo {
+    return !!self.avPlayer;
+}
+
+- (void)setupPlaybackLayers {
+    if (self.isVideo) {
+        [_lutImageView setHidden:YES];
+        [_normalImageView setHidden:YES];
+        if (!_avPlayerLayer) {
+            _avPlayerLayer = [AVPlayerLayer playerLayerWithPlayer:self.avPlayer];
+            _avPlayerLayer.bounds = self.bounds;
+            _avPlayerLayer.backgroundColor = NSColor.redColor.CGColor;
+        }
+        [self.layer addSublayer:_avPlayerLayer];
+//        _avPlayerLayer.mask = _maskLayer;
+    }
+    else {
+        [_avPlayerLayer removeFromSuperlayer];
+        _avPlayerLayer = nil;
+
+        [_lutImageView setHidden:NO];
+        [_normalImageView setHidden:NO];
+        _lutImageView.layer.mask = _maskLayer;
+    }
+
 }
 
 @end
