@@ -30,8 +30,9 @@
         SCNNode *node = [SCNNode nodeWithGeometry:dot];
         node.position = SCNVector3Make(color.red/size, color.green/size, color.blue/size);
         
-        
-        [dotGroup addChildNode:node];
+        @synchronized(dotGroup) {
+            [dotGroup addChildNode:node];
+        }
 
     });
 

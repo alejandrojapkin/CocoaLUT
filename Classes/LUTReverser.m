@@ -19,6 +19,8 @@
 @implementation LUTReverser
 
 - (void)process {
+    [super process];
+    
     NSOperationQueue* operationQueue = [[NSOperationQueue alloc] init];
 
     self.useTree = YES;
@@ -57,7 +59,7 @@
             timer(@"Build Tree", ^{
                 self.progressDescription = @"Building search tree...";
                 self.kdTree = [[KDTree alloc] initWithArray:self.inputArray];
-                self.progress = 0.66;
+                [self setProgress:0 section:3 of:4];
             });
         }];
         [buildTreeOperation addDependency:buildOperation];
@@ -96,7 +98,7 @@
         [array addObjectsFromArray: thisArray];
         [arrayLock unlock];
         completedRs++;
-        self.progress = (float)completedRs / (float)newSize * 0.33;
+        [self setProgress:(float)completedRs / (float)newSize section:2 of:4];
     });
     
     self.inputArray = array;
@@ -112,34 +114,21 @@
     int __block completedOperations = 0;
     NSUInteger totalOps = self.outputSize * self.outputSize * self.outputSize;
     
-    NSLock *latticeLock = [[NSLock alloc] init];
-    
     LUTConcurrentCubeLoop(self.outputSize, ^(NSUInteger r, NSUInteger g, NSUInteger b) {
         if (self.useTree) {
             KDLeaf *leaf = [self.kdTree findNearestNeighbor:@[@(nsremapint01(r, maxValue)),
                                                               @(nsremapint01(g, maxValue)),
                                                               @(nsremapint01(b, maxValue))]];
-            [latticeLock lock];
             [newLattice setColor:leaf.metadata r:r g:g b:b];
-            [latticeLock unlock];
         }
         else {
             LUTColor *color = [self colorNearestToR:nsremapint01(r, maxValue)
                                                   g:nsremapint01(g, maxValue)
                                                   b:nsremapint01(b, maxValue)];
-            [latticeLock lock];
             [newLattice setColor:color r:r g:g b:b];
-            [latticeLock unlock];
         }
         completedOperations += self.outputSize;
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if (self.useTree) {
-                self.progress = (float)completedOperations / (float)totalOps * 0.33 + 0.66;
-            }
-            else {
-                self.progress = (float)completedOperations / (float)totalOps * 0.66 + 0.33;
-            }
-        });
+//        [self setProgress:(float)completedOperations / (float)totalOps section:4 of:4];
     });
     
     [self completedWithLUT:[LUT LUTWithLattice:newLattice]];

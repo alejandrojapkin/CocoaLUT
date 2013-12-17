@@ -17,7 +17,7 @@
 @property (strong) NSString *progressDescription;
 @property (strong) void (^completionHandler)(LUT *reversedLUT);
 @property (strong) void (^cancelHandler)();
-@property (assign) float progress;
+@property (assign, atomic) float progress;
 
 + (instancetype)processorForLUT:(LUT *)lut
               completionHandler:(void(^)(LUT *reversedLUT))completionHandler
@@ -29,5 +29,6 @@
 - (void)process;
 - (void)completedWithLUT:(LUT *)lut;
 - (BOOL)checkCancellation;
+- (void)setProgress:(float)progress section:(int)section of:(int)sectionCount;
 
 @end
