@@ -32,7 +32,7 @@
     return self;
 }
 
-- (LUT *)lut{
+- (LUT *)lutOfSize:(NSUInteger)size {
     LUTLattice *lattice = [[LUTLattice alloc] initWithSize:self.redCurve.count];
     
     LUTConcurrentCubeLoop(lattice.size, ^(NSUInteger r, NSUInteger g, NSUInteger b) {
@@ -42,7 +42,7 @@
         [lattice setColor:[LUTColor colorWithRed:rv green:gv blue:bv] r:r g:g b:b];
     });
     
-    return [LUT LUTWithLattice:lattice];
+    return [[LUT LUTWithLattice:lattice] LUTByResizingToSize:size];
 }
 
 @end

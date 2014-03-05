@@ -13,7 +13,7 @@
 
 + (instancetype)LUT1DWithRedCurve:(NSArray *)redCurve greenCurve:(NSArray *)greenCurve blueCurve:(NSArray *)blueCurve;
 - (instancetype)initWithRedCurve:(NSArray *)redCurve greenCurve:(NSArray *)greenCurve blueCurve:(NSArray *)blueCurve;
-- (LUT *)lut;
+- (LUT *)lutOfSize:(NSUInteger)size;
 
 
 @end
