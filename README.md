@@ -7,7 +7,9 @@ CocoaLUT is a tool for importing, exporting, and manipulating [3D look up tables
 
 The goal of ths project is to have a fast, modern Objective-C library that works on both iOS and OS X.
 
-Do you need something like this in Python? Try [pylut](http://github.com/gregcotten/pylut)
+This project uses [LUTSpec](http://github.com/wilg/LUTSpec) for UTI standardization.
+
+Do you need something like this in Python? Try [pylut](http://github.com/gregcotten/pylut).
 
 ## Features
 
@@ -22,16 +24,6 @@ Do you need something like this in Python? Try [pylut](http://github.com/gregcot
 - Generate visualizations for LUTs with Scene Kit
 - Resize LUTs
 - Reverse LUTs
-
-## Uniform Type Identifiers (UTI) for LUTs
-
-There are no standard [Uniform Type Identifiers](https://en.wikipedia.org/wiki/Uniform_Type_Identifier) for LUTs.
-
-This is especially problematic because LUTs have various and conflicting file extensions, so extensions alone cannot be used to disambiguate between LUT file formats.
-
-CocoaLUT aims to also provide a standard specification for LUTs that developers of applications can use to provide a consistent user experience when opening files on Apple operating systems.
-
-**[View and Contribute to the LUT UTI Specification](LUT_UTI_SPEC.md)**
 
 ## Installation
 
