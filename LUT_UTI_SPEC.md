@@ -15,6 +15,8 @@ CocoaLUT aims to also provide a standard specification for LUTs that developers 
     - **public.3d-color-lookup-table** - A [three-dimensional color lookup table](https://en.wikipedia.org/wiki/3D_lookup_table).
 
       - **com.autodesk.3dl** - Autodesk Lustre 3D LUT - `.3dl`
+      
+      - **com.autodesk.3dl** - Autodesk Smoke 3D LUT - `.3dl`
         
       - **com.blackmagicdesign.cube** -  DaVinci Resolve Cube LUT - `.cube`
 
