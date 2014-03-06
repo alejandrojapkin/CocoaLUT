@@ -18,6 +18,7 @@ Do you need something like this in Python? Try [pylut](http://github.com/gregcot
   - Autodesk Lustre 3D LUT (.3dl)
 - Reads 1D LUTs
   - DaVinci Resolve 1D LUT (.olut)
+  - Discreet 1D LUT (.lut)
 - Has a format-independent internal data structure. You can create LUTs and use them in-memory.
 - Apply LUTs to NSImage, CIImage, and UIImage
 - Generate Core Image Filters (CIFilter / CIColorCube) from LUTs
