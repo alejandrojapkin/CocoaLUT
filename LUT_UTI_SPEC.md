@@ -8,31 +8,21 @@ CocoaLUT aims to also provide a standard specification for LUTs that developers 
 
 ## Public LUT UTIs
 
-- `public.plain-text`
+- **public.plain-text**
 
-  - `public.color-lookup-table`
+  - **public.color-lookup-table** - A base UTI for any type of color lookup table.
 
-    A base UTI for any type of color lookup table.
+    - **public.3d-color-lookup-table** - A [three-dimensional color lookup table](https://en.wikipedia.org/wiki/3D_lookup_table).
 
-    - `public.3d-color-lookup-table`
+      - **com.autodesk.3dl** - Autodesk Lustre 3D LUT - `.3dl`
+        
+      - **com.blackmagicdesign.cube** -  DaVinci Resolve Cube LUT - `.cube`
 
-      A [three-dimensional color lookup table](https://en.wikipedia.org/wiki/3D_lookup_table).
+    - **public.1d-color-lookup-table** - A one-dimensional color lookup table.
 
-      - `com.autodesk.3dl`
-
-        Autodesk Lustre 3D LUT
-
-      - `com.blackmagicdesign.cube`
-
-        DaVinci Resolve Cube LUT
-
-    - `public.1d-color-lookup-table`
-
-      A one-dimensional color lookup table.
-
-      - `com.blackmagicdesign.olut`
-
-        DaVinci Resolve 1D LUT
+      - **com.blackmagicdesign.olut** - DaVinci Resolve 1D LUT - `.olut`
+      
+      - **com.discreet.lut** - Discreet 1D LUT - `.lut`
 
 
 # Contributing
