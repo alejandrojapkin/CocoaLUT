@@ -111,7 +111,13 @@
     
     NSData *data = [NSData dataWithBytesNoCopy:cubeData length:cubeDataSize freeWhenDone:YES];
     CIFilter *colorCube = [CIFilter filterWithName:@"CIColorCubeWithColorSpace"];
+    
+    #if TARGET_OS_IPHONE
+    CGColorSpaceRef currentColorSpace = CGColorSpaceCreateDeviceRGB();
+    #elif TARGET_OS_MAC
     CGColorSpaceRef currentColorSpace = [[[NSScreen mainScreen] colorSpace] CGColorSpace];
+    #endif
+    
     [colorCube setValue:@(size) forKey:@"inputCubeDimension"];
     [colorCube setValue:data forKey:@"inputCubeData"];
     [colorCube setValue:(__bridge id)currentColorSpace forKey:@"inputColorSpace"];
