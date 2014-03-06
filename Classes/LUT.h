@@ -7,7 +7,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <QuartzCore/CoreImage.h>
 #import "LUTLattice.h"
 
 @class LUTLattice;
@@ -24,6 +23,11 @@
 - (CIFilter *)coreImageFilter;
 
 - (CIImage *)processCIImage:(CIImage *)image;
+
+#if TARGET_OS_IPHONE
+- (UIImage *)processUIImage:(UIImage *)image;
+#elif TARGET_OS_MAC
 - (NSImage *)processNSImage:(NSImage *)image;
+#endif
 
 @end

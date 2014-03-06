@@ -117,6 +117,11 @@
     return [filter valueForKey:@"outputImage"];
 }
 
+#if TARGET_OS_IPHONE
+- (UIImage *)processUIImage:(UIImage *)image {
+    return [[UIImage alloc] initWithCIImage:[self processCIImage:image.CIImage]];
+}
+#elif TARGET_OS_MAC
 - (NSImage *)processNSImage:(NSImage *)image {
     NSRect rect = NSMakeRect(0, 0, image.size.width, image.size.height);
     CGImageRef cgImage = [image CGImageForProposedRect:&rect context:[NSGraphicsContext currentContext] hints:nil];
@@ -126,5 +131,6 @@
     [nsImage addRepresentation:rep];
     return nsImage;
 }
+#endif
 
 @end
