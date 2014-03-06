@@ -112,7 +112,7 @@
     int maxValue = (int)self.outputSize - 1;
     
     int __block completedOperations = 0;
-    NSUInteger totalOps = self.outputSize * self.outputSize * self.outputSize;
+//    NSUInteger totalOps = self.outputSize * self.outputSize * self.outputSize;
     
     LUTConcurrentCubeLoop(self.outputSize, ^(NSUInteger r, NSUInteger g, NSUInteger b) {
         if (self.useTree) {

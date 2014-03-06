@@ -34,9 +34,15 @@
                              blue:lerp1d(self.blue, otherColor.blue, amount)];
 }
 
+#if TARGET_OS_IPHONE
+- (UIColor *)UIColor {
+    return [UIColor colorWithRed:self.red green:self.green blue:self.blue alpha:1];
+}
+#elif TARGET_OS_MAC
 - (NSColor *)NSColor {
     return [NSColor colorWithRed:self.red green:self.green blue:self.blue alpha:1];
 }
+#endif
 
 
 @end

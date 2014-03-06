@@ -21,6 +21,11 @@ typedef double LUTColorValue;
 + (LUTColor *)colorFromIntegersWithBitDepth:(NSUInteger)bitdepth red:(NSUInteger)r green:(NSUInteger)g blue:(NSUInteger)b;
 - (LUTColor *)clampedO1;
 - (LUTColor *)lerpTo:(LUTColor *)otherColor amount:(double)amount;
+
+#if TARGET_OS_IPHONE
+- (UIColor *)UIColor;
+#elif TARGET_OS_MAC
 - (NSColor *)NSColor;
+#endif
 
 @end
