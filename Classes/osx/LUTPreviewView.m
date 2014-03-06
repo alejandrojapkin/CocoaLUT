@@ -47,6 +47,7 @@
     _normalImageView.frame = self.bounds;
     _lutImageView.frame = self.bounds;
     
+    
     _borderView.frame = CGRectMake(self.bounds.size.width * self.maskAmount, 0, 1, self.bounds.size.height);
     
     _avPlayerLayer.bounds = self.bounds;
@@ -122,10 +123,12 @@
     _normalImageView = [[NSImageView alloc] initWithFrame:self.bounds];
     [_normalImageView setImage:self.previewImage];
     _normalImageView.imageScaling = NSImageScaleProportionallyUpOrDown;
+    [_normalImageView unregisterDraggedTypes];
     [self addSubview:_normalImageView];
     
     _lutImageView = [[NSImageView alloc] initWithFrame:self.bounds];
     _lutImageView.imageScaling = NSImageScaleProportionallyUpOrDown;
+    [_lutImageView unregisterDraggedTypes];
     [self addSubview:_lutImageView];
 
     _maskLayer = [CALayer layer];
