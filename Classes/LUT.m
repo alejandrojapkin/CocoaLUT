@@ -11,6 +11,7 @@
 #import "LUTFormatterCube.h"
 #import "LUTFormatter3DL.h"
 #import "LUTFormatterOLUT.h"
+#import "LUTFormatterDiscreet1DLUT.h"
 
 @interface LUT () {
     CIFilter *_coreImageFilter;
@@ -28,6 +29,9 @@
     }
     else if ([url.pathExtension.lowercaseString isEqualToString:@"olut"]) {
         return [LUTFormatterOLUT LUTFromFile:url];
+    }
+    else if ([url.pathExtension.lowercaseString isEqualToString:@"lut"]) {
+        return [LUTFormatterDiscreet1DLUT LUTFromFile:url];
     }
     return nil;
 }
