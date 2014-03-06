@@ -26,6 +26,7 @@
 }
 
 + (LUT *)LUTFromLines:(NSArray *)lines {
+    [NSException raise:@"LUTFromLines is unimplemented" format:nil];
     return nil;
 }
 
@@ -34,6 +35,7 @@
 }
 
 + (NSString *)stringFromLUT:(LUT *)lut {
+    [NSException raise:@"stringFromLUT is unimplemented" format:nil];
     return nil;
 }
 
