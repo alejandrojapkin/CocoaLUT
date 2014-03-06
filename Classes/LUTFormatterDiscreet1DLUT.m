@@ -38,11 +38,11 @@
         [redCurve addObject:@(nsremapint01([trimmedLines[i] integerValue], maxCodeValue))];
     }
     //get green values
-    for (int i = maxCodeValue; i < 2*maxCodeValue; i++) {
+    for (int i = (int)maxCodeValue; i < 2*maxCodeValue; i++) {
         [greenCurve addObject:@(nsremapint01([trimmedLines[i] integerValue], maxCodeValue))];
     }
     
-    for (int i = 2*maxCodeValue; i < 3*maxCodeValue; i++) {
+    for (int i = 2*(int)maxCodeValue; i < 3*maxCodeValue; i++) {
         [blueCurve addObject:@(nsremapint01([trimmedLines[i] integerValue], maxCodeValue))];
     }
     
