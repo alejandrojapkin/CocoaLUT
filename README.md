@@ -5,7 +5,7 @@
 
 CocoaLUT is a tool for importing, exporting, and manipulating [3D look up tables](https://en.wikipedia.org/wiki/3D_lookup_table) (LUTs) for colors. LUTs are often used in film and video finishing, graphics, video games, and rendering.
 
-The goal of ths project is to have a fast, modern Objective-C library that works on both iOS and OS X.
+The goal of this project is to have a fast, modern Objective-C library that works on both iOS and OS X.
 
 This project uses [LUTSpec](http://github.com/wilg/LUTSpec) for UTI standardization.
 
