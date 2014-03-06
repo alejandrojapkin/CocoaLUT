@@ -110,9 +110,11 @@
     }
     
     NSData *data = [NSData dataWithBytesNoCopy:cubeData length:cubeDataSize freeWhenDone:YES];
-    CIFilter *colorCube = [CIFilter filterWithName:@"CIColorCube"];
+    CIFilter *colorCube = [CIFilter filterWithName:@"CIColorCubeWithColorSpace"];
+    CGColorSpaceRef currentColorSpace = [[[NSScreen mainScreen] colorSpace] CGColorSpace];
     [colorCube setValue:@(size) forKey:@"inputCubeDimension"];
     [colorCube setValue:data forKey:@"inputCubeData"];
+    [colorCube setValue:(__bridge id)currentColorSpace forKey:@"inputColorSpace"];
     
     _coreImageFilter = colorCube;
 
