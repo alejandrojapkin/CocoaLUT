@@ -27,7 +27,7 @@
         }
     }
     
-    NSUInteger maxCodeValue = trimmedLines.count;
+    NSUInteger maxCodeValue = trimmedLines.count - 1;
     
     for (NSString *line in trimmedLines) {
         NSArray *splitLine = [line componentsSeparatedByString:@","];
