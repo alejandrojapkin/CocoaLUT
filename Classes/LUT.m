@@ -10,6 +10,7 @@
 #import "CocoaLUT.h"
 #import "LUTFormatterCube.h"
 #import "LUTFormatter3DL.h"
+#import "LUTFormatterOLUT.h"
 
 @interface LUT () {
     CIFilter *_coreImageFilter;
@@ -24,6 +25,9 @@
     }
     else if ([url.pathExtension.lowercaseString isEqualToString:@"3dl"]) {
         return [LUTFormatter3DL LUTFromFile:url];
+    }
+    else if ([url.pathExtension.lowercaseString isEqualToString:@"olut"]) {
+        return [LUTFormatterOLUT LUTFromFile:url];
     }
     return nil;
 }
