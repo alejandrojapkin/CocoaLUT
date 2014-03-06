@@ -1,4 +1,8 @@
+#if TARGET_OS_IPHONE
+#import <CoreImage/CoreImage.h>
+#elif TARGET_OS_MAC
 #import <QuartzCore/CoreImage.h>
+#endif
 
 #ifndef _COCOALUT_
 
