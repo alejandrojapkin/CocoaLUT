@@ -8,5 +8,6 @@
     #import "LUT.h"
     #import "LUTLattice.h"
     #import "LUTColor.h"
+    #import "LUT1D.h"
 
 #endif
