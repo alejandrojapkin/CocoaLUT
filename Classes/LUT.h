@@ -20,14 +20,15 @@
 + (LUT *)identityLutOfSize:(NSUInteger)size;
 - (LUT *)LUTByResizingToSize:(NSUInteger)newSize;
 
-- (CIFilter *)coreImageFilter;
+- (CIFilter *)coreImageFilterWithCurrentColorSpace;
+- (CIFilter *)coreImageFilterWithColorSpace:(CGColorSpaceRef)colorSpace;
 
 - (CIImage *)processCIImage:(CIImage *)image;
 
 #if TARGET_OS_IPHONE
-- (UIImage *)processUIImage:(UIImage *)image;
+- (UIImage *)processUIImage:(UIImage *)image withColorSpace:(CGColorSpaceRef)colorSpace;
 #elif TARGET_OS_MAC
-- (NSImage *)processNSImage:(NSImage *)image;
+- (NSImage *)processNSImage:(NSImage *)image withColorSpace:(CGColorSpaceRef)colorSpace;
 #endif
 
 @end

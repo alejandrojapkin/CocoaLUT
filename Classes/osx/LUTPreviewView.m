@@ -72,7 +72,7 @@
     _lut = lut;
     
     if (_lut) {
-        CIFilter *filter = _lut.coreImageFilter;
+        CIFilter *filter = _lut.coreImageFilterWithCurrentColorSpace;
         if (filter) {
             [_lutImageView setContentFilters:@[filter]];
             return;

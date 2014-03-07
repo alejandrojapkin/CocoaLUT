@@ -13,9 +13,7 @@
 #import "LUTFormatterOLUT.h"
 #import "LUTFormatterDiscreet1DLUT.h"
 
-@interface LUT () {
-    CIFilter *_coreImageFilter;
-}
+@interface LUT ()
 @end
 
 @implementation LUT
@@ -81,10 +79,16 @@
     return [LUT LUTWithLattice:[self.lattice copyWithZone:zone]];
 }
 
-- (CIFilter *)coreImageFilter {
-    
-    if (_coreImageFilter)
-        return _coreImageFilter;
+
+- (CIFilter *)coreImageFilterWithCurrentColorSpace {
+    #if TARGET_OS_IPHONE
+    return [self coreImageFilterWithColorSpace:CGColorSpaceCreateDeviceRGB()];
+    #elif TARGET_OS_MAC
+    return [self coreImageFilterWithColorSpace:[[[NSScreen mainScreen] colorSpace] CGColorSpace]];
+    #endif
+}
+
+- (CIFilter *)coreImageFilterWithColorSpace:(CGColorSpaceRef)colorSpace {
     
     NSUInteger size = self.lattice.size;
     size_t cubeDataSize = size * size * size * sizeof ( float ) * 4;
@@ -96,7 +100,6 @@
     for (int z = 0; z < size; z++) {
         for (int y = 0; y < size; y++) {
             for (int x = 0; x < size; x++) {
-                
                 LUTColor *color = [usedLut.lattice colorAtR:x g:y b:z];
                 
                 cubeData[offset]   = color.red;
@@ -110,38 +113,36 @@
     }
     
     NSData *data = [NSData dataWithBytesNoCopy:cubeData length:cubeDataSize freeWhenDone:YES];
-    CIFilter *colorCube = [CIFilter filterWithName:@"CIColorCubeWithColorSpace"];
     
-    #if TARGET_OS_IPHONE
-    CGColorSpaceRef currentColorSpace = CGColorSpaceCreateDeviceRGB();
-    #elif TARGET_OS_MAC
-    CGColorSpaceRef currentColorSpace = [[[NSScreen mainScreen] colorSpace] CGColorSpace];
-    #endif
-    
+    CIFilter *colorCube;
+    if (colorSpace) {
+        colorCube = [CIFilter filterWithName:@"CIColorCubeWithColorSpace"];
+        [colorCube setValue:(__bridge id)(colorSpace) forKey:@"inputColorSpace"];
+    }
+    else {
+        colorCube = [CIFilter filterWithName:@"CIColorCube"];
+    }
     [colorCube setValue:@(size) forKey:@"inputCubeDimension"];
     [colorCube setValue:data forKey:@"inputCubeData"];
-    [colorCube setValue:(__bridge id)currentColorSpace forKey:@"inputColorSpace"];
     
-    _coreImageFilter = colorCube;
-
-    return _coreImageFilter;
+    return colorCube;
 }
 
-- (CIImage *)processCIImage:(CIImage *)image {
-    CIFilter *filter = [self coreImageFilter];
+- (CIImage *)processCIImage:(CIImage *)image withColorSpace:(CGColorSpaceRef)colorSpace {
+    CIFilter *filter = [self coreImageFilterWithColorSpace:colorSpace];
     [filter setValue:image forKey:@"inputImage"];
     return [filter valueForKey:@"outputImage"];
 }
 
 #if TARGET_OS_IPHONE
-- (UIImage *)processUIImage:(UIImage *)image {
-    return [[UIImage alloc] initWithCIImage:[self processCIImage:image.CIImage]];
+- (UIImage *)processUIImage:(UIImage *)image withColorSpace:(CGColorSpaceRef)colorSpace {
+    return [[UIImage alloc] initWithCIImage:[self processCIImage:image.CIImage withColorSpace:colorSpace]];
 }
 #elif TARGET_OS_MAC
-- (NSImage *)processNSImage:(NSImage *)image {
+- (NSImage *)processNSImage:(NSImage *)image withColorSpace:(CGColorSpaceRef)colorSpace {
     NSRect rect = NSMakeRect(0, 0, image.size.width, image.size.height);
     CGImageRef cgImage = [image CGImageForProposedRect:&rect context:[NSGraphicsContext currentContext] hints:nil];
-    CIImage *ciImage = [self processCIImage:[CIImage imageWithCGImage:cgImage]];
+    CIImage *ciImage = [self processCIImage:[CIImage imageWithCGImage:cgImage] withColorSpace:colorSpace];
     NSCIImageRep *rep = [NSCIImageRep imageRepWithCIImage:ciImage];
     NSImage *nsImage = [[NSImage alloc] initWithSize:rep.size];
     [nsImage addRepresentation:rep];
