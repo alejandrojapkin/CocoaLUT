@@ -56,7 +56,8 @@ void LUTConcurrentCubeLoop(NSUInteger cubeSize, void (^block)(NSUInteger r, NSUI
     });
 }
 
-#if TARGET_OS_MAC
+#if TARGET_OS_IPHONE
+#elif TARGET_OS_MAC
 void LUTNSImageLog(NSImage *image) {
     for (NSImageRep *rep in image.representations) {
         NSLog(@"Color Space: %@", rep.colorSpaceName);

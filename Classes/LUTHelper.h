@@ -23,7 +23,8 @@ void timer(NSString* name, void (^block)());
  */
 void LUTConcurrentCubeLoop(NSUInteger cubeSize, void (^block)(NSUInteger r, NSUInteger g, NSUInteger b));
 
-#if TARGET_OS_MAC
+#if TARGET_OS_IPHONE
+#elif TARGET_OS_MAC
 void LUTNSImageLog(NSImage *image);
 #endif
 
