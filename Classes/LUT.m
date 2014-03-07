@@ -14,6 +14,7 @@
 #import "LUTFormatterDiscreet1DLUT.h"
 
 @interface LUT ()
+@property (strong) LUTLattice *lattice;
 @end
 
 @implementation LUT

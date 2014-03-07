@@ -13,7 +13,7 @@
 
 @interface LUT : NSObject <NSCopying>
 
-@property (strong) LUTLattice *lattice;
+@property (readonly) LUTLattice *lattice;
 
 + (LUT *)LUTFromURL:(NSURL *)url;
 + (LUT *)LUTWithLattice:(LUTLattice *)lattice;
