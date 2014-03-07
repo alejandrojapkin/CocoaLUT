@@ -140,13 +140,9 @@
 }
 #elif TARGET_OS_MAC
 - (NSImage *)processNSImage:(NSImage *)image withColorSpace:(CGColorSpaceRef)colorSpace {
-    NSRect rect = NSMakeRect(0, 0, image.size.width, image.size.height);
-    CGImageRef cgImage = [image CGImageForProposedRect:&rect context:[NSGraphicsContext currentContext] hints:nil];
-    CIImage *ciImage = [self processCIImage:[CIImage imageWithCGImage:cgImage] withColorSpace:colorSpace];
-    NSCIImageRep *rep = [NSCIImageRep imageRepWithCIImage:ciImage];
-    NSImage *nsImage = [[NSImage alloc] initWithSize:rep.size];
-    [nsImage addRepresentation:rep];
-    return nsImage;
+    CIImage *inputCIImage = [image deep_CIImage];
+    CIImage *outputCIImage = [self processCIImage:inputCIImage withColorSpace:colorSpace];
+    return [NSImage deep_imageWithCImage:outputCIImage];
 }
 #endif
 

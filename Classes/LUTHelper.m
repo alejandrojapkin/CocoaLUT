@@ -56,6 +56,19 @@ void LUTConcurrentCubeLoop(NSUInteger cubeSize, void (^block)(NSUInteger r, NSUI
     });
 }
 
+#if TARGET_OS_MAC
+void LUTNSImageLog(NSImage *image) {
+    for (NSImageRep *rep in image.representations) {
+        NSLog(@"Color Space: %@", rep.colorSpaceName);
+        NSLog(@"Bits Per Sample: %ld", (long)rep.bitsPerSample);
+        if ([rep isKindOfClass:[NSBitmapImageRep class]]) {
+            NSLog(@"Bits Per Pixel: %ld", (long)((NSBitmapImageRep *)rep).bitsPerPixel);
+        }
+    }
+}
+#endif
+
+
 @implementation LUTHelper
 
 @end
