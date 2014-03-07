@@ -11,6 +11,9 @@
 
 @class LUT;
 
+/**
+ *  A one-dimensional color lookup table that is represented by three tone curves.
+ */
 @interface LUT1D : NSObject
 
 @property (readonly) NSArray *redCurve;
