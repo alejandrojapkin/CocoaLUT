@@ -11,6 +11,9 @@
 
 @class LUTColor;
 
+/**
+ *  Represents a lattice of `LUTColor` objects that make up a 3D lookup table.
+ */
 @interface LUTLattice : NSObject <NSCopying>
 
 @property (readonly) NSUInteger size;

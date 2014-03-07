@@ -7,7 +7,6 @@
 //
 
 #import "LUTFormatter3DL.h"
-
 @implementation LUTFormatter3DL
 
 + (LUT *)LUTFromLines:(NSArray *)lines {

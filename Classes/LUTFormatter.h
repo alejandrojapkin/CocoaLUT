@@ -9,14 +9,75 @@
 #import <Foundation/Foundation.h>
 #import "LUT.h"
 
+/**
+ *  An abstract superclass for an object that is responsible for converting between a `LUT` object in-memory and a file-based format.
+ */
 @interface LUTFormatter : NSObject
 
+/**
+ *  Returns a new LUT from a file in the formatter's file type..
+ *
+ *  The default implementation reads the contents of the file as a string and returns the result of LUTFromString:.
+ *
+ *  @param fileURL A file URL.
+ *
+ *  @return A new `LUT`.
+ */
 + (LUT *)LUTFromFile:(NSURL *)fileURL;
+
+/**
+ *  Returns a new LUT from a data blob in the formatter's file type..
+ *
+ *  The default implementation interprets the data as an ASCII string and returns the result of LUTFromString:.
+ *
+ *  @param data A data blob containing the contents of a LUT file.
+ *
+ *  @return A new `LUT`.
+ */
 + (LUT *)LUTFromData:(NSData *)data;
+
+/**
+ *  Returns a new LUT from a string in the formatter's file type..
+ *
+ *  The default implementation divides the string by newlines and passes the array of strings to LUTFromLines:.
+ *
+ *  @param string A string containing the contents of a LUT file.
+ *
+ *  @return A new `LUT`.
+ */
 + (LUT *)LUTFromString:(NSString *)string;
+
+/**
+ *  Returns a new LUT from an array of string lines in the formatter's file type..
+ *
+ *  The default implementation raises an exception and is intended to be implemented by a subclass.
+ *
+ *  @param lines An array of `NSString` objects that represents the lines in a LUT file.
+ *
+ *  @return A new `LUT`.
+ */
 + (LUT *)LUTFromLines:(NSArray *)lines;
 
+/**
+ *  Converts the provided `LUT` to a data blob in the formatter's file type.
+ *
+ *  The default implementation encodes the returned value from stringFromLUT: as UTF-8 text.
+ *
+ *  @param lut The LUT that is to be formatted.
+ *
+ *  @return A data blob containing the contents of the LUT.
+ */
 + (NSData *)dataFromLUT:(LUT *)lut;
+
+/**
+ *  Converts the provided `LUT` to a string in the formatter's file type.
+ *
+ *  The default implementation raises an exception and is intended to be implemented by a subclass.
+ *
+ *  @param lut The LUT that is to be formatted.
+ *
+ *  @return A string containing the contents of the LUT.
+ */
 + (NSString *)stringFromLUT:(LUT *)lut;
 
 @end
