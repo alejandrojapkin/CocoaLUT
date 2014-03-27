@@ -46,7 +46,7 @@
     
     // FIND OUTPUTS
     NSBlockOperation *findOperation = [NSBlockOperation blockOperationWithBlock:^{
-        timer(@"Searching", ^{
+        timer(@"Searching Tree", ^{
             self.progressDescription = @"Searching and building new LUT...";
             [self search];
         });
@@ -56,7 +56,7 @@
     // BUILD KD TREE IF NECCESSARY
     if (self.useTree) {
         NSBlockOperation *buildTreeOperation = [NSBlockOperation blockOperationWithBlock:^{
-            timer(@"Build Tree", ^{
+            timer(@"Building Search Tree", ^{
                 self.progressDescription = @"Building search tree...";
                 self.kdTree = [[KDTree alloc] initWithArray:self.inputArray];
                 [self setProgress:0 section:3 of:4];
@@ -111,8 +111,10 @@
     
     int maxValue = (int)self.outputSize - 1;
     
-    int __block completedOperations = 0;
-//    NSUInteger totalOps = self.outputSize * self.outputSize * self.outputSize;
+    int __block completedOps = 0;
+    NSUInteger totalOps = self.outputSize * self.outputSize * self.outputSize;
+    
+    NSLock *progressLock = [[NSLock alloc] init];
     
     LUTConcurrentCubeLoop(self.outputSize, ^(NSUInteger r, NSUInteger g, NSUInteger b) {
         if (self.useTree) {
@@ -127,12 +129,14 @@
                                                   b:nsremapint01(b, maxValue)];
             [newLattice setColor:color r:r g:g b:b];
         }
-        completedOperations += self.outputSize;
-//        [self setProgress:(float)completedOperations / (float)totalOps section:4 of:4];
+        completedOps++;
+        [progressLock lock];
+        [self setProgress:(float)completedOps / (float)totalOps section:4 of:4];
+        [progressLock unlock];
     });
     
     [self completedWithLUT:[LUT LUTWithLattice:newLattice]];
-
+    
 }
 
 - (LUTColor *)colorNearestToR:(int)r g:(int)g b:(int)b {
