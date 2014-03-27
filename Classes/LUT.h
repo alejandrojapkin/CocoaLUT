@@ -59,6 +59,16 @@
 
 
 /**
+ *  Returns a new `LUT` that is the original LUT combined with otherLUT.
+ *
+ *  @param otherLUT The LUT to apply to the current lut.
+ *
+ *  @return A new LUT with the same lattice size as self.lattice.size.
+ */
+- (LUT *)LUTByCombiningWithLUT:(LUT *)otherLUT;
+
+
+/**
  *  Returns a Core Image filter that will apply the receiver's transformation in a particular color space.
  *
  *  @param colorSpace The desired color space to use on the filter. Pass `nil` to get a `CIFilter` of type `CIColorCube`.

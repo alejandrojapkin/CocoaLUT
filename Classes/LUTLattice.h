@@ -23,5 +23,6 @@
 - (void)setColor:(LUTColor *)color r:(NSUInteger)r g:(NSUInteger)g b:(NSUInteger)b;
 - (LUTColor *)colorAtR:(NSUInteger)r g:(NSUInteger)g b:(NSUInteger)b;
 - (LUTColor *)colorAtInterpolatedR:(double)redPoint g:(double)greenPoint b:(double)bluePoint;
+- (LUTColor *)colorAtColor:(LUTColor *)color;
 
 @end

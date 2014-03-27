@@ -54,6 +54,10 @@
     return _latticeArray[r][g][b];
 }
 
+- (LUTColor *)colorAtColor:(LUTColor *)color{
+    return [self colorAtInterpolatedR:color.red*(double)(self.size-1) g:color.green*(double)(self.size-1) b:color.blue*(double)(self.size-1)];
+}
+
 - (LUTColor *)colorAtInterpolatedR:(double)redPoint g:(double)greenPoint b:(double)bluePoint {
     NSUInteger cubeSize = self.size;
 

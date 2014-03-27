@@ -60,6 +60,18 @@
     return [LUT LUTWithLattice:lattice];
 }
 
+- (LUT *)LUTByCombiningWithLUT:(LUT *)otherLUT {
+    LUTLattice *lattice = [[LUTLattice alloc] initWithSize:self.lattice.size];
+    
+    LUTConcurrentCubeLoop(lattice.size, ^(NSUInteger r, NSUInteger g, NSUInteger b) {
+        LUTColor *startColor = [self.lattice colorAtR:r g:g b:b];
+        LUTColor *newColor = [otherLUT.lattice colorAtColor:startColor];
+        [lattice setColor:newColor r:r g:g b:b];
+    });
+    
+    return [LUT LUTWithLattice:lattice];
+}
+
 - (LUT *)LUTByResizingToSize:(NSUInteger)newSize {
     if (newSize == self.lattice.size) {
         return [self copy];
