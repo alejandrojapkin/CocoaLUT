@@ -10,7 +10,9 @@
 #import <SceneKit/SceneKit.h>
 #import "CocoaLUT.h"
 
-@interface LUTPreviewSceneGenerator : NSObject
+@interface LUTPreviewScene : SCNScene
+
+@property float animationPercentage;
 
 + (SCNScene *)sceneForLUT:(LUT *)lut;
 
