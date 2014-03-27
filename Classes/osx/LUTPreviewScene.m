@@ -18,7 +18,7 @@
 @implementation LUTColorNode
 - (void)changeToAnimationPercentage:(float)animationPercentage{
     LUTColor *lerpedColor = [self.identityColor lerpTo:self.transformedColor amount:animationPercentage];
-    self.position = SCNVector3Make(lerpedColor.red/LATTICE_SIZE, lerpedColor.green/LATTICE_SIZE, lerpedColor.blue/LATTICE_SIZE);
+    self.position = SCNVector3Make(lerpedColor.red/13.0, lerpedColor.green/13.0, lerpedColor.blue/13.0);
 //    self.geometry.firstMaterial.diffuse.contents = lerpedColor.NSColor;
 }
 @end
@@ -57,7 +57,7 @@
     float size = lut.lattice.size;
     LUTConcurrentCubeLoop(size, ^(NSUInteger r, NSUInteger g, NSUInteger b) {
 
-        LUTColor *identityColor =[LUTColor colorWithRed:(float)r/(float)(LATTICE_SIZE-1) green:(float)g/(float)(LATTICE_SIZE-1) blue:(float)b/(float)(LATTICE_SIZE-1)];
+        LUTColor *identityColor = [LUTColor colorWithRed:(float)r/(float)(LATTICE_SIZE-1) green:(float)g/(float)(LATTICE_SIZE-1) blue:(float)b/(float)(LATTICE_SIZE-1)];
         LUTColor *transformedColor = [lut.lattice colorAtR:r g:g b:b];
         
         SCNSphere *dot = [SCNSphere sphereWithRadius:0.0010f];
