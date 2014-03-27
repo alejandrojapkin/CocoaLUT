@@ -103,11 +103,13 @@
 
 - (CIFilter *)coreImageFilterWithColorSpace:(CGColorSpaceRef)colorSpace {
     
-    NSUInteger size = self.lattice.size;
+    LUT *usedLut = self.lattice.size > 64 ? [self LUTByResizingToSize:64] : self;
+    
+    NSUInteger size = usedLut.lattice.size;
     size_t cubeDataSize = size * size * size * sizeof ( float ) * 4;
     float *cubeData = (float *) malloc ( cubeDataSize );
     
-    LUT *usedLut = self.lattice.size > 64 ? [self LUTByResizingToSize:64] : self;
+    
     
     size_t offset = 0;
     for (int z = 0; z < size; z++) {
