@@ -19,7 +19,7 @@
 - (void)changeToAnimationPercentage:(float)animationPercentage{
     LUTColor *lerpedColor = [self.identityColor lerpTo:self.transformedColor amount:animationPercentage];
     self.position = SCNVector3Make(lerpedColor.red/LATTICE_SIZE, lerpedColor.green/LATTICE_SIZE, lerpedColor.blue/LATTICE_SIZE);
-    self.geometry.firstMaterial.diffuse.contents = lerpedColor.NSColor;
+//    self.geometry.firstMaterial.diffuse.contents = lerpedColor.NSColor;
 }
 @end
 
@@ -39,15 +39,18 @@
 
 + (instancetype)sceneForLUT:(LUT *)lut {
     
+    
     lut = [lut LUTByResizingToSize:LATTICE_SIZE];
     
     LUTPreviewScene *scene = [self scene];
+    scene.animationPercentage = 1.0;
+    [scene addObserver:scene forKeyPath:@"animationPercentage" options:NSKeyValueObservingOptionNew context:NULL];
+    
     
     SCNNode *dotGroup = [SCNNode node];
     [scene.rootNode addChildNode:dotGroup];
     
     float size = lut.lattice.size;
-    [SCNTransaction begin];
     LUTConcurrentCubeLoop(size, ^(NSUInteger r, NSUInteger g, NSUInteger b) {
 
         LUTColor *identityColor =[LUTColor colorWithRed:(float)r/(float)(LATTICE_SIZE-1) green:(float)g/(float)(LATTICE_SIZE-1) blue:(float)b/(float)(LATTICE_SIZE-1)];
@@ -66,9 +69,8 @@
         }
 
     });
-    [SCNTransaction commit];
     
-    [scene addObserver:scene forKeyPath:@"animationPercentage" options:NSKeyValueObservingOptionNew context:NULL];
+    
 
     return scene;
 }
