@@ -25,6 +25,10 @@
 
 @implementation LUTPreviewScene
 
+- (void)dealloc{
+    [self removeObserver:self forKeyPath:@"animationPercentage"];
+}
+
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
     [self updateNodes];
