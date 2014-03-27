@@ -16,9 +16,10 @@
 @end
 
 @implementation LUTColorNode
-- (void)moveToAnimationPercentage:(float)animationPercentage{
+- (void)changeToAnimationPercentage:(float)animationPercentage{
     LUTColor *lerpedColor = [self.identityColor lerpTo:self.transformedColor amount:animationPercentage];
     self.position = SCNVector3Make(lerpedColor.red/LATTICE_SIZE, lerpedColor.green/LATTICE_SIZE, lerpedColor.blue/LATTICE_SIZE);
+    self.geometry.firstMaterial.diffuse.contents = lerpedColor.NSColor;
 }
 @end
 
@@ -26,12 +27,12 @@
 
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
-    [self updateNodePositions];
+    [self updateNodes];
 }
 
-- (void)updateNodePositions{
+- (void)updateNodes{
     for(LUTColorNode *node in [self.rootNode.childNodes[0] childNodes]){
-        [node moveToAnimationPercentage:self.animationPercentage];
+        [node changeToAnimationPercentage:self.animationPercentage];
     }
     
 }
@@ -58,7 +59,7 @@
         LUTColorNode *node = (LUTColorNode*)[LUTColorNode nodeWithGeometry:dot];
         node.identityColor = identityColor;
         node.transformedColor = transformedColor;
-        [node moveToAnimationPercentage:scene.animationPercentage];
+        [node changeToAnimationPercentage:scene.animationPercentage];
         
         @synchronized(dotGroup) {
             [dotGroup addChildNode:node];
