@@ -45,21 +45,21 @@
 
 - (BOOL)checkCancellation {
     if (self.cancelled) {
-        [self didCancel];
+        @synchronized(self) {
+            if (!_calledCancelHandler) {
+                [self didCancel];
+                _calledCancelHandler = YES;
+            }
+        }
         return YES;
     }
     return NO;
 }
 
 - (void)didCancel {
-    @synchronized(self) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if (!_calledCancelHandler) {
-                self.cancelHandler();
-                _calledCancelHandler = YES;
-            }
-        });
-    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.cancelHandler();
+    });
 }
 
 - (void)setProgress:(float)progress section:(int)section of:(int)sectionCount {
