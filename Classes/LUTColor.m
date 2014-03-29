@@ -35,7 +35,11 @@
 }
 
 - (bool)equalsLUTColor:(LUTColor *)otherColor{
-    return self.red == otherColor.red && self.green == otherColor.green && self.blue == otherColor.blue;
+    return fabs(self.red-otherColor.red)<.0005 && fabs(self.green-otherColor.green) < .0005 && fabs(self.blue - otherColor.blue) < .0005;
+}
+
+- (NSString *)description{
+    return [NSString stringWithFormat:@"%.6f %.6f %.6f", self.red, self.green, self.blue];
 }
 
 #if TARGET_OS_IPHONE
