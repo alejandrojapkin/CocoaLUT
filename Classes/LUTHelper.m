@@ -26,7 +26,7 @@ double remapint01(int value, int maxValue) {
 
 double lerp1d(double beginning, double end, double value01) {
     if (value01 < 0 || value01 > 1){
-        @throw [NSException exceptionWithName:@"Invalid Lerp" reason:@"Valye out of bounds" userInfo:nil];
+        @throw [NSException exceptionWithName:@"Invalid Lerp" reason:@"Value out of bounds" userInfo:nil];
     }
     float range = end - beginning;
     return beginning + range * value01;
