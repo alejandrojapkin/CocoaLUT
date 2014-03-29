@@ -68,6 +68,10 @@
  */
 - (LUT *)LUTByCombiningWithLUT:(LUT *)otherLUT;
 
+- (bool)equalsIdentityLUT;
+
+- (bool)equalsLUT:(LUT *)comparisonLUT;
+
 
 - (LUT1D *)LUT1D;
 

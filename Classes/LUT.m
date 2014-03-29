@@ -103,6 +103,23 @@
     return [LUT LUTWithLattice:lattice];
 }
 
+- (bool) equalsIdentityLUT{
+    return [self equalsLUT:[LUT identityLutOfSize:self.lattice.size]];
+}
+
+- (bool) equalsLUT:(LUT *)comparisonLUT{
+    if(comparisonLUT.lattice.size != self.lattice.size){
+        return false;
+    }
+    bool __block isEqual = true;
+    LUTConcurrentCubeLoop(self.lattice.size, ^(NSUInteger r, NSUInteger g, NSUInteger b) {
+        if(! ([[comparisonLUT.lattice colorAtR:r g:g b:b] equalsLUTColor:[self.lattice colorAtR:r g:g b:b]]) ){
+            isEqual = false;
+        }
+    });
+    return isEqual;
+}
+
 - (id)copyWithZone:(NSZone *)zone {
     return [LUT LUTWithLattice:[self.lattice copyWithZone:zone]];
 }

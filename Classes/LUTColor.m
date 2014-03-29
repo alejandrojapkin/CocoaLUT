@@ -34,6 +34,10 @@
                              blue:lerp1d(self.blue, otherColor.blue, amount)];
 }
 
+- (bool)equalsLUTColor:(LUTColor *)otherColor{
+    return self.red == otherColor.red && self.green == otherColor.green && self.blue == otherColor.blue;
+}
+
 #if TARGET_OS_IPHONE
 - (UIColor *)UIColor {
     return [UIColor colorWithRed:self.red green:self.green blue:self.blue alpha:1];
