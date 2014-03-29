@@ -10,6 +10,7 @@
 #import "LUTLattice.h"
 
 @class LUTLattice;
+@class LUT1D;
 
 /**
  *  A three-dimensional color lookup table.
@@ -66,6 +67,9 @@
  *  @return A new LUT with the same lattice size as self.lattice.size.
  */
 - (LUT *)LUTByCombiningWithLUT:(LUT *)otherLUT;
+
+
+- (LUT1D *)LUT1D;
 
 
 /**

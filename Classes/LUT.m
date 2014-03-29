@@ -72,6 +72,20 @@
     return [LUT LUTWithLattice:lattice];
 }
 
+- (LUT1D *) LUT1D{
+    NSMutableArray *redCurve = [NSMutableArray array];
+    NSMutableArray *greenCurve = [NSMutableArray array];
+    NSMutableArray *blueCurve = [NSMutableArray array];
+    
+    for(int i = 0; i < self.lattice.size; i++){
+        [redCurve addObject:@([self.lattice colorAtR:i g:0 b:0].red)];
+        [greenCurve addObject:@([self.lattice colorAtR:0 g:i b:0].green)];
+        [blueCurve addObject:@([self.lattice colorAtR:0 g:0 b:i].blue)];
+    }
+    
+    return [LUT1D LUT1DWithRedCurve:redCurve greenCurve:greenCurve blueCurve:blueCurve];
+}
+
 - (LUT *)LUTByResizingToSize:(NSUInteger)newSize {
     if (newSize == self.lattice.size) {
         return [self copy];
