@@ -76,11 +76,12 @@
     NSMutableArray *redCurve = [NSMutableArray array];
     NSMutableArray *greenCurve = [NSMutableArray array];
     NSMutableArray *blueCurve = [NSMutableArray array];
-    
+    LUTColor *color;
     for(int i = 0; i < self.lattice.size; i++){
-        [redCurve addObject:@([self.lattice colorAtR:i g:0 b:0].red)];
-        [greenCurve addObject:@([self.lattice colorAtR:0 g:i b:0].green)];
-        [blueCurve addObject:@([self.lattice colorAtR:0 g:0 b:i].blue)];
+        color = [self.lattice colorAtR:i g:i b:i];
+        [redCurve addObject:@(color.red)];
+        [greenCurve addObject:@(color.green)];
+        [blueCurve addObject:@(color.blue)];
     }
     
     return [LUT1D LUT1DWithRedCurve:redCurve greenCurve:greenCurve blueCurve:blueCurve];
