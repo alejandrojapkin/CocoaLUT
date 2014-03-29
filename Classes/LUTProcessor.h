@@ -10,7 +10,6 @@
 #import "LUT.h"
 
 @interface LUTProcessor : NSObject {
-    BOOL _cancelled;
 }
 
 @property (strong) LUT *lut;
@@ -18,6 +17,7 @@
 @property (strong) void (^completionHandler)(LUT *reversedLUT);
 @property (strong) void (^cancelHandler)();
 @property (assign, atomic) float progress;
+@property (assign) BOOL cancelled;
 
 + (instancetype)processorForLUT:(LUT *)lut
               completionHandler:(void(^)(LUT *reversedLUT))completionHandler
@@ -29,6 +29,7 @@
 - (void)process;
 - (void)completedWithLUT:(LUT *)lut;
 - (BOOL)checkCancellation;
+- (void)didCancel;
 - (void)setProgress:(float)progress section:(int)section of:(int)sectionCount;
 
 @end

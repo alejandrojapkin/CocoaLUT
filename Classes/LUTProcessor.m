@@ -10,6 +10,7 @@
 
 @interface LUTProcessor (){
     NSDate *_startTime;
+    BOOL _calledCancelHandler;
 }
 @end
 
@@ -30,7 +31,8 @@
 }
 
 - (void)cancel {
-    _cancelled = YES;
+    self.cancelled = YES;
+    self.progressDescription = @"Canceling...";
 }
 
 - (void)completedWithLUT:(LUT *)lut {
@@ -42,11 +44,22 @@
 }
 
 - (BOOL)checkCancellation {
-    if (_cancelled) {
-        self.cancelHandler();
+    if (self.cancelled) {
+        [self didCancel];
         return YES;
     }
     return NO;
+}
+
+- (void)didCancel {
+    @synchronized(self) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (!_calledCancelHandler) {
+                self.cancelHandler();
+                _calledCancelHandler = YES;
+            }
+        });
+    }
 }
 
 - (void)setProgress:(float)progress section:(int)section of:(int)sectionCount {

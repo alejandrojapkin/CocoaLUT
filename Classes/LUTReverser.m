@@ -14,6 +14,7 @@
 @property (strong) NSArray *inputArray;
 @property (assign) BOOL useTree;
 @property (assign) NSUInteger outputSize;
+@property (strong) NSOperationQueue *queue;
 @end
 
 @implementation LUTReverser
@@ -21,7 +22,7 @@
 - (void)process {
     [super process];
     
-    NSOperationQueue* operationQueue = [[NSOperationQueue alloc] init];
+    self.queue = [[NSOperationQueue alloc] init];
 
     self.useTree = YES;
     
@@ -64,13 +65,18 @@
         }];
         [buildTreeOperation addDependency:buildOperation];
         [findOperation addDependency:buildTreeOperation];
-        [operationQueue addOperation:buildTreeOperation];
+        [self.queue addOperation:buildTreeOperation];
     }
     
-    [operationQueue addOperation:resizeOperation];
-    [operationQueue addOperation:findOperation];
-    [operationQueue addOperation:buildOperation];
+    [self.queue addOperation:resizeOperation];
+    [self.queue addOperation:findOperation];
+    [self.queue addOperation:buildOperation];
     
+}
+
+- (void) didCancel {
+    [super didCancel];
+    [self.queue cancelAllOperations];
 }
 
 - (void)buildInputArray:(NSUInteger)newSize {
@@ -87,6 +93,7 @@
         NSMutableArray *thisArray = [NSMutableArray array];
         for (int g = 0; g < newSize; g++) {
             for (int b = 0; b < newSize; b++) {
+                if ([self checkCancellation]) return;
                 LUTColor *latticePointReference = [LUTColor colorWithRed:nsremapint01(r, maxValue)
                                                                    green:nsremapint01(g, maxValue)
                                                                     blue:nsremapint01(b, maxValue)];
@@ -117,6 +124,7 @@
     NSLock *progressLock = [[NSLock alloc] init];
     
     LUTConcurrentCubeLoop(self.outputSize, ^(NSUInteger r, NSUInteger g, NSUInteger b) {
+        if ([self checkCancellation]) return;
         if (self.useTree) {
             KDLeaf *leaf = [self.kdTree findNearestNeighbor:@[@(nsremapint01(r, maxValue)),
                                                               @(nsremapint01(g, maxValue)),
