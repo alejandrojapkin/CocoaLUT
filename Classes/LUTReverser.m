@@ -22,6 +22,12 @@
 - (void)process {
     [super process];
     
+    if([self.lut equalsIdentityLUT]){
+        [self completedWithLUT:self.lut];
+        return;
+    }
+
+    
     self.queue = [[NSOperationQueue alloc] init];
 
     self.useTree = YES;

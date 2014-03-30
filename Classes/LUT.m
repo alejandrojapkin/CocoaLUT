@@ -80,11 +80,12 @@
     NSMutableArray *redCurve = [NSMutableArray array];
     NSMutableArray *greenCurve = [NSMutableArray array];
     NSMutableArray *blueCurve = [NSMutableArray array];
-    
+    LUTColor *color;
     for(int i = 0; i < self.lattice.size; i++){
-        [redCurve addObject:@([self.lattice colorAtR:i g:0 b:0].red)];
-        [greenCurve addObject:@([self.lattice colorAtR:0 g:i b:0].green)];
-        [blueCurve addObject:@([self.lattice colorAtR:0 g:0 b:i].blue)];
+        color = [self.lattice colorAtR:i g:i b:i];
+        [redCurve addObject:@(color.red)];
+        [greenCurve addObject:@(color.green)];
+        [blueCurve addObject:@(color.blue)];
     }
     
     return [LUT1D LUT1DWithRedCurve:redCurve greenCurve:greenCurve blueCurve:blueCurve];
@@ -104,6 +105,23 @@
     });
     
     return [LUT LUTWithLattice:lattice];
+}
+
+- (bool) equalsIdentityLUT{
+    return [self equalsLUT:[LUT identityLutOfSize:self.lattice.size]];
+}
+
+- (bool) equalsLUT:(LUT *)comparisonLUT{
+    if(comparisonLUT.lattice.size != self.lattice.size){
+        return false;
+    }
+    bool __block isEqual = true;
+    LUTConcurrentCubeLoop(self.lattice.size, ^(NSUInteger r, NSUInteger g, NSUInteger b) {
+        if(! ([[comparisonLUT.lattice colorAtR:r g:g b:b] equalsLUTColor:[self.lattice colorAtR:r g:g b:b]]) ){
+            isEqual = false;
+        }
+    });
+    return isEqual;
 }
 
 - (id)copyWithZone:(NSZone *)zone {
