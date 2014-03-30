@@ -11,6 +11,37 @@
 
 @implementation LUTFormatterUnwrappedTexture
 
++ (NSData *)dataFromLUT:(LUT *)lut {
+#if TARGET_OS_IPHONE
+    return UIImagePNGRepresentation([self imageFromLUT:lut]);
+# elif TARGET_OS_MAC
+    return [[self imageFromLUT:lut] TIFFRepresentation];
+# endif
+}
+
++ (LUT *)LUTFromData:(NSData *)data {
+#if TARGET_OS_IPHONE
+    return [self LUTFromImage:[[UIImage alloc] initWithData:data]];
+# elif TARGET_OS_MAC
+    return [self LUTFromImage:[[NSImage alloc] initWithData:data]];
+# endif
+}
+
+#if TARGET_OS_IPHONE
++ (UIImage *)imageFromLUT:(LUT *)lut {
+    NSException *exception = [NSException exceptionWithName:@"Unsupported Platform"
+                                                     reason:@"LUTFormatterUnwrappedTexture doesn't currently support iOS." userInfo:nil];
+    @throw exception;
+    return nil;
+}
++ (LUT *)LUTFromImage:(UIImage *)image {
+    NSException *exception = [NSException exceptionWithName:@"Unsupported Platform"
+                                                     reason:@"LUTFormatterUnwrappedTexture doesn't currently support iOS." userInfo:nil];
+    @throw exception;
+    return nil;
+}
+#elif TARGET_OS_MAC
+
 + (NSImage *)imageFromLUT:(LUT *)lut {
     CGFloat width  = lut.lattice.size * lut.lattice.size;
     CGFloat height = lut.lattice.size;
@@ -38,14 +69,6 @@
     return image;
 }
 
-+ (NSData *)dataFromLUT:(LUT *)lut {
-    return [[self imageFromLUT:lut] TIFFRepresentation];
-}
-
-+ (LUT *)LUTFromData:(NSData *)data {
-    return [self LUTFromImage:[[NSImage alloc] initWithData:data]];
-}
-
 + (LUT *)LUTFromImage:(NSImage *)image {
     if (image.size.width != image.size.height * image.size.height) {
         NSException *exception = [NSException exceptionWithName:@"LUTParseError"
@@ -65,5 +88,6 @@
 
     return [LUT LUTWithLattice:lattice];
 }
+#endif
 
 @end

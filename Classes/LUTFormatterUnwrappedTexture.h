@@ -10,6 +10,12 @@
 
 @interface LUTFormatterUnwrappedTexture : LUTFormatter
 
+#if TARGET_OS_IPHONE
++ (UIImage *)imageFromLUT:(LUT *)lut;
++ (LUT *)LUTFromImage:(UIImage *)image;
+#elif TARGET_OS_MAC
 + (NSImage *)imageFromLUT:(LUT *)lut;
++ (LUT *)LUTFromImage:(NSImage *)image;
+#endif
 
 @end
