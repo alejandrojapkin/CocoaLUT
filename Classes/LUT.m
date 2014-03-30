@@ -12,6 +12,7 @@
 #import "LUTFormatter3DL.h"
 #import "LUTFormatterOLUT.h"
 #import "LUTFormatterDiscreet1DLUT.h"
+#import "LUTFormatterUnwrappedTexture.h"
 
 @interface LUT ()
 @property (strong) LUTLattice *lattice;
@@ -31,6 +32,9 @@
     }
     else if ([url.pathExtension.lowercaseString isEqualToString:@"lut"]) {
         return [LUTFormatterDiscreet1DLUT LUTFromFile:url];
+    }
+    else if ([@[@"tif", @"tiff", @"png"] containsObject:url.pathExtension.lowercaseString]) {
+        return [LUTFormatterUnwrappedTexture LUTFromFile:url];
     }
     return nil;
 }

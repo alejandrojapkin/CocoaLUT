@@ -43,7 +43,7 @@ typedef double LUTColorValue;
  *
  *  @return A new color.
  */
-+ (LUTColor *)colorWithRed:(LUTColorValue)r green:(LUTColorValue)g blue:(LUTColorValue)b;
++ (instancetype)colorWithRed:(LUTColorValue)r green:(LUTColorValue)g blue:(LUTColorValue)b;
 
 /**
  *  Returns a new color with the provided integer channel values and a bit depth of the color system. Values will be converted to floating-point.
@@ -55,7 +55,7 @@ typedef double LUTColorValue;
  *
  *  @return A new color.
  */
-+ (LUTColor *)colorFromIntegersWithBitDepth:(NSUInteger)bitdepth red:(NSUInteger)r green:(NSUInteger)g blue:(NSUInteger)b;
++ (instancetype)colorFromIntegersWithBitDepth:(NSUInteger)bitdepth red:(NSUInteger)r green:(NSUInteger)g blue:(NSUInteger)b;
 
 /**
  *  Returns a new color with channel values clipped below zero and above 1.
@@ -90,6 +90,12 @@ typedef double LUTColorValue;
  *  @return A `NSColor`.
  */
 - (NSColor *)NSColor;
+/**
+ *  A LUTColor representation of an NSColor.
+ *
+ *  @return A `LUTColor`.
+ */
++ (instancetype)colorWithNSColor:(NSColor *)color;
 #endif
 
 @end

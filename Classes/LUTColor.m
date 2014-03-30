@@ -11,7 +11,7 @@
 
 @implementation LUTColor
 
-+ (LUTColor *)colorWithRed:(LUTColorValue)r green:(LUTColorValue)g blue:(LUTColorValue)b {
++ (instancetype)colorWithRed:(LUTColorValue)r green:(LUTColorValue)g blue:(LUTColorValue)b {
     LUTColor *color = [[LUTColor alloc] init];
     color.red = r;
     color.green = g;
@@ -19,7 +19,7 @@
     return color;
 }
 
-+ (LUTColor *)colorFromIntegersWithBitDepth:(NSUInteger)bitdepth red:(NSUInteger)r green:(NSUInteger)g blue:(NSUInteger)b {
++ (instancetype)colorFromIntegersWithBitDepth:(NSUInteger)bitdepth red:(NSUInteger)r green:(NSUInteger)g blue:(NSUInteger)b {
     NSUInteger maxBits = pow(2, bitdepth) - 1;
     return [LUTColor colorWithRed:nsremapint01(r, maxBits) green:nsremapint01(g, maxBits) blue:nsremapint01(b, maxBits)];
 }
@@ -41,6 +41,9 @@
 #elif TARGET_OS_MAC
 - (NSColor *)NSColor {
     return [NSColor colorWithRed:self.red green:self.green blue:self.blue alpha:1];
+}
++ (instancetype)colorWithNSColor:(NSColor *)color {
+    return [LUTColor colorWithRed:color.redComponent green:color.greenComponent blue:color.blueComponent];
 }
 #endif
 

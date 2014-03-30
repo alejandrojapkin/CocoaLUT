@@ -11,14 +11,11 @@
 @implementation LUTFormatter
 
 + (LUT *)LUTFromFile:(NSURL *)fileURL {
-    NSStringEncoding usedEncoding;
-    NSError *error;
-    NSString *string = [NSString stringWithContentsOfURL:fileURL usedEncoding:&usedEncoding error:&error];
-    return [self LUTFromString:string];
+    return [self LUTFromData:[NSData dataWithContentsOfURL:fileURL]];
 }
 
 + (LUT *)LUTFromData:(NSData *)data {
-    return [self LUTFromString:[[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding]];
+    return [self LUTFromString:[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]];
 }
 
 + (LUT *)LUTFromString:(NSString *)string {
