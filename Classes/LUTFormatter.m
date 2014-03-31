@@ -7,10 +7,14 @@
 //
 
 #import "LUTFormatter.h"
+#import "NSImage+OIIO.h"
 
 @implementation LUTFormatter
 
 + (LUT *)LUTFromFile:(NSURL *)fileURL {
+    if([@[@"dpx"] containsObject:fileURL.pathExtension.lowercaseString]){
+        return [self LUTFromData:[[NSImage oiio_forceImageWithContentsOfURL:fileURL] TIFFRepresentation]];
+    }
     return [self LUTFromData:[NSData dataWithContentsOfURL:fileURL]];
 }
 
