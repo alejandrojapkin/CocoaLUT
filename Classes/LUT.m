@@ -13,6 +13,7 @@
 #import "LUTFormatterOLUT.h"
 #import "LUTFormatterDiscreet1DLUT.h"
 #import "LUTFormatterUnwrappedTexture.h"
+#import "LUTFormatterCMSTestPattern.h"
 
 @interface LUT ()
 @property (strong) LUTLattice *lattice;
@@ -33,8 +34,24 @@
     else if ([url.pathExtension.lowercaseString isEqualToString:@"lut"]) {
         return [LUTFormatterDiscreet1DLUT LUTFromFile:url];
     }
-    else if ([@[@"tif", @"tiff", @"png"] containsObject:url.pathExtension.lowercaseString]) {
-        return [LUTFormatterUnwrappedTexture LUTFromFile:url];
+    else if ([@[@"tif", @"tiff", @"png", @"dpx"] containsObject:url.pathExtension.lowercaseString]) {
+        @try{
+            return [LUTFormatterUnwrappedTexture LUTFromFile:url];
+        }
+        @catch (NSException *e) {
+            NSLog(@"%@", e);
+        }
+        
+        @try{
+            return [LUTFormatterCMSTestPattern LUTFromFile:url];
+        }
+        @catch (NSException *e) {
+            NSLog(@"%@", e);
+        }
+        
+        NSException *exception = [NSException exceptionWithName:@"LUTParseError"
+                                                         reason:@"Image dimensions don't conform to LUTFormatterCMSTestPattern or LUTFormatterUnwrappedTexture" userInfo:nil];
+        @throw exception;
     }
     return nil;
 }

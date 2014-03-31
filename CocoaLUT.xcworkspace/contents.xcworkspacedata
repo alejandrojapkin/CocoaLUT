@@ -2,12 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:Classes/osx/LUTPreviewView.h">
-   </FileRef>
-   <FileRef
-      location = "group:Classes/osx/LUTPreviewView.m">
-   </FileRef>
-   <FileRef
       location = "group:Classes">
    </FileRef>
 </Workspace>
