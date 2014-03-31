@@ -53,14 +53,14 @@
                                                               samplesPerPixel:3
                                                                      hasAlpha:NO
                                                                      isPlanar:NO
-                                                               colorSpaceName:NSCalibratedRGBColorSpace
+                                                               colorSpaceName:NSDeviceRGBColorSpace
                                                                   bytesPerRow:(width * (16 * 3)) / 8
                                                                  bitsPerPixel:16 * 3];
     
     LUTConcurrentCubeLoop(lut.lattice.size, ^(NSUInteger r, NSUInteger g, NSUInteger b) {
         NSUInteger x = b * lut.lattice.size + r;
         NSUInteger y = g;
-        NSColor *color = [[lut.lattice colorAtR:r g:g b:b].NSColor colorUsingColorSpaceName:NSCalibratedRGBColorSpace];
+        NSColor *color = [[lut.lattice colorAtR:r g:g b:b].NSColor colorUsingColorSpaceName:NSDeviceRGBColorSpace];
         [imageRep setColor:color atX:x y:y];
     });
     
