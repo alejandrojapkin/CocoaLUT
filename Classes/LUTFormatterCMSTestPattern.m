@@ -49,9 +49,9 @@
     
     NSLog(@"w:%i h:%i", width*7, height*7);
     
-    CGColorSpaceRef cgColorSpace = CGColorSpaceCreateWithName(kCGColorSpaceGenericRGBLinear);
-    NSColorSpace *linearRGBColorSpace = [[NSColorSpace alloc] initWithCGColorSpace:cgColorSpace];
-    CGColorSpaceRelease(cgColorSpace);
+//    CGColorSpaceRef cgColorSpace = CGColorSpaceCreateWithName(kCGColorSpaceGenericRGBLinear);
+//    NSColorSpace *linearRGBColorSpace = [[NSColorSpace alloc] initWithCGColorSpace:cgColorSpace];
+//    CGColorSpaceRelease(cgColorSpace);
     
     
     NSBitmapImageRep *imageRep = [[NSBitmapImageRep alloc] initWithBitmapDataPlanes:NULL
@@ -78,8 +78,8 @@
             
             if(currentCubeIndex < cubeSize*cubeSize*cubeSize){
                 NSColor *color = [[lut.lattice colorAtR:redIndex g:greenIndex b:blueIndex].NSColor colorUsingColorSpaceName:NSDeviceRGBColorSpace];
-                for(int px = x*7; px < x*7+7; px++){
-                    for(int py = (height - (y+1))*7; py < (height - (y+1))*7+7; py++){
+                for(int px = (int)x*7; px < x*7+7; px++){
+                    for(int py = (int)(height - (y+1))*7; py < (height - (y+1))*7+7; py++){
                         [imageRep setColor:color atX:px y:py];
                     }
                 }
