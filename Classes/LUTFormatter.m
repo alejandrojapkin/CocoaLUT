@@ -7,15 +7,21 @@
 //
 
 #import "LUTFormatter.h"
+
+#if defined(COCOAPODS_POD_AVAILABLE_oiiococoa)
 #import "NSImage+OIIO.h"
+#endif
 
 @implementation LUTFormatter
 
 + (LUT *)LUTFromFile:(NSURL *)fileURL {
+    #if defined(COCOAPODS_POD_AVAILABLE_oiiococoa)
     if([@[@"dpx"] containsObject:fileURL.pathExtension.lowercaseString]){
         return [self LUTFromData:[[NSImage oiio_forceImageWithContentsOfURL:fileURL] TIFFRepresentation]];
     }
+    #endif
     return [self LUTFromData:[NSData dataWithContentsOfURL:fileURL]];
+    
 }
 
 + (LUT *)LUTFromData:(NSData *)data {
