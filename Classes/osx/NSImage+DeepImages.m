@@ -25,7 +25,7 @@
                                                                samplesPerPixel:4
                                                                       hasAlpha:YES
                                                                       isPlanar:NO
-                                                                colorSpaceName:NSCalibratedRGBColorSpace
+                                                                colorSpaceName:NSDeviceRGBColorSpace
                                                                   bitmapFormat:0
                                                                    bytesPerRow:rowBytes
                                                                   bitsPerPixel:0];
