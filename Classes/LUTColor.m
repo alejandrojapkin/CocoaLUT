@@ -9,8 +9,6 @@
 #import "LUTColor.h"
 #import "LUTHelper.h"
 
-@end
-
 @implementation LUTColor
 
 + (instancetype)colorWithRed:(LUTColorValue)r green:(LUTColorValue)g blue:(LUTColorValue)b {
@@ -34,11 +32,6 @@
     return [LUTColor colorWithRed:lerp1d(self.red, otherColor.red, amount)
                             green:lerp1d(self.green, otherColor.green, amount)
                              blue:lerp1d(self.blue, otherColor.blue, amount)];
-}
-
-- (LUTColor *)applyTransformationMatrix:(GLKMatrix3)transformationMatrix{
-    GLKVector3 transformedColorAsVector = GLKMatrix3MultiplyVector3(transformationMatrix, GLKVector3Make(self.red, self.green, self.blue));
-    return [LUTColor colorWithRed:transformedColorAsVector.x green:transformedColorAsVector.y blue:transformedColorAsVector.z];
 }
 
 - (bool)equalsLUTColor:(LUTColor *)otherColor{

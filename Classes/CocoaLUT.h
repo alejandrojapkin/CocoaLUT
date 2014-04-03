@@ -19,6 +19,7 @@
     #import "LUTLattice.h"
     #import "LUTColor.h"
     #import "LUT1D.h"
+    #import "LUTColorSpace.h"
 
 #endif
 
