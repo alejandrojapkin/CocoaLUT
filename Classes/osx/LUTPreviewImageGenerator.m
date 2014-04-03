@@ -13,7 +13,7 @@
 - (NSImage *)renderPreviewImageFromImage:(NSImage *)image resizedToSize:(NSSize)size {
 
     NSImage *baseImage = [image copy];
-    NSImage *processedImage = [self.lut processNSImage:[baseImage copy] withColorSpace:nil];
+    NSImage *processedImage = [self.lut processNSImage:[baseImage copy] withColorSpace:CGColorSpaceCreateDeviceRGB()];
 
     NSImage *finalImage = [NSImage imageWithSize:image.size flipped:NO drawingHandler:^BOOL(NSRect dstRect) {
         CGContextRef context = NSGraphicsContext.currentContext.graphicsPort;
