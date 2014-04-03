@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <GLKit/GLKit.h>
 #import "CocoaLUT.h"
 
 /**
@@ -77,6 +78,8 @@ typedef double LUTColorValue;
 - (LUTColor *)lerpTo:(LUTColor *)otherColor amount:(double)amount;
 
 - (bool)equalsLUTColor:(LUTColor *)otherColor;
+
+- (LUTColor *)applyTransformationMatrix:(GLKMatrix3)transformationMatrix;
 
 #if TARGET_OS_IPHONE
 /**
