@@ -127,7 +127,7 @@
                            @"Gamma 2.6": [LUTColorTransferFunction LUTColorTransferFunctionWithGamma:2.6],
                            @"Gamma 1.8": [LUTColorTransferFunction LUTColorTransferFunctionWithGamma:1.8],
                            @"Linear": [LUTColorTransferFunction LUTColorTransferFunctionWithGamma:1.0],
-                           @"Rec 709": [LUTColorTransferFunction rec709TransferFunction],
+                           @"Rec. 709": [LUTColorTransferFunction rec709TransferFunction],
                            @"sRGB": [LUTColorTransferFunction sRGBTransferFunction]
                            };
     return dict;

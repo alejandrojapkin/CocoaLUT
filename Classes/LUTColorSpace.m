@@ -102,7 +102,7 @@
    
 
 + (NSDictionary *)knownColorSpaces{
-    NSDictionary *dict = @{@"Rec. 709": [LUTColorSpace rec709ColorSpace],
+    NSDictionary *dict = @{@"Rec. 709 / sRGB": [LUTColorSpace rec709ColorSpace],
                            @"DCI-P3": [LUTColorSpace dciP3ColorSpace],
                            @"P3 D60": [LUTColorSpace p3D60ColorSpace],
                            @"P3 D65": [LUTColorSpace p3D65ColorSpace],
