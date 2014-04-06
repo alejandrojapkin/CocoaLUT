@@ -46,6 +46,9 @@
 - (UIColor *)UIColor {
     return [UIColor colorWithRed:self.red green:self.green blue:self.blue alpha:1];
 }
++ (instancetype)colorWithUIColor:(UIColor *)color {
+    return [LUTColor colorWithRed:color.redComponent green:color.greenComponent blue:color.blueComponent];
+}
 #elif TARGET_OS_MAC
 - (NSColor *)NSColor {
     return [NSColor colorWithRed:self.red green:self.green blue:self.blue alpha:1];

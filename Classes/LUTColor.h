@@ -85,6 +85,7 @@ typedef double LUTColorValue;
  *  @return A `UIColor`.
  */
 - (UIColor *)UIColor;
++ (instancetype)colorWithUIColor:(UIColor *)color;
 #elif TARGET_OS_MAC
 /**
  *  A `NSColor` representation of the receiver.
