@@ -14,6 +14,6 @@
 @property (strong) LUT *lut;
 
 - (NSImage *)renderPreviewImageFromImage:(NSImage *)image resizedToSize:(NSSize)size;
-
+- (void)drawPreviewImageFromImage:(NSImage *)image resizedToSize:(NSSize)size inContext:(NSGraphicsContext *)graphicsContext;
 
 @end
