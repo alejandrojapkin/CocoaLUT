@@ -51,7 +51,11 @@
 }
 
 - (LUTColor *)colorAtR:(NSUInteger)r g:(NSUInteger)g b:(NSUInteger)b {
-    return _latticeArray[r][g][b];
+    LUTColor *color = _latticeArray[r][g][b];
+    if ([color isEqual:[NSNull null]]) {
+        return nil;
+    }
+    return color;
 }
 
 - (LUTColor *)colorAtColor:(LUTColor *)color{
