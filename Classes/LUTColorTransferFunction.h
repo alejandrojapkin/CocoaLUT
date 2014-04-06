@@ -14,19 +14,19 @@
 
 @interface LUTColorTransferFunction : NSObject
 +(instancetype)LUTColorTransferFunctionWithRedLinearToTransformedExpressionString:(NSString *)redLinearToTransformedExpressionString
-                                             greenLinearToTransformedExpressionString:(NSString *)greenLinearToTransformedExpressionString
-                                              blueLinearToTransformedExpressionString:(NSString *)blueLinearToTransformedExpressionString
-                                               redTransformedToLinearExpressionString:(NSString *)redTransformedToLinearExpressionStrin
-                                             greenTransformedToLinearExpressionString:(NSString *)greenTransformedToLinearExpressionString
-                                              blueTransformedToLinearExpressionString:(NSString *)blueTransformedToLinearExpressionString;
+                                         greenLinearToTransformedExpressionString:(NSString *)greenLinearToTransformedExpressionString
+                                          blueLinearToTransformedExpressionString:(NSString *)blueLinearToTransformedExpressionString
+                                           redTransformedToLinearExpressionString:(NSString *)redTransformedToLinearExpressionStrin
+                                         greenTransformedToLinearExpressionString:(NSString *)greenTransformedToLinearExpressionString
+                                          blueTransformedToLinearExpressionString:(NSString *)blueTransformedToLinearExpressionString;
 
 
-+(instancetype)LUTColorTransferFunctionWithRedLinearToTransformedBlock:( double ( ^ )( double red, double green, double blue ) )redTransformedToLinearBlock
-                                  greenLinearToTransformedExpressionBlock:( double ( ^ )( double red, double green, double blue ) )greenLinearToTransformedExpressionBlock
-                                   blueLinearToTransformedExpressionBlock:( double ( ^ )( double red, double green, double blue ) )blueLinearToTransformedExpressionBlock
-                                    redTransformedToLinearExpressionBlock:( double ( ^ )( double red, double green, double blue ) )redTransformedToLinearExpressionBlock
-                                  greenTransformedToLinearExpressionBlock:( double ( ^ )( double red, double green, double blue ) )greenTransformedToLinearExpressionBlock
-                                   blueTransformedToLinearExpressionBlock:( double ( ^ )( double red, double green, double blue ) )blueTransformedToLinearExpressionBlock;
++(instancetype)LUTColorTransferFunctionWithRedTransformedToLinearBlock:( double ( ^ )( double red, double green, double blue ) )redTransformedToLinearBlock
+                                         greenTransformedToLinearBlock:( double ( ^ )( double red, double green, double blue ) )greenTransformedToLinearBlock
+                                          blueTransformedToLinearBlock:( double ( ^ )( double red, double green, double blue ) )blueTransformedToLinearBlock
+                                           redLinearToTransformedBlock:( double ( ^ )( double red, double green, double blue ) )redLinearToTransformedBlock
+                                         greenLinearToTransformedBlock:( double ( ^ )( double red, double green, double blue ) )greenLinearToTransformedBlock
+                                          blueLinearToTransformedBlock:( double ( ^ )( double red, double green, double blue ) )blueLinearToTransformedBlock;
 
 +(NSDictionary *)knownColorTransferFunctions;
 
