@@ -208,9 +208,9 @@
 }
 #elif TARGET_OS_MAC
 - (NSImage *)processNSImage:(NSImage *)image withColorSpace:(CGColorSpaceRef)colorSpace {
-    CIImage *inputCIImage = [image deep_CIImage];
+    CIImage *inputCIImage = [[CIImage alloc] initWithBitmapImageRep:[image.representations firstObject]];;
     CIImage *outputCIImage = [self processCIImage:inputCIImage withColorSpace:colorSpace];
-    return [NSImage deep_imageWithCImage:outputCIImage];
+    return deep_ImageWithCIImage(outputCIImage);
 }
 #endif
 

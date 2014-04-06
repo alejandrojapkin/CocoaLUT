@@ -9,9 +9,7 @@
 #import "NSImage+DeepImages.h"
 #import "CocoaLUT.h"
 
-@implementation NSImage (DeepImages)
-
-+ (NSImage *)deep_imageWithCImage:(CIImage *)ciImage {
+NSImage* deep_ImageWithCIImage(CIImage *ciImage) {
     
     int width = [ciImage extent].size.width;
     int rows = [ciImage extent].size.height;
@@ -40,7 +38,7 @@
                                                  (CGBitmapInfo)kCGImageAlphaPremultipliedLast);
     
     CIContext* ciContext = [CIContext contextWithCGContext:context options:nil];
-    [ciContext drawImage:ciImage atPoint:CGPointZero fromRect: [ciImage extent]];
+    [ciContext drawImage:ciImage atPoint:CGPointZero fromRect:[ciImage extent]];
     
 	CGContextRelease(context);
 	CGColorSpaceRelease(colorSpace);
@@ -48,6 +46,13 @@
     NSImage *nsImage = [[NSImage alloc] initWithSize:rep.size];
     [nsImage addRepresentation:rep];
 	return nsImage;
+
+}
+
+@implementation NSImage (DeepImages)
+
++ (NSImage *)deep_imageWithCImage:(CIImage *)ciImage {
+    return deep_ImageWithCIImage(ciImage);
 }
 
 

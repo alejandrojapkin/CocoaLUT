@@ -7,10 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <CocoaLUT.h>
+#import "CocoaLUT.h"
 
 @class LUTColor;
-
 
 @interface LUTColorTransferFunction : NSObject
 +(instancetype)LUTColorTransferFunctionWithRedLinearToTransformedExpressionString:(NSString *)redLinearToTransformedExpressionString
