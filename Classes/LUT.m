@@ -196,25 +196,24 @@
     return colorCube;
 }
 
-- (CIImage *)processCIImage:(CIImage *)image withColorSpace:(CGColorSpaceRef)colorSpace {
-    CIFilter *filter = [self coreImageFilterWithColorSpace:colorSpace];
+- (CIImage *)processCIImage:(CIImage *)image {
+    CIFilter *filter = [self coreImageFilterWithCurrentColorSpace];
     [filter setValue:image forKey:@"inputImage"];
     return [filter valueForKey:@"outputImage"];
 }
 
 #if TARGET_OS_IPHONE
 - (UIImage *)processUIImage:(UIImage *)image withColorSpace:(CGColorSpaceRef)colorSpace {
-    return [[UIImage alloc] initWithCIImage:[self processCIImage:image.CIImage withColorSpace:colorSpace]];
+    return [[UIImage alloc] initWithCIImage:[self processCIImage:image.CIImage]];
 }
 #elif TARGET_OS_MAC
 
 - (NSImage *)processNSImage:(NSImage *)image
-             withColorSpace:(CGColorSpaceRef)colorSpace
                  renderPath:(LUTImageRenderPath)renderPath {
-    
+        
     if (renderPath == LUTImageRenderPathCoreImage || renderPath == LUTImageRenderPathCoreImageSoftware) {
         CIImage *inputCIImage = [[CIImage alloc] initWithBitmapImageRep:[image.representations firstObject]];;
-        CIImage *outputCIImage = [self processCIImage:inputCIImage withColorSpace:colorSpace];
+        CIImage *outputCIImage = [self processCIImage:inputCIImage];
         return deep_ImageWithCIImage(outputCIImage, renderPath == LUTImageRenderPathCoreImageSoftware);
     }
     else if (renderPath == LUTImageRenderPathDirect) {

@@ -29,7 +29,6 @@
     
     NSImage *baseImage = [image copy];
     NSImage *processedImage = [self.lut processNSImage:[baseImage copy]
-                                        withColorSpace:CGColorSpaceCreateDeviceRGB()
                                             renderPath:LUTImageRenderPathDirect];
     
     CGSize targetSize = CGSizeScaledToFitWithin(image.size, size);

@@ -104,11 +104,10 @@ typedef NS_ENUM(NSInteger, LUTImageRenderPath) {
  *  Returns a `CIImage` with the receiver's color transformation applied.
  *
  *  @param image      The input `CIImage` you wish transform.
- *  @param colorSpace The desired color space to use on the filter. Pass `nil` to apply the transformation without color management.
  *
  *  @return A `CIImage` with a `CIFilter` applied that represents the receiver's color transformation.
  */
-- (CIImage *)processCIImage:(CIImage *)image withColorSpace:(CGColorSpaceRef)colorSpace;
+- (CIImage *)processCIImage:(CIImage *)image;
 
 #if TARGET_OS_IPHONE
 /**
@@ -125,13 +124,11 @@ typedef NS_ENUM(NSInteger, LUTImageRenderPath) {
  *  Returns an `NSImage` with the receiver's color transformation applied.
  *
  *  @param image      The input `NSImage` you wish transform.
- *  @param colorSpace The desired color space to use on the filter. Pass `nil` to apply the transformation without color management.
  *  @param renderPath The rendering path to use.
  *
  *  @return A `NSImage` with the receiver's color transformation applied.
  */
 - (NSImage *)processNSImage:(NSImage *)image
-             withColorSpace:(CGColorSpaceRef)colorSpace
                  renderPath:(LUTImageRenderPath)renderPath;
 #endif
 

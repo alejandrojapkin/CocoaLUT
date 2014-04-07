@@ -70,16 +70,14 @@ CGSize CGSizeScaledToFitWithin(CGSize imageSize, CGSize targetSize) {
         float heightFactor = targetSize.height / imageSize.height;
         
         float scaleFactor  = 0.0;
-        float scaledWidth  = targetSize.width;
-        float scaledHeight = targetSize.height;
 
         if ( widthFactor < heightFactor )
             scaleFactor = widthFactor;
         else
             scaleFactor = heightFactor;
         
-        scaledWidth  = imageSize.width  * scaleFactor;
-        scaledHeight = imageSize.height * scaleFactor;
+        float scaledWidth  = imageSize.width  * scaleFactor;
+        float scaledHeight = imageSize.height * scaleFactor;
         
         return CGSizeMake(scaledWidth, scaledHeight);
     }

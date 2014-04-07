@@ -30,7 +30,7 @@ NSImage* deep_ImageWithCIImage(CIImage *ciImage, BOOL useSoftwareRenderer) {
                                                                    bytesPerRow:rowBytes
                                                                   bitsPerPixel:0];
     
-    CGColorSpaceRef colorSpace = CGColorSpaceCreateWithName(kCGColorSpaceGenericRGB);
+    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
     CGContextRef context = CGBitmapContextCreate([rep bitmapData],
                                                  width,
                                                  rows,
@@ -40,8 +40,8 @@ NSImage* deep_ImageWithCIImage(CIImage *ciImage, BOOL useSoftwareRenderer) {
                                                  (CGBitmapInfo)kCGImageAlphaPremultipliedLast);
     
     NSDictionary *contextOptions = @{
-                                     kCIContextWorkingColorSpace: (__bridge id)CGColorSpaceCreateDeviceRGB(),
-                                     kCIContextOutputColorSpace: (__bridge id)CGColorSpaceCreateDeviceRGB(),
+                                     kCIContextWorkingColorSpace: (__bridge id)colorSpace,
+                                     kCIContextOutputColorSpace: (__bridge id)colorSpace,
                                      kCIContextUseSoftwareRenderer: @(useSoftwareRenderer)
                                      };
     
