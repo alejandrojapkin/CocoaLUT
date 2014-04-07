@@ -156,7 +156,7 @@
 
 - (CIFilter *)coreImageFilterWithColorSpace:(CGColorSpaceRef)colorSpace {
     
-    LUT *usedLut = self.lattice.size > 64 ? [self LUTByResizingToSize:64] : self;
+    LUT *usedLut = self.lattice.size > COCOALUT_MAX_CICOLORCUBE_SIZE ? [self LUTByResizingToSize:COCOALUT_MAX_CICOLORCUBE_SIZE] : self;
     
     NSUInteger size = usedLut.lattice.size;
     size_t cubeDataSize = size * size * size * sizeof ( float ) * 4;

@@ -9,6 +9,8 @@
 
     #define _COCOALUT_
 
+    #define COCOALUT_MAX_CICOLORCUBE_SIZE 64
+
     #import "LUTHelper.h"
     #import "LUT.h"
     #import "LUTLattice.h"
