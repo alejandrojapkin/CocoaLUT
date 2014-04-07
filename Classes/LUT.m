@@ -100,6 +100,16 @@
     return [LUT LUTWithLattice:lattice];
 }
 
+- (instancetype)LUTByClamping01{
+    LUTLattice *lattice = [[LUTLattice alloc] initWithSize:self.lattice.size];
+    
+    LUTConcurrentCubeLoop(lattice.size, ^(NSUInteger r, NSUInteger g, NSUInteger b) {
+        [lattice setColor:[[self.lattice colorAtR:r g:g b:b] clampedO1] r:r g:g b:b];
+    });
+    
+    return [LUT LUTWithLattice:lattice];
+}
+
 - (LUT1D *) LUT1D{
     NSMutableArray *redCurve = [NSMutableArray array];
     NSMutableArray *greenCurve = [NSMutableArray array];
