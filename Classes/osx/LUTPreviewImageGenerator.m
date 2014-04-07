@@ -29,7 +29,7 @@
     
     NSImage *baseImage = [image copy];
     NSImage *processedImage = [self.lut processNSImage:[baseImage copy]
-                                            renderPath:LUTImageRenderPathDirect];
+                                            renderPath:LUTImageRenderPathCoreImage];
     
     CGSize targetSize = CGSizeScaledToFitWithin(image.size, size);
 
