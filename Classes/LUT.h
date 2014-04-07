@@ -124,6 +124,7 @@
  *  @return A `NSImage` with the receiver's color transformation applied.
  */
 - (NSImage *)processNSImage:(NSImage *)image withColorSpace:(CGColorSpaceRef)colorSpace;
+- (NSImage *)processNSImageDirectly:(NSImage *)image;
 #endif
 
 

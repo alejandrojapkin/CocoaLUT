@@ -212,6 +212,35 @@
     CIImage *outputCIImage = [self processCIImage:inputCIImage withColorSpace:colorSpace];
     return deep_ImageWithCIImage(outputCIImage);
 }
+
+- (NSImage *)processNSImageDirectly:(NSImage *)image {
+    
+    NSBitmapImageRep *inImageRep = [image representations][0];
+    
+
+    int nchannels = 3;
+    int bps = 16;
+    NSBitmapImageRep *imageRep = [[NSBitmapImageRep alloc] initWithBitmapDataPlanes:NULL
+                                                                         pixelsWide:image.size.width
+                                                                         pixelsHigh:image.size.height
+                                                                      bitsPerSample:bps
+                                                                    samplesPerPixel:nchannels
+                                                                           hasAlpha:NO
+                                                                           isPlanar:NO
+                                                                     colorSpaceName:NSDeviceRGBColorSpace
+                                                                        bytesPerRow:(image.size.width * (bps * nchannels)) / 8
+                                                                       bitsPerPixel:bps * nchannels];
+    
+    LUTConcurrentRectLoop(image.size.width, image.size.height, ^(NSUInteger x, NSUInteger y) {
+        [imageRep setColor:[self.lattice colorAtColor:[LUTColor colorWithNSColor:[inImageRep colorAtX:x y:y]]].NSColor
+                       atX:x
+                         y:y];
+    });
+    
+    NSImage* outImage = [[NSImage alloc] initWithSize:image.size];
+    [outImage addRepresentation:imageRep];
+    return outImage;
+}
 #endif
 
 @end

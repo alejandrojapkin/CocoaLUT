@@ -51,7 +51,7 @@
 }
 #elif TARGET_OS_MAC
 - (NSColor *)NSColor {
-    return [NSColor colorWithRed:self.red green:self.green blue:self.blue alpha:1];
+    return [NSColor colorWithDeviceRed:self.red green:self.green blue:self.blue alpha:1];
 }
 + (instancetype)colorWithNSColor:(NSColor *)color {
     return [LUTColor colorWithRed:color.redComponent green:color.greenComponent blue:color.blueComponent];

@@ -56,6 +56,14 @@ void LUTConcurrentCubeLoop(NSUInteger cubeSize, void (^block)(NSUInteger r, NSUI
     });
 }
 
+void LUTConcurrentRectLoop(NSUInteger width, NSUInteger height, void (^block)(NSUInteger x, NSUInteger y)) {
+    dispatch_apply(width, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0) , ^(size_t x){
+        for (int y = 0; y < height; y++) {
+            block(x, y);
+        }
+    });
+}
+
 #if TARGET_OS_IPHONE
 #elif TARGET_OS_MAC
 void LUTNSImageLog(NSImage *image) {
