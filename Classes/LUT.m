@@ -207,10 +207,21 @@
     return [[UIImage alloc] initWithCIImage:[self processCIImage:image.CIImage withColorSpace:colorSpace]];
 }
 #elif TARGET_OS_MAC
-- (NSImage *)processNSImage:(NSImage *)image withColorSpace:(CGColorSpaceRef)colorSpace {
-    CIImage *inputCIImage = [[CIImage alloc] initWithBitmapImageRep:[image.representations firstObject]];;
-    CIImage *outputCIImage = [self processCIImage:inputCIImage withColorSpace:colorSpace];
-    return deep_ImageWithCIImage(outputCIImage);
+
+- (NSImage *)processNSImage:(NSImage *)image
+             withColorSpace:(CGColorSpaceRef)colorSpace
+                 renderPath:(LUTImageRenderPath)renderPath {
+    
+    if (renderPath == LUTImageRenderPathCoreImage || renderPath == LUTImageRenderPathCoreImageSoftware) {
+        CIImage *inputCIImage = [[CIImage alloc] initWithBitmapImageRep:[image.representations firstObject]];;
+        CIImage *outputCIImage = [self processCIImage:inputCIImage withColorSpace:colorSpace];
+        return deep_ImageWithCIImage(outputCIImage, renderPath == LUTImageRenderPathCoreImageSoftware);
+    }
+    else if (renderPath == LUTImageRenderPathDirect) {
+        return [self processNSImageDirectly:image];
+    }
+    
+    return nil;
 }
 
 - (NSImage *)processNSImageDirectly:(NSImage *)image {
@@ -231,11 +242,15 @@
                                                                         bytesPerRow:(image.size.width * (bps * nchannels)) / 8
                                                                        bitsPerPixel:bps * nchannels];
     
-    LUTConcurrentRectLoop(image.size.width, image.size.height, ^(NSUInteger x, NSUInteger y) {
-        [imageRep setColor:[self.lattice colorAtColor:[LUTColor colorWithNSColor:[inImageRep colorAtX:x y:y]]].NSColor
-                       atX:x
-                         y:y];
-    });
+    for (int x = 0; x < image.size.width; x++) {
+        for (int y = 0; y < image.size.height; y++) {
+            
+            LUTColor *lutColor = [LUTColor colorWithNSColor:[inImageRep colorAtX:x y:y]];
+            LUTColor *transformedColor =[self.lattice colorAtColor:lutColor];
+            [imageRep setColor:transformedColor.NSColor atX:x y:y];
+
+        }
+    }
     
     NSImage* outImage = [[NSImage alloc] initWithSize:image.size];
     [outImage addRepresentation:imageRep];

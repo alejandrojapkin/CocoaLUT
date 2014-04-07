@@ -10,7 +10,7 @@
 
 @interface NSImage (DeepImages)
 
-NSImage* deep_ImageWithCIImage(CIImage *ciImage);
+NSImage* deep_ImageWithCIImage(CIImage *ciImage, BOOL useSoftwareRenderer);
 
 + (NSImage *)deep_imageWithCImage:(CIImage *)ciImage;
 - (CIImage *)deep_CIImage;

@@ -12,6 +12,12 @@
 @class LUTLattice;
 @class LUT1D;
 
+typedef NS_ENUM(NSInteger, LUTImageRenderPath) {
+    LUTImageRenderPathCoreImage,
+    LUTImageRenderPathCoreImageSoftware,
+    LUTImageRenderPathDirect
+};
+
 /**
  *  A three-dimensional color lookup table.
  */
@@ -120,11 +126,13 @@
  *
  *  @param image      The input `NSImage` you wish transform.
  *  @param colorSpace The desired color space to use on the filter. Pass `nil` to apply the transformation without color management.
+ *  @param renderPath The rendering path to use.
  *
  *  @return A `NSImage` with the receiver's color transformation applied.
  */
-- (NSImage *)processNSImage:(NSImage *)image withColorSpace:(CGColorSpaceRef)colorSpace;
-- (NSImage *)processNSImageDirectly:(NSImage *)image;
+- (NSImage *)processNSImage:(NSImage *)image
+             withColorSpace:(CGColorSpaceRef)colorSpace
+                 renderPath:(LUTImageRenderPath)renderPath;
 #endif
 
 

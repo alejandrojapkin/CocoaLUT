@@ -28,20 +28,24 @@
     CGContextRef context = graphicsContext.graphicsPort;
     
     NSImage *baseImage = [image copy];
-    NSImage *processedImage = [self.lut processNSImage:[baseImage copy] withColorSpace:CGColorSpaceCreateDeviceRGB()];
+    NSImage *processedImage = [self.lut processNSImage:[baseImage copy]
+                                        withColorSpace:CGColorSpaceCreateDeviceRGB()
+                                            renderPath:LUTImageRenderPathDirect];
+    
+    CGSize targetSize = CGSizeScaledToFitWithin(image.size, size);
 
-    NSRect rect = NSMakeRect(0, 0, processedImage.size.width, processedImage.size.height);
+    NSRect rect = NSMakeRect(0, 0, targetSize.width, targetSize.height);
     CGImageRef unprocessedImageRef = [baseImage CGImageForProposedRect:&rect context:NSGraphicsContext.currentContext hints:nil];
     CGImageRef processedImageRef = [processedImage CGImageForProposedRect:&rect context:NSGraphicsContext.currentContext hints:nil];
     
     CGContextDrawImage(context, rect, unprocessedImageRef);
     
-    NSImage *maskImage = [NSImage imageWithSize:baseImage.size flipped:NO drawingHandler:^BOOL(NSRect dstRect) {
+    NSImage *maskImage = [NSImage imageWithSize:targetSize flipped:NO drawingHandler:^BOOL(NSRect dstRect) {
         
         NSBezierPath *path = [NSBezierPath bezierPath];
         [path moveToPoint:NSMakePoint(0, 0)];
-        [path lineToPoint:NSMakePoint(0, baseImage.size.height)];
-        [path lineToPoint:NSMakePoint(baseImage.size.width, baseImage.size.height)];
+        [path lineToPoint:NSMakePoint(0, targetSize.height)];
+        [path lineToPoint:NSMakePoint(targetSize.width, targetSize.height)];
         
         [[NSColor whiteColor] setFill];
         [path fill];
@@ -71,7 +75,7 @@
     
     CGContextSetLineWidth(context, 2.0f);
     CGContextMoveToPoint(context, 0, 0);
-    CGContextAddLineToPoint(context, baseImage.size.width, baseImage.size.height);
+    CGContextAddLineToPoint(context, targetSize.width, targetSize.height);
     CGContextSetStrokeColorWithColor(context, [NSColor colorWithWhite:1 alpha:0.5].CGColor);
     CGContextStrokePath(context);
 

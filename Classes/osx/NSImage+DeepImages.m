@@ -9,8 +9,10 @@
 #import "NSImage+DeepImages.h"
 #import "CocoaLUT.h"
 
-NSImage* deep_ImageWithCIImage(CIImage *ciImage) {
+NSImage* deep_ImageWithCIImage(CIImage *ciImage, BOOL useSoftwareRenderer) {
     
+    [NSGraphicsContext saveGraphicsState];
+
     int width = [ciImage extent].size.width;
     int rows = [ciImage extent].size.height;
     int rowBytes = (width * 8);
@@ -37,11 +39,22 @@ NSImage* deep_ImageWithCIImage(CIImage *ciImage) {
                                                  colorSpace,
                                                  (CGBitmapInfo)kCGImageAlphaPremultipliedLast);
     
-    CIContext* ciContext = [CIContext contextWithCGContext:context options:nil];
-    [ciContext drawImage:ciImage atPoint:CGPointZero fromRect:[ciImage extent]];
+    NSDictionary *contextOptions = @{
+                                     kCIContextWorkingColorSpace: (__bridge id)CGColorSpaceCreateDeviceRGB(),
+                                     kCIContextOutputColorSpace: (__bridge id)CGColorSpaceCreateDeviceRGB(),
+                                     kCIContextUseSoftwareRenderer: @(useSoftwareRenderer)
+                                     };
+    
+    CIContext* ciContext = [CIContext contextWithCGContext:context options:contextOptions];
+    
+    [ciContext drawImage:ciImage
+                  inRect:CGRectMake(0, 0, ciImage.extent.size.width, ciImage.extent.size.height)
+                fromRect:ciImage.extent];
     
 	CGContextRelease(context);
 	CGColorSpaceRelease(colorSpace);
+    
+    [NSGraphicsContext restoreGraphicsState];
     
     NSImage *nsImage = [[NSImage alloc] initWithSize:rep.size];
     [nsImage addRepresentation:rep];
@@ -52,7 +65,7 @@ NSImage* deep_ImageWithCIImage(CIImage *ciImage) {
 @implementation NSImage (DeepImages)
 
 + (NSImage *)deep_imageWithCImage:(CIImage *)ciImage {
-    return deep_ImageWithCIImage(ciImage);
+    return deep_ImageWithCIImage(ciImage, NO);
 }
 
 

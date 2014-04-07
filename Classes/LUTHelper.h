@@ -18,6 +18,8 @@ double lerp1d(double beginning, double end, double value01);
 float distancecalc(float x1, float y1, float z1, float x2, float y2, float z2);
 void timer(NSString* name, void (^block)());
 
+CGSize CGSizeScaledToFitWithin(CGSize imageSize, CGSize targetSize);
+
 /**
  *  Runs the passed block cubeSize ^ 3 times, iterating over each point on a cube of edge length `cubeSize`.
  */
