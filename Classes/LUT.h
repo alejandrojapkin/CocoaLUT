@@ -29,6 +29,9 @@ typedef NS_ENUM(NSInteger, LUTImageRenderPath) {
  */
 @property (readonly) LUTLattice *lattice;
 
+@property (strong) NSString *title;
+@property (strong) NSString *description;
+
 /**
  *  Arbitrary metadata.
  */

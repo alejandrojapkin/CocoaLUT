@@ -96,6 +96,12 @@ void LUTNSImageLog(NSImage *image) {
     }
 }
 
+NSString* FirstRegexMatch(NSString *text, NSString *pattern) {
+    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:pattern options:0 error:NULL];
+    NSTextCheckingResult *match = [regex firstMatchInString:text options:0 range:NSMakeRange(0, [text length])];
+    return [text substringWithRange:[match rangeAtIndex:1]];
+}
+
 NSImage* LUTNSImageFromCIImage(CIImage *ciImage, BOOL useSoftwareRenderer) {
     
     [NSGraphicsContext saveGraphicsState];

@@ -10,21 +10,37 @@
 #import "LUTLattice.h"
 #import "LUT.h"
 
+#import <RegExCategories/RegExCategories.h>
 
 @implementation LUTFormatterCube
 
 + (LUT *)LUTFromLines:(NSArray *)lines {
+    
+    NSMutableString __block *description = [NSMutableString stringWithString:@""];
+    NSMutableString __block *title = [NSMutableString stringWithString:@""];
 
     NSUInteger __block cubeSize = 0;
     NSUInteger __block sizeLineIndex = 0;
-
+    
     // Find the size
     [lines enumerateObjectsUsingBlock:^(NSString *line, NSUInteger i, BOOL *stop) {
+        NSString *titleMatch;
         if ([line rangeOfString:@"LUT_3D_SIZE"].location != NSNotFound) {
             NSString *sizeString = [line componentsSeparatedByString:@" "][1];
             cubeSize = sizeString.integerValue;
             sizeLineIndex = i;
-            *stop = YES;
+        }
+        else if ((titleMatch = [line firstMatch:RX(@"(?<=TITLE \")[^\"]*(?=\")")])) {
+            [title appendString:titleMatch];
+        }
+        else if (line.length > 0 && [[line substringToIndex:1] isEqualToString:@"#"]) {
+            if ([[line substringToIndex:2] isEqualToString:@"# "]) {
+                [description appendString:[line substringFromIndex:2]];
+            }
+            else {
+                [description appendString:[line substringFromIndex:1]];
+            }
+            [description appendString:@"\n"];
         }
     }];
 
@@ -59,8 +75,13 @@
             }
         }
     }
+    
+    LUT *lut = [LUT LUTWithLattice:lattice];
 
-    return [LUT LUTWithLattice:lattice];
+    lut.title = title;
+    lut.description = description;
+
+    return lut;
 }
 
 + (NSString *)stringFromLUT:(LUT *)lut {
@@ -69,7 +90,21 @@
     
     NSUInteger cubeSize = lut.lattice.size;
     
+    if (lut.title && lut.title.length > 0) {
+        [string appendString:[NSString stringWithFormat:@"TITLE \"%@\"\n", lut.title]];
+    }
+    
+    [string appendString:@"\n"];
+
+    if (lut.description && lut.description.length > 0) {
+        for (NSString *line in [lut.description componentsSeparatedByCharactersInSet:NSCharacterSet.newlineCharacterSet]) {
+            [string appendString:[NSString stringWithFormat:@"# %@\n", line]];
+        }
+    }
+
     [string appendString:[NSString stringWithFormat:@"LUT_3D_SIZE %i\n", (int)cubeSize]];
+    
+    [string appendString:@"\n"];
 
     NSUInteger arrayLength = cubeSize * cubeSize * cubeSize;
     for (int i = 0; i < arrayLength; i++) {

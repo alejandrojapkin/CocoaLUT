@@ -12,6 +12,8 @@ Pod::Spec.new do |s|
   s.public_header_files = 'Classes/**/*.h'
   s.frameworks = ['QuartzCore', 'GLKit']
 
+  s.dependency 'RegExCategories'
+
   # iOS
   s.ios.frameworks = 'UIKit'
   s.ios.exclude_files = 'Classes/osx'
