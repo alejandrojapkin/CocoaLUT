@@ -18,6 +18,7 @@
     
     NSMutableString __block *description = [NSMutableString stringWithString:@""];
     NSMutableString __block *title = [NSMutableString stringWithString:@""];
+    NSMutableDictionary __block *metadata = [NSMutableDictionary dictionary];
 
     NSUInteger __block cubeSize = 0;
     NSUInteger __block sizeLineIndex = 0;
@@ -34,13 +35,27 @@
             [title appendString:titleMatch];
         }
         else if (line.length > 0 && [[line substringToIndex:1] isEqualToString:@"#"]) {
-            if ([[line substringToIndex:2] isEqualToString:@"# "]) {
-                [description appendString:[line substringFromIndex:2]];
+            NSString *comment;
+            if (line.length > 2 && [[line substringToIndex:2] isEqualToString:@"# "]) {
+                comment = [line substringFromIndex:2];
             }
             else {
-                [description appendString:[line substringFromIndex:1]];
+                comment = [line substringFromIndex:1];
             }
-            [description appendString:@"\n"];
+            
+            BOOL isKeyValue = NO;
+            if ([comment rangeOfString:@":"].location != NSNotFound) {
+                NSArray *split = [comment componentsSeparatedByString:@":"];
+                if (split.count == 2) {
+                    metadata[[split[0] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]] = [split[1] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+                    isKeyValue = YES;
+                }
+            }
+            
+            if (!isKeyValue) {
+                [description appendString:comment];
+                [description appendString:@"\n"];
+            }
         }
     }];
 
@@ -80,6 +95,7 @@
 
     lut.title = title;
     lut.description = description;
+    lut.metadata = [metadata copy];
 
     return lut;
 }
@@ -95,11 +111,20 @@
     }
     
     [string appendString:@"\n"];
-
+    
     if (lut.description && lut.description.length > 0) {
         for (NSString *line in [lut.description componentsSeparatedByCharactersInSet:NSCharacterSet.newlineCharacterSet]) {
             [string appendString:[NSString stringWithFormat:@"# %@\n", line]];
         }
+    }
+    
+    [string appendString:@"\n"];
+    
+    if (lut.metadata && lut.metadata.count > 0) {
+        for (NSString *key in lut.metadata) {
+            [string appendString:[NSString stringWithFormat:@"# %@: %@\n", key, lut.metadata[key]]];
+        }
+        [string appendString:@"\n"];
     }
 
     [string appendString:[NSString stringWithFormat:@"LUT_3D_SIZE %i\n", (int)cubeSize]];
