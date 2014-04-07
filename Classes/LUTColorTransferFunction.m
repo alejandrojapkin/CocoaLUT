@@ -23,12 +23,12 @@
 
 +(instancetype)LUTColorTransferFunctionWithGamma:(double)gamma{
     
-    return [[[self class] alloc] initWithRedTransformedToLinearBlock:^double(double red, double green, double blue) {return pow(red, 1.0/gamma);}
-                                       greenTransformedToLinearBlock:^double(double red, double green, double blue) {return pow(green, 1.0/gamma);}
-                                        blueTransformedToLinearBlock:^double(double red, double green, double blue) {return pow(blue, 1.0/gamma);}
-                                         redLinearToTransformedBlock:^double(double red, double green, double blue) {return pow(red, gamma);}
-                                       greenLinearToTransformedBlock:^double(double red, double green, double blue) {return pow(green, gamma);}
-                                        blueLinearToTransformedBlock:^double(double red, double green, double blue) {return pow(blue, gamma);}];
+    return [[[self class] alloc] initWithRedTransformedToLinearBlock:^double(double red, double green, double blue) {return pow(red, gamma);}
+                                       greenTransformedToLinearBlock:^double(double red, double green, double blue) {return pow(green, gamma);}
+                                        blueTransformedToLinearBlock:^double(double red, double green, double blue) {return pow(blue, gamma);}
+                                         redLinearToTransformedBlock:^double(double red, double green, double blue) {return pow(red,  1.0/gamma);}
+                                       greenLinearToTransformedBlock:^double(double red, double green, double blue) {return pow(green,  1.0/gamma);}
+                                        blueLinearToTransformedBlock:^double(double red, double green, double blue) {return pow(blue,  1.0/gamma);}];
 }
 
 
