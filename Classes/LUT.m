@@ -135,7 +135,7 @@
     return [self equalsLUT:[LUT identityLutOfSize:self.lattice.size]];
 }
 
-- (bool) equalsLUT:(LUT *)comparisonLUT{
+- (bool)equalsLUT:(LUT *)comparisonLUT{
     if(comparisonLUT.lattice.size != self.lattice.size){
         return false;
     }
@@ -149,9 +149,10 @@
 }
 
 - (id)copyWithZone:(NSZone *)zone {
-    return [LUT LUTWithLattice:[self.lattice copyWithZone:zone]];
+    LUT *lut = [LUT LUTWithLattice:[self.lattice copyWithZone:zone]];
+    lut.metadata = [self.metadata copyWithZone:zone];
+    return lut;
 }
-
 
 - (CIFilter *)coreImageFilterWithCurrentColorSpace {
     #if TARGET_OS_IPHONE
