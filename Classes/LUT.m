@@ -21,7 +21,7 @@
 
 @implementation LUT
 
-+ (LUT *)LUTFromURL:(NSURL *)url {
++ (instancetype)LUTFromURL:(NSURL *)url {
     if ([url.pathExtension.lowercaseString isEqualToString:@"cube"]){
         return [LUTFormatterCube LUTFromFile:url];
     }
@@ -56,13 +56,20 @@
     return nil;
 }
 
-+ (LUT *)LUTWithLattice:(LUTLattice *)lattice {
+- (instancetype)init {
+    if (self = [super init]) {
+        self.metadata = @{};
+    }
+    return self;
+}
+
++ (instancetype)LUTWithLattice:(LUTLattice *)lattice {
     LUT *lut = [[LUT alloc] init];
     lut.lattice = lattice;
     return lut;
 }
 
-+ (LUT *)identityLutOfSize:(NSUInteger)size {
++ (instancetype)identityLutOfSize:(NSUInteger)size {
     NSMutableArray *indices = [NSMutableArray array];
     float ratio = 1.0 / (float)(size - 1);
     for (int i = 0; i < size; i++) {
@@ -81,7 +88,7 @@
     return [LUT LUTWithLattice:lattice];
 }
 
-- (LUT *)LUTByCombiningWithLUT:(LUT *)otherLUT {
+- (instancetype)LUTByCombiningWithLUT:(LUT *)otherLUT {
     LUTLattice *lattice = [[LUTLattice alloc] initWithSize:self.lattice.size];
     
     LUTConcurrentCubeLoop(lattice.size, ^(NSUInteger r, NSUInteger g, NSUInteger b) {
@@ -108,7 +115,7 @@
     return [LUT1D LUT1DWithRedCurve:redCurve greenCurve:greenCurve blueCurve:blueCurve];
 }
 
-- (LUT *)LUTByResizingToSize:(NSUInteger)newSize {
+- (instancetype)LUTByResizingToSize:(NSUInteger)newSize {
     if (newSize == self.lattice.size) {
         return [self copy];
     }
