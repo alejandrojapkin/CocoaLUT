@@ -19,13 +19,8 @@
                                          greenTransformedToLinearExpressionString:(NSString *)greenTransformedToLinearExpressionString
                                           blueTransformedToLinearExpressionString:(NSString *)blueTransformedToLinearExpressionString;
 
-
-+(instancetype)LUTColorTransferFunctionWithRedTransformedToLinearBlock:( double ( ^ )( double red, double green, double blue ) )redTransformedToLinearBlock
-                                         greenTransformedToLinearBlock:( double ( ^ )( double red, double green, double blue ) )greenTransformedToLinearBlock
-                                          blueTransformedToLinearBlock:( double ( ^ )( double red, double green, double blue ) )blueTransformedToLinearBlock
-                                           redLinearToTransformedBlock:( double ( ^ )( double red, double green, double blue ) )redLinearToTransformedBlock
-                                         greenLinearToTransformedBlock:( double ( ^ )( double red, double green, double blue ) )greenLinearToTransformedBlock
-                                          blueLinearToTransformedBlock:( double ( ^ )( double red, double green, double blue ) )blueLinearToTransformedBlock;
++(instancetype)LUTColorTransferFunctionWithTransformedToLinearBlock:( LUTColor* ( ^ )(double red, double green, double blue) )transformedToLinearBlock
+                                           linearToTransformedBlock:( LUTColor* ( ^ )(double red, double green, double blue) )linearToTransformedBlock;
 
 +(NSDictionary *)knownColorTransferFunctions;
 

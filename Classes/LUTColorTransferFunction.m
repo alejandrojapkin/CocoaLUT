@@ -10,28 +10,21 @@
 #include "math.h"
 
 @interface LUTColorTransferFunction ()
-    @property (copy)double (^redTransformedToLinear)( double red, double green, double blue );
-    @property (copy)double (^greenTransformedToLinear)( double red, double green, double blue );
-    @property (copy)double (^blueTransformedToLinear)( double red, double green, double blue );
+    @property (copy)LUTColor* (^transformedToLinearBlock)( double red, double green, double blue );
+    @property (copy)LUTColor* (^linearToTransformedBlock)( double red, double green, double blue );
 
-    @property (copy)double (^redLinearToTransformed)( double red, double green, double blue );
-    @property (copy)double (^greenLinearToTransformed)( double red, double green, double blue );
-    @property (copy)double (^blueLinearToTransformed)( double red, double green, double blue );
 @end
 
 @implementation LUTColorTransferFunction
 
-+(instancetype)LUTColorTransferFunctionWithGamma:(double)gamma{
-    
-    return [[[self class] alloc] initWithRedTransformedToLinearBlock:^double(double red, double green, double blue) {return pow(red, gamma);}
-                                       greenTransformedToLinearBlock:^double(double red, double green, double blue) {return pow(green, gamma);}
-                                        blueTransformedToLinearBlock:^double(double red, double green, double blue) {return pow(blue, gamma);}
-                                         redLinearToTransformedBlock:^double(double red, double green, double blue) {return pow(red,  1.0/gamma);}
-                                       greenLinearToTransformedBlock:^double(double red, double green, double blue) {return pow(green,  1.0/gamma);}
-                                        blueLinearToTransformedBlock:^double(double red, double green, double blue) {return pow(blue,  1.0/gamma);}];
+-(instancetype)initWithTransformedToLinearBlock:( LUTColor* ( ^ )(double red, double green, double blue) )transformedToLinearBlock
+                       linearToTransformedBlock:( LUTColor* ( ^ )(double red, double green, double blue) )linearToTransformedBlock{
+    if (self = [super init]){
+        self.transformedToLinearBlock = transformedToLinearBlock;
+        self.linearToTransformedBlock = linearToTransformedBlock;
+    }
+    return self;
 }
-
-
 
 +(instancetype)LUTColorTransferFunctionWithRedLinearToTransformedExpressionString:(NSString *)redLinearToTransformedExpressionString
                                          greenLinearToTransformedExpressionString:(NSString *)greenLinearToTransformedExpressionString
@@ -42,59 +35,30 @@
     return nil;
 }
 
-
-+(instancetype)LUTColorTransferFunctionWithRedTransformedToLinearBlock:( double ( ^ )( double red, double green, double blue ) )redTransformedToLinearBlock
-                                         greenTransformedToLinearBlock:( double ( ^ )( double red, double green, double blue ) )greenTransformedToLinearBlock
-                                          blueTransformedToLinearBlock:( double ( ^ )( double red, double green, double blue ) )blueTransformedToLinearBlock
-                                           redLinearToTransformedBlock:( double ( ^ )( double red, double green, double blue ) )redLinearToTransformedBlock
-                                         greenLinearToTransformedBlock:( double ( ^ )( double red, double green, double blue ) )greenLinearToTransformedBlock
-                                          blueLinearToTransformedBlock:( double ( ^ )( double red, double green, double blue ) )blueLinearToTransformedBlock{
-    
-    return [[[self class] alloc] initWithRedTransformedToLinearBlock:redTransformedToLinearBlock
-                                       greenTransformedToLinearBlock:greenTransformedToLinearBlock
-                                        blueTransformedToLinearBlock:blueTransformedToLinearBlock
-                                         redLinearToTransformedBlock:redLinearToTransformedBlock
-                                       greenLinearToTransformedBlock:greenLinearToTransformedBlock
-                                        blueLinearToTransformedBlock:blueLinearToTransformedBlock];
++(instancetype)LUTColorTransferFunctionWithTransformedToLinearBlock:( LUTColor* ( ^ )(double red, double green, double blue) )transformedToLinearBlock
+                                           linearToTransformedBlock:( LUTColor* ( ^ )(double red, double green, double blue) )linearToTransformedBlock{
+    return [[[self class] alloc] initWithTransformedToLinearBlock:transformedToLinearBlock
+                                         linearToTransformedBlock:linearToTransformedBlock];
 }
 
--(instancetype)initWithRedTransformedToLinearBlock:( double ( ^ )( double red, double green, double blue ) )redTransformedToLinearBlock
-                     greenTransformedToLinearBlock:( double ( ^ )( double red, double green, double blue ) )greenTransformedToLinearBlock
-                      blueTransformedToLinearBlock:( double ( ^ )( double red, double green, double blue ) )blueTransformedToLinearBlock
-                       redLinearToTransformedBlock:( double ( ^ )( double red, double green, double blue ) )redLinearToTransformedBlock
-                     greenLinearToTransformedBlock:( double ( ^ )( double red, double green, double blue ) )greenLinearToTransformedBlock
-                      blueLinearToTransformedBlock:( double ( ^ )( double red, double green, double blue ) )blueLinearToTransformedBlock{
-    if (self = [super init]){
-        self.redTransformedToLinear = redTransformedToLinearBlock;
-        self.greenTransformedToLinear = greenTransformedToLinearBlock;
-        self.blueTransformedToLinear = blueTransformedToLinearBlock;
-
-        self.redLinearToTransformed = redLinearToTransformedBlock;
-        self.greenLinearToTransformed = greenLinearToTransformedBlock;
-        self.blueLinearToTransformed = blueLinearToTransformedBlock;
-    }
-    return self;
-    
++(instancetype)LUTColorTransferFunctionWithTransformedToLinearBlock1D:( double ( ^ )(double value) )transformedToLinearBlock1D
+                                           linearToTransformedBlock1D:( double ( ^ )(double value) )linearToTransformedBlock1D{
+    return [LUTColorTransferFunction LUTColorTransferFunctionWithTransformedToLinearBlock:^LUTColor*(double red, double green, double blue) {
+        return [LUTColor colorWithRed:transformedToLinearBlock1D(red)
+                                green:transformedToLinearBlock1D(green)
+                                 blue:transformedToLinearBlock1D(blue)];}
+                                                                 linearToTransformedBlock:^LUTColor*(double red, double green, double blue) {
+                                                                     return [LUTColor colorWithRed:linearToTransformedBlock1D(red)
+                                                                                             green:linearToTransformedBlock1D(green)
+                                                                                              blue:linearToTransformedBlock1D(blue)];}];
 }
 
 -(LUTColor *)transformedToLinearFromColor:(LUTColor *)transformedColor{
-    double redTransformed = transformedColor.red;
-    double greenTransformed = transformedColor.green;
-    double blueTransformed = transformedColor.blue;
-    
-    return [LUTColor colorWithRed:self.redTransformedToLinear(redTransformed, greenTransformed, blueTransformed)
-                            green:self.greenTransformedToLinear(redTransformed, greenTransformed, blueTransformed)
-                             blue:self.blueTransformedToLinear(redTransformed, greenTransformed, blueTransformed)];
+    return self.transformedToLinearBlock(transformedColor.red, transformedColor.green, transformedColor.blue);
 }
 
 -(LUTColor *)linearToTransformedFromColor:(LUTColor *)linearColor{
-    double redLinear = linearColor.red;
-    double greenLinear = linearColor.green;
-    double blueLinear = linearColor.blue;
-    
-    return [LUTColor colorWithRed:self.redLinearToTransformed(redLinear, greenLinear, blueLinear)
-                            green:self.greenLinearToTransformed(redLinear, greenLinear, blueLinear)
-                             blue:self.blueLinearToTransformed(redLinear, greenLinear, blueLinear)];
+    return self.linearToTransformedBlock(linearColor.red, linearColor.green, linearColor.blue);
 }
 
 + (LUT *)transformedLUTFromLUT:(LUT *)sourceLUT
@@ -133,34 +97,26 @@
     return dict;
 }
 
++(instancetype)LUTColorTransferFunctionWithGamma:(double)gamma{
+    
+    return [LUTColorTransferFunction LUTColorTransferFunctionWithTransformedToLinearBlock1D:^double(double value) {
+                                                                                            return pow(value, gamma);}
+                                                                 linearToTransformedBlock1D:^double(double value) {
+                                                                                        return pow(value, 1.0/gamma);}];
+}
+
 + (instancetype)rec709TransferFunction{
-    return [LUTColorTransferFunction LUTColorTransferFunctionWithRedTransformedToLinearBlock:^double(double red, double green, double blue)
-                                                                                                {if(red < .081){return red/4.5;} else{return pow((red+.099)/1.099, 2.2);}}
-                                                               greenTransformedToLinearBlock:^double(double red, double green, double blue)
-                                                                                                {if(green < .081){return green/4.5;} else{return pow((green+.099)/1.099, 2.2);}}
-                                                                blueTransformedToLinearBlock:^double(double red, double green, double blue)
-                                                                                                {if(blue < .081){return blue/4.5;} else{return pow((blue+.099)/1.099, 2.2);}}
-                                                                 redLinearToTransformedBlock:^double(double red, double green, double blue)
-                                                                                                {if(red < .018){return 4.5*red;} else{return 1.099*pow(red, 1.0/2.2) - .099;}}
-                                                               greenLinearToTransformedBlock:^double(double red, double green, double blue)
-                                                                                                {if(green < .018){return 4.5*green;} else{return 1.099*pow(green, 1.0/2.2) - .099;}}
-                                                                blueLinearToTransformedBlock:^double(double red, double green, double blue)
-                                                                                                {if(blue < .018){return 4.5*blue;} else{return 1.099*pow(blue, 1.0/2.2) - .099;}} ];
+    return [LUTColorTransferFunction LUTColorTransferFunctionWithTransformedToLinearBlock1D:^double(double value){
+                                                                                            return (value < .081) ? value/4.5 : pow((value+.099)/1.099, 2.2);}
+                                                                 linearToTransformedBlock1D:^double(double value){
+                                                                                            return (value < .018) ? 4.5*value : 1.099*pow(value, 1.0/2.2) - .099;} ];
 }
 
 + (instancetype)sRGBTransferFunction{
-    return [LUTColorTransferFunction LUTColorTransferFunctionWithRedTransformedToLinearBlock:^double(double red, double green, double blue)
-                                                                                                {if(red <= .04045){return red/12.92;} else{return pow((red+.055)/1.055, 2.4);}}
-                                                               greenTransformedToLinearBlock:^double(double red, double green, double blue)
-                                                                                                {if(green <= .04045){return green/12.92;} else{return pow((green+.055)/1.055, 2.4);}}
-                                                                blueTransformedToLinearBlock:^double(double red, double green, double blue)
-                                                                                                {if(blue <= .04045){return blue/12.92;} else{return pow((blue+.055)/1.055, 2.4);}}
-                                                                 redLinearToTransformedBlock:^double(double red, double green, double blue)
-                                                                                                {if(red <= .0031308){return 12.92*red;} else{return 1.055*pow(red, 1.0/2.4) - .055;}}
-                                                               greenLinearToTransformedBlock:^double(double red, double green, double blue)
-                                                                                                {if(green <= .0031308){return 12.92*green;} else{return 1.055*pow(green, 1.0/2.4) - .055;}}
-                                                                blueLinearToTransformedBlock:^double(double red, double green, double blue)
-                                                                                                {if(blue <= .0031308){return 12.92*blue;} else{return 1.055*pow(blue, 1.0/2.4) - .055;}} ];
+    return [LUTColorTransferFunction LUTColorTransferFunctionWithTransformedToLinearBlock1D:^double(double value){
+                                                                                            return (value <= .04045) ? value/12.92 : pow((value+.055)/1.055, 2.4);}
+                                                                 linearToTransformedBlock1D:^double(double value){
+                                                                                            return (value <= .0031308) ? 12.92*value : 1.055*pow(value, 1.0/2.4) - .055;}];
 }
 
 @end
