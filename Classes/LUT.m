@@ -159,21 +159,19 @@
     LUT *usedLut = self.lattice.size > COCOALUT_MAX_CICOLORCUBE_SIZE ? [self LUTByResizingToSize:COCOALUT_MAX_CICOLORCUBE_SIZE] : self;
     
     NSUInteger size = usedLut.lattice.size;
-    size_t cubeDataSize = size * size * size * sizeof ( float ) * 4;
-    float *cubeData = (float *) malloc ( cubeDataSize );
-    
-    
+    size_t cubeDataSize = size * size * size * sizeof (float) * 4;
+    float *cubeData = (float *) malloc (cubeDataSize);
     
     size_t offset = 0;
-    for (int z = 0; z < size; z++) {
-        for (int y = 0; y < size; y++) {
-            for (int x = 0; x < size; x++) {
-                LUTColor *color = [usedLut.lattice colorAtR:x g:y b:z];
+    for (int b = 0; b < size; b++) {
+        for (int g = 0; g < size; g++) {
+            for (int r = 0; r < size; r++) {
+                LUTColor *color = [usedLut.lattice colorAtR:r g:g b:b];
                 
-                cubeData[offset]   = color.red;
-                cubeData[offset+1] = color.green;
-                cubeData[offset+2] = color.blue;
-                cubeData[offset+3] = 1.0;
+                cubeData[offset]   = (float)color.red;
+                cubeData[offset+1] = (float)color.green;
+                cubeData[offset+2] = (float)color.blue;
+                cubeData[offset+3] = 1.0f;
                 
                 offset += 4;
             }
