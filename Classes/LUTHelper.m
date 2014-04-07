@@ -64,10 +64,10 @@ void LUTConcurrentRectLoop(NSUInteger width, NSUInteger height, void (^block)(NS
     });
 }
 
-CGSize CGSizeScaledToFitWithin(CGSize imageSize, CGSize targetSize) {
-    if ( NSEqualSizes(imageSize, targetSize) == NO ) {
-        float widthFactor  = targetSize.width / imageSize.width;
-        float heightFactor = targetSize.height / imageSize.height;
+CGSize CGSizeProportionallyScaled(CGSize currentSize, CGSize targetSize) {
+    if ( NSEqualSizes(currentSize, targetSize) == NO ) {
+        float widthFactor  = targetSize.width / currentSize.width;
+        float heightFactor = targetSize.height / currentSize.height;
         
         float scaleFactor  = 0.0;
 
@@ -76,12 +76,12 @@ CGSize CGSizeScaledToFitWithin(CGSize imageSize, CGSize targetSize) {
         else
             scaleFactor = heightFactor;
         
-        float scaledWidth  = imageSize.width  * scaleFactor;
-        float scaledHeight = imageSize.height * scaleFactor;
+        float scaledWidth  = currentSize.width  * scaleFactor;
+        float scaledHeight = currentSize.height * scaleFactor;
         
         return CGSizeMake(scaledWidth, scaledHeight);
     }
-    return imageSize;
+    return currentSize;
 }
 
 #if TARGET_OS_IPHONE

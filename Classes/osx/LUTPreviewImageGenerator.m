@@ -31,13 +31,15 @@
     NSImage *processedImage = [self.lut processNSImage:[baseImage copy]
                                             renderPath:LUTImageRenderPathCoreImage];
     
-    CGSize targetSize = CGSizeScaledToFitWithin(image.size, size);
+    CGSize targetSize = CGSizeProportionallyScaled(image.size, size);
 
-    NSRect rect = NSMakeRect(0, 0, targetSize.width, targetSize.height);
-    CGImageRef unprocessedImageRef = [baseImage CGImageForProposedRect:&rect context:NSGraphicsContext.currentContext hints:nil];
-    CGImageRef processedImageRef = [processedImage CGImageForProposedRect:&rect context:NSGraphicsContext.currentContext hints:nil];
+    NSRect sourceRect = NSMakeRect(0, 0, image.size.width, image.size.height);
+    NSRect destinationRect = NSMakeRect(0, 0, targetSize.width, targetSize.height);
     
-    CGContextDrawImage(context, rect, unprocessedImageRef);
+    CGImageRef unprocessedImageRef = [baseImage CGImageForProposedRect:&sourceRect context:NSGraphicsContext.currentContext hints:nil];
+    CGImageRef processedImageRef = [processedImage CGImageForProposedRect:&sourceRect context:NSGraphicsContext.currentContext hints:nil];
+    
+    CGContextDrawImage(context, destinationRect, unprocessedImageRef);
     
     NSImage *maskImage = [NSImage imageWithSize:targetSize flipped:NO drawingHandler:^BOOL(NSRect dstRect) {
         
@@ -53,7 +55,7 @@
         
     }];
     
-    CGImageRef maskImageRef = [maskImage CGImageForProposedRect:&rect context:NSGraphicsContext.currentContext hints:nil];
+    CGImageRef maskImageRef = [maskImage CGImageForProposedRect:&sourceRect context:NSGraphicsContext.currentContext hints:nil];
     
     CGImageRef imageMask = CGImageMaskCreate(CGImageGetWidth(maskImageRef),
                                              CGImageGetHeight(maskImageRef),
@@ -67,7 +69,7 @@
     
     CGImageRef maskedImage = CGImageCreateWithMask(processedImageRef, imageMask);
     
-    CGContextDrawImage(context, rect, maskedImage);
+    CGContextDrawImage(context, destinationRect, maskedImage);
     
     CGImageRelease(imageMask);
     CGImageRelease(maskedImage);
