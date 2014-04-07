@@ -30,6 +30,7 @@ void LUTConcurrentRectLoop(NSUInteger width, NSUInteger height, void (^block)(NS
 #if TARGET_OS_IPHONE
 #elif TARGET_OS_MAC
 void LUTNSImageLog(NSImage *image);
+NSImage* LUTNSImageFromCIImage(CIImage *ciImage, BOOL useSoftwareRenderer);
 #endif
 
 @interface LUTHelper : NSObject

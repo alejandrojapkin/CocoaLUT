@@ -214,7 +214,7 @@
     if (renderPath == LUTImageRenderPathCoreImage || renderPath == LUTImageRenderPathCoreImageSoftware) {
         CIImage *inputCIImage = [[CIImage alloc] initWithBitmapImageRep:[image.representations firstObject]];;
         CIImage *outputCIImage = [self processCIImage:inputCIImage];
-        return deep_ImageWithCIImage(outputCIImage, renderPath == LUTImageRenderPathCoreImageSoftware);
+        return LUTNSImageFromCIImage(outputCIImage, renderPath == LUTImageRenderPathCoreImageSoftware);
     }
     else if (renderPath == LUTImageRenderPathDirect) {
         return [self processNSImageDirectly:image];

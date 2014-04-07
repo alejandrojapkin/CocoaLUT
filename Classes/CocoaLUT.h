@@ -2,17 +2,12 @@
 #import <CoreImage/CoreImage.h>
 #elif TARGET_OS_MAC
 #import <QuartzCore/CoreImage.h>
+#import <Cocoa/Cocoa.h>
 #endif
 
 #ifndef _COCOALUT_
 
     #define _COCOALUT_
-
-    #if TARGET_OS_IPHONE
-    // TBD
-    #elif TARGET_OS_MAC
-    #import "NSImage+DeepImages.h"
-    #endif
 
     #import "LUTHelper.h"
     #import "LUT.h"
