@@ -58,7 +58,7 @@
 
 - (instancetype)init {
     if (self = [super init]) {
-        self.metadata = @{};
+        self.metadata = [NSMutableDictionary dictionary];
     }
     return self;
 }
@@ -150,7 +150,9 @@
 
 - (id)copyWithZone:(NSZone *)zone {
     LUT *lut = [LUT LUTWithLattice:[self.lattice copyWithZone:zone]];
-    lut.metadata = [self.metadata copyWithZone:zone];
+    lut.metadata = [self.metadata mutableCopyWithZone:zone];
+    lut.description = [self.description copyWithZone:zone];
+    lut.title = [self.title copyWithZone:zone];
     return lut;
 }
 

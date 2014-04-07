@@ -35,7 +35,7 @@ typedef NS_ENUM(NSInteger, LUTImageRenderPath) {
 /**
  *  Arbitrary metadata.
  */
-@property (strong) NSDictionary *metadata;
+@property (strong) NSMutableDictionary *metadata;
 
 /**
  *  Returns a new `LUT` by reading the a contents of a file represented by a file URL. It will automatically detect the type of LUT file format.

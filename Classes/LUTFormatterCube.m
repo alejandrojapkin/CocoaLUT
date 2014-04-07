@@ -95,7 +95,7 @@
 
     lut.title = title;
     lut.description = description;
-    lut.metadata = [metadata copy];
+    [lut.metadata setValuesForKeysWithDictionary:metadata];
 
     return lut;
 }
