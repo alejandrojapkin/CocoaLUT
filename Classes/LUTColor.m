@@ -24,7 +24,7 @@
     return [LUTColor colorWithRed:nsremapint01(r, maxBits) green:nsremapint01(g, maxBits) blue:nsremapint01(b, maxBits)];
 }
 
-- (LUTColor *)clampedO1 {
+- (LUTColor *)clamped01 {
     return [LUTColor colorWithRed:clamp01(self.red) green:clamp01(self.green) blue:clamp01(self.blue)];
 }
 

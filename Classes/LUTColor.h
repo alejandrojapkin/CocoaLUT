@@ -62,7 +62,7 @@ typedef double LUTColorValue;
  *
  *  @return A new color.
  */
-- (LUTColor *)clampedO1;
+- (LUTColor *)clamped01;
 
 /**
  *  Linearly interpolate between two colors by a percentage amount.

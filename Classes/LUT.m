@@ -104,7 +104,7 @@
     LUTLattice *lattice = [[LUTLattice alloc] initWithSize:self.lattice.size];
     
     LUTConcurrentCubeLoop(lattice.size, ^(NSUInteger r, NSUInteger g, NSUInteger b) {
-        [lattice setColor:[[self.lattice colorAtR:r g:g b:b] clampedO1] r:r g:g b:b];
+        [lattice setColor:[[self.lattice colorAtR:r g:g b:b] clamped01] r:r g:g b:b];
     });
     
     return [LUT LUTWithLattice:lattice];
