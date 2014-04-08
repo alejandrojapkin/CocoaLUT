@@ -93,7 +93,8 @@
                            @"Linear": [LUTColorTransferFunction LUTColorTransferFunctionWithGamma:1.0],
                            @"Rec. 709": [LUTColorTransferFunction rec709TransferFunction],
                            @"sRGB": [LUTColorTransferFunction sRGBTransferFunction],
-                           @"AlexaLogC_V3 EI800": [LUTColorTransferFunction arriLogCV3TransferFunctionWithEI:800]
+                           @"AlexaLogC_V3 EI800": [LUTColorTransferFunction arriLogCV3TransferFunctionWithEI:800],
+                           @"AlexaLogC_V3 EI400": [LUTColorTransferFunction arriLogCV3TransferFunctionWithEI:400]
                            };
     return dict;
 }
