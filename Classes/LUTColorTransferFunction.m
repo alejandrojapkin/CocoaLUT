@@ -94,8 +94,9 @@
                            @"Rec. 709": [LUTColorTransferFunction rec709TransferFunction],
                            @"sRGB": [LUTColorTransferFunction sRGBTransferFunction],
                            @"AlexaLogC_V3 EI800": [LUTColorTransferFunction arriLogCV3TransferFunctionWithEI:800],
-                           @"AlexaLogC_V3 EI400": [LUTColorTransferFunction arriLogCV3TransferFunctionWithEI:400]
-                           };
+                           @"AlexaLogC_V3 EI400": [LUTColorTransferFunction arriLogCV3TransferFunctionWithEI:400],
+                           @"S-Log2": [LUTColorTransferFunction sLog2TransferFunction]};
+    
     return dict;
 }
 
@@ -166,6 +167,20 @@
         
                                                                  linearToTransformedBlock1D:^double(double value){
                                                                                             return (value > cut) ? c * log10(a * value + b) + d: e * value + f;}];
+}
+
+//4096
++ (instancetype)sLog2TransferFunction {
+    double b = 256.0;
+    double ab = 360.0;
+    double w = 3760.0;
+    return [LUTColorTransferFunction LUTColorTransferFunctionWithTransformedToLinearBlock1D:^double(double value){
+                                                                                            double valueAsInt = (4095.0*value);
+                                                                                            return (valueAsInt >= ab) ? (219. * (pow(10., (((valueAsInt - b) / (w - b) - 0.616596 - 0.03) / 0.432699)) - 0.037584) / 155.) : ((( valueAsInt - b) / (w - b) - 0.030001222851889303) / 3.53881278538813) * 0.9;}
+                                                                 linearToTransformedBlock1D:^double(double value){
+                                                                                            double valueAsInt = (int)(4095.0*value);
+                                                                                            double transitionValue = (219. * (pow(10., (((ab - b) / (w - b) - 0.616596 - 0.03) / 0.432699)) - 0.037584) / 155.)*4095.;
+                                                                                            return (valueAsInt >= transitionValue) ? b*(1.0 + (.0187919*w - .0187919*b)*log(22.0912*valueAsInt + 1.1731)) : b*(0.969999 - 3.93201*valueAsInt) + w*(3.93201*valueAsInt + .0300012);}];
 }
 
 @end
