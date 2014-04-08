@@ -44,13 +44,13 @@
 +(instancetype)LUTColorTransferFunctionWithTransformedToLinearBlock1D:( double ( ^ )(double value) )transformedToLinearBlock1D
                                            linearToTransformedBlock1D:( double ( ^ )(double value) )linearToTransformedBlock1D{
     return [LUTColorTransferFunction LUTColorTransferFunctionWithTransformedToLinearBlock:^LUTColor*(double red, double green, double blue) {
-        return [LUTColor colorWithRed:transformedToLinearBlock1D(red)
-                                green:transformedToLinearBlock1D(green)
-                                 blue:transformedToLinearBlock1D(blue)];}
+                                                                                            return [LUTColor colorWithRed:transformedToLinearBlock1D(red)
+                                                                                                                    green:transformedToLinearBlock1D(green)
+                                                                                                                     blue:transformedToLinearBlock1D(blue)];}
                                                                  linearToTransformedBlock:^LUTColor*(double red, double green, double blue) {
-                                                                     return [LUTColor colorWithRed:linearToTransformedBlock1D(red)
-                                                                                             green:linearToTransformedBlock1D(green)
-                                                                                              blue:linearToTransformedBlock1D(blue)];}];
+                                                                                            return [LUTColor colorWithRed:linearToTransformedBlock1D(red)
+                                                                                                                    green:linearToTransformedBlock1D(green)
+                                                                                                                     blue:linearToTransformedBlock1D(blue)];}];
 }
 
 -(LUTColor *)transformedToLinearFromColor:(LUTColor *)transformedColor{
