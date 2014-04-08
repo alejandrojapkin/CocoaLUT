@@ -80,7 +80,7 @@
     NSLog(@"Source NPM: %@\n Destination NPM: %@", NSStringFromGLKMatrix3(sourceColorSpace.npm), NSStringFromGLKMatrix3(destinationColorSpace.npm));
     
     GLKMatrix3 transformationMatrix = [LUTColorSpace transformationMatrixFromColorSpace:sourceColorSpace ToColorSpace:destinationColorSpace];
-    
+    NSLog(@"Transformation Matrix: %@", NSStringFromGLKMatrix3(transformationMatrix));
     LUTLattice *transformedLattice = [[LUTLattice alloc] initWithSize:lut.lattice.size];
     
     LUTConcurrentCubeLoop(lut.lattice.size, ^(NSUInteger r, NSUInteger g, NSUInteger b) {
