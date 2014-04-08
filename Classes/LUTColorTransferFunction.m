@@ -103,23 +103,23 @@
 +(instancetype)LUTColorTransferFunctionWithGamma:(double)gamma{
     
     return [LUTColorTransferFunction LUTColorTransferFunctionWithTransformedToLinearBlock1D:^double(double value) {
-                                                                                            return pow(value, gamma);}
+                                                                                            return pow(fabs(value), gamma);}
                                                                  linearToTransformedBlock1D:^double(double value) {
-                                                                                        return pow(value, 1.0/gamma);}];
+                                                                                        return pow(fabs(value), 1.0/gamma);}];
 }
 
 + (instancetype)rec709TransferFunction{
     return [LUTColorTransferFunction LUTColorTransferFunctionWithTransformedToLinearBlock1D:^double(double value){
-                                                                                            return (value < .081) ? value/4.5 : pow((value+.099)/1.099, 2.2);}
+                                                                                            return (value < .081) ? value/4.5 : pow(fabs((value+.099)/1.099), 2.2);}
                                                                  linearToTransformedBlock1D:^double(double value){
-                                                                                            return (value < .018) ? 4.5*value : 1.099*pow(value, 1.0/2.2) - .099;} ];
+                                                                                            return (value < .018) ? 4.5*value : 1.099*pow(fabs(value), 1.0/2.2) - .099;} ];
 }
 
 + (instancetype)sRGBTransferFunction{
     return [LUTColorTransferFunction LUTColorTransferFunctionWithTransformedToLinearBlock1D:^double(double value){
-                                                                                            return (value <= .04045) ? value/12.92 : pow((value+.055)/1.055, 2.4);}
+                                                                                            return (value <= .04045) ? value/12.92 : pow(fabs((value+.055)/1.055), 2.4);}
                                                                  linearToTransformedBlock1D:^double(double value){
-                                                                                            return (value <= .0031308) ? 12.92*value : 1.055*pow(value, 1.0/2.4) - .055;}];
+                                                                                            return (value <= .0031308) ? 12.92*value : 1.055*pow(fabs(value), 1.0/2.4) - .055;}];
 }
 
 + (instancetype)arriLogCV3TransferFunctionWithEI:(double)EI{
