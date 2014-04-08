@@ -137,7 +137,7 @@
         int greenIndex = ((i % (cubeSize * cubeSize)) / (cubeSize) );
         int blueIndex = i / (cubeSize * cubeSize);
         
-        LUTColor *color = [lut.lattice colorAtR:redIndex g:greenIndex b:blueIndex].clampedO1;
+        LUTColor *color = [lut.lattice colorAtR:redIndex g:greenIndex b:blueIndex];
 
         [string appendString:[NSString stringWithFormat:@"%.6f %.6f %.6f", color.red, color.green, color.blue]];
 
