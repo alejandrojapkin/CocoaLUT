@@ -110,9 +110,9 @@
 
 + (instancetype)rec709TransferFunction{
     return [LUTColorTransferFunction LUTColorTransferFunctionWithTransformedToLinearBlock1D:^double(double value){
-                                                                                            return (value < .081) ? value/4.5 : pow(fabs((value+.099)/1.099), 2.2);}
+                                                                                            return (value <= .081) ? value/4.5 : pow(fabs((value+.099)/1.099), 2.2);}
                                                                  linearToTransformedBlock1D:^double(double value){
-                                                                                            return (value < .018) ? 4.5*value : 1.099*pow(fabs(value), 1.0/2.2) - .099;} ];
+                                                                                            return (value <= .018) ? 4.5*value : 1.099*pow(fabs(value), 1.0/2.2) - .099;} ];
 }
 
 + (instancetype)sRGBTransferFunction{
@@ -138,12 +138,12 @@
     double gain = EI / nominalEI;
     double gray = midGraySignal / gain;
     // The higher the EI, the lower the gamma
-    double encGain = (log(EI/nominalEI)/log(2) * (0.89 - 1) / 3 + 1) * encodingGain;
+    double encGain = (log(EI/nominalEI)/log(2.0) * (0.89 - 1.0) / 3.0 + 1.0) * encodingGain;
     double encOffset = encodingOffset;
     double nz;
     for (int i = 0; i < 3; i++){
         nz = ((95.0 / 1023.0 - encOffset) / encGain - offset) / slope;
-        encOffset = encodingOffset - log10(1 + nz) * encGain;
+        encOffset = encodingOffset - log10(1.0 + nz) * encGain;
     }
     // Calculate some intermediate values
     double a = 1.0 / gray;
@@ -151,7 +151,7 @@
     double e = slope * a * encGain;
     double f = encGain * (slope * b + offset) + encOffset;
     // Manipulations so we can return relative exposure
-    double s = 4 / (0.18 * EI);
+    double s = 4.0 / (0.18 * EI);
     double t = blackSignal;
     b = b + a * t;
     a = a * s;
@@ -162,8 +162,10 @@
     double c = encGain;
     double d = encOffset;
     
+    
+    
     return [LUTColorTransferFunction LUTColorTransferFunctionWithTransformedToLinearBlock1D:^double(double value){
-                                                                                            return (value > e * cut + f) ? (pow(10, (value - d) / c) - b) / a: (value - f) / e;}
+                                                                                            return (value > e * cut + f) ? (pow(10.0, (value - d) / c) - b) / a: (value - f) / e;}
         
                                                                  linearToTransformedBlock1D:^double(double value){
                                                                                             return (value > cut) ? c * log10(a * value + b) + d: e * value + f;}];
