@@ -12,6 +12,8 @@
 
 double clamp(double value, double min, double max);
 double clamp01(double value);
+double clampLowerBound(double value, double lowerBound);
+double clampUpperBound(double value, double upperBound);
 double remapint01(int value, int maxValue);
 double nsremapint01(NSInteger value, NSInteger maxValue);
 double lerp1d(double beginning, double end, double value01);

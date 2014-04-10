@@ -16,6 +16,16 @@ double clamp01(double value) {
     return clamp(value, 0, 1);
 }
 
+double clampLowerBound(double value, double lowerBound){
+    if(value < lowerBound) return lowerBound;
+    else return value;
+}
+
+double clampUpperBound(double value, double upperBound){
+    if(value > upperBound) return upperBound;
+    else return value;
+}
+
 double nsremapint01(NSInteger value, NSInteger maxValue) {
     return (double)value / (double)maxValue;
 }
