@@ -11,6 +11,7 @@
 #import "LUTFormatterCube.h"
 #import "LUTFormatter3DL.h"
 #import "LUTFormatterOLUT.h"
+#import "LUTFormatterILUT.h"
 #import "LUTFormatterDiscreet1DLUT.h"
 #import "LUTFormatterUnwrappedTexture.h"
 #import "LUTFormatterCMSTestPattern.h"
@@ -30,6 +31,9 @@
     }
     else if ([url.pathExtension.lowercaseString isEqualToString:@"olut"]) {
         return [LUTFormatterOLUT LUTFromFile:url];
+    }
+    else if ([url.pathExtension.lowercaseString isEqualToString:@"ilut"]) {
+        return [LUTFormatterILUT LUTFromFile:url];
     }
     else if ([url.pathExtension.lowercaseString isEqualToString:@"lut"]) {
         return [LUTFormatterDiscreet1DLUT LUTFromFile:url];
