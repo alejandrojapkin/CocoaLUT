@@ -95,7 +95,8 @@
                            @"sRGB": [LUTColorTransferFunction sRGBTransferFunction],
                            @"AlexaLogC_V3 EI800": [LUTColorTransferFunction arriLogCV3TransferFunctionWithEI:800],
                            @"AlexaLogC_V3 EI400": [LUTColorTransferFunction arriLogCV3TransferFunctionWithEI:400],
-                           @"S-Log2": [LUTColorTransferFunction sLog2TransferFunction]};
+                           @"S-Log2": [LUTColorTransferFunction sLog2TransferFunction],
+                           @"CanonLog": [LUTColorTransferFunction canonLogTransferFunction]};
     
     return dict;
 }
@@ -103,23 +104,29 @@
 +(instancetype)LUTColorTransferFunctionWithGamma:(double)gamma{
     
     return [LUTColorTransferFunction LUTColorTransferFunctionWithTransformedToLinearBlock1D:^double(double value) {
-                                                                                            return pow(fabs(value), gamma);}
+                                                                                            value = clampLowerBound(value, 0.0);
+                                                                                            return pow(value, gamma);}
                                                                  linearToTransformedBlock1D:^double(double value) {
-                                                                                        return pow(fabs(value), 1.0/gamma);}];
+                                                                                            value = clampLowerBound(value, 0.0);
+                                                                                            return pow(value, 1.0/gamma);}];
 }
 
 + (instancetype)rec709TransferFunction{
     return [LUTColorTransferFunction LUTColorTransferFunctionWithTransformedToLinearBlock1D:^double(double value){
-                                                                                            return (value <= .081) ? value/4.5 : pow(fabs((value+.099)/1.099), 2.2);}
+                                                                                            value = clampLowerBound(value, 0.0);
+                                                                                            return (value <= .081) ? value/4.5 : pow((value+.099)/1.099, 2.2);}
                                                                  linearToTransformedBlock1D:^double(double value){
-                                                                                            return (value <= .018) ? 4.5*value : 1.099*pow(fabs(value), 1.0/2.2) - .099;} ];
+                                                                                            value = clampLowerBound(value, 0.0);
+                                                                                            return (value <= .018) ? 4.5*value : 1.099*pow(value, 1.0/2.2) - .099;} ];
 }
 
 + (instancetype)sRGBTransferFunction{
     return [LUTColorTransferFunction LUTColorTransferFunctionWithTransformedToLinearBlock1D:^double(double value){
-                                                                                            return (value <= .04045) ? value/12.92 : pow(fabs((value+.055)/1.055), 2.4);}
+                                                                                            value = clampLowerBound(value, 0.0);
+                                                                                            return (value <= .04045) ? value/12.92 : pow((value+.055)/1.055, 2.4);}
                                                                  linearToTransformedBlock1D:^double(double value){
-                                                                                            return (value <= .0031308) ? 12.92*value : 1.055*pow(fabs(value), 1.0/2.4) - .055;}];
+                                                                                            value = clampLowerBound(value, 0.0);
+                                                                                            return (value <= .0031308) ? 12.92*value : 1.055*pow(value, 1.0/2.4) - .055;}];
 }
 
 + (instancetype)arriLogCV3TransferFunctionWithEI:(double)EI{
@@ -165,10 +172,25 @@
     
     
     return [LUTColorTransferFunction LUTColorTransferFunctionWithTransformedToLinearBlock1D:^double(double value){
+                                                                                            value = clampLowerBound(value, 0.0);
                                                                                             return (value > e * cut + f) ? (pow(10.0, (value - d) / c) - b) / a: (value - f) / e;}
         
                                                                  linearToTransformedBlock1D:^double(double value){
+                                                                                            value = clampLowerBound(value, 0.0);
                                                                                             return (value > cut) ? c * log10(a * value + b) + d: e * value + f;}];
+}
+
++ (instancetype)canonLogTransferFunction {
+    
+    return [LUTColorTransferFunction LUTColorTransferFunctionWithTransformedToLinearBlock1D:^double(double value){
+                                                                                            value = clampLowerBound(value, 0.0);
+                                                                                            double valueAsIRE = (value*1023.0 - 64.0) / 876.0;
+                                                                                            return (pow(10,(valueAsIRE-0.0730597)/0.529136)-1)/10.1596;}
+            
+                                                                 linearToTransformedBlock1D:^double(double value){
+                                                                                            value = clampLowerBound(value, 0.0);
+                                                                                            double valueAsIRE = .529136*log10(10.1596*value+1)+.0730597;
+                                                                                            return (876.0*valueAsIRE + 64.0)/1023.0;}];
 }
 
 //4096
@@ -177,9 +199,11 @@
     double ab = 360.0;
     double w = 3760.0;
     return [LUTColorTransferFunction LUTColorTransferFunctionWithTransformedToLinearBlock1D:^double(double value){
+                                                                                            value = clampLowerBound(value, 0.0);
                                                                                             double valueAsInt = (4095.0*value);
                                                                                             return (valueAsInt >= ab) ? (219. * (pow(10., (((valueAsInt - b) / (w - b) - 0.616596 - 0.03) / 0.432699)) - 0.037584) / 155.) : ((( valueAsInt - b) / (w - b) - 0.030001222851889303) / 3.53881278538813) * 0.9;}
                                                                  linearToTransformedBlock1D:^double(double value){
+                                                                                            value = clampLowerBound(value, 0.0);
                                                                                             double valueAsInt = (int)(4095.0*value);
                                                                                             double transitionValue = (219. * (pow(10., (((ab - b) / (w - b) - 0.616596 - 0.03) / 0.432699)) - 0.037584) / 155.)*4095.;
                                                                                             return (valueAsInt >= transitionValue) ? b*(1.0 + (.0187919*w - .0187919*b)*log(22.0912*valueAsInt + 1.1731)) : b*(0.969999 - 3.93201*valueAsInt) + w*(3.93201*valueAsInt + .0300012);}];
