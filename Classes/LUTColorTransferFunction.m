@@ -97,7 +97,6 @@
                            @"AlexaLogC_V3 EI400": [LUTColorTransferFunction arriLogCV3TransferFunctionWithEI:400],
                            @"S-Log2": [LUTColorTransferFunction sLog2TransferFunction],
                            @"CanonLog": [LUTColorTransferFunction canonLogTransferFunction],
-                           @"Greg": [LUTColorTransferFunction gregWithMaxPercentage:600],
                            @"BMD Film": [LUTColorTransferFunction bmdFilmTransferFunction]};
     
     return dict;
@@ -111,16 +110,6 @@
                                                                  linearToTransformedBlock1D:^double(double value) {
                                                                                             value = clampLowerBound(value, 0.0);
                                                                                             return pow(value, 1.0/gamma);}];
-}
-
-+ (instancetype)gregWithMaxPercentage:(double)maxPercentage{
-    return [LUTColorTransferFunction LUTColorTransferFunctionWithTransformedToLinearBlock1D:^double(double value){
-                                                                    value = clampLowerBound(value, 0.0);
-                                                                    return pow(value, 2.0);}
-                                                                 linearToTransformedBlock1D:^double(double value){
-                                                                     value = clampLowerBound(value, 0.0);
-                                                                     double valueNormalized = value/(maxPercentage/100.0);
-                                                                     return (valueNormalized <= .75) ? sqrt(valueNormalized) : log(valueNormalized*(1.0/(1-.75)) - .75 + 1.0);} ];
 }
 
 + (instancetype)rec709TransferFunction{
