@@ -114,6 +114,11 @@
     return [LUT LUTWithLattice:lattice];
 }
 
+- (instancetype)LUTByFlatteningTo1D{
+    LUT1D *flattened = [self LUT1D];
+    return [flattened lutOfSize:self.lattice.size];
+}
+
 - (LUT1D *) LUT1D{
     NSMutableArray *redCurve = [NSMutableArray array];
     NSMutableArray *greenCurve = [NSMutableArray array];
