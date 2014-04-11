@@ -35,10 +35,11 @@
 }
 
 - (LUT1D *)LUT1DByResizingToSize:(NSUInteger)newSize {
+    /*
     if (newSize == self.size) {
         return [self copy];
     }
-    
+    */
     NSMutableArray *newRedCurve = [NSMutableArray array];
     NSMutableArray *newGreenCurve = [NSMutableArray array];
     NSMutableArray *newBlueCurve = [NSMutableArray array];
