@@ -13,6 +13,7 @@ Pod::Spec.new do |s|
   s.frameworks = ['QuartzCore', 'GLKit']
 
   s.dependency 'RegExCategories'
+  s.dependency 'SAMCubicSpline'
 
   # iOS
   s.ios.frameworks = 'UIKit'
