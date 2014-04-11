@@ -96,7 +96,9 @@
                            @"AlexaLogC_V3 EI800": [LUTColorTransferFunction arriLogCV3TransferFunctionWithEI:800],
                            @"AlexaLogC_V3 EI400": [LUTColorTransferFunction arriLogCV3TransferFunctionWithEI:400],
                            @"S-Log2": [LUTColorTransferFunction sLog2TransferFunction],
-                           @"CanonLog": [LUTColorTransferFunction canonLogTransferFunction]};
+                           @"CanonLog": [LUTColorTransferFunction canonLogTransferFunction],
+                           @"Greg": [LUTColorTransferFunction gregWithMaxPercentage:600],
+                           @"BMD Film": [LUTColorTransferFunction bmdFilmTransferFunction]};
     
     return dict;
 }
@@ -109,6 +111,16 @@
                                                                  linearToTransformedBlock1D:^double(double value) {
                                                                                             value = clampLowerBound(value, 0.0);
                                                                                             return pow(value, 1.0/gamma);}];
+}
+
++ (instancetype)gregWithMaxPercentage:(double)maxPercentage{
+    return [LUTColorTransferFunction LUTColorTransferFunctionWithTransformedToLinearBlock1D:^double(double value){
+                                                                    value = clampLowerBound(value, 0.0);
+                                                                    return pow(value, 2.0);}
+                                                                 linearToTransformedBlock1D:^double(double value){
+                                                                     value = clampLowerBound(value, 0.0);
+                                                                     double valueNormalized = value/(maxPercentage/100.0);
+                                                                     return (valueNormalized <= .75) ? sqrt(valueNormalized) : log(valueNormalized*(1.0/(1-.75)) - .75 + 1.0);} ];
 }
 
 + (instancetype)rec709TransferFunction{
@@ -178,6 +190,17 @@
                                                                  linearToTransformedBlock1D:^double(double value){
                                                                                             value = clampLowerBound(value, 0.0);
                                                                                             return (value > cut) ? c * log10(a * value + b) + d: e * value + f;}];
+}
+
++ (instancetype)bmdFilmTransferFunction {
+    
+    return [LUTColorTransferFunction LUTColorTransferFunctionWithTransformedToLinearBlock1D:^double(double value){
+                                                                                            value = clampLowerBound(value, 0.0);
+                                                                                            return (value <= .2) ? 0.121167*value : (pow(10,(value-0.598919)/0.489017) - 0.122152)/1.26644;}
+            
+                                                                 linearToTransformedBlock1D:^double(double value){
+                                                                                             value = clampLowerBound(value, 0.0);
+                                                                                             return (value <= .0242334) ? value/0.121167 : .212377*log(21.2484*value + 2.04974);}];
 }
 
 + (instancetype)canonLogTransferFunction {
