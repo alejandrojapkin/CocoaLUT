@@ -45,12 +45,12 @@
 + (instancetype)LUT1DWithRedCurve:(NSArray *)redCurve
                        greenCurve:(NSArray *)greenCurve
                         blueCurve:(NSArray *)blueCurve
-                   WithLowerBound:(double)lowerBound
-                   WithUpperBound:(double)upperBound;
+                       lowerBound:(double)lowerBound
+                       upperBound:(double)upperBound;
 
 + (instancetype)LUT1DWith1DCurve:(NSArray *)curve1D
-                  WithLowerBound:(double)lowerBound
-                  WithUpperBound:(double)upperBound;
+                      lowerBound:(double)lowerBound
+                      upperBound:(double)upperBound;
 
 /**
  *  Initializes a newly allocated 1D LUT with the specified channel curves.
@@ -66,8 +66,8 @@
 - (instancetype)initWithRedCurve:(NSArray *)redCurve
                       greenCurve:(NSArray *)greenCurve
                        blueCurve:(NSArray *)blueCurve
-                  WithLowerBound:(double)lowerBound
-                  WithUpperBound:(double)upperBound;
+                      lowerBound:(double)lowerBound
+                      upperBound:(double)upperBound;
 
 /**
  *  Generates a 3D LUT that represents an approximation of the transformation applied by the channel curves.

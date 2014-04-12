@@ -50,7 +50,7 @@
         [blueCurve addObject:@(nsremapint01([trimmedLines[i] integerValue], maxCodeValue))];
     }
     
-    return [[LUT1D LUT1DWithRedCurve:redCurve greenCurve:greenCurve blueCurve:blueCurve WithLowerBound:0.0 WithUpperBound:1.0] lutOfSize:33];
+    return [[LUT1D LUT1DWithRedCurve:redCurve greenCurve:greenCurve blueCurve:blueCurve lowerBound:0.0 upperBound:1.0] lutOfSize:33];
 }
 
 + (NSString *)stringFromLUT:(LUT *)lut {

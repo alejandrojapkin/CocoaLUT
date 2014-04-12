@@ -24,30 +24,30 @@
 + (instancetype)LUT1DWithRedCurve:(NSArray *)redCurve
                        greenCurve:(NSArray *)greenCurve
                         blueCurve:(NSArray *)blueCurve
-                   WithLowerBound:(double)lowerBound
-                   WithUpperBound:(double)upperBound{
+                       lowerBound:(double)lowerBound
+                       upperBound:(double)upperBound {
     return [[[self class] alloc] initWithRedCurve:redCurve
                                        greenCurve:greenCurve
                                         blueCurve:blueCurve
-                                   WithLowerBound:lowerBound
-                                   WithUpperBound:upperBound];
+                                       lowerBound:lowerBound
+                                       upperBound:upperBound];
 }
 
 + (instancetype)LUT1DWith1DCurve:(NSArray *)curve1D
-                  WithLowerBound:(double)lowerBound
-                  WithUpperBound:(double)upperBound{
+                      lowerBound:(double)lowerBound
+                      upperBound:(double)upperBound {
     return [[[self class] alloc] initWithRedCurve:[curve1D copy]
                                        greenCurve:[curve1D copy]
                                         blueCurve:[curve1D copy]
-                                   WithLowerBound:lowerBound
-                                   WithUpperBound:upperBound];
+                                       lowerBound:lowerBound
+                                       upperBound:upperBound];
 }
 
 - (instancetype)initWithRedCurve:(NSArray *)redCurve
                       greenCurve:(NSArray *)greenCurve
                        blueCurve:(NSArray *)blueCurve
-                  WithLowerBound:(double)lowerBound
-                  WithUpperBound:(double)upperBound{
+                      lowerBound:(double)lowerBound
+                      upperBound:(double)upperBound {
     if (self = [super init]){
         self.redCurve = redCurve;
         self.greenCurve = greenCurve;
@@ -90,7 +90,7 @@
         
     }
     
-    return [LUT1D LUT1DWithRedCurve:newRedCurve greenCurve:newGreenCurve blueCurve:newBlueCurve WithLowerBound:0.0 WithUpperBound:1.0];
+    return [LUT1D LUT1DWithRedCurve:newRedCurve greenCurve:newGreenCurve blueCurve:newBlueCurve lowerBound:0.0 upperBound:1.0];
 }
 
 - (LUT *)lutOfSize:(NSUInteger)size {
