@@ -14,25 +14,53 @@
 @property (strong) NSArray *greenCurve;
 @property (strong) NSArray *blueCurve;
 @property NSUInteger size;
+@property (assign) double inputLowerBound;
+@property (assign) double inputUpperBound;
 
 @end
 
 @implementation LUT1D
 
-+ (instancetype)LUT1DWithRedCurve:(NSArray *)redCurve greenCurve:(NSArray *)greenCurve blueCurve:(NSArray *)blueCurve{
-    return [[[self class] alloc] initWithRedCurve:redCurve greenCurve:greenCurve blueCurve:blueCurve];
++ (instancetype)LUT1DWithRedCurve:(NSArray *)redCurve
+                       greenCurve:(NSArray *)greenCurve
+                        blueCurve:(NSArray *)blueCurve
+                   WithLowerBound:(double)lowerBound
+                   WithUpperBound:(double)upperBound{
+    return [[[self class] alloc] initWithRedCurve:redCurve
+                                       greenCurve:greenCurve
+                                        blueCurve:blueCurve
+                                   WithLowerBound:lowerBound
+                                   WithUpperBound:upperBound];
 }
 
-- (instancetype)initWithRedCurve:(NSArray *)redCurve greenCurve:(NSArray *)greenCurve blueCurve:(NSArray *)blueCurve{
++ (instancetype)LUT1DWith1DCurve:(NSArray *)curve1D
+                  WithLowerBound:(double)lowerBound
+                  WithUpperBound:(double)upperBound{
+    return [[[self class] alloc] initWithRedCurve:[curve1D copy]
+                                       greenCurve:[curve1D copy]
+                                        blueCurve:[curve1D copy]
+                                   WithLowerBound:lowerBound
+                                   WithUpperBound:upperBound];
+}
+
+- (instancetype)initWithRedCurve:(NSArray *)redCurve
+                      greenCurve:(NSArray *)greenCurve
+                       blueCurve:(NSArray *)blueCurve
+                  WithLowerBound:(double)lowerBound
+                  WithUpperBound:(double)upperBound{
     if (self = [super init]){
         self.redCurve = redCurve;
         self.greenCurve = greenCurve;
         self.blueCurve = blueCurve;
+        self.inputLowerBound = lowerBound;
+        self.inputUpperBound = upperBound;
+        
         NSAssert(redCurve.count == greenCurve.count && redCurve.count == blueCurve.count, @"Curves must be the same length.");
         self.size = self.redCurve.count;
     }
     return self;
 }
+
 
 - (LUT1D *)LUT1DByResizingToSize:(NSUInteger)newSize {
     /*
@@ -62,7 +90,7 @@
         
     }
     
-    return [LUT1D LUT1DWithRedCurve:newRedCurve greenCurve:newGreenCurve blueCurve:newBlueCurve];
+    return [LUT1D LUT1DWithRedCurve:newRedCurve greenCurve:newGreenCurve blueCurve:newBlueCurve WithLowerBound:0.0 WithUpperBound:1.0];
 }
 
 - (LUT *)lutOfSize:(NSUInteger)size {

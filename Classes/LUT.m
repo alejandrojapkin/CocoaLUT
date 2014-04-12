@@ -131,7 +131,7 @@
         [blueCurve addObject:@(color.blue)];
     }
     
-    return [LUT1D LUT1DWithRedCurve:redCurve greenCurve:greenCurve blueCurve:blueCurve];
+    return [LUT1D LUT1DWithRedCurve:redCurve greenCurve:greenCurve blueCurve:blueCurve WithLowerBound:0.0 WithUpperBound:1.0];
 }
 
 - (instancetype)LUTByResizingToSize:(NSUInteger)newSize {
