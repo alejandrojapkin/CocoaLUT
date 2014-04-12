@@ -19,7 +19,7 @@ Do you need something like this in Python? Try [pylut](http://github.com/gregcot
   - Unwrapped Texture LUT Image (.tiff, .dpx, .png)
   - CMS Test Pattern LUT Image (.tiff, .dpx, .png)
 - Reads 1D LUTs
-  - DaVinci Resolve 1D LUT (.olut)
+  - DaVinci Resolve 1D LUT (.ilut, .olut)
   - Discreet 1D LUT (.lut)
 - Has a format-independent internal data structure. You can create LUTs and use them in-memory.
 - Apply LUTs to NSImage, CIImage, and UIImage
