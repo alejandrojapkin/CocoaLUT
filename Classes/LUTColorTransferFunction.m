@@ -9,8 +9,6 @@
 #import "LUTColorTransferFunction.h"
 #include "math.h"
 
-#import <SAMCubicSpline/SAMCubicSpline.h>
-
 @interface LUTColorTransferFunction ()
     @property (copy)LUTColor* (^transformedToLinearBlock)( double red, double green, double blue );
     @property (copy)LUTColor* (^linearToTransformedBlock)( double red, double green, double blue );
