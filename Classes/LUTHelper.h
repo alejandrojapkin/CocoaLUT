@@ -10,6 +10,7 @@
 
 #import "CocoaLUT.h"
 
+double contrastStretch(double value, double currentMin, double currentMax, double finalMin, double finalMax);
 double clamp(double value, double min, double max);
 double clamp01(double value);
 double clampLowerBound(double value, double lowerBound);

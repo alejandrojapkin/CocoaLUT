@@ -8,6 +8,10 @@
 
 #import "LUTHelper.h"
 
+double contrastStretch(double value, double currentMin, double currentMax, double finalMin, double finalMax){
+    return (value - currentMin)*((finalMax-finalMin)/(currentMax-currentMin)) + finalMin;
+}
+
 double clamp(double value, double min, double max){
     return (value > max) ? max : ((value < min) ? min : value);
 }
