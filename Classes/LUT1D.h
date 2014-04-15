@@ -10,6 +10,7 @@
 #import "CocoaLUT.h"
 
 @class LUT;
+@class LUTColor;
 
 /**
  *  A one-dimensional color lookup table that is represented by three channel curves.
@@ -68,6 +69,13 @@
                        blueCurve:(NSArray *)blueCurve
                       lowerBound:(double)lowerBound
                       upperBound:(double)upperBound;
+
+- (LUTColor *)colorAtInterpolatedR:(double)redPoint
+                                 g:(double)greenPoint
+                                 b:(double)bluePoint;
+
+- (LUTColor *)colorAtColor:(LUTColor *)inputColor;
+
 
 /**
  *  Generates a 3D LUT that represents an approximation of the transformation applied by the channel curves.

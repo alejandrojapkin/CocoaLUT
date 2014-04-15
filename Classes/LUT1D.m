@@ -61,6 +61,33 @@
     return self;
 }
 
+- (LUTColor *)colorAtColor:(LUTColor *)inputColor{
+    inputColor = [inputColor clampedWithLowerBound:self.inputLowerBound upperBound:self.inputUpperBound];
+    return [self colorAtInterpolatedR:inputColor.red * (double)(self.size-1) g:inputColor.green * (double)(self.size-1) b:inputColor.blue * (double)(self.size-1)];
+}
+
+- (LUTColor *)colorAtInterpolatedR:(double)redPoint
+                                 g:(double)greenPoint
+                                 b:(double)bluePoint{
+    
+    //red
+    int redBottomIndex = floor(redPoint);
+    int redTopIndex = ceil(redPoint);
+    
+    int greenBottomIndex = floor(greenPoint);
+    int greenTopIndex = ceil(greenPoint);
+    
+    int blueBottomIndex = floor(bluePoint);
+    int blueTopIndex = ceil(bluePoint);
+    
+    double interpolatedRedValue = lerp1d([self.redCurve[redBottomIndex] doubleValue], [self.redCurve[redTopIndex] doubleValue], redPoint - (double)redBottomIndex);
+    double interpolatedGreenValue = lerp1d([self.greenCurve[greenBottomIndex] doubleValue], [self.greenCurve[greenTopIndex] doubleValue], greenPoint - (double)greenBottomIndex);
+    double interpolatedBlueValue = lerp1d([self.blueCurve[blueBottomIndex] doubleValue], [self.blueCurve[blueTopIndex] doubleValue], bluePoint - (double)blueBottomIndex);
+    
+    return [LUTColor colorWithRed:interpolatedRedValue green:interpolatedGreenValue blue:interpolatedBlueValue];
+
+}
+
 
 - (LUT1D *)LUT1DByResizingToSize:(NSUInteger)newSize {
     /*
@@ -76,21 +103,17 @@
     
     for(int i = 0; i < newSize; i++){
         double interpolatedIndex = (double)i * ratio;
-        NSUInteger bottomIndex = floor(interpolatedIndex);
-        NSUInteger topIndex = ceil(interpolatedIndex);
         
-        double interpolatedRedValue = lerp1d([self.redCurve[bottomIndex] doubleValue], [self.redCurve[topIndex] doubleValue], interpolatedIndex - (double)bottomIndex);
-        double interpolatedGreenValue = lerp1d([self.greenCurve[bottomIndex] doubleValue], [self.greenCurve[topIndex] doubleValue], interpolatedIndex - (double)bottomIndex);
-        double interpolatedBlueValue = lerp1d([self.blueCurve[bottomIndex] doubleValue], [self.blueCurve[topIndex] doubleValue], interpolatedIndex - (double)bottomIndex);
+        LUTColor *color = [self colorAtInterpolatedR:interpolatedIndex g:interpolatedIndex b:interpolatedIndex];
         
-        [newRedCurve addObject:@(interpolatedRedValue)];
-        [newGreenCurve addObject:@(interpolatedGreenValue)];
-        [newBlueCurve addObject:@(interpolatedBlueValue)];
+        [newRedCurve addObject:@(color.red)];
+        [newGreenCurve addObject:@(color.green)];
+        [newBlueCurve addObject:@(color.blue)];
         
         
     }
     
-    return [LUT1D LUT1DWithRedCurve:newRedCurve greenCurve:newGreenCurve blueCurve:newBlueCurve lowerBound:0.0 upperBound:1.0];
+    return [LUT1D LUT1DWithRedCurve:newRedCurve greenCurve:newGreenCurve blueCurve:newBlueCurve lowerBound:self.inputLowerBound upperBound:self.inputUpperBound];
 }
 
 - (LUT *)lutOfSize:(NSUInteger)size {
