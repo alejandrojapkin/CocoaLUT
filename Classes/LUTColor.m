@@ -24,6 +24,22 @@
     return [LUTColor colorWithRed:nsremapint01(r, maxBits) green:nsremapint01(g, maxBits) blue:nsremapint01(b, maxBits)];
 }
 
+- (LUTColor *)clampedWithLowerBound:(double)lowerBound
+                         upperBound:(double)upperBound{
+    return [LUTColor colorWithRed:clamp(self.red, lowerBound, upperBound)
+                            green:clamp(self.green, lowerBound, upperBound)
+                             blue:clamp(self.blue, lowerBound, upperBound)];
+}
+
+- (LUTColor *)contrastStretchWithCurrentMin:(double)currentMin
+                                 currentMax:(double)currentMax
+                                   finalMin:(double)finalMin
+                                   finalMax:(double)finalMax{
+    return [LUTColor colorWithRed:contrastStretch(self.red, currentMin, currentMax, finalMin, finalMax)
+                            green:contrastStretch(self.green, currentMin, currentMax, finalMin, finalMax)
+                             blue:contrastStretch(self.blue, currentMin, currentMax, finalMin, finalMax)];
+}
+
 - (LUTColor *)clamped01 {
     return [LUTColor colorWithRed:clamp01(self.red) green:clamp01(self.green) blue:clamp01(self.blue)];
 }

@@ -57,12 +57,21 @@ typedef double LUTColorValue;
  */
 + (instancetype)colorFromIntegersWithBitDepth:(NSUInteger)bitdepth red:(NSUInteger)r green:(NSUInteger)g blue:(NSUInteger)b;
 
+
+- (LUTColor *)contrastStretchWithCurrentMin:(double)currentMin
+                                 currentMax:(double)currentMax
+                                   finalMin:(double)finalMin
+                                   finalMax:(double)finalMax;
+
 /**
  *  Returns a new color with channel values clipped below zero and above 1.
  *
  *  @return A new color.
  */
 - (LUTColor *)clamped01;
+
+- (LUTColor *)clampedWithLowerBound:(double)lowerBound
+                         upperBound:(double)upperBound;
 
 /**
  *  Linearly interpolate between two colors by a percentage amount.
