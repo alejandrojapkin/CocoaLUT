@@ -155,6 +155,10 @@
     
     LUT1D *reversed1D = [[self LUT1D] LUT1DByReversing];
     
+    if(reversed1D == nil){
+        return nil;
+    }
+    
     LUTConcurrentCubeLoop(self.lattice.size, ^(NSUInteger r, NSUInteger g, NSUInteger b) {
         LUTColor *color = [self.lattice colorAtR:r
                                                g:g

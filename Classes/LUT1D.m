@@ -117,7 +117,9 @@
 }
 
 - (LUT1D *)LUT1DByReversing{
-    NSAssert([self isReversible] == YES, @"This 1D LUT is not invertible.");
+    if(![self isReversible]){
+        return nil;
+    }
     NSArray *rgbCurves = @[self.redCurve, self.greenCurve, self.blueCurve];
     
     NSMutableArray *newRGBCurves = [[NSMutableArray alloc] init];
@@ -188,10 +190,10 @@
         double lastValue = [curve[0] doubleValue];
         for(int i = 1; i < [curve count]; i++){
             double currentValue = [curve[i] doubleValue];
-            if(currentValue <= lastValue){
+            if(currentValue < lastValue){//make <= to be very strict
                 isIncreasing = NO;
             }
-            if(currentValue >= lastValue){
+            if(currentValue > lastValue){//make <= to be very strict
                 isDecreasing = NO;
             }
             lastValue = currentValue;
