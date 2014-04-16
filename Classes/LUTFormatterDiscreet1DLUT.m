@@ -64,15 +64,15 @@
     
     //write red
     for (int i = 0; i < 1024; i++) {
-        [string appendString:[NSString stringWithFormat:@"%d\n", (int)([lut1D.redCurve[i] doubleValue]*4095.0) ]];
+        [string appendString:[NSString stringWithFormat:@"%d\n", (int)(clamp01([lut1D.redCurve[i] doubleValue])*4095.0) ]];
     }
     //write green
     for (int i = 0; i < 1024; i++) {
-        [string appendString:[NSString stringWithFormat:@"%d\n", (int)([lut1D.greenCurve[i] doubleValue]*4095.0) ]];
+        [string appendString:[NSString stringWithFormat:@"%d\n", (int)(clamp01([lut1D.greenCurve[i] doubleValue])*4095.0) ]];
     }
     //write blue
     for (int i = 0; i < 1024; i++) {
-        [string appendString:[NSString stringWithFormat:@"%d\n", (int)([lut1D.blueCurve[i] doubleValue]*4095.0) ]];
+        [string appendString:[NSString stringWithFormat:@"%d\n", (int)(clamp01([lut1D.blueCurve[i] doubleValue])*4095.0) ]];
     }
     
     return string;

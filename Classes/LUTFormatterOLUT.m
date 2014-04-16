@@ -47,9 +47,9 @@
     LUT1D *lut1D = [[lut LUT1D] LUT1DByResizingToSize:pow(2,12)];
     
     for (int i = 0; i < pow(2,12); i++){
-        int red = (int)([lut1D.redCurve[i] doubleValue]*(double)pow(2,12));
-        int green = (int)([lut1D.greenCurve[i] doubleValue]*(double)pow(2,12));
-        int blue = (int)([lut1D.blueCurve[i] doubleValue]*(double)pow(2,12));
+        int red = (int)(clamp01([lut1D.redCurve[i] doubleValue])*(double)pow(2,12));
+        int green = (int)(clamp01([lut1D.greenCurve[i] doubleValue])*(double)pow(2,12));
+        int blue = (int)(clamp01([lut1D.blueCurve[i] doubleValue])*(double)pow(2,12));
         [string appendString:[NSString stringWithFormat:@"%d,%d,%d,%d,%d,%d\n", red, green, blue, red, green, blue]];
     }
     
