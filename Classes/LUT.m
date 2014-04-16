@@ -126,9 +126,14 @@
     LUTColor *color;
     for(int i = 0; i < self.lattice.size; i++){
         color = [self.lattice colorAtR:i g:i b:i];
-        [redCurve addObject:@(color.red)];
-        [greenCurve addObject:@(color.green)];
-        [blueCurve addObject:@(color.blue)];
+        double averageValue = (color.red+color.green+color.blue)/3.0;
+        [redCurve addObject:@(averageValue)];
+        [greenCurve addObject:@(averageValue)];
+        [blueCurve addObject:@(averageValue)];
+
+//        [redCurve addObject:@(color.red)];
+//        [greenCurve addObject:@(color.green)];
+//        [blueCurve addObject:@(color.blue)];
     }
     
     return [LUT1D LUT1DWithRedCurve:redCurve greenCurve:greenCurve blueCurve:blueCurve lowerBound:0.0 upperBound:1.0];
