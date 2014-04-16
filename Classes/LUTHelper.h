@@ -17,6 +17,7 @@ double clampLowerBound(double value, double lowerBound);
 double clampUpperBound(double value, double upperBound);
 double remapint01(int value, int maxValue);
 double nsremapint01(NSInteger value, NSInteger maxValue);
+double remap(double value, double inputLow, double inputHigh, double outputLow, double outputHigh);
 double lerp1d(double beginning, double end, double value01);
 float distancecalc(float x1, float y1, float z1, float x2, float y2, float z2);
 void timer(NSString* name, void (^block)());

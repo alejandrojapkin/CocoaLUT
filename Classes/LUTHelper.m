@@ -38,6 +38,10 @@ double remapint01(int value, int maxValue) {
     return nsremapint01(value, maxValue);
 }
 
+double remap(double value, double inputLow, double inputHigh, double outputLow, double outputHigh){
+    return outputLow + ((value - inputLow)*(outputHigh - outputLow))/(inputHigh - inputLow);
+}
+
 double lerp1d(double beginning, double end, double value01) {
     if (value01 < 0 || value01 > 1){
         @throw [NSException exceptionWithName:@"Invalid Lerp" reason:@"Value out of bounds" userInfo:nil];
