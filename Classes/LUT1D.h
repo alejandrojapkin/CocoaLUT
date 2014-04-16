@@ -32,6 +32,9 @@
  */
 @property (readonly) NSArray *blueCurve;
 
+@property (assign) double inputLowerBound;
+@property (assign) double inputUpperBound;
+
 /**
  *  Initializes and returns a 1D LUT with the specified channel curves.
  *

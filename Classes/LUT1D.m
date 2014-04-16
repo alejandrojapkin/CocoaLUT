@@ -14,8 +14,7 @@
 @property (strong) NSArray *greenCurve;
 @property (strong) NSArray *blueCurve;
 @property NSUInteger size;
-@property (assign) double inputLowerBound;
-@property (assign) double inputUpperBound;
+
 
 @end
 
@@ -63,7 +62,13 @@
 
 - (LUTColor *)colorAtColor:(LUTColor *)inputColor{
     inputColor = [inputColor clampedWithLowerBound:self.inputLowerBound upperBound:self.inputUpperBound];
-    return [self colorAtInterpolatedR:inputColor.red * (double)(self.size-1) g:inputColor.green * (double)(self.size-1) b:inputColor.blue * (double)(self.size-1)];
+    double redRemappedInterpolatedIndex = remap(inputColor.red, self.inputLowerBound, self.inputUpperBound, 0, self.size-1);
+    double greenRemappedInterpolatedIndex = remap(inputColor.green, self.inputLowerBound, self.inputUpperBound, 0, self.size-1);
+    double blueRemappedInterpolatedIndex = remap(inputColor.blue, self.inputLowerBound, self.inputUpperBound, 0, self.size-1);
+    
+    return [self colorAtInterpolatedR:redRemappedInterpolatedIndex
+                                    g:greenRemappedInterpolatedIndex
+                                    b:blueRemappedInterpolatedIndex];
 }
 
 - (LUTColor *)colorAtInterpolatedR:(double)redPoint
