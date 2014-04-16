@@ -116,6 +116,90 @@
     return [LUT1D LUT1DWithRedCurve:newRedCurve greenCurve:newGreenCurve blueCurve:newBlueCurve lowerBound:self.inputLowerBound upperBound:self.inputUpperBound];
 }
 
+- (LUT1D *)LUT1DByReversing{
+    NSAssert([self isReversible] == YES, @"This 1D LUT is not invertible.");
+    NSArray *rgbCurves = @[self.redCurve, self.greenCurve, self.blueCurve];
+    
+    NSMutableArray *newRGBCurves = [[NSMutableArray alloc] init];
+    double newLowerBound = 0;
+    double newUpperBound = 0;
+    
+    //find new lower and upper bounds
+    for(NSArray *curve in rgbCurves){
+        double minValue = [[curve valueForKeyPath:@"@min.doubleValue"] doubleValue];
+        double maxValue = [[curve valueForKeyPath:@"@max.doubleValue"] doubleValue];
+        if(minValue < newLowerBound){
+            newLowerBound = minValue;
+        }
+        if(maxValue > newUpperBound){
+            newUpperBound = maxValue;
+        }
+    }
+    
+    double range = newUpperBound - newLowerBound;
+    
+    for(NSArray *curve in rgbCurves){
+        NSMutableArray *newCurve = [[NSMutableArray alloc] init];
+        
+        double minValue = [[curve valueForKeyPath:@"@min.self"] doubleValue];
+        double maxValue = [[curve valueForKeyPath:@"@max.self"] doubleValue];
+        
+        
+        for(int i = 0; i < self.size; i++){
+            double remappedIndex = newLowerBound + range*((double)i/(double)(self.size-1));
+            if (remappedIndex <= minValue){
+                [newCurve addObject:@(minValue)];
+            }
+            else if(remappedIndex >= maxValue){
+                [newCurve addObject:@(maxValue)];
+            }
+            else{
+                for(int i = 0; i < self.size; i++){
+                    double currentValue = [curve[i] doubleValue];
+                    if (remappedIndex < currentValue){
+                        double previousValue = [curve[i-1] doubleValue]; //smaller than remappedIndex
+                        double lowerValue = remap(i-1, 0, self.size-1, self.inputLowerBound, self.inputUpperBound);
+                        double higherValue = remap(i, 0, self.size-1, self.inputLowerBound, self.inputUpperBound);
+                        [newCurve addObject:@(lerp1d(lowerValue, higherValue,(remappedIndex - previousValue)/(currentValue - previousValue)))];
+                        break;
+                    }
+                }
+            }
+            
+        }
+        
+        [newRGBCurves addObject:[NSArray arrayWithArray:newCurve]];
+    }
+    
+    return [LUT1D LUT1DWithRedCurve:newRGBCurves[0]
+                         greenCurve:newRGBCurves[1]
+                          blueCurve:newRGBCurves[2]
+                         lowerBound:newLowerBound
+                         upperBound:newUpperBound];
+}
+
+- (BOOL)isReversible{
+    BOOL isIncreasing = YES;
+    BOOL isDecreasing = YES;
+    
+    NSArray *rgbCurves = @[self.redCurve, self.greenCurve, self.blueCurve];
+    
+    for(NSArray *curve in rgbCurves){
+        double lastValue = [curve[0] doubleValue];
+        for(int i = 1; i < [curve count]; i++){
+            double currentValue = [curve[i] doubleValue];
+            if(currentValue <= lastValue){
+                isIncreasing = NO;
+            }
+            if(currentValue >= lastValue){
+                isDecreasing = NO;
+            }
+            lastValue = currentValue;
+        }
+    }
+    return isIncreasing;
+}
+
 - (LUT *)lutOfSize:(NSUInteger)size {
     LUT1D *resized1DLUT = [self LUT1DByResizingToSize:size];
     

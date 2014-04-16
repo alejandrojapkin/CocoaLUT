@@ -53,6 +53,8 @@
                       lowerBound:(double)lowerBound
                       upperBound:(double)upperBound;
 
+- (LUT1D *)LUT1DByReversing;
+
 /**
  *  Initializes a newly allocated 1D LUT with the specified channel curves.
  *
