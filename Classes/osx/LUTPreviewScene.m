@@ -18,7 +18,7 @@
 @implementation LUTColorNode
 - (void)changeToAnimationPercentage:(float)animationPercentage{
     LUTColor *lerpedColor = [self.identityColor lerpTo:self.transformedColor amount:animationPercentage];
-    self.position = SCNVector3Make(lerpedColor.red/13.0, lerpedColor.green/13.0, lerpedColor.blue/13.0);
+    self.position = SCNVector3Make(lerpedColor.red/LATTICE_SIZE, lerpedColor.green/LATTICE_SIZE, lerpedColor.blue/LATTICE_SIZE);
 //    self.geometry.firstMaterial.diffuse.contents = lerpedColor.NSColor;
 }
 @end
