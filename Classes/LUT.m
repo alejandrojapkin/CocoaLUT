@@ -150,6 +150,22 @@
     return [LUT LUTWithLattice:lattice];
 }
 
+- (instancetype)LUTByExtractingColorOnly{
+    LUTLattice *lattice = [[LUTLattice alloc] initWithSize:self.lattice.size];
+    
+    LUT1D *reversed1D = [[self LUT1D] LUT1DByReversing];
+    
+    LUTConcurrentCubeLoop(self.lattice.size, ^(NSUInteger r, NSUInteger g, NSUInteger b) {
+        LUTColor *color = [self.lattice colorAtR:r
+                                               g:g
+                                               b:b];
+        LUTColor *transformedColor = [reversed1D colorAtColor:color];
+        [lattice setColor:transformedColor r:r g:g b:b];
+    });
+    
+    return [LUT LUTWithLattice:lattice];
+}
+
 - (bool) equalsIdentityLUT{
     return [self equalsLUT:[LUT identityLutOfSize:self.lattice.size]];
 }

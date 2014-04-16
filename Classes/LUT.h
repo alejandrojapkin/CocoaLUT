@@ -87,6 +87,8 @@ typedef NS_ENUM(NSInteger, LUTImageRenderPath) {
 
 - (instancetype)LUTByFlatteningTo1D;
 
+- (instancetype)LUTByExtractingColorOnly;
+
 - (bool)equalsIdentityLUT;
 
 - (bool)equalsLUT:(LUT *)comparisonLUT;
