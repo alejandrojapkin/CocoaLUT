@@ -172,7 +172,10 @@
         [lattice setColor:transformedColor r:r g:g b:b];
     });
     
-    return [LUT LUTWithLattice:lattice];
+    LUT *extractedLUT = [LUT LUTWithLattice:lattice];
+    [extractedLUT.metadata setObject:@(reversed1D.inputLowerBound) forKey:@"Input Lower"];
+    [extractedLUT.metadata setObject:@(reversed1D.inputUpperBound) forKey:@"Input Upper"];
+    return extractedLUT;
 }
 
 - (bool) equalsIdentityLUT{
