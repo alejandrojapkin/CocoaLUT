@@ -128,20 +128,14 @@
     NSArray *rgbCurves = @[self.redCurve, self.greenCurve, self.blueCurve];
     
     NSMutableArray *newRGBCurves = [[NSMutableArray alloc] init];
-    double newLowerBound = 0;
-    double newUpperBound = 0;
     
-    //find new lower and upper bounds
-    for(NSArray *curve in rgbCurves){
-        double minValue = [[curve valueForKeyPath:@"@min.doubleValue"] doubleValue];
-        double maxValue = [[curve valueForKeyPath:@"@max.doubleValue"] doubleValue];
-        if(minValue < newLowerBound){
-            newLowerBound = minValue;
-        }
-        if(maxValue > newUpperBound){
-            newUpperBound = maxValue;
-        }
-    }
+    NSMutableArray *allCurvesCombined = [[NSMutableArray alloc] init];
+    [allCurvesCombined addObjectsFromArray:self.redCurve];
+    [allCurvesCombined addObjectsFromArray:self.greenCurve];
+    [allCurvesCombined addObjectsFromArray:self.blueCurve];
+    
+    double newLowerBound = [[allCurvesCombined valueForKeyPath:@"@min.doubleValue"] doubleValue];
+    double newUpperBound = [[allCurvesCombined valueForKeyPath:@"@max.doubleValue"] doubleValue];
     
     double range = newUpperBound - newLowerBound;
     
