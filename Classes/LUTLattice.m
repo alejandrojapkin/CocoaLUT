@@ -68,7 +68,9 @@
     if ((0 < redPoint   && redPoint     > cubeSize - 1) ||
         (0 < greenPoint && greenPoint   > cubeSize - 1) ||
         (0 < bluePoint  && bluePoint    > cubeSize - 1)) {
-        @throw [NSException exceptionWithName:@"InvalidInputs" reason:@"" userInfo:nil];
+        @throw [NSException exceptionWithName:@"InvalidInputs"
+                                       reason:[NSString stringWithFormat:@"Tried to access out-of-bounds lattice point r:%f g:%f b:%f", redPoint, greenPoint, bluePoint]
+                                     userInfo:nil];
     }
 
     double lowerRedPoint = clamp(floor(redPoint), 0, cubeSize-1);
