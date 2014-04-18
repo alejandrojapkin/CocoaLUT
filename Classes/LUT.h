@@ -83,13 +83,23 @@ typedef NS_ENUM(NSInteger, LUT1DExtractionMethod) {
 
 
 /**
- *  Returns a new `LUT` that is the original LUT combined with otherLUT.
+ *  Returns a new `LUT` that is the original LUT of original size combined with otherLUT.
  *
  *  @param otherLUT The LUT to apply to the current lut.
  *
  *  @return A new LUT with the same lattice size as self.lattice.size.
  */
 - (instancetype)LUTByCombiningWithLUT:(LUT *)otherLUT;
+
+
+/**
+ *  Returns a new `LUT` that is the original LUT of original size combined with otherLUT.
+ *
+ *  @param otherLUT The LUT1D to apply to the current lut.
+ *
+ *  @return A new LUT with the same lattice size as self.lattice.size.
+ */
+- (instancetype)LUTByCombiningWithLUT1D:(LUT1D *)otherLUT;
 
 - (instancetype)LUTByClamping01;
 

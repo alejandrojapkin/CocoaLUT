@@ -104,6 +104,20 @@
     return [LUT LUTWithLattice:lattice];
 }
 
+- (instancetype)LUTByCombiningWithLUT1D:(LUT1D *)otherLUT {
+    LUTLattice *lattice = [[LUTLattice alloc] initWithSize:self.lattice.size];
+    
+    LUTConcurrentCubeLoop(self.lattice.size, ^(NSUInteger r, NSUInteger g, NSUInteger b) {
+        LUTColor *color = [self.lattice colorAtR:r
+                                               g:g
+                                               b:b];
+        LUTColor *transformedColor = [otherLUT colorAtColor:color];
+        [lattice setColor:transformedColor r:r g:g b:b];
+    });
+    
+    return [LUT LUTWithLattice:lattice];
+}
+
 - (instancetype)LUTByClamping01{
     LUTLattice *lattice = [[LUTLattice alloc] initWithSize:self.lattice.size];
     
@@ -159,23 +173,16 @@
 }
 
 - (instancetype)LUTByExtractingColorOnly{
-    LUTLattice *lattice = [[LUTLattice alloc] initWithSize:self.lattice.size];
-    
     LUT1D *reversed1D = [[self LUT1DWithExtractionMethod:LUT1DExtractionMethodUniqueRGB] LUT1DByReversing];
     
     if(reversed1D == nil){
         return nil;
     }
     
-    LUTConcurrentCubeLoop(self.lattice.size, ^(NSUInteger r, NSUInteger g, NSUInteger b) {
-        LUTColor *color = [self.lattice colorAtR:r
-                                               g:g
-                                               b:b];
-        LUTColor *transformedColor = [reversed1D colorAtColor:color];
-        [lattice setColor:transformedColor r:r g:g b:b];
-    });
     
-    LUT *extractedLUT = [LUT LUTWithLattice:lattice];
+    
+    LUT *extractedLUT = [self LUTByCombiningWithLUT1D:reversed1D];
+    
     [extractedLUT.metadata setObject:@(reversed1D.inputLowerBound) forKey:@"Input Lower"];
     [extractedLUT.metadata setObject:@(reversed1D.inputUpperBound) forKey:@"Input Upper"];
     return extractedLUT;
