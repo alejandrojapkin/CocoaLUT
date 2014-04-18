@@ -155,12 +155,12 @@
                 [newCurve addObject:@(maxValue)];
             }
             else{
-                for(int i = 0; i < self.size; i++){
-                    double currentValue = [curve[i] doubleValue];
+                for(int j = 0; j < self.size; j++){
+                    double currentValue = [curve[j] doubleValue];
                     if (remappedIndex < currentValue){
-                        double previousValue = [curve[i-1] doubleValue]; //smaller than remappedIndex
-                        double lowerValue = remap(i-1, 0, self.size-1, self.inputLowerBound, self.inputUpperBound);
-                        double higherValue = remap(i, 0, self.size-1, self.inputLowerBound, self.inputUpperBound);
+                        double previousValue = [curve[j-1] doubleValue]; //smaller or equal to remappedIndex
+                        double lowerValue = remap(j-1, 0, self.size-1, self.inputLowerBound, self.inputUpperBound);
+                        double higherValue = remap(j, 0, self.size-1, self.inputLowerBound, self.inputUpperBound);
                         [newCurve addObject:@(lerp1d(lowerValue, higherValue,(remappedIndex - previousValue)/(currentValue - previousValue)))];
                         break;
                     }
