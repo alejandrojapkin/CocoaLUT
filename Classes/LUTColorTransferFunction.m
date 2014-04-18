@@ -188,10 +188,8 @@
     LUT1D *arriK1S1ToLogC = [LUTColorTransferFunction arriK1S1VideoToLogC];
     LUTColorTransferFunction *arriLogCV3TransferFunction = [LUTColorTransferFunction arriLogCV3TransferFunctionWithEI:800];
     
-    double minValueK1S1 = [arriLogCToK1S1 colorAtColor:[arriLogCV3TransferFunction linearToTransformedFromColor:[LUTColor colorWithRed:0 green:0 blue:0]]].red;
+    //double minValueK1S1 = [arriLogCToK1S1 colorAtColor:[arriLogCV3TransferFunction linearToTransformedFromColor:[LUTColor colorWithRed:0 green:0 blue:0]]].red;
     double maxValueK1S1 = [arriLogCToK1S1 colorAtColor:[arriLogCV3TransferFunction linearToTransformedFromColor:[LUTColor colorWithRed:maxValue green:maxValue blue:maxValue]]].red;
-    
-    NSLog(@"min %f max %f", minValueK1S1, maxValueK1S1);
     
     return [LUTColorTransferFunction LUTColorTransferFunctionWithTransformedToLinearBlock:^LUTColor*(double red, double green, double blue) {
                                                                                             LUTColor *logColor = [arriK1S1ToLogC colorAtColor:[[LUTColor colorWithRed:red green:green blue:blue] contrastStretchWithCurrentMin:0.0 currentMax:1.0 finalMin:0.0 finalMax:maxValueK1S1]];
