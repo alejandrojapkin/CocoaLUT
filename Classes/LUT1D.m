@@ -137,8 +137,6 @@
     double newLowerBound = [[allCurvesCombined valueForKeyPath:@"@min.doubleValue"] doubleValue];
     double newUpperBound = [[allCurvesCombined valueForKeyPath:@"@max.doubleValue"] doubleValue];
     
-    double range = newUpperBound - newLowerBound;
-    
     for(NSArray *curve in rgbCurves){
         NSMutableArray *newCurve = [[NSMutableArray alloc] init];
         
@@ -147,7 +145,8 @@
         
         
         for(int i = 0; i < self.size; i++){
-            double remappedIndex = newLowerBound + range*((double)i/(double)(self.size-1));
+            double remappedIndex = remap(i, 0, self.size-1, newLowerBound, newUpperBound);
+
             if (remappedIndex <= minValue){
                 [newCurve addObject:@(minValue)];
             }
