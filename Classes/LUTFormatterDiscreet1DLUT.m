@@ -59,7 +59,7 @@
     
     [string appendString:[NSString stringWithFormat:@"#\n# Discreet LUT file\n#\tChannels: 3\n# Input Samples: 1024\n# Ouput Scale: 4095\n#\n# Exported from CocoaLUT\n#\nLUT: 3 1024\n"]];
     
-    LUT1D *lut1D = [[lut LUT1D] LUT1DByResizingToSize:1024];
+    LUT1D *lut1D = [[lut LUT1DWithExtractionMethod:LUT1DExtractionMethodUniqueRGB] LUT1DByResizingToSize:1024];
 
     
     //write red

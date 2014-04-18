@@ -114,26 +114,29 @@
     return [LUT LUTWithLattice:lattice];
 }
 
-- (instancetype)LUTByFlatteningTo1D{
-    LUT1D *flattened = [self LUT1D];
+- (instancetype)LUTByFlatteningTo1DWithExtractionMethod:(LUT1DExtractionMethod)extractionMethod{
+    LUT1D *flattened = [self LUT1DWithExtractionMethod:extractionMethod];
     return [flattened lutOfSize:self.lattice.size];
 }
 
-- (LUT1D *) LUT1D{
+- (LUT1D *)LUT1DWithExtractionMethod:(LUT1DExtractionMethod)extractionMethod{
     NSMutableArray *redCurve = [NSMutableArray array];
     NSMutableArray *greenCurve = [NSMutableArray array];
     NSMutableArray *blueCurve = [NSMutableArray array];
     LUTColor *color;
     for(int i = 0; i < self.lattice.size; i++){
         color = [self.lattice colorAtR:i g:i b:i];
-        double averageValue = (color.red+color.green+color.blue)/3.0;
-        [redCurve addObject:@(averageValue)];
-        [greenCurve addObject:@(averageValue)];
-        [blueCurve addObject:@(averageValue)];
-
-//        [redCurve addObject:@(color.red)];
-//        [greenCurve addObject:@(color.green)];
-//        [blueCurve addObject:@(color.blue)];
+        if(extractionMethod == LUT1DExtractionMethodAverageRGB){
+            double averageValue = (color.red+color.green+color.blue)/3.0;
+            [redCurve addObject:@(averageValue)];
+            [greenCurve addObject:@(averageValue)];
+            [blueCurve addObject:@(averageValue)];
+        }
+        else if(extractionMethod == LUT1DExtractionMethodUniqueRGB){
+            [redCurve addObject:@(color.red)];
+            [greenCurve addObject:@(color.green)];
+            [blueCurve addObject:@(color.blue)];
+        }
     }
     
     return [LUT1D LUT1DWithRedCurve:redCurve greenCurve:greenCurve blueCurve:blueCurve lowerBound:0.0 upperBound:1.0];
@@ -158,7 +161,7 @@
 - (instancetype)LUTByExtractingColorOnly{
     LUTLattice *lattice = [[LUTLattice alloc] initWithSize:self.lattice.size];
     
-    LUT1D *reversed1D = [[self LUT1D] LUT1DByReversing];
+    LUT1D *reversed1D = [[self LUT1DWithExtractionMethod:LUT1DExtractionMethodUniqueRGB] LUT1DByReversing];
     
     if(reversed1D == nil){
         return nil;

@@ -18,6 +18,14 @@ typedef NS_ENUM(NSInteger, LUTImageRenderPath) {
     LUTImageRenderPathDirect
 };
 
+typedef NS_ENUM(NSInteger, LUT1DExtractionMethod) {
+    LUT1DExtractionMethodUniqueRGB,
+    LUT1DExtractionMethodAverageRGB,
+    LUT1DExtractionMethodRed,
+    LUT1DExtractionMethodGreen,
+    LUT1DExtractionMethodBlue
+};
+
 
 /**
  *  A three-dimensional color lookup table.
@@ -85,7 +93,7 @@ typedef NS_ENUM(NSInteger, LUTImageRenderPath) {
 
 - (instancetype)LUTByClamping01;
 
-- (instancetype)LUTByFlatteningTo1D;
+- (instancetype)LUTByFlatteningTo1DWithExtractionMethod:(LUT1DExtractionMethod)extractionMethod;
 
 - (instancetype)LUTByExtractingColorOnly;
 
@@ -94,7 +102,7 @@ typedef NS_ENUM(NSInteger, LUTImageRenderPath) {
 - (bool)equalsLUT:(LUT *)comparisonLUT;
 
 
-- (LUT1D *)LUT1D;
+- (LUT1D *)LUT1DWithExtractionMethod:(LUT1DExtractionMethod)extractionMethod;
 
 
 /**
