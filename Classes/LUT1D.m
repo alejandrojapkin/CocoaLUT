@@ -122,7 +122,7 @@
 }
 
 - (LUT1D *)LUT1DByReversing{
-    if(![self isReversible]){
+    if(![self isReversibleWithStrictness:NO]){
         return nil;
     }
     NSArray *rgbCurves = @[self.redCurve, self.greenCurve, self.blueCurve];
@@ -156,7 +156,7 @@
             else{
                 for(int j = 0; j < self.size; j++){
                     double currentValue = [curve[j] doubleValue];
-                    if (remappedIndex < currentValue){
+                    if (currentValue > remappedIndex){
                         double previousValue = [curve[j-1] doubleValue]; //smaller or equal to remappedIndex
                         double lowerValue = remap(j-1, 0, self.size-1, self.inputLowerBound, self.inputUpperBound);
                         double higherValue = remap(j, 0, self.size-1, self.inputLowerBound, self.inputUpperBound);
@@ -178,7 +178,7 @@
                          upperBound:newUpperBound];
 }
 
-- (BOOL)isReversible{
+- (BOOL)isReversibleWithStrictness:(BOOL)strict{
     BOOL isIncreasing = YES;
     BOOL isDecreasing = YES;
     
@@ -188,11 +188,15 @@
         double lastValue = [curve[0] doubleValue];
         for(int i = 1; i < [curve count]; i++){
             double currentValue = [curve[i] doubleValue];
-            if(currentValue < lastValue){//make <= to be very strict
-                isIncreasing = NO;
+            if(currentValue <= lastValue){//make <= to be very strict
+                if(strict && currentValue == lastValue){
+                    isIncreasing = NO;
+                }
             }
-            if(currentValue > lastValue){//make <= to be very strict
-                isDecreasing = NO;
+            if(currentValue >= lastValue){//make <= to be very strict
+                if(strict && currentValue == lastValue){
+                    isDecreasing = NO;
+                }
             }
             lastValue = currentValue;
         }
