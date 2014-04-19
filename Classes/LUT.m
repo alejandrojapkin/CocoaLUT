@@ -128,27 +128,55 @@
     return [LUT LUTWithLattice:lattice];
 }
 
-- (instancetype)LUTByFlatteningTo1DWithExtractionMethod:(LUT1DExtractionMethod)extractionMethod{
-    LUT1D *flattened = [self LUT1DWithExtractionMethod:extractionMethod];
-    return [flattened lutOfSize:self.lattice.size];
+- (instancetype)LUTByExtracting1DWithExtractionMethod:(LUT1DExtractionMethod)extractionMethod{
+    LUT1D *extracted1D = [self LUT1DWithExtractionMethod:extractionMethod];
+    return [extracted1D lutOfSize:self.lattice.size];
+}
+
++ (NSDictionary *)LUT1DExtractionMethods{
+    return @{@"Averaged RGB":@(LUT1DExtractionMethodAverageRGB),
+             @"Unique RGB":@(LUT1DExtractionMethodUniqueRGB),
+             @"Copy Red Channel":@(LUT1DExtractionMethodRedCopiedToRGB),
+             @"Copy Green Channel":@(LUT1DExtractionMethodGreenCopiedToRGB),
+             @"Copy Blue Channel":@(LUT1DExtractionMethodBlueCopiedToRGB)};
 }
 
 - (LUT1D *)LUT1DWithExtractionMethod:(LUT1DExtractionMethod)extractionMethod{
     NSMutableArray *redCurve = [NSMutableArray array];
     NSMutableArray *greenCurve = [NSMutableArray array];
     NSMutableArray *blueCurve = [NSMutableArray array];
+    
     LUTColor *color;
     for(int i = 0; i < self.lattice.size; i++){
-        color = [self.lattice colorAtR:i g:i b:i];
         if(extractionMethod == LUT1DExtractionMethodAverageRGB){
+            color = [self.lattice colorAtR:i g:i b:i];
             double averageValue = (color.red+color.green+color.blue)/3.0;
             [redCurve addObject:@(averageValue)];
             [greenCurve addObject:@(averageValue)];
             [blueCurve addObject:@(averageValue)];
         }
         else if(extractionMethod == LUT1DExtractionMethodUniqueRGB){
+            color = [self.lattice colorAtR:i g:i b:i];
             [redCurve addObject:@(color.red)];
             [greenCurve addObject:@(color.green)];
+            [blueCurve addObject:@(color.blue)];
+        }
+        else if(extractionMethod == LUT1DExtractionMethodRedCopiedToRGB){
+            color = [self.lattice colorAtR:i g:i b:i];
+            [redCurve addObject:@(color.red)];
+            [greenCurve addObject:@(color.red)];
+            [blueCurve addObject:@(color.red)];
+        }
+        else if(extractionMethod == LUT1DExtractionMethodGreenCopiedToRGB){
+            color = [self.lattice colorAtR:i g:i b:i];
+            [redCurve addObject:@(color.green)];
+            [greenCurve addObject:@(color.green)];
+            [blueCurve addObject:@(color.green)];
+        }
+        else if(extractionMethod == LUT1DExtractionMethodBlueCopiedToRGB){
+            color = [self.lattice colorAtR:i g:i b:i];
+            [redCurve addObject:@(color.blue)];
+            [greenCurve addObject:@(color.blue)];
             [blueCurve addObject:@(color.blue)];
         }
     }

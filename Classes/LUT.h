@@ -21,9 +21,10 @@ typedef NS_ENUM(NSInteger, LUTImageRenderPath) {
 typedef NS_ENUM(NSInteger, LUT1DExtractionMethod) {
     LUT1DExtractionMethodUniqueRGB,
     LUT1DExtractionMethodAverageRGB,
-    LUT1DExtractionMethodRed,
-    LUT1DExtractionMethodGreen,
-    LUT1DExtractionMethodBlue
+    LUT1DExtractionMethodEdgesRGB,
+    LUT1DExtractionMethodRedCopiedToRGB,
+    LUT1DExtractionMethodGreenCopiedToRGB,
+    LUT1DExtractionMethodBlueCopiedToRGB
 };
 
 
@@ -103,7 +104,7 @@ typedef NS_ENUM(NSInteger, LUT1DExtractionMethod) {
 
 - (instancetype)LUTByClamping01;
 
-- (instancetype)LUTByFlatteningTo1DWithExtractionMethod:(LUT1DExtractionMethod)extractionMethod;
+- (instancetype)LUTByExtracting1DWithExtractionMethod:(LUT1DExtractionMethod)extractionMethod;
 
 - (instancetype)LUTByExtractingColorOnly;
 
@@ -111,6 +112,7 @@ typedef NS_ENUM(NSInteger, LUT1DExtractionMethod) {
 
 - (bool)equalsLUT:(LUT *)comparisonLUT;
 
++ (NSDictionary *)LUT1DExtractionMethods;
 
 - (LUT1D *)LUT1DWithExtractionMethod:(LUT1DExtractionMethod)extractionMethod;
 
