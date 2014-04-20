@@ -107,8 +107,13 @@ M13OrderedDictionary* M13OrderedDictionaryFromOrderedArrayWithDictionaries(NSArr
     NSMutableArray *values = [[NSMutableArray alloc] init];
     
     for (NSDictionary *item in array){
-        [keys addObject:[item allKeys][0]];
-        [values addObject:[item allValues][0]];
+        if([[item allKeys] count] == 1 && [[item allValues] count] == 1){
+            [keys addObject:[item allKeys][0]];
+            [values addObject:[item allValues][0]];
+        }
+        else{
+            @throw [NSException exceptionWithName:@"M13OrderedDictionary generator failed." reason:@"A dictionary in the array was not of count 1" userInfo:nil];
+        }
     }
     
     return [[M13OrderedDictionary alloc] initWithObjects:values pairedWithKeys:keys];
