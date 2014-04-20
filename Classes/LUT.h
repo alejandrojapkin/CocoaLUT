@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "LUTLattice.h"
+#import <M13OrderedDictionary/M13OrderedDictionary.h>
 
 @class LUTLattice;
 @class LUT1D;
@@ -112,7 +113,7 @@ typedef NS_ENUM(NSInteger, LUT1DExtractionMethod) {
 
 - (bool)equalsLUT:(LUT *)comparisonLUT;
 
-+ (NSDictionary *)LUT1DExtractionMethods;
++ (M13OrderedDictionary *)LUT1DExtractionMethods;
 
 - (LUT1D *)LUT1DWithExtractionMethod:(LUT1DExtractionMethod)extractionMethod;
 

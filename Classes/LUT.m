@@ -133,12 +133,12 @@
     return [extracted1D lutOfSize:self.lattice.size];
 }
 
-+ (NSDictionary *)LUT1DExtractionMethods{
-    return @{@"Averaged RGB":@(LUT1DExtractionMethodAverageRGB),
-             @"Unique RGB":@(LUT1DExtractionMethodUniqueRGB),
-             @"Copy Red Channel":@(LUT1DExtractionMethodRedCopiedToRGB),
-             @"Copy Green Channel":@(LUT1DExtractionMethodGreenCopiedToRGB),
-             @"Copy Blue Channel":@(LUT1DExtractionMethodBlueCopiedToRGB)};
++ (M13OrderedDictionary *)LUT1DExtractionMethods{
+    return M13OrderedDictionaryFromOrderedArrayWithDictionaries(@[@{@"Averaged RGB":@(LUT1DExtractionMethodAverageRGB)},
+                                                                  @{@"Unique RGB":@(LUT1DExtractionMethodUniqueRGB)},
+                                                                  @{@"Copy Red Channel":@(LUT1DExtractionMethodRedCopiedToRGB)},
+                                                                  @{@"Copy Green Channel":@(LUT1DExtractionMethodGreenCopiedToRGB)},
+                                                                  @{@"Copy Blue Channel":@(LUT1DExtractionMethodBlueCopiedToRGB)}]);
 }
 
 - (LUT1D *)LUT1DWithExtractionMethod:(LUT1DExtractionMethod)extractionMethod{

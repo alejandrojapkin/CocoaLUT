@@ -101,19 +101,18 @@
 }
    
 
-+ (NSDictionary *)knownColorSpaces{
-    NSDictionary *dict = @{@"Rec. 709 / sRGB": [LUTColorSpace rec709ColorSpace],
-                           @"DCI-P3": [LUTColorSpace dciP3ColorSpace],
-                           @"P3 D60": [LUTColorSpace p3D60ColorSpace],
-                           @"P3 D65": [LUTColorSpace p3D65ColorSpace],
-                           @"Rec. 2020": [LUTColorSpace rec2020ColorSpace],
-                           @"Alexa Wide Gamut": [LUTColorSpace alexaWideGamutColorSpace],
-                           @"S-Gamut3.Cine": [LUTColorSpace sGamut3CineColorSpace],
-                           @"S-Gamut/S-Gamut3": [LUTColorSpace sGamutColorSpace],
-                           @"ACES Gamut": [LUTColorSpace acesGamutColorSpace],
-                           @"XYZ Gamut": [LUTColorSpace xyzColorSpace]
-                           };
-    return dict;
++ (M13OrderedDictionary *)knownColorSpaces{
+    return M13OrderedDictionaryFromOrderedArrayWithDictionaries(@[@{@"Rec. 709 / sRGB": [LUTColorSpace rec709ColorSpace]},
+                                                                  @{@"DCI-P3": [LUTColorSpace dciP3ColorSpace]},
+                                                                  @{@"P3 D60": [LUTColorSpace p3D60ColorSpace]},
+                                                                  @{@"P3 D65": [LUTColorSpace p3D65ColorSpace]},
+                                                                  @{@"Rec. 2020": [LUTColorSpace rec2020ColorSpace]},
+                                                                  @{@"Alexa Wide Gamut": [LUTColorSpace alexaWideGamutColorSpace]},
+                                                                  @{@"S-Gamut3.Cine": [LUTColorSpace sGamut3CineColorSpace]},
+                                                                  @{@"S-Gamut/S-Gamut3": [LUTColorSpace sGamutColorSpace]},
+                                                                  @{@"ACES Gamut": [LUTColorSpace acesGamutColorSpace]},
+                                                                  @{@"XYZ Gamut": [LUTColorSpace xyzColorSpace]}
+                                                                  ]);
 }
 
 

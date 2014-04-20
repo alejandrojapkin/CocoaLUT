@@ -85,23 +85,19 @@
     return [destinationColorTransferFunction linearToTransformedFromColor:sourceLinear];
 }
 
-+ (NSDictionary *)knownColorTransferFunctions{
-    NSDictionary *dict = @{@"Gamma 2.2": [LUTColorTransferFunction LUTColorTransferFunctionWithGamma:2.2],
-                           @"Gamma 2.4": [LUTColorTransferFunction LUTColorTransferFunctionWithGamma:2.4],
-                           @"Gamma 2.6": [LUTColorTransferFunction LUTColorTransferFunctionWithGamma:2.6],
-                           @"Gamma 1.8": [LUTColorTransferFunction LUTColorTransferFunctionWithGamma:1.8],
-                           @"Linear": [LUTColorTransferFunction LUTColorTransferFunctionWithGamma:1.0],
-                           @"Rec. 709": [LUTColorTransferFunction rec709TransferFunction],
-                           @"sRGB": [LUTColorTransferFunction sRGBTransferFunction],
-                           @"AlexaLogC_V3 EI800": [LUTColorTransferFunction arriLogCV3TransferFunctionWithEI:800],
-                           @"AlexaLogC_V3 EI400": [LUTColorTransferFunction arriLogCV3TransferFunctionWithEI:400],
-                           @"S-Log2": [LUTColorTransferFunction sLog2TransferFunction],
-                           @"CanonLog": [LUTColorTransferFunction canonLogTransferFunction],
-                           @"BMD Film": [LUTColorTransferFunction bmdFilmTransferFunction],
-                           @"Arri K1S1 (Alexa DR)": [LUTColorTransferFunction arriK1S1VideoCurveWithMaxValue:55.080231],
-                           @"Arri K1S1 (BMCC DR)": [LUTColorTransferFunction arriK1S1VideoCurveWithMaxValue:5.122621]};
-    
-    return dict;
++ (M13OrderedDictionary *)knownColorTransferFunctions{
+    return M13OrderedDictionaryFromOrderedArrayWithDictionaries(@[@{@"Linear": [LUTColorTransferFunction LUTColorTransferFunctionWithGamma:1.0]},
+                                                                  @{@"Gamma 2.2": [LUTColorTransferFunction LUTColorTransferFunctionWithGamma:2.2]},
+                                                                  @{@"Gamma 2.4": [LUTColorTransferFunction LUTColorTransferFunctionWithGamma:2.4]},
+                                                                  @{@"Gamma 2.6": [LUTColorTransferFunction LUTColorTransferFunctionWithGamma:2.6]},
+                                                                  @{@"Rec. 709": [LUTColorTransferFunction rec709TransferFunction]},
+                                                                  @{@"sRGB": [LUTColorTransferFunction sRGBTransferFunction]},
+                                                                  @{@"AlexaLogC_V3 EI800": [LUTColorTransferFunction arriLogCV3TransferFunctionWithEI:800]},
+                                                                  @{@"Arri K1S1": [LUTColorTransferFunction arriK1S1VideoCurveWithMaxValue:55.080231]},
+                                                                  @{@"S-Log2": [LUTColorTransferFunction sLog2TransferFunction]},
+                                                                  @{@"CanonLog": [LUTColorTransferFunction canonLogTransferFunction]},
+                                                                  @{@"BMD Film": [LUTColorTransferFunction bmdFilmTransferFunction]},
+                                                                  ]);
 }
 
 +(instancetype)LUTColorTransferFunctionWithGamma:(double)gamma{

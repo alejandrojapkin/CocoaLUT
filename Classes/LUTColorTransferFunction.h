@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "CocoaLUT.h"
+#import <M13OrderedDictionary/M13OrderedDictionary.h>
 
 @class LUTColor;
 
@@ -22,7 +23,7 @@
 +(instancetype)LUTColorTransferFunctionWithTransformedToLinearBlock:( LUTColor* ( ^ )(double red, double green, double blue) )transformedToLinearBlock
                                            linearToTransformedBlock:( LUTColor* ( ^ )(double red, double green, double blue) )linearToTransformedBlock;
 
-+(NSDictionary *)knownColorTransferFunctions;
++(M13OrderedDictionary *)knownColorTransferFunctions;
 
 +(instancetype)LUTColorTransferFunctionWithGamma:(double)gamma;
 

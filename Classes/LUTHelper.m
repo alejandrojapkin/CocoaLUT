@@ -102,6 +102,18 @@ CGSize CGSizeProportionallyScaled(CGSize currentSize, CGSize targetSize) {
     return currentSize;
 }
 
+M13OrderedDictionary* M13OrderedDictionaryFromOrderedArrayWithDictionaries(NSArray *array){
+    NSMutableArray *keys = [[NSMutableArray alloc] init];
+    NSMutableArray *values = [[NSMutableArray alloc] init];
+    
+    for (NSDictionary *item in array){
+        [keys addObject:[item allKeys][0]];
+        [values addObject:[item allValues][0]];
+    }
+    
+    return [[M13OrderedDictionary alloc] initWithObjects:values pairedWithKeys:keys];
+}
+
 #if TARGET_OS_IPHONE
 #elif TARGET_OS_MAC
 void LUTNSImageLog(NSImage *image) {

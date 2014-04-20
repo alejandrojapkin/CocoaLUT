@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 
 #import "CocoaLUT.h"
+#import <M13OrderedDictionary/M13OrderedDictionary.h>
 
 double contrastStretch(double value, double currentMin, double currentMax, double finalMin, double finalMax);
 double clamp(double value, double min, double max);
@@ -24,6 +25,8 @@ void timer(NSString* name, void (^block)());
 
 CGSize CGSizeProportionallyScaled(CGSize currentSize, CGSize targetSize);
 
+M13OrderedDictionary* M13OrderedDictionaryFromOrderedArrayWithDictionaries(NSArray *array);
+
 /**
  *  Runs the passed block cubeSize ^ 3 times, iterating over each point on a cube of edge length `cubeSize`.
  */
@@ -38,5 +41,6 @@ NSImage* LUTNSImageFromCIImage(CIImage *ciImage, BOOL useSoftwareRenderer);
 #endif
 
 @interface LUTHelper : NSObject
+
 
 @end

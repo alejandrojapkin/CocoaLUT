@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <GLKit/GLKit.h>
 #import "CocoaLUT.h"
+#import <M13OrderedDictionary/M13OrderedDictionary.h>
 
 @interface LUTColorSpace : NSObject
 
@@ -28,7 +29,7 @@
 
 + (GLKMatrix3)transformationMatrixFromColorSpace:(LUTColorSpace *)sourceColorSpace ToColorSpace:(LUTColorSpace *)destinationColorSpace;
 
-+ (NSDictionary *)knownColorSpaces;
++ (M13OrderedDictionary *)knownColorSpaces;
 
 + (instancetype)rec709ColorSpace;
 + (instancetype)dciP3ColorSpace;
