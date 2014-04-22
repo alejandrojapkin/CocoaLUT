@@ -227,6 +227,7 @@
     bool __block isEqual = true;
     LUTConcurrentCubeLoop(self.lattice.size, ^(NSUInteger r, NSUInteger g, NSUInteger b) {
         if(! ([[comparisonLUT.lattice colorAtR:r g:g b:b] equalsLUTColor:[self.lattice colorAtR:r g:g b:b]]) ){
+//            NSLog(@"r:%d g:%d b:%d, self: %@ vs. other: %@",(int)r, (int)g, (int)b, [self.lattice colorAtR:r g:g b:b], [comparisonLUT.lattice colorAtR:r g:g b:b]);
             isEqual = false;
         }
     });
@@ -245,7 +246,10 @@
     #if TARGET_OS_IPHONE
     return [self coreImageFilterWithColorSpace:CGColorSpaceCreateDeviceRGB()];
     #elif TARGET_OS_MAC
-    return [self coreImageFilterWithColorSpace:[[[NSScreen mainScreen] colorSpace] CGColorSpace]];
+    //good for render, not good for viewing
+    return [self coreImageFilterWithColorSpace:CGColorSpaceCreateDeviceRGB()];
+    //good for viewing, not good for render
+    //return [self coreImageFilterWithColorSpace:[[[NSScreen mainScreen] colorSpace] CGColorSpace]];
     #endif
 }
 
