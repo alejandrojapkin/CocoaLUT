@@ -141,6 +141,13 @@
                                                                   @{@"Copy Blue Channel":@(LUT1DExtractionMethodBlueCopiedToRGB)}]);
 }
 
++ (M13OrderedDictionary *)LUTMonoConversionMethods{
+    return M13OrderedDictionaryFromOrderedArrayWithDictionaries(@[@{@"Averaged RGB":@(LUTMonoConversionMethodAverageRGB)},
+                                                                  @{@"Copy Red Channel":@(LUTMonoConversionMethodRedCopiedToRGB)},
+                                                                  @{@"Copy Green Channel":@(LUTMonoConversionMethodGreenCopiedToRGB)},
+                                                                  @{@"Copy Blue Channel":@(LUTMonoConversionMethodBlueCopiedToRGB)}]);
+}
+
 - (LUT1D *)LUT1DWithExtractionMethod:(LUT1DExtractionMethod)extractionMethod{
     NSMutableArray *redCurve = [NSMutableArray array];
     NSMutableArray *greenCurve = [NSMutableArray array];
@@ -182,6 +189,38 @@
     }
     
     return [LUT1D LUT1DWithRedCurve:redCurve greenCurve:greenCurve blueCurve:blueCurve lowerBound:0.0 upperBound:1.0];
+}
+
+- (instancetype)LUTByConvertingToMonoWithConversionMethod:(LUTMonoConversionMethod)conversionMethod{
+    LUTLattice *lattice = [[LUTLattice alloc] initWithSize:self.lattice.size];
+    
+    typedef LUTColor* (^converter)(LUTColor *);
+    
+    converter convertToMonoBlock;
+    
+    if(conversionMethod == LUTMonoConversionMethodAverageRGB){
+       convertToMonoBlock = ^(LUTColor *color){double average = (color.red+color.green+color.blue)/3.0; return [LUTColor colorWithRed:average green:average blue:average];};
+    }
+    else if (conversionMethod == LUTMonoConversionMethodRedCopiedToRGB){
+        convertToMonoBlock = ^(LUTColor *color){return [LUTColor colorWithRed:color.red green:color.red blue:color.red];};
+    }
+    else if (conversionMethod == LUTMonoConversionMethodGreenCopiedToRGB){
+        convertToMonoBlock = ^(LUTColor *color){return [LUTColor colorWithRed:color.green green:color.green blue:color.green];};
+    }
+    else if (conversionMethod == LUTMonoConversionMethodBlueCopiedToRGB){
+        convertToMonoBlock = ^(LUTColor *color){return [LUTColor colorWithRed:color.blue green:color.blue blue:color.blue];};
+    }
+    
+    
+    LUTConcurrentCubeLoop(self.lattice.size, ^(NSUInteger r, NSUInteger g, NSUInteger b) {
+        [lattice setColor:convertToMonoBlock([self.lattice colorAtR:r g:g b:b])
+                        r:r
+                        g:g
+                        b:b];
+    });
+    
+    return [LUT LUTWithLattice:lattice];
+    
 }
 
 - (instancetype)LUTByResizingToSize:(NSUInteger)newSize {

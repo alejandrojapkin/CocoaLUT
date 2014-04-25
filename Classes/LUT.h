@@ -28,6 +28,13 @@ typedef NS_ENUM(NSInteger, LUT1DExtractionMethod) {
     LUT1DExtractionMethodBlueCopiedToRGB
 };
 
+typedef NS_ENUM(NSInteger, LUTMonoConversionMethod) {
+    LUTMonoConversionMethodAverageRGB,
+    LUTMonoConversionMethodRedCopiedToRGB,
+    LUTMonoConversionMethodGreenCopiedToRGB,
+    LUTMonoConversionMethodBlueCopiedToRGB
+};
+
 
 /**
  *  A three-dimensional color lookup table.
@@ -109,11 +116,15 @@ typedef NS_ENUM(NSInteger, LUT1DExtractionMethod) {
 
 - (instancetype)LUTByExtractingColorOnly;
 
+- (instancetype)LUTByConvertingToMonoWithConversionMethod:(LUTMonoConversionMethod)conversionMethod;
+
 - (bool)equalsIdentityLUT;
 
 - (bool)equalsLUT:(LUT *)comparisonLUT;
 
 + (M13OrderedDictionary *)LUT1DExtractionMethods;
+
++ (M13OrderedDictionary *)LUTMonoConversionMethods;
 
 - (LUT1D *)LUT1DWithExtractionMethod:(LUT1DExtractionMethod)extractionMethod;
 
