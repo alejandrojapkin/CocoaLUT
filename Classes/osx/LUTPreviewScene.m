@@ -44,7 +44,7 @@
 + (instancetype)sceneForLUT:(LUT *)lut {
     
     
-    lut = [lut LUTByResizingToSize:LATTICE_SIZE];
+    LUT3D *lut3D = LUTAsLUT3D(lut, LATTICE_SIZE);
     
     LUTPreviewScene *scene = [self scene];
     scene.animationPercentage = 1.0;
@@ -54,11 +54,11 @@
     SCNNode *dotGroup = [SCNNode node];
     [scene.rootNode addChildNode:dotGroup];
     
-    float size = lut.lattice.size;
-    LUTConcurrentCubeLoop(size, ^(NSUInteger r, NSUInteger g, NSUInteger b) {
+    float size = [lut3D size];
+    LUT3DConcurrentLoop(size, ^(NSUInteger r, NSUInteger g, NSUInteger b) {
 
         LUTColor *identityColor = [LUTColor colorWithRed:(float)r/(float)(LATTICE_SIZE-1) green:(float)g/(float)(LATTICE_SIZE-1) blue:(float)b/(float)(LATTICE_SIZE-1)];
-        LUTColor *transformedColor = [lut.lattice colorAtR:r g:g b:b];
+        LUTColor *transformedColor = [lut3D colorAtR:r g:g b:b];
         
         SCNSphere *dot = [SCNSphere sphereWithRadius:0.0010f];
         dot.firstMaterial.diffuse.contents = identityColor.NSColor;
