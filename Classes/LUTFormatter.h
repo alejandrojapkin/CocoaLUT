@@ -7,7 +7,13 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "LUT.h"
+#import"LUT.h"
+#import "LUT1D.h"
+#import "LUT3D.h"
+
+@class LUT;
+@class LUT1D;
+@class LUT3D;
 
 /**
  *  An abstract superclass for an object that is responsible for converting between a `LUT` object in-memory and a file-based format.

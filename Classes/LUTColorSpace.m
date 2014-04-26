@@ -76,20 +76,21 @@
     return self;
 }
 
-+ (LUT *)convertLUT:(LUT *)lut fromColorSpace:(LUTColorSpace *)sourceColorSpace toColorSpace:(LUTColorSpace *)destinationColorSpace{
++ (LUT3D *)convertLUT3D:(LUT3D *)lut fromColorSpace:(LUTColorSpace *)sourceColorSpace toColorSpace:(LUTColorSpace *)destinationColorSpace{
     NSLog(@"Source NPM: %@\n Destination NPM: %@", NSStringFromGLKMatrix3(sourceColorSpace.npm), NSStringFromGLKMatrix3(destinationColorSpace.npm));
     
     GLKMatrix3 transformationMatrix = [LUTColorSpace transformationMatrixFromColorSpace:sourceColorSpace ToColorSpace:destinationColorSpace];
     NSLog(@"Transformation Matrix: %@", NSStringFromGLKMatrix3(transformationMatrix));
-    LUTLattice *transformedLattice = [[LUTLattice alloc] initWithSize:lut.lattice.size];
     
-    LUTConcurrentCubeLoop(lut.lattice.size, ^(NSUInteger r, NSUInteger g, NSUInteger b) {
-        LUTColor *sourceColor = [lut.lattice colorAtR:r g:g b:b];
+    LUT3D *transformedLUT = [LUT3D LUTOfSize:[lut size] inputLowerBound:[lut inputLowerBound] inputUpperBound:[lut inputUpperBound]];
+    
+    LUT3DConcurrentLoop([transformedLUT size], ^(NSUInteger r, NSUInteger g, NSUInteger b) {
+        LUTColor *sourceColor = [lut colorAtR:r g:g b:b];
         GLKVector3 transformedColor = GLKMatrix3MultiplyVector3(transformationMatrix, GLKVector3Make(sourceColor.red, sourceColor.green, sourceColor.blue));
-        [transformedLattice setColor:[LUTColor colorWithRed:transformedColor.x green:transformedColor.y blue:transformedColor.z] r:r g:g b:b];
+        [transformedLUT setColor:[LUTColor colorWithRed:transformedColor.x green:transformedColor.y blue:transformedColor.z] r:r g:g b:b];
     });
     
-    return [LUT LUTWithLattice:transformedLattice];
+    return transformedLUT;
 }
 
 

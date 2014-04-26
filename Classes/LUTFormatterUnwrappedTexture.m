@@ -43,8 +43,17 @@
 #elif TARGET_OS_MAC
 
 + (NSImage *)imageFromLUT:(LUT *)lut {
-    CGFloat width  = lut.lattice.size * lut.lattice.size;
-    CGFloat height = lut.lattice.size;
+    
+    LUT3D *lut3D;
+    if(isLUT1D(lut)){
+        lut3D = LUTAsLUT3D(lut, 64);
+    }
+    else{
+        lut3D = (LUT3D *)lut;
+    }
+    
+    CGFloat width  = [lut3D size] * [lut3D size];
+    CGFloat height = [lut3D size];
     
     NSBitmapImageRep *imageRep = [[NSBitmapImageRep alloc] initWithBitmapDataPlanes:NULL
                                                                    pixelsWide:width
@@ -57,10 +66,10 @@
                                                                   bytesPerRow:(width * (16 * 3)) / 8
                                                                  bitsPerPixel:16 * 3];
     
-    LUTConcurrentCubeLoop(lut.lattice.size, ^(NSUInteger r, NSUInteger g, NSUInteger b) {
-        NSUInteger x = b * lut.lattice.size + r;
+    LUT3DConcurrentLoop([lut3D size], ^(NSUInteger r, NSUInteger g, NSUInteger b) {
+        NSUInteger x = b * [lut3D size] + r;
         NSUInteger y = g;
-        NSColor *color = [[lut.lattice colorAtR:r g:g b:b].NSColor colorUsingColorSpaceName:NSDeviceRGBColorSpace];
+        NSColor *color = [[lut3D colorAtR:r g:g b:b].NSColor colorUsingColorSpaceName:NSDeviceRGBColorSpace];
         [imageRep setColor:color atX:x y:y];
     });
     
@@ -76,17 +85,17 @@
         @throw exception;
     }
     
-    LUTLattice *lattice = [[LUTLattice alloc] initWithSize:image.size.height];
+    LUT3D *lut3D = [LUT3D LUTOfSize:image.size.height inputLowerBound:0.0 inputUpperBound:1.0];
 
     NSBitmapImageRep* imageRep = [NSBitmapImageRep imageRepWithData:[image TIFFRepresentation]];
 
-    LUTConcurrentCubeLoop(lattice.size, ^(NSUInteger r, NSUInteger g, NSUInteger b) {
-        NSUInteger x = b * lattice.size + r;
+    LUT3DConcurrentLoop([lut3D size], ^(NSUInteger r, NSUInteger g, NSUInteger b) {
+        NSUInteger x = b * [lut3D size] + r;
         NSUInteger y = g;
-        [lattice setColor:[LUTColor colorWithNSColor:[imageRep colorAtX:x y:y]] r:r g:g b:b];
+        [lut3D setColor:[LUTColor colorWithNSColor:[imageRep colorAtX:x y:y]] r:r g:g b:b];
     });
 
-    return [LUT LUTWithLattice:lattice];
+    return lut3D;
 }
 #endif
 

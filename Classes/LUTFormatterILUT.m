@@ -35,19 +35,19 @@
             [blueCurve addObject:@(nsremapint01([splitLine[2] integerValue], maxCodeValue))];
         }
         
-        return [[LUT1D LUT1DWithRedCurve:redCurve greenCurve:greenCurve blueCurve:blueCurve lowerBound:0 upperBound:1] lutOfSize:64];
+        return [LUT1D LUT1DWithRedCurve:redCurve greenCurve:greenCurve blueCurve:blueCurve lowerBound:0 upperBound:1];
     }
 
 + (NSString *)stringFromLUT:(LUT *)lut {
     
     NSMutableString *string = [NSMutableString stringWithString:@""];
     
-    LUT1D *lut1D = [[lut LUT1DWithExtractionMethod:LUT1DExtractionMethodUniqueRGB] LUT1DByResizingToSize:pow(2,14)];
+    LUT1D *lut1D = LUTAsLUT1D(lut, pow(2,14), LUT1DExtractionMethodUniqueRGB);
     
     for (int i = 0; i < pow(2,14); i++){
-        int red = (int)(clamp01([lut1D.redCurve[i] doubleValue])*(double)pow(2,14));
-        int green = (int)(clamp01([lut1D.greenCurve[i] doubleValue])*(double)pow(2,14));
-        int blue = (int)(clamp01([lut1D.blueCurve[i] doubleValue])*(double)pow(2,14));
+        int red = (int)(clamp01([lut1D valueAtR:i])*(double)pow(2,14));
+        int green = (int)(clamp01([lut1D valueAtG:i])*(double)pow(2,14));
+        int blue = (int)(clamp01([lut1D valueAtB:i])*(double)pow(2,14));
         [string appendString:[NSString stringWithFormat:@"%d,%d,%d,%d\n", red, green, blue, 0]];
     }
     

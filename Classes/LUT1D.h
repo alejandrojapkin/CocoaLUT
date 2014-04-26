@@ -8,32 +8,18 @@
 
 #import <Foundation/Foundation.h>
 #import "CocoaLUT.h"
+#import "LUT.h"
 
-@class LUT;
 @class LUTColor;
+@class LUT3D;
 
 /**
  *  A one-dimensional color lookup table that is represented by three channel curves.
  */
-@interface LUT1D : NSObject
+@interface LUT1D : LUT
 
-/**
- *  An array of `NSNumber` instances representing the brightness of the red channel curve. Values should be between 0 and 1.
- */
-@property (readonly) NSArray *redCurve;
 
-/**
- *  An array of `NSNumber` instances representing the brightness of the green channel curve. Values should be between 0 and 1.
- */
-@property (readonly) NSArray *greenCurve;
 
-/**
- *  An array of `NSNumber` instances representing the brightness of the blue channel curve. Values should be between 0 and 1.
- */
-@property (readonly) NSArray *blueCurve;
-
-@property (assign) double inputLowerBound;
-@property (assign) double inputUpperBound;
 
 /**
  *  Initializes and returns a 1D LUT with the specified channel curves.
@@ -75,11 +61,13 @@
                       lowerBound:(double)lowerBound
                       upperBound:(double)upperBound;
 
-- (LUTColor *)colorAtInterpolatedR:(double)redPoint
-                                 g:(double)greenPoint
-                                 b:(double)bluePoint;
+- (void)setValue:(double)value atR:(NSUInteger)r;
+- (void)setValue:(double)value atG:(NSUInteger)g;
+- (void)setValue:(double)value atB:(NSUInteger)b;
+- (double)valueAtR:(NSUInteger)r;
+- (double)valueAtG:(NSUInteger)g;
+- (double)valueAtB:(NSUInteger)b;
 
-- (LUTColor *)colorAtColor:(LUTColor *)inputColor;
 
 
 /**
@@ -89,16 +77,7 @@
  *
  *  @return A new `LUT`.
  */
-- (LUT *)lutOfSize:(NSUInteger)size;
-
-/**
- *  Returns a new `LUT1D` with the channel curves linearly interpolated to the new number of points.
- *
- *  @param newSize An integer size for the number of points on each channel curves.
- *
- *  @return A new `LUT1D`.
- */
-- (LUT1D *)LUT1DByResizingToSize:(NSUInteger)newSize;
+- (LUT3D *)LUT3DOfSize:(NSUInteger)size;
 
 
 @end

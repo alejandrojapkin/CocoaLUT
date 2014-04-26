@@ -39,8 +39,24 @@ double remapint01(int value, int maxValue) {
 }
 
 double remap(double value, double inputLow, double inputHigh, double outputLow, double outputHigh){
+    if(value < inputLow || value > inputHigh){
+        @throw [NSException exceptionWithName:@"RemapValueOutOfBounds"
+                                       reason:[NSString stringWithFormat:@"Tried to remap out-of-bounds value (%f) with input constraints low:%f high:%f", value, inputLow, inputHigh]
+                                     userInfo:nil];
+    }
+    if(inputLow > inputHigh){
+        @throw [NSException exceptionWithName:@"RemapInputsError"
+                                       reason:[NSString stringWithFormat:@"Inputs low:%f high:%f. low must be less than or equal to high", inputLow, inputHigh]
+                                     userInfo:nil];
+    }
+    if(outputLow > outputHigh){
+        @throw [NSException exceptionWithName:@"RemapOutputsError"
+                                       reason:[NSString stringWithFormat:@"Outputs low:%f high:%f. low must be less than or equal to high", outputLow, outputHigh]
+                                     userInfo:nil];
+    }
     return outputLow + ((value - inputLow)*(outputHigh - outputLow))/(inputHigh - inputLow);
 }
+
 
 double lerp1d(double beginning, double end, double value01) {
     if (value01 < 0 || value01 > 1){
@@ -64,13 +80,48 @@ void timer(NSString* name, void (^block)()) {
     NSLog(@"%@ finished in %fs", name, -[startTime timeIntervalSinceNow]);
 }
 
-void LUTConcurrentCubeLoop(NSUInteger cubeSize, void (^block)(NSUInteger r, NSUInteger g, NSUInteger b)) {
+BOOL isLUT3D(LUT* lut){
+    return [lut isKindOfClass:[LUT3D class]];
+}
+
+BOOL isLUT1D(LUT* lut){
+    return [lut isKindOfClass:[LUT1D class]];
+}
+
+LUT3D* LUTAsLUT3D(LUT* lut, NSUInteger size){
+    if (isLUT1D(lut)){
+        return [(LUT1D *)lut LUT3DOfSize:size];
+    }
+    else{
+        return [(LUT3D *)lut LUTByResizingToSize:size];
+    }
+    
+}
+
+LUT1D* LUTAsLUT1D(LUT* lut, NSUInteger size, LUT1DExtractionMethod method){
+    if (isLUT3D(lut)){
+        return [[(LUT3D *)lut LUT1DWithExtractionMethod:method] LUTByResizingToSize:size];
+    }
+    else{
+        return [(LUT1D *)lut LUTByResizingToSize:size];
+    }
+}
+
+void LUT3DConcurrentLoop(NSUInteger cubeSize, void (^block)(NSUInteger r, NSUInteger g, NSUInteger b)) {
     dispatch_apply(cubeSize, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0) , ^(size_t r){
         dispatch_apply(cubeSize, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0) , ^(size_t g){
             for (int b = 0; b < cubeSize; b++) {
                 block(r, g, b);
             }
         });
+    });
+}
+
+void LUT1DConcurrentLoop(NSUInteger size, void (^block)(NSUInteger channel, NSUInteger index)) {
+    dispatch_apply(3, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0) , ^(size_t channel){
+        for(int index = 0; index < size; index++){
+                block(channel, index);
+        }
     });
 }
 

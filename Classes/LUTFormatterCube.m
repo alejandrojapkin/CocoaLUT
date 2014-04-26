@@ -7,8 +7,6 @@
 //
 
 #import "LUTFormatterCube.h"
-#import "LUTLattice.h"
-#import "LUT.h"
 
 #import <RegExCategories/RegExCategories.h>
 
@@ -64,7 +62,7 @@
         @throw exception;
     }
 
-    LUTLattice *lattice = [[LUTLattice alloc] initWithSize:cubeSize];
+    LUT3D *lut3D = [LUT3D LUTOfSize:cubeSize inputLowerBound:0.0 inputUpperBound:1.0];
 
     NSUInteger currentCubeIndex = 0;
     for (NSString *line in [lines subarrayWithRange:NSMakeRange(sizeLineIndex + 1, lines.count - sizeLineIndex - 1)]) {
@@ -84,27 +82,39 @@
 				NSUInteger greenIndex = ( (currentCubeIndex % (cubeSize * cubeSize)) / (cubeSize) );
 				NSUInteger blueIndex = currentCubeIndex / (cubeSize * cubeSize);
 
-                [lattice setColor:color r:redIndex g:greenIndex b:blueIndex];
+                [lut3D setColor:color r:redIndex g:greenIndex b:blueIndex];
 
                 currentCubeIndex++;
             }
         }
     }
     
-    LUT *lut = [LUT LUTWithLattice:lattice];
 
-    lut.title = title;
-    lut.description = description;
-    [lut.metadata setValuesForKeysWithDictionary:metadata];
+    [lut3D setTitle:title];
+    [lut3D setDescription:description];
+    [[lut3D metadata] setValuesForKeysWithDictionary:metadata];
 
-    return lut;
+    return lut3D;
 }
 
 + (NSString *)stringFromLUT:(LUT *)lut {
     
+    LUT3D *lut3D;
+    if(isLUT1D(lut)){
+        //maybe implement writing a CUBE as 1D here?
+        lut3D = LUTAsLUT3D(lut, 64);
+    }
+    else if(isLUT3D(lut)){
+        lut3D = (LUT3D *)lut;
+        //implement 3d writing here
+    }
+    //but not for now
+    
+    
+    
     NSMutableString *string = [NSMutableString stringWithString:@""];
     
-    NSUInteger cubeSize = lut.lattice.size;
+    NSUInteger cubeSize = [lut3D size];
     
     if (lut.title && lut.title.length > 0) {
         [string appendString:[NSString stringWithFormat:@"TITLE \"%@\"\n", lut.title]];
@@ -137,7 +147,7 @@
         int greenIndex = ((i % (cubeSize * cubeSize)) / (cubeSize) );
         int blueIndex = i / (cubeSize * cubeSize);
         
-        LUTColor *color = [lut.lattice colorAtR:redIndex g:greenIndex b:blueIndex];
+        LUTColor *color = [lut3D colorAtR:redIndex g:greenIndex b:blueIndex];
 
         [string appendString:[NSString stringWithFormat:@"%.6f %.6f %.6f", color.red, color.green, color.blue]];
 

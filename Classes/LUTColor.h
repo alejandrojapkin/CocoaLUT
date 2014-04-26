@@ -34,6 +34,7 @@ typedef double LUTColorValue;
  */
 @property (assign) LUTColorValue blue;
 
+
 /**
  *  Returns a new color with the provided floating-point channel values.
  *

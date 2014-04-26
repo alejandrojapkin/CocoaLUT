@@ -65,17 +65,38 @@
           fromColorTransferFunction:(LUTColorTransferFunction *)sourceColorTransferFunction
             toColorTransferFunction:(LUTColorTransferFunction *)destinationColorTransferFunction{
     
-    LUTLattice *transformedLattice = [[LUTLattice alloc] initWithSize:sourceLUT.lattice.size];
+    LUT *transformedLUT;
     
-    LUTConcurrentCubeLoop(sourceLUT.lattice.size, ^(NSUInteger r, NSUInteger g, NSUInteger b) {
-        LUTColor *transformedColor = [LUTColorTransferFunction transformedColorFromColor:[sourceLUT.lattice colorAtR:r g:g b:b]
-                                                               fromColorTransferFunction:sourceColorTransferFunction
-                                                                 toColorTransferFunction:destinationColorTransferFunction];
+    if(isLUT3D(sourceLUT)){
+        LUT3D *transformedLUT3D = [LUT3D LUTOfSize:[sourceLUT size] inputLowerBound:[sourceLUT inputLowerBound] inputUpperBound:[sourceLUT inputUpperBound]];
+        LUT3DConcurrentLoop([sourceLUT size], ^(NSUInteger r, NSUInteger g, NSUInteger b) {
+            LUTColor *transformedColor = [LUTColorTransferFunction transformedColorFromColor:[(LUT3D *)sourceLUT colorAtR:r g:g b:b]
+                                                                   fromColorTransferFunction:sourceColorTransferFunction
+                                                                     toColorTransferFunction:destinationColorTransferFunction];
+            
+            [transformedLUT3D setColor:transformedColor r:r g:g b:b];
+        });
         
-        [transformedLattice setColor:transformedColor r:r g:g b:b];
-    });
+        transformedLUT = transformedLUT3D;
+    }
+    else if(isLUT1D(sourceLUT)){
+        LUT1D *transformedLUT1D = [LUT1D LUTOfSize:[sourceLUT size] inputLowerBound:[sourceLUT size] inputUpperBound:[sourceLUT size]];
+        
+        for(int index = 0; index < [sourceLUT size]; index++){
+            LUTColor *transformedColor = [LUTColorTransferFunction transformedColorFromColor:[(LUT1D *)sourceLUT colorAtR:index g:index b:index]
+                                                                  fromColorTransferFunction:sourceColorTransferFunction
+                                                                    toColorTransferFunction:destinationColorTransferFunction];
+            
+            [transformedLUT1D setValue:transformedColor.red atR:index];
+            [transformedLUT1D setValue:transformedColor.green atG:index];
+            [transformedLUT1D setValue:transformedColor.blue atB:index];
+        }
+        
+        transformedLUT = transformedLUT1D;
+    }
     
-    return [LUT LUTWithLattice:transformedLattice];
+    return transformedLUT;
+    
 }
 
 + (LUTColor *)transformedColorFromColor:(LUTColor *)sourceColor
