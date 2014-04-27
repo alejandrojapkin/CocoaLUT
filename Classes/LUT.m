@@ -62,11 +62,13 @@
 + (instancetype)LUTOfSize:(NSUInteger)size
           inputLowerBound:(double)inputLowerBound
           inputUpperBound:(double)inputUpperBound{
-    return nil;
+   @throw [NSException exceptionWithName:@"NotImplemented" reason:@"NotImplemented" userInfo:nil];
 }
 
-+ (instancetype)LUTIdentityOfSize:(NSUInteger)size {
-    return nil;
++ (instancetype)LUTIdentityOfSize:(NSUInteger)size
+                  inputLowerBound:(double)inputLowerBound
+                  inputUpperBound:(double)inputUpperBound {
+    @throw [NSException exceptionWithName:@"NotImplemented" reason:@"NotImplemented" userInfo:nil];
 }
 
 - (instancetype)init {
@@ -78,45 +80,56 @@
 
 
 - (instancetype)LUTByResizingToSize:(NSUInteger)newSize {
-    return nil;
+    @throw [NSException exceptionWithName:@"NotImplemented" reason:@"NotImplemented" userInfo:nil];
 }
 
 
 - (instancetype)LUTByCombiningWithLUT:(LUT *)otherLUT {
-    return nil;
+    @throw [NSException exceptionWithName:@"NotImplemented" reason:@"NotImplemented" userInfo:nil];
 }
 
 - (instancetype)LUTByClamping01{
-    return nil;
+    @throw [NSException exceptionWithName:@"NotImplemented" reason:@"NotImplemented" userInfo:nil];
 }
 
 - (LUTColor *)colorAtColor:(LUTColor *)color{
-    return nil;
+    color = [color clampedWithLowerBound:[self inputLowerBound] upperBound:[self inputUpperBound]];
+    double redRemappedInterpolatedIndex = remap(color.red, [self inputLowerBound], [self inputUpperBound], 0, [self size]-1);
+    double greenRemappedInterpolatedIndex = remap(color.green, [self inputLowerBound], [self inputUpperBound], 0, [self size]-1);
+    double blueRemappedInterpolatedIndex = remap(color.blue, [self inputLowerBound], [self inputUpperBound], 0, [self size]-1);
+    
+    return [self colorAtInterpolatedR:redRemappedInterpolatedIndex
+                                    g:greenRemappedInterpolatedIndex
+                                    b:blueRemappedInterpolatedIndex];
 }
 
 - (LUTColor *)colorAtR:(NSUInteger)r g:(NSUInteger)g b:(NSUInteger)b{
-    return nil;
+    @throw [NSException exceptionWithName:@"NotImplemented" reason:@"NotImplemented" userInfo:nil];
 }
 
 - (LUTColor *)colorAtInterpolatedR:(double)redPoint g:(double)greenPoint b:(double)bluePoint{
-    return nil;
+    @throw [NSException exceptionWithName:@"NotImplemented" reason:@"NotImplemented" userInfo:nil];
 }
 
 
 //000
 
 - (bool) equalsIdentityLUT{
-    return [self equalsLUT:[LUT LUTIdentityOfSize:[self size]]];
+    return [self equalsLUT:[LUT LUTIdentityOfSize:[self size] inputLowerBound:[self inputLowerBound] inputUpperBound:[self inputUpperBound]]];
 }
 
 - (bool)equalsLUT:(LUT *)comparisonLUT{
-    return nil;
+    @throw [NSException exceptionWithName:@"NotImplemented" reason:@"NotImplemented" userInfo:nil];
 }
 
 
 
 - (id)copyWithZone:(NSZone *)zone {
-    return nil;
+    LUT *copiedLUT = [LUT LUTOfSize:[self size] inputLowerBound:[self inputLowerBound] inputUpperBound:[self inputUpperBound]];
+    [copiedLUT setMetadata:[[self metadata] copyWithZone:zone]];
+    [copiedLUT setDescription:[[self description] copyWithZone:zone]];
+    [copiedLUT setTitle:[[self title] copyWithZone:zone]];
+    return copiedLUT;
 }
 
 - (CIFilter *)coreImageFilterWithCurrentColorSpace {

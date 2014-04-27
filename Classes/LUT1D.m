@@ -58,30 +58,6 @@
     return self;
 }
 
-- (NSMutableArray *)curveArrayFromChannelNumber:(NSUInteger)channelNumber{
-    if(channelNumber == 0){
-        return self.redCurve;
-    }
-    if(channelNumber == 1){
-        return self.greenCurve;
-    }
-    if(channelNumber == 2){
-        return self.blueCurve;
-    }
-    return nil;
-}
-
-- (LUTColor *)colorAtColor:(LUTColor *)inputColor{
-    inputColor = [inputColor clampedWithLowerBound:[self inputLowerBound] upperBound:[self inputUpperBound]];
-    double redRemappedInterpolatedIndex = remap(inputColor.red, [self inputLowerBound], [self inputUpperBound], 0, [self size]-1);
-    double greenRemappedInterpolatedIndex = remap(inputColor.green, [self inputLowerBound], [self inputUpperBound], 0, [self size]-1);
-    double blueRemappedInterpolatedIndex = remap(inputColor.blue, [self inputLowerBound], [self inputUpperBound], 0, [self size]-1);
-    
-    return [self colorAtInterpolatedR:redRemappedInterpolatedIndex
-                                    g:greenRemappedInterpolatedIndex
-                                    b:blueRemappedInterpolatedIndex];
-}
-
 - (LUTColor *)colorAtR:(NSUInteger)r g:(NSUInteger)g b:(NSUInteger)b {
     return [LUTColor colorWithRed:[self.redCurve[r] doubleValue] green:[self.greenCurve[g] doubleValue] blue:[self.blueCurve[b] doubleValue]];
 }

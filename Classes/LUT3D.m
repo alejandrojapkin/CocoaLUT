@@ -75,12 +75,12 @@
 - (instancetype)LUTByCombiningWithLUT:(LUT *)otherLUT {
     LUT3D *newLUT = [LUT3D LUTOfSize:[self size] inputLowerBound:[self inputLowerBound] inputUpperBound:[self inputUpperBound]];
     
-    if([otherLUT inputLowerBound] > [self inputLowerBound] || [otherLUT inputUpperBound] < [self inputUpperBound]){
-        //other LUT does not encompass the range of the current LUT - this won't work for us!
-        @throw [NSException exceptionWithName:@"InvalidCombiningLUT"
-                                       reason:[NSString stringWithFormat:@"LUT to combine with does not encompass the full input range of the current LUT."]
-                                     userInfo:nil];
-    }
+//    if([otherLUT inputLowerBound] > [self inputLowerBound] || [otherLUT inputUpperBound] < [self inputUpperBound]){
+//        //other LUT does not encompass the range of the current LUT - this won't work for us!
+//        @throw [NSException exceptionWithName:@"InvalidCombiningLUT"
+//                                       reason:[NSString stringWithFormat:@"LUT to combine with does not encompass the full input range of the current LUT."]
+//                                     userInfo:nil];
+//    }
     
     LUT3DConcurrentLoop([newLUT size], ^(NSUInteger r, NSUInteger g, NSUInteger b) {
         LUTColor *startColor = [self colorAtR:r g:g b:b];
@@ -245,14 +245,6 @@
         return nil;
     }
     return color;
-}
-
-- (LUTColor *)colorAtColor:(LUTColor *)color{
-    double redIndex = remap(color.red, [self inputLowerBound], [self inputUpperBound], 0, [self size] - 1);
-    double greenIndex = remap(color.green, [self inputLowerBound], [self inputUpperBound], 0, [self size] - 1);
-    double blueIndex = remap(color.blue, [self inputLowerBound], [self inputUpperBound], 0, [self size] - 1);
-    
-    return [self colorAtInterpolatedR:redIndex g:greenIndex b:blueIndex];
 }
 
 - (LUTColor *)colorAtInterpolatedR:(double)redPoint g:(double)greenPoint b:(double)bluePoint {
