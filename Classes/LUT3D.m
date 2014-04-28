@@ -164,7 +164,7 @@
 
 
 - (id)copyWithZone:(NSZone *)zone{
-    LUT3D *copiedLUT = [super copyWithZone:zone];
+    LUT3D *copiedLUT = [LUT3D LUTOfSize:[self size] inputLowerBound:[self inputLowerBound] inputUpperBound:[self inputUpperBound]];
     [copiedLUT setLatticeArray:[[self latticeArray] mutableCopyWithZone:zone]];
     
     return copiedLUT;
