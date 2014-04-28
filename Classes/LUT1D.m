@@ -68,6 +68,16 @@
     return [LUT1D LUT1DWith1DCurve:blankCurve lowerBound:inputLowerBound upperBound:inputUpperBound];
 }
 
++ (instancetype)LUTIdentityOfSize:(NSUInteger)size
+                  inputLowerBound:(double)inputLowerBound
+                  inputUpperBound:(double)inputUpperBound{
+    LUT1D *identityLUT = [LUT1D LUTOfSize:size inputLowerBound:inputLowerBound inputUpperBound:inputUpperBound];
+    LUT1DLoop(size, ^(NSUInteger index) {
+        [identityLUT setColor:[identityLUT identityColorAtR:index g:index b:index] r:index g:index b:index];
+    });
+    return identityLUT;
+}
+
 - (void)setColor:(LUTColor *)color r:(NSUInteger)r g:(NSUInteger)g b:(NSUInteger)b{
     self.redCurve[r] = @(color.red);
     self.greenCurve[g] = @(color.green);
@@ -115,7 +125,6 @@
     if (newSize == self.size) {
         return [self copy];
     }
-    NSLog(@"Self size = %d resize = %d", (int)[self size], (int)newSize);
     LUT1D *resizedLUT = [LUT1D LUTOfSize:newSize inputLowerBound:[self inputLowerBound] inputUpperBound:[self inputUpperBound]];
     
     LUT1DLoop(newSize, ^(NSUInteger index) {
