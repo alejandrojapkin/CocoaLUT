@@ -166,16 +166,16 @@
 }
 
 - (CIFilter *)coreImageFilterWithColorSpace:(CGColorSpaceRef)colorSpace {
-    NSUInteger size = COCOALUT_MAX_CICOLORCUBE_SIZE;
+    LUT *usedLUT = [self size] > COCOALUT_MAX_CICOLORCUBE_SIZE ? [self LUTByResizingToSize:COCOALUT_MAX_CICOLORCUBE_SIZE] : self;
+    
+    size_t size = [usedLUT size];
     size_t cubeDataSize = size * size * size * sizeof (float) * 4;
     float *cubeData = (float *) malloc (cubeDataSize);
     
     
     LUT3DConcurrentLoop(size, ^(NSUInteger r, NSUInteger g, NSUInteger b) {
-        LUTColor *sourceColor = [LUTColor colorWithRed:remap(r, 0, size-1, [self inputLowerBound], [self inputUpperBound])
-                                                 green:remap(g, 0, size-1, [self inputLowerBound], [self inputUpperBound])
-                                                  blue:remap(b, 0, size-1, [self inputLowerBound], [self inputUpperBound])];
-        LUTColor *transformedColor = [self colorAtColor:sourceColor];
+        
+        LUTColor *transformedColor = [usedLUT colorAtR:r g:g b:b];
         
         size_t offset = 4*(b*size*size + g*size + r);
         
@@ -185,7 +185,7 @@
         cubeData[offset+3] = 1.0f;
     });
     
-
+    
     
     NSData *data = [NSData dataWithBytesNoCopy:cubeData length:cubeDataSize freeWhenDone:YES];
     
@@ -199,7 +199,7 @@
     }
     [colorCube setValue:@(size) forKey:@"inputCubeDimension"];
     [colorCube setValue:data forKey:@"inputCubeData"];
-    
+
     return colorCube;
 }
 
