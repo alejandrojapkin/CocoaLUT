@@ -126,6 +126,12 @@ void LUT3DConcurrentLoop(NSUInteger cubeSize, void (^block)(NSUInteger r, NSUInt
     });
 }
 
+BOOL stringIsNumeric(NSString* str){
+    NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
+    NSNumber *number = [formatter numberFromString:str];
+    return !!number; // If the string is not numeric, number will be nil
+}
+
 void LUT1DLoop(NSUInteger size, void (^block)(NSUInteger index)) {
     for(int index = 0; index < size; index++){
         block(index);

@@ -30,6 +30,7 @@ double lerp1d(double beginning, double end, double value01);
 float distancecalc(float x1, float y1, float z1, float x2, float y2, float z2);
 void timer(NSString* name, void (^block)());
 NSArray* indicesArray(double startValue, double endValue, int numIndices);
+BOOL stringIsNumeric(NSString* str);
 
 BOOL isLUT1D(LUT* lut);
 BOOL isLUT3D(LUT* lut);
