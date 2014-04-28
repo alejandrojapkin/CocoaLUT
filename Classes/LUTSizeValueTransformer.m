@@ -23,18 +23,27 @@
     if (!value) {
         return nil;
     }
-    NSString *outString = [NSString stringWithFormat:@"%ld × %ld × %ld",
-                           (long) [value integerValue],
-                           (long)[value integerValue],
-                           (long)[value integerValue]];
-    
-    if ([value integerValue] > COCOALUT_MAX_CICOLORCUBE_SIZE) {
+    LUT *lut = (LUT *)value;
+    NSString *outString;
+    if(isLUT3D(lut)){
+        outString = [NSString stringWithFormat:@"Size: %ld × %ld × %ld",
+                               (long)[lut size],
+                               (long)[lut size],
+                               (long)[lut size]];
+    }
+    else{
+        outString = [NSString stringWithFormat:@"Size: %ld", (long) [lut size]];
+    }
+    if ([lut size] > COCOALUT_MAX_CICOLORCUBE_SIZE) {
         outString = [NSString stringWithFormat:@"%@ (displaying at %i × %i × %i)",
                      outString,
                      COCOALUT_MAX_CICOLORCUBE_SIZE,
                      COCOALUT_MAX_CICOLORCUBE_SIZE,
                      COCOALUT_MAX_CICOLORCUBE_SIZE];
     }
+    
+    
+    
     
     return outString;
 }
