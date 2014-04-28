@@ -21,6 +21,25 @@
 
 @implementation LUT
 
+- (instancetype)init {
+    if (self = [super init]) {
+        self.metadata = [NSMutableDictionary dictionary];
+    }
+    return self;
+}
+
+- (instancetype)initWithSize:(NSUInteger)size
+             inputLowerBound:(double)inputLowerBound
+             inputUpperBound:(double)inputUpperBound{
+    if (self = [super init]) {
+        self.metadata = [NSMutableDictionary dictionary];
+        self.size = size;
+        self.inputLowerBound = inputLowerBound;
+        self.inputUpperBound = inputUpperBound;
+    }
+    return self;
+}
+
 + (instancetype)LUTFromURL:(NSURL *)url {
     if ([url.pathExtension.lowercaseString isEqualToString:@"cube"]){
         return [LUTFormatterCube LUTFromFile:url];
@@ -62,20 +81,13 @@
 + (instancetype)LUTOfSize:(NSUInteger)size
           inputLowerBound:(double)inputLowerBound
           inputUpperBound:(double)inputUpperBound{
-   @throw [NSException exceptionWithName:@"NotImplemented" reason:@"NotImplemented" userInfo:nil];
+    return [[[self class] alloc] initWithSize:size inputLowerBound:inputLowerBound inputUpperBound:inputUpperBound];
 }
 
 + (instancetype)LUTIdentityOfSize:(NSUInteger)size
                   inputLowerBound:(double)inputLowerBound
                   inputUpperBound:(double)inputUpperBound {
     @throw [NSException exceptionWithName:@"NotImplemented" reason:@"NotImplemented" userInfo:nil];
-}
-
-- (instancetype)init {
-    if (self = [super init]) {
-        self.metadata = [NSMutableDictionary dictionary];
-    }
-    return self;
 }
 
 

@@ -95,7 +95,7 @@
 }
 
 - (instancetype)LUT3DByExtractingColorOnly{
-    LUT1D *reversed1D = [[self LUT1DWithExtractionMethod:LUT1DExtractionMethodUniqueRGB] LUT1DByReversing];
+    LUT1D *reversed1D = [[self LUT1D] LUT1DByReversing];
     
     if(reversed1D == nil){
         return nil;
@@ -106,44 +106,17 @@
     return extractedLUT;
 }
 
-- (LUT1D *)LUT1DWithExtractionMethod:(LUT1DExtractionMethod)extractionMethod{
+- (LUT1D *)LUT1D{
     NSMutableArray *redCurve = [NSMutableArray array];
     NSMutableArray *greenCurve = [NSMutableArray array];
     NSMutableArray *blueCurve = [NSMutableArray array];
     
     LUTColor *color;
     for(int i = 0; i < [self size]; i++){
-        if(extractionMethod == LUT1DExtractionMethodAverageRGB){
-            color = [self colorAtR:i g:i b:i];
-            double averageValue = (color.red+color.green+color.blue)/3.0;
-            [redCurve addObject:@(averageValue)];
-            [greenCurve addObject:@(averageValue)];
-            [blueCurve addObject:@(averageValue)];
-        }
-        else if(extractionMethod == LUT1DExtractionMethodUniqueRGB){
-            color = [self colorAtR:i g:i b:i];
-            [redCurve addObject:@(color.red)];
-            [greenCurve addObject:@(color.green)];
-            [blueCurve addObject:@(color.blue)];
-        }
-        else if(extractionMethod == LUT1DExtractionMethodRedCopiedToRGB){
-            color = [self colorAtR:i g:i b:i];
-            [redCurve addObject:@(color.red)];
-            [greenCurve addObject:@(color.red)];
-            [blueCurve addObject:@(color.red)];
-        }
-        else if(extractionMethod == LUT1DExtractionMethodGreenCopiedToRGB){
-            color = [self colorAtR:i g:i b:i];
-            [redCurve addObject:@(color.green)];
-            [greenCurve addObject:@(color.green)];
-            [blueCurve addObject:@(color.green)];
-        }
-        else if(extractionMethod == LUT1DExtractionMethodBlueCopiedToRGB){
-            color = [self colorAtR:i g:i b:i];
-            [redCurve addObject:@(color.blue)];
-            [greenCurve addObject:@(color.blue)];
-            [blueCurve addObject:@(color.blue)];
-        }
+        color = [self colorAtR:i g:i b:i];
+        [redCurve addObject:@(color.red)];
+        [greenCurve addObject:@(color.green)];
+        [blueCurve addObject:@(color.blue)];
     }
     
     return [LUT1D LUT1DWithRedCurve:redCurve greenCurve:greenCurve blueCurve:blueCurve lowerBound:0.0 upperBound:1.0];
@@ -179,14 +152,6 @@
     
     return newLUT;
     
-}
-
-+ (M13OrderedDictionary *)LUT1DExtractionMethods{
-    return M13OrderedDictionaryFromOrderedArrayWithDictionaries(@[@{@"Averaged RGB":@(LUT1DExtractionMethodAverageRGB)},
-                                                                  @{@"Unique RGB":@(LUT1DExtractionMethodUniqueRGB)},
-                                                                  @{@"Copy Red Channel":@(LUT1DExtractionMethodRedCopiedToRGB)},
-                                                                  @{@"Copy Green Channel":@(LUT1DExtractionMethodGreenCopiedToRGB)},
-                                                                  @{@"Copy Blue Channel":@(LUT1DExtractionMethodBlueCopiedToRGB)}]);
 }
 
 + (M13OrderedDictionary *)LUTMonoConversionMethods{

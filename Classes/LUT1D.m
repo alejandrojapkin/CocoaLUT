@@ -129,6 +129,39 @@
     return resizedLUT;
 }
 
++ (M13OrderedDictionary *)LUT1DSwizzleChannelsMethods{
+    return M13OrderedDictionaryFromOrderedArrayWithDictionaries(@[@{@"Averaged RGB":@(LUT1DSwizzleChannelsMethodAverageRGB)},
+                                                                  @{@"Copy Red Channel":@(LUT1DSwizzleChannelsMethodRedCopiedToRGB)},
+                                                                  @{@"Copy Green Channel":@(LUT1DSwizzleChannelsMethodGreenCopiedToRGB)},
+                                                                  @{@"Copy Blue Channel":@(LUT1DSwizzleChannelsMethodBlueCopiedToRGB)}]);
+}
+
+- (LUT1D *)LUT1DBySwizzlingChannelsWithMethod:(LUT1DSwizzleChannelsMethod)method{
+    LUT1D *swizzledLUT = [LUT1D LUTOfSize:[self size] inputLowerBound:[self inputLowerBound] inputUpperBound:[self inputUpperBound]];
+    
+    LUT1DLoop([swizzledLUT size], ^(NSUInteger index) {
+        if(method == LUT1DSwizzleChannelsMethodAverageRGB){
+            LUTColor *color = [self colorAtR:index g:index b:index];
+            double averageValue = (color.red+color.green+color.blue)/3.0;
+            [swizzledLUT setColor:[LUTColor colorWithRed:averageValue green:averageValue blue:averageValue] r:index g:index b:index];
+        }
+        else if(method == LUT1DSwizzleChannelsMethodRedCopiedToRGB){
+            LUTColor *color = [self colorAtR:index g:index b:index];
+            [swizzledLUT setColor:[LUTColor colorWithRed:color.red green:color.red blue:color.red] r:index g:index b:index];
+        }
+        else if(method == LUT1DSwizzleChannelsMethodGreenCopiedToRGB){
+            LUTColor *color = [self colorAtR:index g:index b:index];
+            [swizzledLUT setColor:[LUTColor colorWithRed:color.green green:color.green blue:color.green] r:index g:index b:index];
+        }
+        else if(method == LUT1DSwizzleChannelsMethodBlueCopiedToRGB){
+            LUTColor *color = [self colorAtR:index g:index b:index];
+            [swizzledLUT setColor:[LUTColor colorWithRed:color.blue green:color.blue blue:color.blue] r:index g:index b:index];
+        }
+    });
+    
+    return swizzledLUT;
+}
+
 - (LUT1D *)LUT1DByReversing{
     if(![self isReversibleWithStrictness:NO]){
         return nil;
@@ -226,7 +259,7 @@
 }
 
 - (id)copyWithZone:(NSZone *)zone{
-    LUT1D *copiedLUT = [super copyWithZone:zone];
+    LUT1D *copiedLUT = [LUT1D LUTOfSize:[self size] inputLowerBound:[self inputLowerBound] inputUpperBound:[self inputUpperBound]];
     copiedLUT.redCurve = [self.redCurve mutableCopyWithZone:zone];
     copiedLUT.greenCurve = [self.greenCurve mutableCopyWithZone:zone];
     copiedLUT.blueCurve = [self.blueCurve mutableCopyWithZone:zone];

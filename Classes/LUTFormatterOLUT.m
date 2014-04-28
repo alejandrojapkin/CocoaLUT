@@ -44,7 +44,7 @@
     
     NSMutableString *string = [NSMutableString stringWithString:@""];
     
-    LUT1D *lut1D = LUTAsLUT1D(lut, pow(2,12), LUT1DExtractionMethodUniqueRGB);
+    LUT1D *lut1D = LUTAsLUT1D(lut, pow(2,12));
     
     
     for (int i = 0; i < pow(2,12); i++){

@@ -9,9 +9,18 @@
 #import <Foundation/Foundation.h>
 #import "CocoaLUT.h"
 #import "LUT.h"
+#import <M13OrderedDictionary/M13OrderedDictionary.h>
 
 @class LUTColor;
 @class LUT3D;
+
+typedef NS_ENUM(NSInteger, LUT1DSwizzleChannelsMethod) {
+    LUT1DSwizzleChannelsMethodAverageRGB,
+    LUT1DSwizzleChannelsMethodEdgesRGB,
+    LUT1DSwizzleChannelsMethodRedCopiedToRGB,
+    LUT1DSwizzleChannelsMethodGreenCopiedToRGB,
+    LUT1DSwizzleChannelsMethodBlueCopiedToRGB
+};
 
 /**
  *  A one-dimensional color lookup table that is represented by three channel curves.
@@ -43,6 +52,10 @@
                       upperBound:(double)upperBound;
 
 - (LUT1D *)LUT1DByReversing;
+
+- (LUT1D *)LUT1DBySwizzlingChannelsWithMethod:(LUT1DSwizzleChannelsMethod)method;
+
++ (M13OrderedDictionary *)LUT1DSwizzleChannelsMethods;
 
 /**
  *  Initializes a newly allocated 1D LUT with the specified channel curves.

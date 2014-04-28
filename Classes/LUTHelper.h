@@ -33,7 +33,7 @@ NSArray* indicesArray(double startValue, double endValue, int numIndices);
 
 BOOL isLUT1D(LUT* lut);
 BOOL isLUT3D(LUT* lut);
-LUT1D* LUTAsLUT1D(LUT* lut, NSUInteger size, LUT1DExtractionMethod method);
+LUT1D* LUTAsLUT1D(LUT* lut, NSUInteger size);
 LUT3D* LUTAsLUT3D(LUT* lut, NSUInteger size);
 
 CGSize CGSizeProportionallyScaled(CGSize currentSize, CGSize targetSize);

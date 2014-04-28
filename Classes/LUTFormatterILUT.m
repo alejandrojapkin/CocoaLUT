@@ -42,7 +42,7 @@
     
     NSMutableString *string = [NSMutableString stringWithString:@""];
     
-    LUT1D *lut1D = LUTAsLUT1D(lut, pow(2,14), LUT1DExtractionMethodUniqueRGB);
+    LUT1D *lut1D = LUTAsLUT1D(lut, pow(2,14));
     
     for (int i = 0; i < pow(2,14); i++){
         int red = (int)(clamp01([lut1D valueAtR:i])*(double)pow(2,14));

@@ -14,15 +14,6 @@
 @class LUTColor;
 @class LUT1D;
 
-typedef NS_ENUM(NSInteger, LUT1DExtractionMethod) {
-    LUT1DExtractionMethodUniqueRGB,
-    LUT1DExtractionMethodAverageRGB,
-    LUT1DExtractionMethodEdgesRGB,
-    LUT1DExtractionMethodRedCopiedToRGB,
-    LUT1DExtractionMethodGreenCopiedToRGB,
-    LUT1DExtractionMethodBlueCopiedToRGB
-};
-
 typedef NS_ENUM(NSInteger, LUTMonoConversionMethod) {
     LUTMonoConversionMethodAverageRGB,
     LUTMonoConversionMethodRedCopiedToRGB,
@@ -37,11 +28,9 @@ typedef NS_ENUM(NSInteger, LUTMonoConversionMethod) {
 
 - (instancetype)LUT3DByExtractingColorOnly;
 - (instancetype)LUT3DByConvertingToMonoWithConversionMethod:(LUTMonoConversionMethod)conversionMethod;
-- (LUT1D *)LUT1DWithExtractionMethod:(LUT1DExtractionMethod)extractionMethod;
+- (LUT1D *)LUT1D;
 
 
-//options for API hooks and whatnot
-+ (M13OrderedDictionary *)LUT1DExtractionMethods;
 + (M13OrderedDictionary *)LUTMonoConversionMethods;
 
 

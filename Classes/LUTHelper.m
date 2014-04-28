@@ -107,9 +107,9 @@ LUT3D* LUTAsLUT3D(LUT* lut, NSUInteger size){
     
 }
 
-LUT1D* LUTAsLUT1D(LUT* lut, NSUInteger size, LUT1DExtractionMethod method){
+LUT1D* LUTAsLUT1D(LUT* lut, NSUInteger size){
     if (isLUT3D(lut)){
-        return [[(LUT3D *)lut LUT1DWithExtractionMethod:method] LUTByResizingToSize:size];
+        return [[(LUT3D *)lut LUT1D] LUTByResizingToSize:size];
     }
     else{
         return [(LUT1D *)lut LUTByResizingToSize:size];
