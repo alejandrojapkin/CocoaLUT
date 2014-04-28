@@ -22,6 +22,18 @@
 - (void)process {
     [super process];
     
+    if(isLUT1D(self.lut)){
+        LUT1D *reversedLUT1D = [(LUT1D *)self.lut LUT1DByReversing];
+        if(reversedLUT1D != nil){
+            [self completedWithLUT:reversedLUT1D];
+        }
+        else{
+            //not reversible
+            [self didCancel];
+        }
+        return;
+    }
+    
     if([self.lut equalsIdentityLUT]){
         [self completedWithLUT:self.lut];
         return;
