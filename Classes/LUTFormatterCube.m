@@ -21,13 +21,13 @@
     NSUInteger __block cubeSize = 0;
     NSUInteger __block sizeLineIndex = 0;
     
-    // Find the size
-    [lines enumerateObjectsUsingBlock:^(NSString *line, NSUInteger i, BOOL *stop) {
+    dispatch_apply([lines count], dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0) , ^(size_t index){
+        NSString *line = lines[index];
         NSString *titleMatch;
         if ([line rangeOfString:@"LUT_3D_SIZE"].location != NSNotFound) {
             NSString *sizeString = [line componentsSeparatedByString:@" "][1];
             cubeSize = sizeString.integerValue;
-            sizeLineIndex = i;
+            sizeLineIndex = index;
         }
         else if ((titleMatch = [line firstMatch:RX(@"(?<=TITLE \")[^\"]*(?=\")")])) {
             [title appendString:titleMatch];
@@ -55,8 +55,8 @@
                 [description appendString:@"\n"];
             }
         }
-    }];
-
+    });
+    
     if (cubeSize == 0) {
         NSException *exception = [NSException exceptionWithName:@"LUTParseError" reason:@"Couldn't find LUT size in file" userInfo:nil];
         @throw exception;
@@ -88,7 +88,7 @@
             }
         }
     }
-    
+
 
     [lut3D setTitle:title];
     [lut3D setDescription:description];
