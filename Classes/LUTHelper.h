@@ -29,6 +29,7 @@ double remap(double value, double inputLow, double inputHigh, double outputLow, 
 double lerp1d(double beginning, double end, double value01);
 float distancecalc(float x1, float y1, float z1, float x2, float y2, float z2);
 void timer(NSString* name, void (^block)());
+NSArray* indicesArray(double startValue, double endValue, int numIndices);
 
 BOOL isLUT1D(LUT* lut);
 BOOL isLUT3D(LUT* lut);
@@ -44,7 +45,7 @@ M13OrderedDictionary* M13OrderedDictionaryFromOrderedArrayWithDictionaries(NSArr
  */
 void LUT3DConcurrentLoop(NSUInteger cubeSize, void (^block)(NSUInteger r, NSUInteger g, NSUInteger b));
 
-void LUT1DConcurrentLoop(NSUInteger size, void (^block)(NSUInteger channel, NSUInteger index));
+void LUT1DLoop(NSUInteger size, void (^block)(NSUInteger index));
 
 void LUTConcurrentRectLoop(NSUInteger width, NSUInteger height, void (^block)(NSUInteger x, NSUInteger y));
 

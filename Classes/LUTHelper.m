@@ -73,6 +73,15 @@ float distancecalc(float x1, float y1, float z1, float x2, float y2, float z2) {
     return sqrt((float)(dx * dx + dy * dy + dz * dz));
 }
 
+NSArray* indicesArray(double startValue, double endValue, int numIndices){
+    NSMutableArray *indices = [NSMutableArray array];
+    double ratio = remap(1, 0, numIndices - 1, startValue, endValue);
+    for (int i = 0; i < numIndices; i++) {
+        [indices addObject:@((double)i * ratio)];
+    }
+    return indices;
+}
+
 void timer(NSString* name, void (^block)()) {
     NSLog(@"Starting %@", name);
     NSDate *startTime = [NSDate date];
@@ -117,12 +126,11 @@ void LUT3DConcurrentLoop(NSUInteger cubeSize, void (^block)(NSUInteger r, NSUInt
     });
 }
 
-void LUT1DConcurrentLoop(NSUInteger size, void (^block)(NSUInteger channel, NSUInteger index)) {
-    dispatch_apply(3, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0) , ^(size_t channel){
-        for(int index = 0; index < size; index++){
-                block(channel, index);
-        }
-    });
+void LUT1DLoop(NSUInteger size, void (^block)(NSUInteger index)) {
+    for(int index = 0; index < size; index++){
+        block(index);
+    }
+
 }
 
 void LUTConcurrentRectLoop(NSUInteger width, NSUInteger height, void (^block)(NSUInteger x, NSUInteger y)) {
