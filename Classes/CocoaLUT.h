@@ -12,7 +12,7 @@
 
     #define _COCOALUT_
 
-    #define COCOALUT_MAX_CICOLORCUBE_SIZE 32
+    #define COCOALUT_MAX_CICOLORCUBE_SIZE 64
 
     #import "LUTHelper.h"
     #import "LUT.h"
