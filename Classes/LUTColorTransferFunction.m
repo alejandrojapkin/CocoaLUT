@@ -82,15 +82,14 @@
     else if(isLUT1D(sourceLUT)){
         LUT1D *transformedLUT1D = [LUT1D LUTOfSize:[sourceLUT size] inputLowerBound:[sourceLUT size] inputUpperBound:[sourceLUT size]];
         
-        for(int index = 0; index < [sourceLUT size]; index++){
+        LUT1DLoop([sourceLUT size], ^(NSUInteger index) {
             LUTColor *transformedColor = [LUTColorTransferFunction transformedColorFromColor:[(LUT1D *)sourceLUT colorAtR:index g:index b:index]
-                                                                  fromColorTransferFunction:sourceColorTransferFunction
-                                                                    toColorTransferFunction:destinationColorTransferFunction];
+                                                                   fromColorTransferFunction:sourceColorTransferFunction
+                                                                     toColorTransferFunction:destinationColorTransferFunction];
             
-            [transformedLUT1D setValue:transformedColor.red atR:index];
-            [transformedLUT1D setValue:transformedColor.green atG:index];
-            [transformedLUT1D setValue:transformedColor.blue atB:index];
-        }
+            [transformedLUT1D setColor:transformedColor r:index g:index b:index];
+        });
+        
         
         transformedLUT = transformedLUT1D;
     }

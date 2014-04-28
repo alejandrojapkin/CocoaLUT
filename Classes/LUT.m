@@ -92,6 +92,12 @@
     @throw [NSException exceptionWithName:@"NotImplemented" reason:@"NotImplemented" userInfo:nil];
 }
 
+- (LUTColor *)identityColorAtR:(double)redPoint g:(double)greenPoint b:(double)bluePoint{
+    double ratio = remap(1.0, 0, [self size] - 1, [self inputLowerBound], [self inputUpperBound]);
+    
+    return [LUTColor colorWithRed:ratio*redPoint green:ratio*greenPoint blue:ratio*bluePoint];
+}
+
 - (LUTColor *)colorAtColor:(LUTColor *)color{
     color = [color clampedWithLowerBound:[self inputLowerBound] upperBound:[self inputUpperBound]];
     double redRemappedInterpolatedIndex = remap(color.red, [self inputLowerBound], [self inputUpperBound], 0, [self size]-1);
@@ -108,6 +114,10 @@
 }
 
 - (LUTColor *)colorAtInterpolatedR:(double)redPoint g:(double)greenPoint b:(double)bluePoint{
+    @throw [NSException exceptionWithName:@"NotImplemented" reason:@"NotImplemented" userInfo:nil];
+}
+
+- (void)setColor:(LUTColor *)color r:(NSUInteger)r g:(NSUInteger)g b:(NSUInteger)b{
     @throw [NSException exceptionWithName:@"NotImplemented" reason:@"NotImplemented" userInfo:nil];
 }
 

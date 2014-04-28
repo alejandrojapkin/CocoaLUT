@@ -38,19 +38,10 @@
 + (instancetype)LUTIdentityOfSize:(NSUInteger)size
                   inputLowerBound:(double)inputLowerBound
                   inputUpperBound:(double)inputUpperBound{
-    NSMutableArray *indices = [NSMutableArray array];
-    float ratio = 1.0 / (float)(size - 1);
-    for (int i = 0; i < size; i++) {
-        [indices addObject:@((float)i * ratio)];
-    }
-    
     LUT3D *identity = [self LUTOfSize:size inputLowerBound:inputLowerBound inputUpperBound:inputUpperBound];
     
     LUT3DConcurrentLoop(size, ^(NSUInteger r, NSUInteger g, NSUInteger b) {
-        LUTColorValue rv = remap(r, 0, [identity size]-1, [identity inputLowerBound], [identity inputUpperBound]);
-        LUTColorValue gv = remap(g, 0, [identity size]-1, [identity inputLowerBound], [identity inputUpperBound]);
-        LUTColorValue bv = remap(b, 0, [identity size]-1, [identity inputLowerBound], [identity inputUpperBound]);
-        [identity setColor:[LUTColor colorWithRed:rv green:gv blue:bv] r:r g:g b:b];
+        [identity setColor:[identity identityColorAtR:r g:g b:b] r:r g:g b:b];
     });
     
     return identity;
@@ -62,7 +53,7 @@
     }
     LUT3D *resizedLUT = [LUT3D LUTOfSize:newSize inputLowerBound:[self inputLowerBound] inputUpperBound:[self inputUpperBound]];
     
-    double ratio = ((double)[self size] - 1.0) / ((float)[resizedLUT size] - 1.0);
+    double ratio = remap(1, 0, [resizedLUT size] - 1, 0, [self size] - 1);
     
     LUT3DConcurrentLoop([resizedLUT size], ^(NSUInteger r, NSUInteger g, NSUInteger b) {
         LUTColor *color = [self colorAtInterpolatedR:r * ratio g:g * ratio b:b * ratio];
@@ -208,11 +199,8 @@
 
 
 - (id)copyWithZone:(NSZone *)zone{
-    LUT3D *copiedLUT = [LUT3D LUTOfSize:[self size] inputLowerBound:[self inputLowerBound] inputUpperBound:[self inputUpperBound]];
-    [copiedLUT setLatticeArray:[[self latticeArray] copyWithZone:zone]];
-    [copiedLUT setMetadata:[[self metadata] copyWithZone:zone]];
-    [copiedLUT setTitle:[[self title] copyWithZone:zone]];
-    [copiedLUT setDescription:[[self description] copyWithZone:zone]];
+    LUT3D *copiedLUT = [super copyWithZone:zone];
+    [copiedLUT setLatticeArray:[[self latticeArray] mutableCopyWithZone:zone]];
     
     return copiedLUT;
 }

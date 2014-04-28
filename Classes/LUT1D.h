@@ -61,9 +61,7 @@
                       lowerBound:(double)lowerBound
                       upperBound:(double)upperBound;
 
-- (void)setValue:(double)value atR:(NSUInteger)r;
-- (void)setValue:(double)value atG:(NSUInteger)g;
-- (void)setValue:(double)value atB:(NSUInteger)b;
+
 - (double)valueAtR:(NSUInteger)r;
 - (double)valueAtG:(NSUInteger)g;
 - (double)valueAtB:(NSUInteger)b;

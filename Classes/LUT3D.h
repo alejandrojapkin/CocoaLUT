@@ -44,7 +44,7 @@ typedef NS_ENUM(NSInteger, LUTMonoConversionMethod) {
 + (M13OrderedDictionary *)LUT1DExtractionMethods;
 + (M13OrderedDictionary *)LUTMonoConversionMethods;
 
-- (void)setColor:(LUTColor *)color r:(NSUInteger)r g:(NSUInteger)g b:(NSUInteger)b;
+
 
 
 @end

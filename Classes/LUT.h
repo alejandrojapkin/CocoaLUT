@@ -91,7 +91,7 @@ typedef NS_ENUM(NSInteger, LUTImageRenderPath) {
 - (bool)equalsLUT:(LUT *)comparisonLUT;
 
 
-
+- (LUTColor *)identityColorAtR:(double)redPoint g:(double)greenPoint b:(double)bluePoint;
 
 - (LUTColor *)colorAtColor:(LUTColor *)color;
 
@@ -99,6 +99,7 @@ typedef NS_ENUM(NSInteger, LUTImageRenderPath) {
 
 - (LUTColor *)colorAtInterpolatedR:(double)redPoint g:(double)greenPoint b:(double)bluePoint;
 
+- (void)setColor:(LUTColor *)color r:(NSUInteger)r g:(NSUInteger)g b:(NSUInteger)b;
 
 /**
  *  Returns a Core Image filter that will apply the receiver's transformation in a particular color space.
