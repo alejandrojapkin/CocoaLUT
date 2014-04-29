@@ -77,10 +77,10 @@
 }
 
 + (LUT3D *)convertLUT3D:(LUT3D *)lut fromColorSpace:(LUTColorSpace *)sourceColorSpace toColorSpace:(LUTColorSpace *)destinationColorSpace{
-    NSLog(@"Source NPM: %@\n Destination NPM: %@", NSStringFromGLKMatrix3(sourceColorSpace.npm), NSStringFromGLKMatrix3(destinationColorSpace.npm));
+    //NSLog(@"Source NPM: %@\n Destination NPM: %@", NSStringFromGLKMatrix3(sourceColorSpace.npm), NSStringFromGLKMatrix3(destinationColorSpace.npm));
     
     GLKMatrix3 transformationMatrix = [LUTColorSpace transformationMatrixFromColorSpace:sourceColorSpace ToColorSpace:destinationColorSpace];
-    NSLog(@"Transformation Matrix: %@", NSStringFromGLKMatrix3(transformationMatrix));
+    //NSLog(@"Transformation Matrix: %@", NSStringFromGLKMatrix3(transformationMatrix));
     
     LUT3D *transformedLUT = [LUT3D LUTOfSize:[lut size] inputLowerBound:[lut inputLowerBound] inputUpperBound:[lut inputUpperBound]];
     
