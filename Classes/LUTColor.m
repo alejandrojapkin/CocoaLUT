@@ -9,6 +9,8 @@
 #import "LUTColor.h"
 #import "LUTHelper.h"
 
+#define LUT_COLOR_EQUALITY_ERROR_MARGIN .0005
+
 @implementation LUTColor
 
 + (instancetype)colorWithRed:(LUTColorValue)r green:(LUTColorValue)g blue:(LUTColorValue)b {
@@ -50,10 +52,6 @@
                              blue:lerp1d(self.blue, otherColor.blue, amount)];
 }
 
-- (bool)equalsLUTColor:(LUTColor *)otherColor{
-    return fabs(self.red-otherColor.red)<.0005 && fabs(self.green-otherColor.green) < .0005 && fabs(self.blue - otherColor.blue) < .0005;
-}
-
 - (NSString *)description{
     return [NSString stringWithFormat:@"%.6f %.6f %.6f", self.red, self.green, self.blue];
 }
@@ -62,7 +60,7 @@
     if (!otherColor){
         return NO;
     }
-    return self.red == otherColor.red && self.green == otherColor.green && self.blue == otherColor.blue;
+    return fabs(self.red - otherColor.red) <= LUT_COLOR_EQUALITY_ERROR_MARGIN && fabs(self.green - otherColor.green) <= LUT_COLOR_EQUALITY_ERROR_MARGIN && fabs(self.blue - otherColor.blue) <= LUT_COLOR_EQUALITY_ERROR_MARGIN;
     
 }
 
