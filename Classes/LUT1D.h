@@ -74,6 +74,7 @@ typedef NS_ENUM(NSInteger, LUT1DSwizzleChannelsMethod) {
                       lowerBound:(double)lowerBound
                       upperBound:(double)upperBound;
 
+- (NSArray *)rgbCurvesCopy;
 
 - (double)valueAtR:(NSUInteger)r;
 - (double)valueAtG:(NSUInteger)g;

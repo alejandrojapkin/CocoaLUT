@@ -30,6 +30,8 @@ typedef NS_ENUM(NSInteger, LUTMonoConversionMethod) {
 - (instancetype)LUT3DByConvertingToMonoWithConversionMethod:(LUTMonoConversionMethod)conversionMethod;
 - (LUT1D *)LUT1D;
 
+- (NSMutableArray *)latticeArrayCopy;
+
 
 + (M13OrderedDictionary *)LUTMonoConversionMethods;
 

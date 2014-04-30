@@ -98,6 +98,10 @@
     return [self.blueCurve[b] doubleValue];
 }
 
+- (NSArray *)rgbCurvesCopy{
+    return @[[self.redCurve mutableCopy], [self.greenCurve mutableCopy], [self.blueCurve mutableCopy]];
+}
+
 - (LUTColor *)colorAtInterpolatedR:(double)redPoint
                                  g:(double)greenPoint
                                  b:(double)bluePoint{
@@ -252,6 +256,22 @@
         }
     }
     return isIncreasing;
+}
+
+- (bool)equalsLUT:(LUT *)comparisonLUT{
+    if(isLUT3D(comparisonLUT)){
+        return NO;
+    }
+    else{
+        //it's LUT1D
+        if([self size] != [comparisonLUT size]){
+            return NO;
+        }
+        else{
+            NSArray *comparisonCurves = [(LUT1D *)comparisonLUT rgbCurvesCopy];
+            return [self.redCurve isEqualToArray:comparisonCurves[0]] && [self.greenCurve isEqualToArray:comparisonCurves[1]] && [self.blueCurve isEqualToArray:comparisonCurves[2]];
+        }
+    }
 }
 
 - (LUT3D *)LUT3DOfSize:(NSUInteger)size {

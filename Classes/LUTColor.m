@@ -58,6 +58,27 @@
     return [NSString stringWithFormat:@"%.6f %.6f %.6f", self.red, self.green, self.blue];
 }
 
+- (BOOL)isEqualToLUTColor:(LUTColor *)otherColor{
+    if (!otherColor){
+        return NO;
+    }
+    return self.red == otherColor.red && self.green == otherColor.green && self.blue == otherColor.blue;
+    
+}
+
+- (BOOL)isEqual:(id)object {
+    if (self == object) {
+        return YES;
+    }
+    
+    if (![object isKindOfClass:[LUTColor class]]) {
+        return NO;
+    }
+    
+    return [self isEqualToLUTColor:(LUTColor *)object];
+}
+
+
 #if TARGET_OS_IPHONE
 - (UIColor *)UIColor {
     return [UIColor colorWithRed:self.red green:self.green blue:self.blue alpha:1];

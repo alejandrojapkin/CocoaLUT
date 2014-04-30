@@ -87,21 +87,21 @@
 + (instancetype)LUTIdentityOfSize:(NSUInteger)size
                   inputLowerBound:(double)inputLowerBound
                   inputUpperBound:(double)inputUpperBound {
-    @throw [NSException exceptionWithName:@"NotImplemented" reason:@"NotImplemented" userInfo:nil];
+    @throw [NSException exceptionWithName:@"NotImplemented" reason:[NSString stringWithFormat:@"\"%s\" Not Implemented", __func__] userInfo:nil];
 }
 
 
 - (instancetype)LUTByResizingToSize:(NSUInteger)newSize {
-    @throw [NSException exceptionWithName:@"NotImplemented" reason:@"NotImplemented" userInfo:nil];
+    @throw [NSException exceptionWithName:@"NotImplemented" reason:[NSString stringWithFormat:@"\"%s\" Not Implemented", __func__] userInfo:nil];
 }
 
 
 - (instancetype)LUTByCombiningWithLUT:(LUT *)otherLUT {
-    @throw [NSException exceptionWithName:@"NotImplemented" reason:@"NotImplemented" userInfo:nil];
+    @throw [NSException exceptionWithName:@"NotImplemented" reason:[NSString stringWithFormat:@"\"%s\" Not Implemented", __func__] userInfo:nil];
 }
 
 - (instancetype)LUTByClamping01{
-    @throw [NSException exceptionWithName:@"NotImplemented" reason:@"NotImplemented" userInfo:nil];
+    @throw [NSException exceptionWithName:@"NotImplemented" reason:[NSString stringWithFormat:@"\"%s\" Not Implemented", __func__] userInfo:nil];
 }
 
 - (LUTColor *)identityColorAtR:(double)redPoint g:(double)greenPoint b:(double)bluePoint{
@@ -122,26 +122,26 @@
 }
 
 - (LUTColor *)colorAtR:(NSUInteger)r g:(NSUInteger)g b:(NSUInteger)b{
-    @throw [NSException exceptionWithName:@"NotImplemented" reason:@"NotImplemented" userInfo:nil];
+    @throw [NSException exceptionWithName:@"NotImplemented" reason:[NSString stringWithFormat:@"\"%s\" Not Implemented", __func__] userInfo:nil];
 }
 
 - (LUTColor *)colorAtInterpolatedR:(double)redPoint g:(double)greenPoint b:(double)bluePoint{
-    @throw [NSException exceptionWithName:@"NotImplemented" reason:@"NotImplemented" userInfo:nil];
+    @throw [NSException exceptionWithName:@"NotImplemented" reason:[NSString stringWithFormat:@"\"%s\" Not Implemented", __func__] userInfo:nil];
 }
 
 - (void)setColor:(LUTColor *)color r:(NSUInteger)r g:(NSUInteger)g b:(NSUInteger)b{
-    @throw [NSException exceptionWithName:@"NotImplemented" reason:@"NotImplemented" userInfo:nil];
+    @throw [NSException exceptionWithName:@"NotImplemented" reason:[NSString stringWithFormat:@"\"%s\" Not Implemented", __func__] userInfo:nil];
 }
 
 
 //000
 
 - (bool) equalsIdentityLUT{
-    return [self equalsLUT:[LUT LUTIdentityOfSize:[self size] inputLowerBound:[self inputLowerBound] inputUpperBound:[self inputUpperBound]]];
+    return [self equalsLUT:[[self class] LUTIdentityOfSize:[self size] inputLowerBound:[self inputLowerBound] inputUpperBound:[self inputUpperBound]]];
 }
 
 - (bool)equalsLUT:(LUT *)comparisonLUT{
-    @throw [NSException exceptionWithName:@"NotImplemented" reason:@"NotImplemented" userInfo:nil];
+    @throw [NSException exceptionWithName:@"NotImplemented" reason:[NSString stringWithFormat:@"\"%s\" Not Implemented", __func__] userInfo:nil];
 }
 
 

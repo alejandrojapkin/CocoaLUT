@@ -200,6 +200,25 @@
     return color;
 }
 
+- (NSMutableArray *)latticeArrayCopy{
+    return [[self latticeArray] mutableCopy];
+}
+
+- (bool)equalsLUT:(LUT *)comparisonLUT{
+    if(isLUT1D(comparisonLUT)){
+        return NO;
+    }
+    else{
+        //it's LUT3D
+        if([self size] != [comparisonLUT size]){
+            return NO;
+        }
+        else{
+            return [[self latticeArray] isEqualToArray:[(LUT3D *)comparisonLUT latticeArray]];
+        }
+    }
+}
+
 - (LUTColor *)colorAtInterpolatedR:(double)redPoint g:(double)greenPoint b:(double)bluePoint {
     NSUInteger cubeSize = self.size;
 
