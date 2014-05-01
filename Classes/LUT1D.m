@@ -46,6 +46,9 @@
                       lowerBound:(double)lowerBound
                       upperBound:(double)upperBound {
     if (self = [super init]){
+        if(lowerBound >= upperBound){
+            @throw [NSException exceptionWithName:@"LUTCreationError" reason:@"Input Lower Bound >= Input Upper Bound" userInfo:nil];
+        }
         self.redCurve = redCurve;
         self.greenCurve = greenCurve;
         self.blueCurve = blueCurve;

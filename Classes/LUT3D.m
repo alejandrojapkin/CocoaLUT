@@ -18,6 +18,9 @@
    inputLowerBound:(double)inputLowerBound
    inputUpperBound:(double)inputUpperBound{
     if (self = [super init]) {
+        if(inputLowerBound >= inputUpperBound){
+            @throw [NSException exceptionWithName:@"LUTCreationError" reason:@"Input Lower Bound >= Input Upper Bound" userInfo:nil];
+        }
         [self setSize: size];
         [self setInputLowerBound:inputLowerBound];
         [self setInputUpperBound:inputUpperBound];
