@@ -275,6 +275,7 @@
 }
 
 - (LUT3D *)LUT3DOfSize:(NSUInteger)size {
+    //the size parameter is out of desperation - we can't be making 1024x cubes can we?
     LUT1D *resized1DLUT = [self LUTByResizingToSize:size];
     
     LUT3D *newLUT = [LUT3D LUTOfSize:size inputLowerBound:[self inputLowerBound] inputUpperBound:[self inputUpperBound]];
