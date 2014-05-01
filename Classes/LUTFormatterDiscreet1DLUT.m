@@ -50,7 +50,7 @@
         [blueCurve addObject:@(nsremapint01([trimmedLines[i] integerValue], maxCodeValue))];
     }
     
-    return [[LUT1D LUT1DWithRedCurve:redCurve greenCurve:greenCurve blueCurve:blueCurve lowerBound:0.0 upperBound:1.0] lutOfSize:33];
+    return [LUT1D LUT1DWithRedCurve:redCurve greenCurve:greenCurve blueCurve:blueCurve lowerBound:0.0 upperBound:1.0];
 }
 
 + (NSString *)stringFromLUT:(LUT *)lut {
@@ -59,20 +59,20 @@
     
     [string appendString:[NSString stringWithFormat:@"#\n# Discreet LUT file\n#\tChannels: 3\n# Input Samples: 1024\n# Ouput Scale: 4095\n#\n# Exported from CocoaLUT\n#\nLUT: 3 1024\n"]];
     
-    LUT1D *lut1D = [[lut LUT1DWithExtractionMethod:LUT1DExtractionMethodUniqueRGB] LUT1DByResizingToSize:1024];
+    LUT1D *lut1D = LUTAsLUT1D(lut, 1024);
 
     
     //write red
     for (int i = 0; i < 1024; i++) {
-        [string appendString:[NSString stringWithFormat:@"%d\n", (int)(clamp01([lut1D.redCurve[i] doubleValue])*4095.0) ]];
+        [string appendString:[NSString stringWithFormat:@"%d\n", (int)(clamp01([lut1D valueAtR:i])*4095.0) ]];
     }
     //write green
     for (int i = 0; i < 1024; i++) {
-        [string appendString:[NSString stringWithFormat:@"%d\n", (int)(clamp01([lut1D.greenCurve[i] doubleValue])*4095.0) ]];
+        [string appendString:[NSString stringWithFormat:@"%d\n", (int)(clamp01([lut1D valueAtG:i])*4095.0) ]];
     }
     //write blue
     for (int i = 0; i < 1024; i++) {
-        [string appendString:[NSString stringWithFormat:@"%d\n", (int)(clamp01([lut1D.blueCurve[i] doubleValue])*4095.0) ]];
+        [string appendString:[NSString stringWithFormat:@"%d\n", (int)(clamp01([lut1D valueAtB:i])*4095.0) ]];
     }
     
     return string;

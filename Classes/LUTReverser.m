@@ -26,13 +26,39 @@
         [self completedWithLUT:self.lut];
         return;
     }
+    
+    if(isLUT1D(self.lut)){
+        LUT1D *reversedLUT1D = [(LUT1D *)self.lut LUT1DByReversing];
+        if(reversedLUT1D != nil){
+            [self completedWithLUT:reversedLUT1D];
+        }
+        else{
+            //not reversible
+            [self didCancel];
+        }
+        return;
+    }
+    
+    
+    
+    if(isLUT1D(self.lut)){
+        LUT1D *reversedLUT1D = [(LUT1D *)self.lut LUT1DByReversing];
+        if(reversedLUT1D != nil){
+            [self completedWithLUT:reversedLUT1D];
+        }
+        else{
+            //not reversible
+            [self didCancel];
+        }
+        
+    }
 
     
     self.queue = [[NSOperationQueue alloc] init];
 
     self.useTree = YES;
     
-    self.outputSize = self.lut.lattice.size;
+    self.outputSize = [self.lut size];
     
     // RESIZE LUT
     NSBlockOperation *resizeOperation = [NSBlockOperation blockOperationWithBlock:^{
@@ -103,7 +129,7 @@
                 LUTColor *latticePointReference = [LUTColor colorWithRed:nsremapint01(r, maxValue)
                                                                    green:nsremapint01(g, maxValue)
                                                                     blue:nsremapint01(b, maxValue)];
-                LUTColor *outputColor = [self.lut.lattice colorAtR:r g:g b:b];
+                LUTColor *outputColor = [self.lut colorAtR:r g:g b:b];
                 [thisArray addObject:@[@(outputColor.red), @(outputColor.green), @(outputColor.blue), latticePointReference]];
             }
         }
@@ -120,8 +146,7 @@
 
 - (void)search {
     
-    LUTLattice *newLattice = [[LUTLattice alloc] initWithSize:self.outputSize];
-    
+    LUT3D *newLUT = [LUT3D LUTOfSize:self.outputSize inputLowerBound:[self.lut inputLowerBound] inputUpperBound:[self.lut inputUpperBound]];
     int maxValue = (int)self.outputSize - 1;
     
     int __block completedOps = 0;
@@ -129,27 +154,27 @@
     
     NSLock *progressLock = [[NSLock alloc] init];
     
-    LUTConcurrentCubeLoop(self.outputSize, ^(NSUInteger r, NSUInteger g, NSUInteger b) {
+    [self.lut LUTLoopWithBlock:^(double r, double g, double b) {
         if ([self checkCancellation]) return;
         if (self.useTree) {
             KDLeaf *leaf = [self.kdTree findNearestNeighbor:@[@(nsremapint01(r, maxValue)),
                                                               @(nsremapint01(g, maxValue)),
                                                               @(nsremapint01(b, maxValue))]];
-            [newLattice setColor:leaf.metadata r:r g:g b:b];
+            [newLUT setColor:leaf.metadata r:r g:g b:b];
         }
         else {
             LUTColor *color = [self colorNearestToR:nsremapint01(r, maxValue)
                                                   g:nsremapint01(g, maxValue)
                                                   b:nsremapint01(b, maxValue)];
-            [newLattice setColor:color r:r g:g b:b];
+            [newLUT setColor:color r:r g:g b:b];
         }
         completedOps++;
         [progressLock lock];
         [self setProgress:(float)completedOps / (float)totalOps section:4 of:4];
         [progressLock unlock];
-    });
+    }];
     
-    [self completedWithLUT:[LUT LUTWithLattice:newLattice]];
+    [self completedWithLUT:newLUT];
     
 }
 

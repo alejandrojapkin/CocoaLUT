@@ -65,17 +65,18 @@
           fromColorTransferFunction:(LUTColorTransferFunction *)sourceColorTransferFunction
             toColorTransferFunction:(LUTColorTransferFunction *)destinationColorTransferFunction{
     
-    LUTLattice *transformedLattice = [[LUTLattice alloc] initWithSize:sourceLUT.lattice.size];
+    LUT *transformedLUT = [[sourceLUT class] LUTOfSize:[sourceLUT size] inputLowerBound:[sourceLUT inputLowerBound] inputUpperBound:[sourceLUT inputUpperBound]];
     
-    LUTConcurrentCubeLoop(sourceLUT.lattice.size, ^(NSUInteger r, NSUInteger g, NSUInteger b) {
-        LUTColor *transformedColor = [LUTColorTransferFunction transformedColorFromColor:[sourceLUT.lattice colorAtR:r g:g b:b]
+    [transformedLUT LUTLoopWithBlock:^(double r, double g, double b) {
+        LUTColor *transformedColor = [LUTColorTransferFunction transformedColorFromColor:[sourceLUT colorAtR:r g:g b:b]
                                                                fromColorTransferFunction:sourceColorTransferFunction
                                                                  toColorTransferFunction:destinationColorTransferFunction];
         
-        [transformedLattice setColor:transformedColor r:r g:g b:b];
-    });
+        [transformedLUT setColor:transformedColor r:r g:g b:b];
+    }];
     
-    return [LUT LUTWithLattice:transformedLattice];
+    return transformedLUT;
+    
 }
 
 + (LUTColor *)transformedColorFromColor:(LUTColor *)sourceColor
@@ -104,9 +105,15 @@
     
     return [LUTColorTransferFunction LUTColorTransferFunctionWithTransformedToLinearBlock1D:^double(double value) {
                                                                                             value = clampLowerBound(value, 0.0);
+                                                                                            if(gamma == 1.0){
+                                                                                                return value;
+                                                                                            }
                                                                                             return pow(value, gamma);}
                                                                  linearToTransformedBlock1D:^double(double value) {
                                                                                             value = clampLowerBound(value, 0.0);
+                                                                                            if(gamma == 1.0){
+                                                                                                return value;
+                                                                                             }
                                                                                             return pow(value, 1.0/gamma);}];
 }
 

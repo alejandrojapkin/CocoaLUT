@@ -43,7 +43,16 @@
 #elif TARGET_OS_MAC
 
 + (NSImage *)imageFromLUT:(LUT *)lut {
-    int cubeSize = (int)lut.lattice.size;
+    
+    LUT3D *lut3D;
+    if(isLUT1D(lut)){
+        lut3D = LUTAsLUT3D(lut, 64);
+    }
+    else{
+        lut3D = (LUT3D *)lut;
+    }
+    
+    int cubeSize = (int)[lut3D size];
     int height = round(sqrt(cubeSize)*(double)cubeSize);
     int width  = ceil(((double)pow(cubeSize,3))/(double)height);
     
@@ -77,7 +86,7 @@
             
             
             if(currentCubeIndex < cubeSize*cubeSize*cubeSize){
-                NSColor *color = [[lut.lattice colorAtR:redIndex g:greenIndex b:blueIndex].NSColor colorUsingColorSpaceName:NSDeviceRGBColorSpace];
+                NSColor *color = [[lut3D colorAtR:redIndex g:greenIndex b:blueIndex].NSColor colorUsingColorSpaceName:NSDeviceRGBColorSpace];
                 for(int px = (int)x*7; px < x*7+7; px++){
                     for(int py = (int)(height - (y+1))*7; py < (height - (y+1))*7+7; py++){
                         [imageRep setColor:color atX:px y:py];
@@ -108,28 +117,26 @@
         @throw exception;
     }
     
-    LUTLattice *lattice = [[LUTLattice alloc] initWithSize:cubeSize];
+    LUT3D *lut = [LUT3D LUTOfSize:cubeSize inputLowerBound:0.0 inputUpperBound:1.0];
     
     NSBitmapImageRep* imageRep = [NSBitmapImageRep imageRepWithData:[image TIFFRepresentation]];
     
-    dispatch_apply(height, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0) , ^(size_t y){
-        dispatch_apply(width, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0) , ^(size_t x){
-            NSUInteger currentCubeIndex = y*width + x;
-            
-//            NSLog(@"ax%i ay%i", x, (int)(height - (y+1)));
-//            NSLog(@"px%i py%i", x*7, (height - (y+1))*7);
-            NSUInteger redIndex = currentCubeIndex % cubeSize;
-            NSUInteger greenIndex = ( (currentCubeIndex % (cubeSize * cubeSize)) / (cubeSize) );
-            NSUInteger blueIndex = currentCubeIndex / (cubeSize * cubeSize);
-            
-            if(currentCubeIndex < cubeSize*cubeSize*cubeSize){
-                    //NSLog(@"%@", [LUTColor colorWithNSColor:[imageRep colorAtX:x*7 y:(height - (y+1))*7]]);
-                    [lattice setColor:[LUTColor colorWithNSColor:[imageRep colorAtX:x*7 y:(height - (y+1))*7]] r:redIndex g:greenIndex b:blueIndex];
-            }
-        });
+    LUTConcurrentRectLoop(width, height, ^(NSUInteger x, NSUInteger y) {
+        NSUInteger currentCubeIndex = y*width + x;
+        
+        //            NSLog(@"ax%i ay%i", x, (int)(height - (y+1)));
+        //            NSLog(@"px%i py%i", x*7, (height - (y+1))*7);
+        NSUInteger redIndex = currentCubeIndex % cubeSize;
+        NSUInteger greenIndex = ( (currentCubeIndex % (cubeSize * cubeSize)) / (cubeSize) );
+        NSUInteger blueIndex = currentCubeIndex / (cubeSize * cubeSize);
+        
+        if(currentCubeIndex < cubeSize*cubeSize*cubeSize){
+            //NSLog(@"%@", [LUTColor colorWithNSColor:[imageRep colorAtX:x*7 y:(height - (y+1))*7]]);
+            [lut setColor:[LUTColor colorWithNSColor:[imageRep colorAtX:x*7 y:(height - (y+1))*7]] r:redIndex g:greenIndex b:blueIndex];
+        }
     });
     
-    return [LUT LUTWithLattice:lattice];
+    return lut;
 }
 #endif
 

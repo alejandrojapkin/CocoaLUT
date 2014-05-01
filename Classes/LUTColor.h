@@ -34,6 +34,7 @@ typedef double LUTColorValue;
  */
 @property (assign) LUTColorValue blue;
 
+
 /**
  *  Returns a new color with the provided floating-point channel values.
  *
@@ -84,8 +85,6 @@ typedef double LUTColorValue;
  *  @return <#return value description#>
  */
 - (LUTColor *)lerpTo:(LUTColor *)otherColor amount:(double)amount;
-
-- (bool)equalsLUTColor:(LUTColor *)otherColor;
 
 #if TARGET_OS_IPHONE
 /**

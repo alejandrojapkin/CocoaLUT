@@ -7,7 +7,8 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "LUT.h"
+#import "LUT1D.h"
+#import "LUT3D.h"
 
 @interface LUTPreviewImageGenerator : NSObject
 

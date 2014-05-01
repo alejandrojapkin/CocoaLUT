@@ -10,19 +10,17 @@
 
 @interface LUT1D ()
 
-@property (strong) NSArray *redCurve;
-@property (strong) NSArray *greenCurve;
-@property (strong) NSArray *blueCurve;
-@property NSUInteger size;
-
+@property (strong) NSMutableArray *redCurve;
+@property (strong) NSMutableArray *greenCurve;
+@property (strong) NSMutableArray *blueCurve;
 
 @end
 
 @implementation LUT1D
 
-+ (instancetype)LUT1DWithRedCurve:(NSArray *)redCurve
-                       greenCurve:(NSArray *)greenCurve
-                        blueCurve:(NSArray *)blueCurve
++ (instancetype)LUT1DWithRedCurve:(NSMutableArray *)redCurve
+                       greenCurve:(NSMutableArray *)greenCurve
+                        blueCurve:(NSMutableArray *)blueCurve
                        lowerBound:(double)lowerBound
                        upperBound:(double)upperBound {
     return [[[self class] alloc] initWithRedCurve:redCurve
@@ -32,43 +30,78 @@
                                        upperBound:upperBound];
 }
 
-+ (instancetype)LUT1DWith1DCurve:(NSArray *)curve1D
++ (instancetype)LUT1DWith1DCurve:(NSMutableArray *)curve1D
                       lowerBound:(double)lowerBound
                       upperBound:(double)upperBound {
-    return [[[self class] alloc] initWithRedCurve:[curve1D copy]
-                                       greenCurve:[curve1D copy]
-                                        blueCurve:[curve1D copy]
+    return [[[self class] alloc] initWithRedCurve:[curve1D mutableCopy]
+                                       greenCurve:[curve1D mutableCopy]
+                                        blueCurve:[curve1D mutableCopy]
                                        lowerBound:lowerBound
                                        upperBound:upperBound];
 }
 
-- (instancetype)initWithRedCurve:(NSArray *)redCurve
-                      greenCurve:(NSArray *)greenCurve
-                       blueCurve:(NSArray *)blueCurve
+- (instancetype)initWithRedCurve:(NSMutableArray *)redCurve
+                      greenCurve:(NSMutableArray *)greenCurve
+                       blueCurve:(NSMutableArray *)blueCurve
                       lowerBound:(double)lowerBound
                       upperBound:(double)upperBound {
-    if (self = [super init]){
+    if (self = [super initWithSize:redCurve.count inputLowerBound:lowerBound inputUpperBound:upperBound]){
+        
         self.redCurve = redCurve;
         self.greenCurve = greenCurve;
         self.blueCurve = blueCurve;
-        self.inputLowerBound = lowerBound;
-        self.inputUpperBound = upperBound;
-        
-        NSAssert(redCurve.count == greenCurve.count && redCurve.count == blueCurve.count, @"Curves must be the same length.");
-        self.size = self.redCurve.count;
+        if(redCurve.count != greenCurve.count || redCurve.count != blueCurve.count){
+            @throw [NSException exceptionWithName:@"LUT1DCreationError" reason:[NSString stringWithFormat:@"Curves must be the same length. R:%d G:%d B:%d", (int)redCurve.count, (int)greenCurve.count, (int)blueCurve.count] userInfo:nil];
+        }
+
     }
     return self;
 }
 
-- (LUTColor *)colorAtColor:(LUTColor *)inputColor{
-    inputColor = [inputColor clampedWithLowerBound:self.inputLowerBound upperBound:self.inputUpperBound];
-    double redRemappedInterpolatedIndex = remap(inputColor.red, self.inputLowerBound, self.inputUpperBound, 0, self.size-1);
-    double greenRemappedInterpolatedIndex = remap(inputColor.green, self.inputLowerBound, self.inputUpperBound, 0, self.size-1);
-    double blueRemappedInterpolatedIndex = remap(inputColor.blue, self.inputLowerBound, self.inputUpperBound, 0, self.size-1);
++ (instancetype)LUTOfSize:(NSUInteger)size
+          inputLowerBound:(double)inputLowerBound
+          inputUpperBound:(double)inputUpperBound{
+    NSMutableArray *blankCurve = [NSMutableArray array];
+    for(int i = 0; i < size; i++){
+        [blankCurve addObject:[NSNull null]];
+    }
+    return [LUT1D LUT1DWith1DCurve:blankCurve lowerBound:inputLowerBound upperBound:inputUpperBound];
+}
+
+- (void) LUTLoopWithBlock:( void ( ^ )(double r, double g, double b) )block{
+    for(int index = 0; index < [self size]; index++){
+        block(index, index, index);
+    }
+}
+
+//convenience method for comparison purposes
+- (NSMutableArray *)colorCurve{
     
-    return [self colorAtInterpolatedR:redRemappedInterpolatedIndex
-                                    g:greenRemappedInterpolatedIndex
-                                    b:blueRemappedInterpolatedIndex];
+    NSMutableArray *colorCurve = [NSMutableArray array];
+    for(int i = 0; i < self.redCurve.count; i++){
+        [colorCurve addObject:[LUTColor colorWithRed:[self.redCurve[i] doubleValue] green:[self.greenCurve[i] doubleValue] blue:[self.blueCurve[i] doubleValue]]];
+    }
+    return colorCurve;
+}
+
+- (void)setColor:(LUTColor *)color r:(NSUInteger)r g:(NSUInteger)g b:(NSUInteger)b{
+    self.redCurve[r] = @(color.red);
+    self.greenCurve[g] = @(color.green);
+    self.blueCurve[b] = @(color.blue);
+}
+
+- (LUTColor *)colorAtR:(NSUInteger)r g:(NSUInteger)g b:(NSUInteger)b {
+    return [LUTColor colorWithRed:[self.redCurve[r] doubleValue] green:[self.greenCurve[g] doubleValue] blue:[self.blueCurve[b] doubleValue]];
+}
+
+- (double)valueAtR:(NSUInteger)r{
+    return [self.redCurve[r] doubleValue];
+}
+- (double)valueAtG:(NSUInteger)g{
+    return [self.greenCurve[g] doubleValue];
+}
+- (double)valueAtB:(NSUInteger)b{
+    return [self.blueCurve[b] doubleValue];
 }
 
 - (LUTColor *)colorAtInterpolatedR:(double)redPoint
@@ -93,32 +126,37 @@
 
 }
 
++ (M13OrderedDictionary *)LUT1DSwizzleChannelsMethods{
+    return M13OrderedDictionaryFromOrderedArrayWithDictionaries(@[@{@"Averaged RGB":@(LUT1DSwizzleChannelsMethodAverageRGB)},
+                                                                  @{@"Copy Red Channel":@(LUT1DSwizzleChannelsMethodRedCopiedToRGB)},
+                                                                  @{@"Copy Green Channel":@(LUT1DSwizzleChannelsMethodGreenCopiedToRGB)},
+                                                                  @{@"Copy Blue Channel":@(LUT1DSwizzleChannelsMethodBlueCopiedToRGB)}]);
+}
 
-- (LUT1D *)LUT1DByResizingToSize:(NSUInteger)newSize {
-    /*
-    if (newSize == self.size) {
-        return [self copy];
-    }
-    */
-    NSMutableArray *newRedCurve = [NSMutableArray array];
-    NSMutableArray *newGreenCurve = [NSMutableArray array];
-    NSMutableArray *newBlueCurve = [NSMutableArray array];
+- (LUT1D *)LUT1DBySwizzlingChannelsWithMethod:(LUT1DSwizzleChannelsMethod)method{
+    LUT1D *swizzledLUT = [LUT1D LUTOfSize:[self size] inputLowerBound:[self inputLowerBound] inputUpperBound:[self inputUpperBound]];
     
-    double ratio = ((double)self.size - 1.0) / ((float)newSize - 1.0);
+    [swizzledLUT LUTLoopWithBlock:^(double r, double g, double b) {
+        if(method == LUT1DSwizzleChannelsMethodAverageRGB){
+            LUTColor *color = [self colorAtR:r g:g b:b];
+            double averageValue = (color.red+color.green+color.blue)/3.0;
+            [swizzledLUT setColor:[LUTColor colorWithRed:averageValue green:averageValue blue:averageValue] r:r g:g b:b];
+        }
+        else if(method == LUT1DSwizzleChannelsMethodRedCopiedToRGB){
+            LUTColor *color = [self colorAtR:r g:g b:b];
+            [swizzledLUT setColor:[LUTColor colorWithRed:color.red green:color.red blue:color.red] r:r g:g b:b];
+        }
+        else if(method == LUT1DSwizzleChannelsMethodGreenCopiedToRGB){
+            LUTColor *color = [self colorAtR:r g:g b:b];
+            [swizzledLUT setColor:[LUTColor colorWithRed:color.green green:color.green blue:color.green] r:r g:g b:b];
+        }
+        else if(method == LUT1DSwizzleChannelsMethodBlueCopiedToRGB){
+            LUTColor *color = [self colorAtR:r g:g b:b];
+            [swizzledLUT setColor:[LUTColor colorWithRed:color.blue green:color.blue blue:color.blue] r:r g:g b:b];
+        }
+    }];
     
-    for(int i = 0; i < newSize; i++){
-        double interpolatedIndex = (double)i * ratio;
-        
-        LUTColor *color = [self colorAtInterpolatedR:interpolatedIndex g:interpolatedIndex b:interpolatedIndex];
-        
-        [newRedCurve addObject:@(color.red)];
-        [newGreenCurve addObject:@(color.green)];
-        [newBlueCurve addObject:@(color.blue)];
-        
-        
-    }
-    
-    return [LUT1D LUT1DWithRedCurve:newRedCurve greenCurve:newGreenCurve blueCurve:newBlueCurve lowerBound:self.inputLowerBound upperBound:self.inputUpperBound];
+    return swizzledLUT;
 }
 
 - (LUT1D *)LUT1DByReversing{
@@ -137,15 +175,15 @@
     double newLowerBound = [[allCurvesCombined valueForKeyPath:@"@min.doubleValue"] doubleValue];
     double newUpperBound = [[allCurvesCombined valueForKeyPath:@"@max.doubleValue"] doubleValue];
     
-    for(NSArray *curve in rgbCurves){
+    for(NSMutableArray *curve in rgbCurves){
         NSMutableArray *newCurve = [[NSMutableArray alloc] init];
         
         double minValue = [[curve valueForKeyPath:@"@min.self"] doubleValue];
         double maxValue = [[curve valueForKeyPath:@"@max.self"] doubleValue];
         
         
-        for(int i = 0; i < self.size; i++){
-            double remappedIndex = remap(i, 0, self.size-1, newLowerBound, newUpperBound);
+        for(int i = 0; i < [self size]; i++){
+            double remappedIndex = remap(i, 0, [self size]-1, newLowerBound, newUpperBound);
 
             if (remappedIndex <= minValue){
                 [newCurve addObject:@(minValue)];
@@ -154,12 +192,12 @@
                 [newCurve addObject:@(maxValue)];
             }
             else{
-                for(int j = 0; j < self.size; j++){
+                for(int j = 0; j < [self size]; j++){
                     double currentValue = [curve[j] doubleValue];
                     if (currentValue > remappedIndex){
                         double previousValue = [curve[j-1] doubleValue]; //smaller or equal to remappedIndex
-                        double lowerValue = remap(j-1, 0, self.size-1, self.inputLowerBound, self.inputUpperBound);
-                        double higherValue = remap(j, 0, self.size-1, self.inputLowerBound, self.inputUpperBound);
+                        double lowerValue = remap(j-1, 0, [self size]-1, [self inputLowerBound], [self inputUpperBound]);
+                        double higherValue = remap(j, 0, [self size]-1, [self inputLowerBound], [self inputUpperBound]);
                         [newCurve addObject:@(lerp1d(lowerValue, higherValue,(remappedIndex - previousValue)/(currentValue - previousValue)))];
                         break;
                     }
@@ -168,7 +206,7 @@
             
         }
         
-        [newRGBCurves addObject:[NSArray arrayWithArray:newCurve]];
+        [newRGBCurves addObject:[NSMutableArray arrayWithArray:newCurve]];
     }
     
     return [LUT1D LUT1DWithRedCurve:newRGBCurves[0]
@@ -184,7 +222,7 @@
     
     NSArray *rgbCurves = @[self.redCurve, self.greenCurve, self.blueCurve];
     
-    for(NSArray *curve in rgbCurves){
+    for(NSMutableArray *curve in rgbCurves){
         double lastValue = [curve[0] doubleValue];
         for(int i = 1; i < [curve count]; i++){
             double currentValue = [curve[i] doubleValue];
@@ -204,19 +242,41 @@
     return isIncreasing;
 }
 
-- (LUT *)lutOfSize:(NSUInteger)size {
-    LUT1D *resized1DLUT = [self LUT1DByResizingToSize:size];
+- (bool)equalsLUT:(LUT *)comparisonLUT{
+    if(isLUT3D(comparisonLUT)){
+        return NO;
+    }
+    else{
+        //it's LUT1D
+        if([self size] != [comparisonLUT size]){
+            return NO;
+        }
+        else{
+            return [[self colorCurve] isEqualToArray:[(LUT1D *)comparisonLUT colorCurve]];
+        }
+    }
+}
+
+- (LUT3D *)LUT3DOfSize:(NSUInteger)size {
+    //the size parameter is out of desperation - we can't be making 1024x cubes can we?
+    LUT1D *resized1DLUT = [self LUTByResizingToSize:size];
     
-    LUTLattice *lattice = [[LUTLattice alloc] initWithSize:size];
+    LUT3D *newLUT = [LUT3D LUTOfSize:size inputLowerBound:[self inputLowerBound] inputUpperBound:[self inputUpperBound]];
     
-    LUTConcurrentCubeLoop(lattice.size, ^(NSUInteger r, NSUInteger g, NSUInteger b) {
-        LUTColorValue rv = [resized1DLUT.redCurve[r] doubleValue];
-        LUTColorValue gv = [resized1DLUT.greenCurve[g] doubleValue];
-        LUTColorValue bv = [resized1DLUT.blueCurve[b] doubleValue];
-        [lattice setColor:[LUTColor colorWithRed:rv green:gv blue:bv] r:r g:g b:b];
-    });
+    [newLUT LUTLoopWithBlock:^(double r, double g, double b) {
+        [newLUT setColor:[resized1DLUT colorAtR:r g:g b:b] r:r g:g b:b];
+    }];
     
-    return [[LUT LUTWithLattice:lattice] LUTByResizingToSize:size];
+    return newLUT;
+}
+
+- (id)copyWithZone:(NSZone *)zone{
+    LUT1D *copiedLUT = [LUT1D LUTOfSize:[self size] inputLowerBound:[self inputLowerBound] inputUpperBound:[self inputUpperBound]];
+    copiedLUT.redCurve = [self.redCurve mutableCopyWithZone:zone];
+    copiedLUT.greenCurve = [self.greenCurve mutableCopyWithZone:zone];
+    copiedLUT.blueCurve = [self.blueCurve mutableCopyWithZone:zone];
+    
+    return copiedLUT;
 }
 
 @end

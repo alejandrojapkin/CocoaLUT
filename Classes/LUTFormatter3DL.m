@@ -34,7 +34,7 @@
         @throw exception;
     }
 
-    LUTLattice *lattice = [[LUTLattice alloc] initWithSize:cubeSize];
+    LUT3D *lut = [LUT3D LUTOfSize:cubeSize inputLowerBound:0.0 inputUpperBound:1.0];
     NSUInteger currentCubeIndex = 0;
     for (NSString *line in [lines subarrayWithRange:NSMakeRange(meshLineIndex + 1, lines.count - meshLineIndex - 1)]) {
 
@@ -53,14 +53,14 @@
 				NSUInteger greenIndex   = (currentCubeIndex % (cubeSize * cubeSize)) / cubeSize;
 				NSUInteger blueIndex    = currentCubeIndex % cubeSize;
 
-                [lattice setColor:color r:redIndex g:greenIndex b:blueIndex];
+                [lut setColor:color r:redIndex g:greenIndex b:blueIndex];
 
                 currentCubeIndex++;
             }
         }
     }
 
-    return [LUT LUTWithLattice:lattice];
+    return lut;
 
 }
 
