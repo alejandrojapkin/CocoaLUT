@@ -74,6 +74,16 @@
     }
 }
 
+//convenience method for comparison purposes
+- (NSMutableArray *)colorCurve{
+    
+    NSMutableArray *colorCurve = [NSMutableArray array];
+    for(int i = 0; i < self.redCurve.count; i++){
+        [colorCurve addObject:[LUTColor colorWithRed:[self.redCurve[i] doubleValue] green:[self.greenCurve[i] doubleValue] blue:[self.blueCurve[i] doubleValue]]];
+    }
+    return colorCurve;
+}
+
 - (void)setColor:(LUTColor *)color r:(NSUInteger)r g:(NSUInteger)g b:(NSUInteger)b{
     self.redCurve[r] = @(color.red);
     self.greenCurve[g] = @(color.green);
@@ -92,10 +102,6 @@
 }
 - (double)valueAtB:(NSUInteger)b{
     return [self.blueCurve[b] doubleValue];
-}
-
-- (NSArray *)rgbCurvesCopy{
-    return @[[self.redCurve mutableCopy], [self.greenCurve mutableCopy], [self.blueCurve mutableCopy]];
 }
 
 - (LUTColor *)colorAtInterpolatedR:(double)redPoint
@@ -246,8 +252,7 @@
             return NO;
         }
         else{
-            NSArray *comparisonCurves = [(LUT1D *)comparisonLUT rgbCurvesCopy];
-            return [self.redCurve isEqualToArray:comparisonCurves[0]] && [self.greenCurve isEqualToArray:comparisonCurves[1]] && [self.blueCurve isEqualToArray:comparisonCurves[2]];
+            return [[self colorCurve] isEqualToArray:[(LUT1D *)comparisonLUT colorCurve]];
         }
     }
 }
