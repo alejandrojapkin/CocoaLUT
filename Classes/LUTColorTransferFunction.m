@@ -123,16 +123,16 @@
 +(instancetype)LUTColorTransferFunctionWithGamma:(double)gamma{
     
     return [LUTColorTransferFunction LUTColorTransferFunctionWithTransformedToLinearBlock1D:^double(double value) {
+                                                                                            value = clampLowerBound(value, 0.0);
                                                                                             if(gamma == 1.0){
                                                                                                 return value;
                                                                                             }
-                                                                                            value = clampLowerBound(value, 0.0);
                                                                                             return pow(value, gamma);}
                                                                  linearToTransformedBlock1D:^double(double value) {
+                                                                                            value = clampLowerBound(value, 0.0);
                                                                                             if(gamma == 1.0){
                                                                                                 return value;
                                                                                              }
-                                                                                            value = clampLowerBound(value, 0.0);
                                                                                             return pow(value, 1.0/gamma);}];
 }
 
