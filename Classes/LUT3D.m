@@ -107,19 +107,14 @@
 }
 
 - (LUT1D *)LUT1D{
-    NSMutableArray *redCurve = [NSMutableArray array];
-    NSMutableArray *greenCurve = [NSMutableArray array];
-    NSMutableArray *blueCurve = [NSMutableArray array];
+    LUT1D *lut1D = [LUT1D LUTOfSize:[self size] inputLowerBound:[self inputLowerBound] inputUpperBound:[self inputUpperBound]];
     
-    LUTColor *color;
-    for(int i = 0; i < [self size]; i++){
-        color = [self colorAtR:i g:i b:i];
-        [redCurve addObject:@(color.red)];
-        [greenCurve addObject:@(color.green)];
-        [blueCurve addObject:@(color.blue)];
-    }
+    LUT1DLoop([lut1D size], ^(NSUInteger index) {
+        LUTColor *color = [self colorAtR:index g:index b:index];
+        [lut1D setColor:color r:index g:index b:index];
+    });
     
-    return [LUT1D LUT1DWithRedCurve:redCurve greenCurve:greenCurve blueCurve:blueCurve lowerBound:0.0 upperBound:1.0];
+    return lut1D;
 }
 
 - (instancetype)LUT3DByConvertingToMonoWithConversionMethod:(LUTMonoConversionMethod)conversionMethod{
