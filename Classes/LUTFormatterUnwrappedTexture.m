@@ -66,12 +66,12 @@
                                                                   bytesPerRow:(width * (16 * 3)) / 8
                                                                  bitsPerPixel:16 * 3];
     
-    LUT3DConcurrentLoop([lut3D size], ^(NSUInteger r, NSUInteger g, NSUInteger b) {
+    [lut3D LUTLoopWithBlock:^(double r, double g, double b) {
         NSUInteger x = b * [lut3D size] + r;
         NSUInteger y = g;
         NSColor *color = [[lut3D colorAtR:r g:g b:b].NSColor colorUsingColorSpaceName:NSDeviceRGBColorSpace];
         [imageRep setColor:color atX:x y:y];
-    });
+    }];
     
     NSImage* image = [[NSImage alloc] initWithSize:NSMakeSize(width, height)];
     [image addRepresentation:imageRep];
@@ -88,12 +88,12 @@
     LUT3D *lut3D = [LUT3D LUTOfSize:image.size.height inputLowerBound:0.0 inputUpperBound:1.0];
 
     NSBitmapImageRep* imageRep = [NSBitmapImageRep imageRepWithData:[image TIFFRepresentation]];
-
-    LUT3DConcurrentLoop([lut3D size], ^(NSUInteger r, NSUInteger g, NSUInteger b) {
+    
+    [lut3D LUTLoopWithBlock:^(double r, double g, double b) {
         NSUInteger x = b * [lut3D size] + r;
         NSUInteger y = g;
         [lut3D setColor:[LUTColor colorWithNSColor:[imageRep colorAtX:x y:y]] r:r g:g b:b];
-    });
+    }];
 
     return lut3D;
 }

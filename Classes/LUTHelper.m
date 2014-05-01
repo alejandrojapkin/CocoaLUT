@@ -116,27 +116,10 @@ LUT1D* LUTAsLUT1D(LUT* lut, NSUInteger size){
     }
 }
 
-void LUT3DConcurrentLoop(NSUInteger cubeSize, void (^block)(NSUInteger r, NSUInteger g, NSUInteger b)) {
-    dispatch_apply(cubeSize, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0) , ^(size_t r){
-        dispatch_apply(cubeSize, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0) , ^(size_t g){
-            for (int b = 0; b < cubeSize; b++) {
-                block(r, g, b);
-            }
-        });
-    });
-}
-
 BOOL stringIsNumeric(NSString* str){
     NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
     NSNumber *number = [formatter numberFromString:str];
     return !!number; // If the string is not numeric, number will be nil
-}
-
-void LUT1DLoop(NSUInteger size, void (^block)(NSUInteger index)) {
-    for(int index = 0; index < size; index++){
-        block(index);
-    }
-
 }
 
 void LUTConcurrentRectLoop(NSUInteger width, NSUInteger height, void (^block)(NSUInteger x, NSUInteger y)) {

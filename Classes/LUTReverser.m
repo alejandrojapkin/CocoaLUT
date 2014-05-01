@@ -154,7 +154,7 @@
     
     NSLock *progressLock = [[NSLock alloc] init];
     
-    LUT3DConcurrentLoop(self.outputSize, ^(NSUInteger r, NSUInteger g, NSUInteger b) {
+    [self.lut LUTLoopWithBlock:^(double r, double g, double b) {
         if ([self checkCancellation]) return;
         if (self.useTree) {
             KDLeaf *leaf = [self.kdTree findNearestNeighbor:@[@(nsremapint01(r, maxValue)),
@@ -172,7 +172,7 @@
         [progressLock lock];
         [self setProgress:(float)completedOps / (float)totalOps section:4 of:4];
         [progressLock unlock];
-    });
+    }];
     
     [self completedWithLUT:newLUT];
     

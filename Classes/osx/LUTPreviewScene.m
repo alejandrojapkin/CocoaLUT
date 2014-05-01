@@ -54,9 +54,7 @@
     SCNNode *dotGroup = [SCNNode node];
     [scene.rootNode addChildNode:dotGroup];
     
-    float size = [lut3D size];
-    LUT3DConcurrentLoop(size, ^(NSUInteger r, NSUInteger g, NSUInteger b) {
-
+    [lut3D LUTLoopWithBlock:^(double r, double g, double b) {
         LUTColor *identityColor = [LUTColor colorWithRed:(float)r/(float)(LATTICE_SIZE-1) green:(float)g/(float)(LATTICE_SIZE-1) blue:(float)b/(float)(LATTICE_SIZE-1)];
         LUTColor *transformedColor = [lut3D colorAtR:r g:g b:b];
         
@@ -71,11 +69,8 @@
         @synchronized(dotGroup) {
             [dotGroup addChildNode:node];
         }
-
-    });
+    }];
     
-    
-
     return scene;
 }
 

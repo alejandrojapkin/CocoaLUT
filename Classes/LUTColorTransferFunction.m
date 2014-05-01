@@ -65,34 +65,15 @@
           fromColorTransferFunction:(LUTColorTransferFunction *)sourceColorTransferFunction
             toColorTransferFunction:(LUTColorTransferFunction *)destinationColorTransferFunction{
     
-    LUT *transformedLUT;
+    LUT *transformedLUT = [[sourceLUT class] LUTOfSize:[sourceLUT size] inputLowerBound:[sourceLUT inputLowerBound] inputUpperBound:[sourceLUT inputUpperBound]];
     
-    if(isLUT3D(sourceLUT)){
-        LUT3D *transformedLUT3D = [LUT3D LUTOfSize:[sourceLUT size] inputLowerBound:[sourceLUT inputLowerBound] inputUpperBound:[sourceLUT inputUpperBound]];
-        LUT3DConcurrentLoop([sourceLUT size], ^(NSUInteger r, NSUInteger g, NSUInteger b) {
-            LUTColor *transformedColor = [LUTColorTransferFunction transformedColorFromColor:[sourceLUT colorAtR:r g:g b:b]
-                                                                   fromColorTransferFunction:sourceColorTransferFunction
-                                                                     toColorTransferFunction:destinationColorTransferFunction];
-            
-            [transformedLUT3D setColor:transformedColor r:r g:g b:b];
-        });
+    [transformedLUT LUTLoopWithBlock:^(double r, double g, double b) {
+        LUTColor *transformedColor = [LUTColorTransferFunction transformedColorFromColor:[sourceLUT colorAtR:r g:g b:b]
+                                                               fromColorTransferFunction:sourceColorTransferFunction
+                                                                 toColorTransferFunction:destinationColorTransferFunction];
         
-        transformedLUT = transformedLUT3D;
-    }
-    else if(isLUT1D(sourceLUT)){
-        LUT1D *transformedLUT1D = [LUT1D LUTOfSize:[sourceLUT size] inputLowerBound:[sourceLUT inputLowerBound] inputUpperBound:[sourceLUT inputUpperBound]];
-        
-        LUT1DLoop([sourceLUT size], ^(NSUInteger index) {
-            LUTColor *transformedColor = [LUTColorTransferFunction transformedColorFromColor:[sourceLUT colorAtR:index g:index b:index]
-                                                                   fromColorTransferFunction:sourceColorTransferFunction
-                                                                     toColorTransferFunction:destinationColorTransferFunction];
-            
-            [transformedLUT1D setColor:transformedColor r:index g:index b:index];
-        });
-        
-        
-        transformedLUT = transformedLUT1D;
-    }
+        [transformedLUT setColor:transformedColor r:r g:g b:b];
+    }];
     
     return transformedLUT;
     

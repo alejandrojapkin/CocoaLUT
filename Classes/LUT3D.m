@@ -15,17 +15,11 @@
 @implementation LUT3D
 
 - (instancetype)initWithSize:(NSUInteger)size
-   inputLowerBound:(double)inputLowerBound
-   inputUpperBound:(double)inputUpperBound{
-    if (self = [super init]) {
-        if(inputLowerBound >= inputUpperBound){
-            @throw [NSException exceptionWithName:@"LUTCreationError" reason:@"Input Lower Bound >= Input Upper Bound" userInfo:nil];
-        }
-        [self setSize: size];
-        [self setInputLowerBound:inputLowerBound];
-        [self setInputUpperBound:inputUpperBound];
-        
-        self.latticeArray = [LUT3D blankLatticeArrayOfSize:size];
+             inputLowerBound:(double)inputLowerBound
+             inputUpperBound:(double)inputUpperBound
+                latticeArray:(NSMutableArray *)latticeArray{
+    if (self = [super initWithSize:size inputLowerBound:inputLowerBound inputUpperBound:inputUpperBound]) {
+        self.latticeArray = latticeArray;
     }
     return self;
 }
@@ -35,35 +29,18 @@
           inputUpperBound:(double)inputUpperBound{
     return [[[self class] alloc] initWithSize:size
                               inputLowerBound:inputLowerBound
-                              inputUpperBound:inputUpperBound];
+                              inputUpperBound:inputUpperBound
+                                 latticeArray:[LUT3D blankLatticeArrayOfSize:size]];
 }
 
-+ (instancetype)LUTIdentityOfSize:(NSUInteger)size
-                  inputLowerBound:(double)inputLowerBound
-                  inputUpperBound:(double)inputUpperBound{
-    LUT3D *identity = [self LUTOfSize:size inputLowerBound:inputLowerBound inputUpperBound:inputUpperBound];
-    
-    LUT3DConcurrentLoop(size, ^(NSUInteger r, NSUInteger g, NSUInteger b) {
-        [identity setColor:[identity identityColorAtR:r g:g b:b] r:r g:g b:b];
+- (void) LUTLoopWithBlock:( void ( ^ )(double r, double g, double b) )block{
+    dispatch_apply([self size], dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0) , ^(size_t r){
+        dispatch_apply([self size], dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0) , ^(size_t g){
+            for (int b = 0; b < [self size]; b++) {
+                block(r, g, b);
+            }
+        });
     });
-    
-    return identity;
-}
-
-- (instancetype)LUTByResizingToSize:(NSUInteger)newSize {
-    if (newSize == [self size]) {
-        return [self copy];
-    }
-    LUT3D *resizedLUT = [LUT3D LUTOfSize:newSize inputLowerBound:[self inputLowerBound] inputUpperBound:[self inputUpperBound]];
-    
-    double ratio = remap(1, 0, [resizedLUT size] - 1, 0, [self size] - 1);
-    
-    LUT3DConcurrentLoop([resizedLUT size], ^(NSUInteger r, NSUInteger g, NSUInteger b) {
-        LUTColor *color = [self colorAtInterpolatedR:r * ratio g:g * ratio b:b * ratio];
-        [resizedLUT setColor:color r:r g:g b:b];
-    });
-    
-    return resizedLUT;
 }
 
 - (instancetype)LUTByCombiningWithLUT:(LUT *)otherLUT {
@@ -76,23 +53,11 @@
 //                                     userInfo:nil];
 //    }
     
-    LUT3DConcurrentLoop([newLUT size], ^(NSUInteger r, NSUInteger g, NSUInteger b) {
+    [newLUT LUTLoopWithBlock:^(double r, double g, double b) {
         LUTColor *startColor = [self colorAtR:r g:g b:b];
         LUTColor *newColor = [otherLUT colorAtColor:startColor];
         [newLUT setColor:newColor r:r g:g b:b];
-    });
-    
-    return newLUT;
-}
-
-
-
-- (instancetype)LUTByClamping01{
-    LUT3D *newLUT = [self copy];
-
-    LUT3DConcurrentLoop([newLUT size], ^(NSUInteger r, NSUInteger g, NSUInteger b) {
-        [newLUT setColor:[[newLUT colorAtR:r g:g b:b] clamped01] r:r g:g b:b];
-    });
+    }];
     
     return newLUT;
 }
@@ -112,10 +77,10 @@
 - (LUT1D *)LUT1D{
     LUT1D *lut1D = [LUT1D LUTOfSize:[self size] inputLowerBound:[self inputLowerBound] inputUpperBound:[self inputUpperBound]];
     
-    LUT1DLoop([lut1D size], ^(NSUInteger index) {
-        LUTColor *color = [self colorAtR:index g:index b:index];
-        [lut1D setColor:color r:index g:index b:index];
-    });
+    [lut1D LUTLoopWithBlock:^(double r, double g, double b) {
+        LUTColor *color = [self colorAtR:r g:g b:b];
+        [lut1D setColor:color r:r g:g b:b];
+    }];
     
     return lut1D;
 }
@@ -141,12 +106,12 @@
     }
     
     
-    LUT3DConcurrentLoop([newLUT size], ^(NSUInteger r, NSUInteger g, NSUInteger b) {
+    [newLUT LUTLoopWithBlock:^(double r, double g, double b) {
         [newLUT setColor:convertToMonoBlock([newLUT colorAtR:r g:g b:b])
-                        r:r
-                        g:g
-                        b:b];
-    });
+                       r:r
+                       g:g
+                       b:b];
+    }];
     
     return newLUT;
     

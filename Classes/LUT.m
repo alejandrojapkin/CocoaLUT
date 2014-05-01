@@ -32,6 +32,9 @@
              inputLowerBound:(double)inputLowerBound
              inputUpperBound:(double)inputUpperBound{
     if (self = [super init]) {
+        if(inputLowerBound >= inputUpperBound){
+            @throw [NSException exceptionWithName:@"LUTCreationError" reason:@"Input Lower Bound >= Input Upper Bound" userInfo:nil];
+        }
         self.metadata = [NSMutableDictionary dictionary];
         self.size = size;
         self.inputLowerBound = inputLowerBound;
@@ -81,27 +84,67 @@
 + (instancetype)LUTOfSize:(NSUInteger)size
           inputLowerBound:(double)inputLowerBound
           inputUpperBound:(double)inputUpperBound{
-    return [[[self class] alloc] initWithSize:size inputLowerBound:inputLowerBound inputUpperBound:inputUpperBound];
+    @throw [NSException exceptionWithName:@"NotImplemented" reason:[NSString stringWithFormat:@"\"%s\" Not Implemented", __func__] userInfo:nil];
 }
 
 + (instancetype)LUTIdentityOfSize:(NSUInteger)size
                   inputLowerBound:(double)inputLowerBound
-                  inputUpperBound:(double)inputUpperBound {
+                  inputUpperBound:(double)inputUpperBound{
+    LUT *identityLUT = [[self class] LUTOfSize:size inputLowerBound:inputLowerBound inputUpperBound:inputUpperBound];
+    
+    [identityLUT LUTLoopWithBlock:^(double r, double g, double b) {
+        [identityLUT setColor:[identityLUT identityColorAtR:r g:g b:b] r:r g:g b:b];
+    }];
+    
+    return identityLUT;
+}
+
+- (void)LUTLoopWithBlock:(void (^)(double, double, double))block{
     @throw [NSException exceptionWithName:@"NotImplemented" reason:[NSString stringWithFormat:@"\"%s\" Not Implemented", __func__] userInfo:nil];
 }
 
 
 - (instancetype)LUTByResizingToSize:(NSUInteger)newSize {
-    @throw [NSException exceptionWithName:@"NotImplemented" reason:[NSString stringWithFormat:@"\"%s\" Not Implemented", __func__] userInfo:nil];
+    if (newSize == [self size]) {
+        return [self copy];
+    }
+    LUT *resizedLUT = [[self class] LUTOfSize:newSize inputLowerBound:[self inputLowerBound] inputUpperBound:[self inputUpperBound]];
+    
+    double ratio = remap(1, 0, [resizedLUT size] - 1, 0, [self size] - 1);
+    
+    [resizedLUT LUTLoopWithBlock:^(double r, double g, double b) {
+        LUTColor *color = [self colorAtInterpolatedR:r * ratio g:g * ratio b:b * ratio];
+        [resizedLUT setColor:color r:r g:g b:b];
+    }];
+    
+    return resizedLUT;
 }
 
+- (instancetype)LUTByClampingLowerBound:(double)lowerBound
+                             upperBound:(double)upperBound{
+    LUT *newLUT = [[self class] LUTOfSize:[self size] inputLowerBound:[self inputLowerBound] inputUpperBound:[self inputUpperBound]];
+    
+    [newLUT LUTLoopWithBlock:^(double r, double g, double b) {
+        [newLUT setColor:[[self colorAtR:r g:g b:b] clampedWithLowerBound:lowerBound upperBound:upperBound] r:r g:g b:b];
+    }];
+    
+    return newLUT;
+}
 
 - (instancetype)LUTByCombiningWithLUT:(LUT *)otherLUT {
     @throw [NSException exceptionWithName:@"NotImplemented" reason:[NSString stringWithFormat:@"\"%s\" Not Implemented", __func__] userInfo:nil];
 }
 
-- (instancetype)LUTByClamping01{
-    @throw [NSException exceptionWithName:@"NotImplemented" reason:[NSString stringWithFormat:@"\"%s\" Not Implemented", __func__] userInfo:nil];
+- (instancetype)LUTByChangingInputLowerBound:(double)inputLowerBound
+                             inputUpperBound:(double)inputUpperBound{
+    LUT *newLUT = [[self class] LUTOfSize:[self size] inputLowerBound:inputLowerBound inputUpperBound:inputUpperBound];
+    
+    [newLUT LUTLoopWithBlock:^(double r, double g, double b) {
+        LUTColor *identityColor = [newLUT identityColorAtR:r g:g b:b];
+        [newLUT setColor:[self colorAtColor:identityColor] r:r g:g b:b];
+    }];
+    
+    return newLUT;
 }
 
 - (LUTColor *)identityColorAtR:(double)redPoint g:(double)greenPoint b:(double)bluePoint{
@@ -166,16 +209,15 @@
 }
 
 - (CIFilter *)coreImageFilterWithColorSpace:(CGColorSpaceRef)colorSpace {
-    LUT *usedLUT = [self size] > COCOALUT_MAX_CICOLORCUBE_SIZE ? [self LUTByResizingToSize:COCOALUT_MAX_CICOLORCUBE_SIZE] : self;
+    NSUInteger sizeOfColorCubeFilter = [self size] > COCOALUT_MAX_CICOLORCUBE_SIZE ? COCOALUT_MAX_CICOLORCUBE_SIZE : [self size];
+    LUT3D *used3DLUT = LUTAsLUT3D(self, sizeOfColorCubeFilter);
     
-    size_t size = [usedLUT size];
+    size_t size = [used3DLUT size];
     size_t cubeDataSize = size * size * size * sizeof (float) * 4;
     float *cubeData = (float *) malloc (cubeDataSize);
     
-    
-    LUT3DConcurrentLoop(size, ^(NSUInteger r, NSUInteger g, NSUInteger b) {
-        
-        LUTColor *transformedColor = [usedLUT colorAtR:r g:g b:b];
+    [used3DLUT LUTLoopWithBlock:^(double r, double g, double b) {
+        LUTColor *transformedColor = [used3DLUT colorAtR:r g:g b:b];
         
         size_t offset = 4*(b*size*size + g*size + r);
         
@@ -183,9 +225,7 @@
         cubeData[offset+1] = (float)transformedColor.green;
         cubeData[offset+2] = (float)transformedColor.blue;
         cubeData[offset+3] = 1.0f;
-    });
-    
-    
+    }];
     
     NSData *data = [NSData dataWithBytesNoCopy:cubeData length:cubeDataSize freeWhenDone:YES];
     

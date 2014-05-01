@@ -45,18 +45,15 @@
                        blueCurve:(NSMutableArray *)blueCurve
                       lowerBound:(double)lowerBound
                       upperBound:(double)upperBound {
-    if (self = [super init]){
-        if(lowerBound >= upperBound){
-            @throw [NSException exceptionWithName:@"LUTCreationError" reason:@"Input Lower Bound >= Input Upper Bound" userInfo:nil];
-        }
+    if (self = [super initWithSize:redCurve.count inputLowerBound:lowerBound inputUpperBound:upperBound]){
+        
         self.redCurve = redCurve;
         self.greenCurve = greenCurve;
         self.blueCurve = blueCurve;
-        [self setInputLowerBound:lowerBound];
-        [self setInputUpperBound:upperBound];
-        
-        NSAssert(redCurve.count == greenCurve.count && redCurve.count == blueCurve.count, @"Curves must be the same length.");
-        [self setSize: self.redCurve.count];
+        if(redCurve.count != greenCurve.count || redCurve.count != blueCurve.count){
+            @throw [NSException exceptionWithName:@"LUT1DCreationError" reason:[NSString stringWithFormat:@"Curves must be the same length. R:%d G:%d B:%d", (int)redCurve.count, (int)greenCurve.count, (int)blueCurve.count] userInfo:nil];
+        }
+
     }
     return self;
 }
@@ -71,14 +68,10 @@
     return [LUT1D LUT1DWith1DCurve:blankCurve lowerBound:inputLowerBound upperBound:inputUpperBound];
 }
 
-+ (instancetype)LUTIdentityOfSize:(NSUInteger)size
-                  inputLowerBound:(double)inputLowerBound
-                  inputUpperBound:(double)inputUpperBound{
-    LUT1D *identityLUT = [LUT1D LUTOfSize:size inputLowerBound:inputLowerBound inputUpperBound:inputUpperBound];
-    LUT1DLoop(size, ^(NSUInteger index) {
-        [identityLUT setColor:[identityLUT identityColorAtR:index g:index b:index] r:index g:index b:index];
-    });
-    return identityLUT;
+- (void) LUTLoopWithBlock:( void ( ^ )(double r, double g, double b) )block{
+    for(int index = 0; index < [self size]; index++){
+        block(index, index, index);
+    }
 }
 
 - (void)setColor:(LUTColor *)color r:(NSUInteger)r g:(NSUInteger)g b:(NSUInteger)b{
@@ -127,24 +120,6 @@
 
 }
 
-
-- (instancetype)LUTByResizingToSize:(NSUInteger)newSize {
-    if (newSize == self.size) {
-        return [self copy];
-    }
-    LUT1D *resizedLUT = [LUT1D LUTOfSize:newSize inputLowerBound:[self inputLowerBound] inputUpperBound:[self inputUpperBound]];
-    
-    LUT1DLoop(newSize, ^(NSUInteger index) {
-        double interpolatedIndex = remap(index, 0, [resizedLUT size] - 1, 0, [self size] - 1);
-        
-        LUTColor *color = [self colorAtInterpolatedR:interpolatedIndex g:interpolatedIndex b:interpolatedIndex];
-
-        [resizedLUT setColor:color r:index g:index b:index];
-    });
-    
-    return resizedLUT;
-}
-
 + (M13OrderedDictionary *)LUT1DSwizzleChannelsMethods{
     return M13OrderedDictionaryFromOrderedArrayWithDictionaries(@[@{@"Averaged RGB":@(LUT1DSwizzleChannelsMethodAverageRGB)},
                                                                   @{@"Copy Red Channel":@(LUT1DSwizzleChannelsMethodRedCopiedToRGB)},
@@ -155,25 +130,25 @@
 - (LUT1D *)LUT1DBySwizzlingChannelsWithMethod:(LUT1DSwizzleChannelsMethod)method{
     LUT1D *swizzledLUT = [LUT1D LUTOfSize:[self size] inputLowerBound:[self inputLowerBound] inputUpperBound:[self inputUpperBound]];
     
-    LUT1DLoop([swizzledLUT size], ^(NSUInteger index) {
+    [swizzledLUT LUTLoopWithBlock:^(double r, double g, double b) {
         if(method == LUT1DSwizzleChannelsMethodAverageRGB){
-            LUTColor *color = [self colorAtR:index g:index b:index];
+            LUTColor *color = [self colorAtR:r g:g b:b];
             double averageValue = (color.red+color.green+color.blue)/3.0;
-            [swizzledLUT setColor:[LUTColor colorWithRed:averageValue green:averageValue blue:averageValue] r:index g:index b:index];
+            [swizzledLUT setColor:[LUTColor colorWithRed:averageValue green:averageValue blue:averageValue] r:r g:g b:b];
         }
         else if(method == LUT1DSwizzleChannelsMethodRedCopiedToRGB){
-            LUTColor *color = [self colorAtR:index g:index b:index];
-            [swizzledLUT setColor:[LUTColor colorWithRed:color.red green:color.red blue:color.red] r:index g:index b:index];
+            LUTColor *color = [self colorAtR:r g:g b:b];
+            [swizzledLUT setColor:[LUTColor colorWithRed:color.red green:color.red blue:color.red] r:r g:g b:b];
         }
         else if(method == LUT1DSwizzleChannelsMethodGreenCopiedToRGB){
-            LUTColor *color = [self colorAtR:index g:index b:index];
-            [swizzledLUT setColor:[LUTColor colorWithRed:color.green green:color.green blue:color.green] r:index g:index b:index];
+            LUTColor *color = [self colorAtR:r g:g b:b];
+            [swizzledLUT setColor:[LUTColor colorWithRed:color.green green:color.green blue:color.green] r:r g:g b:b];
         }
         else if(method == LUT1DSwizzleChannelsMethodBlueCopiedToRGB){
-            LUTColor *color = [self colorAtR:index g:index b:index];
-            [swizzledLUT setColor:[LUTColor colorWithRed:color.blue green:color.blue blue:color.blue] r:index g:index b:index];
+            LUTColor *color = [self colorAtR:r g:g b:b];
+            [swizzledLUT setColor:[LUTColor colorWithRed:color.blue green:color.blue blue:color.blue] r:r g:g b:b];
         }
-    });
+    }];
     
     return swizzledLUT;
 }
@@ -283,10 +258,9 @@
     
     LUT3D *newLUT = [LUT3D LUTOfSize:size inputLowerBound:[self inputLowerBound] inputUpperBound:[self inputUpperBound]];
     
-    
-    LUT3DConcurrentLoop(size, ^(NSUInteger r, NSUInteger g, NSUInteger b) {
+    [newLUT LUTLoopWithBlock:^(double r, double g, double b) {
         [newLUT setColor:[resized1DLUT colorAtR:r g:g b:b] r:r g:g b:b];
-    });
+    }];
     
     return newLUT;
 }
