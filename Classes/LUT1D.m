@@ -271,11 +271,11 @@
 }
 
 + (M13OrderedDictionary *)LUT1DDefaultSizes{
-    return M13OrderedDictionaryFromOrderedArrayWithDictionaries(@[@{@"8-bit": @(256)},
-                                                                  @{@"10-bit": @(1024)},
-                                                                  @{@"12-bit": @(4096)},
-                                                                  @{@"14-bit": @(16384)},
-                                                                  @{@"16-bit": @(65536)}]);
+    return M13OrderedDictionaryFromOrderedArrayWithDictionaries(@[@{@"256": @(256)},
+                                                                  @{@"1024": @(1024)},
+                                                                  @{@"4096": @(4096)},
+                                                                  @{@"16384": @(16384)},
+                                                                  @{@"65536": @(65536)}]);
 }
 
 - (id)copyWithZone:(NSZone *)zone{
