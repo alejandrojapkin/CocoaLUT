@@ -92,14 +92,14 @@
                   inputUpperBound:(double)inputUpperBound{
     LUT *identityLUT = [[self class] LUTOfSize:size inputLowerBound:inputLowerBound inputUpperBound:inputUpperBound];
     
-    [identityLUT LUTLoopWithBlock:^(double r, double g, double b) {
+    [identityLUT LUTLoopWithBlock:^(size_t r, size_t g, size_t b) {
         [identityLUT setColor:[identityLUT identityColorAtR:r g:g b:b] r:r g:g b:b];
     }];
     
     return identityLUT;
 }
 
-- (void)LUTLoopWithBlock:(void (^)(double, double, double))block{
+- (void)LUTLoopWithBlock:(void (^)(size_t r, size_t g, size_t b))block{
     @throw [NSException exceptionWithName:@"NotImplemented" reason:[NSString stringWithFormat:@"\"%s\" Not Implemented", __func__] userInfo:nil];
 }
 
@@ -112,7 +112,7 @@
     
     double ratio = remap(1, 0, [resizedLUT size] - 1, 0, [self size] - 1);
     
-    [resizedLUT LUTLoopWithBlock:^(double r, double g, double b) {
+    [resizedLUT LUTLoopWithBlock:^(size_t r, size_t g, size_t b) {
         LUTColor *color = [self colorAtInterpolatedR:r * ratio g:g * ratio b:b * ratio];
         [resizedLUT setColor:color r:r g:g b:b];
     }];
@@ -124,7 +124,7 @@
                              upperBound:(double)upperBound{
     LUT *newLUT = [[self class] LUTOfSize:[self size] inputLowerBound:[self inputLowerBound] inputUpperBound:[self inputUpperBound]];
     
-    [newLUT LUTLoopWithBlock:^(double r, double g, double b) {
+    [newLUT LUTLoopWithBlock:^(size_t r, size_t g, size_t b) {
         [newLUT setColor:[[self colorAtR:r g:g b:b] clampedWithLowerBound:lowerBound upperBound:upperBound] r:r g:g b:b];
     }];
     
@@ -139,7 +139,7 @@
                              inputUpperBound:(double)inputUpperBound{
     LUT *newLUT = [[self class] LUTOfSize:[self size] inputLowerBound:inputLowerBound inputUpperBound:inputUpperBound];
     
-    [newLUT LUTLoopWithBlock:^(double r, double g, double b) {
+    [newLUT LUTLoopWithBlock:^(size_t r, size_t g, size_t b) {
         LUTColor *identityColor = [newLUT identityColorAtR:r g:g b:b];
         [newLUT setColor:[self colorAtColor:identityColor] r:r g:g b:b];
     }];
@@ -174,6 +174,40 @@
 
 - (void)setColor:(LUTColor *)color r:(NSUInteger)r g:(NSUInteger)g b:(NSUInteger)b{
     @throw [NSException exceptionWithName:@"NotImplemented" reason:[NSString stringWithFormat:@"\"%s\" Not Implemented", __func__] userInfo:nil];
+}
+
+- (double)maximumOutputValue{
+    __block double maxValue = [self colorAtR:0 g:0 b:0].red;
+    [self LUTLoopWithBlock:^(size_t r, size_t g, size_t b) {
+        LUTColor *color = [self colorAtR:r g:g b:b];
+        if(color.red > maxValue){
+            maxValue = color.red;
+        }
+        if(color.green > maxValue){
+            maxValue = color.green;
+        }
+        if(color.blue > maxValue){
+            maxValue = color.blue;
+        }
+    }];
+    return maxValue;
+}
+
+- (double)minimumOutputValue{
+    __block double minValue = [self colorAtR:0 g:0 b:0].red;
+    [self LUTLoopWithBlock:^(size_t r, size_t g, size_t b) {
+        LUTColor *color = [self colorAtR:r g:g b:b];
+        if(color.red < minValue){
+            minValue = color.red;
+        }
+        if(color.green < minValue){
+            minValue = color.green;
+        }
+        if(color.blue < minValue){
+            minValue = color.blue;
+        }
+    }];
+    return minValue;
 }
 
 
@@ -216,7 +250,7 @@
     size_t cubeDataSize = size * size * size * sizeof (float) * 4;
     float *cubeData = (float *) malloc (cubeDataSize);
     
-    [used3DLUT LUTLoopWithBlock:^(double r, double g, double b) {
+    [used3DLUT LUTLoopWithBlock:^(size_t r, size_t g, size_t b) {
         LUTColor *transformedColor = [used3DLUT colorAtR:r g:g b:b];
         
         size_t offset = 4*(b*size*size + g*size + r);

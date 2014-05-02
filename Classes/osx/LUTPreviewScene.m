@@ -54,7 +54,7 @@
     SCNNode *dotGroup = [SCNNode node];
     [scene.rootNode addChildNode:dotGroup];
     
-    [lut3D LUTLoopWithBlock:^(double r, double g, double b) {
+    [lut3D LUTLoopWithBlock:^(size_t r, size_t g, size_t b) {
         LUTColor *identityColor = [LUTColor colorWithRed:(float)r/(float)(LATTICE_SIZE-1) green:(float)g/(float)(LATTICE_SIZE-1) blue:(float)b/(float)(LATTICE_SIZE-1)];
         LUTColor *transformedColor = [lut3D colorAtR:r g:g b:b];
         

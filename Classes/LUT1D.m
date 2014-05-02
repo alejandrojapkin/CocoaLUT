@@ -68,10 +68,14 @@
     return [LUT1D LUT1DWith1DCurve:blankCurve lowerBound:inputLowerBound upperBound:inputUpperBound];
 }
 
-- (void) LUTLoopWithBlock:( void ( ^ )(double r, double g, double b) )block{
+- (void) LUTLoopWithBlock:( void ( ^ )(size_t r, size_t g, size_t b) )block{
     for(int index = 0; index < [self size]; index++){
         block(index, index, index);
     }
+}
+
+- (NSArray *)rgbCurveArray{
+    return @[[self.redCurve mutableCopy], [self.greenCurve mutableCopy], [self.blueCurve mutableCopy]];
 }
 
 //convenience method for comparison purposes
@@ -126,6 +130,30 @@
 
 }
 
+- (NSArray *)SAMCubicSplineRGBArrayWithNormalized01XAxis{
+    NSMutableArray *redArray = [NSMutableArray array];
+    NSMutableArray *greenArray = [NSMutableArray array];
+    NSMutableArray *blueArray = [NSMutableArray array];
+    
+    [self LUTLoopWithBlock:^(size_t r, size_t g, size_t b) {
+        double normalizedRIndex = remap(r, 0, [self size]-1, 0, 1);
+        double normalizedGIndex = remap(g, 0, [self size]-1, 0, 1);
+        double normalizedBIndex = remap(b, 0, [self size]-1, 0, 1);
+        LUTColor *color = [self colorAtR:r g:g b:b];
+        #if TARGET_OS_IPHONE
+        redArray[r] = [NSValue valueWithCGPoint: CGPointMake(normalizedRIndex, color.red)];
+        greenArray[g] = [NSValue valueWithCGPoint: CGPointMake(normalizedGIndex, color.green)];
+        blueArray[b] = [NSValue valueWithCGPoint: CGPointMake(normalizedBIndex, color.blue)];
+        #else
+        redArray[r] = [NSValue valueWithPoint: CGPointMake(normalizedRIndex, color.red)];
+        greenArray[g] = [NSValue valueWithPoint: CGPointMake(normalizedGIndex, color.green)];
+        blueArray[b] =  [NSValue valueWithPoint: CGPointMake(normalizedBIndex, color.blue)];
+        #endif
+    }];
+    
+    return @[[[SAMCubicSpline alloc] initWithPoints:redArray], [[SAMCubicSpline alloc] initWithPoints:greenArray], [[SAMCubicSpline alloc] initWithPoints:blueArray]];
+}
+
 + (M13OrderedDictionary *)LUT1DSwizzleChannelsMethods{
     return M13OrderedDictionaryFromOrderedArrayWithDictionaries(@[@{@"Averaged RGB":@(LUT1DSwizzleChannelsMethodAverageRGB)},
                                                                   @{@"Copy Red Channel":@(LUT1DSwizzleChannelsMethodRedCopiedToRGB)},
@@ -136,7 +164,7 @@
 - (LUT1D *)LUT1DBySwizzlingChannelsWithMethod:(LUT1DSwizzleChannelsMethod)method{
     LUT1D *swizzledLUT = [LUT1D LUTOfSize:[self size] inputLowerBound:[self inputLowerBound] inputUpperBound:[self inputUpperBound]];
     
-    [swizzledLUT LUTLoopWithBlock:^(double r, double g, double b) {
+    [swizzledLUT LUTLoopWithBlock:^(size_t r, size_t g, size_t b) {
         if(method == LUT1DSwizzleChannelsMethodAverageRGB){
             LUTColor *color = [self colorAtR:r g:g b:b];
             double averageValue = (color.red+color.green+color.blue)/3.0;
@@ -263,7 +291,7 @@
     
     LUT3D *newLUT = [LUT3D LUTOfSize:size inputLowerBound:[self inputLowerBound] inputUpperBound:[self inputUpperBound]];
     
-    [newLUT LUTLoopWithBlock:^(double r, double g, double b) {
+    [newLUT LUTLoopWithBlock:^(size_t r, size_t g, size_t b) {
         [newLUT setColor:[resized1DLUT colorAtR:r g:g b:b] r:r g:g b:b];
     }];
     

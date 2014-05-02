@@ -52,6 +52,15 @@
                              blue:lerp1d(self.blue, otherColor.blue, amount)];
 }
 
+- (LUTColor *)remappedFromInputLow:(double)inputLow
+                         inputHigh:(double)inputHigh
+                         outputLow:(double)outputLow
+                        outputHigh:(double)outputHigh{
+    return [LUTColor colorWithRed:remap(self.red, inputLow, inputHigh, outputLow, outputHigh)
+                            green:remap(self.green, inputLow, inputHigh, outputLow, outputHigh)
+                             blue:remap(self.blue, inputLow, inputHigh, outputLow, outputHigh)];
+}
+
 - (NSString *)description{
     return [NSString stringWithFormat:@"%.6f %.6f %.6f", self.red, self.green, self.blue];
 }

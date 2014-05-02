@@ -10,6 +10,7 @@
 #import "CocoaLUT.h"
 #import "LUT.h"
 #import <M13OrderedDictionary/M13OrderedDictionary.h>
+#import <SAMCubicSpline/SAMCubicSpline.h>
 
 @class LUTColor;
 @class LUT3D;
@@ -78,9 +79,14 @@ typedef NS_ENUM(NSInteger, LUT1DSwizzleChannelsMethod) {
 //convenience method for comparison purposes
 - (NSMutableArray *)colorCurve;
 
+- (NSArray *)rgbCurveArray;
+
 - (double)valueAtR:(NSUInteger)r;
 - (double)valueAtG:(NSUInteger)g;
 - (double)valueAtB:(NSUInteger)b;
+
+//for helping make the 1D graph view
+- (NSArray *)SAMCubicSplineRGBArrayWithNormalized01XAxis;
 
 
 

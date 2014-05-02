@@ -84,7 +84,7 @@
     
     LUT3D *transformedLUT = [LUT3D LUTOfSize:[lut size] inputLowerBound:[lut inputLowerBound] inputUpperBound:[lut inputUpperBound]];
     
-    [transformedLUT LUTLoopWithBlock:^(double r, double g, double b) {
+    [transformedLUT LUTLoopWithBlock:^(size_t r, size_t g, size_t b) {
         LUTColor *sourceColor = [lut colorAtR:r g:g b:b];
         GLKVector3 transformedColor = GLKMatrix3MultiplyVector3(transformationMatrix, GLKVector3Make(sourceColor.red, sourceColor.green, sourceColor.blue));
         [transformedLUT setColor:[LUTColor colorWithRed:transformedColor.x green:transformedColor.y blue:transformedColor.z] r:r g:g b:b];

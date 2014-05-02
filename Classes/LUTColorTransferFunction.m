@@ -67,7 +67,7 @@
     
     LUT *transformedLUT = [[sourceLUT class] LUTOfSize:[sourceLUT size] inputLowerBound:[sourceLUT inputLowerBound] inputUpperBound:[sourceLUT inputUpperBound]];
     
-    [transformedLUT LUTLoopWithBlock:^(double r, double g, double b) {
+    [transformedLUT LUTLoopWithBlock:^(size_t r, size_t g, size_t b) {
         LUTColor *transformedColor = [LUTColorTransferFunction transformedColorFromColor:[sourceLUT colorAtR:r g:g b:b]
                                                                fromColorTransferFunction:sourceColorTransferFunction
                                                                  toColorTransferFunction:destinationColorTransferFunction];

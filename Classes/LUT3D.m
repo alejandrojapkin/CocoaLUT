@@ -33,7 +33,7 @@
                                  latticeArray:[LUT3D blankLatticeArrayOfSize:size]];
 }
 
-- (void) LUTLoopWithBlock:( void ( ^ )(double r, double g, double b) )block{
+- (void) LUTLoopWithBlock:( void ( ^ )(size_t r, size_t g, size_t b) )block{
     dispatch_apply([self size], dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0) , ^(size_t r){
         dispatch_apply([self size], dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0) , ^(size_t g){
             for (int b = 0; b < [self size]; b++) {
@@ -53,7 +53,7 @@
 //                                     userInfo:nil];
 //    }
     
-    [newLUT LUTLoopWithBlock:^(double r, double g, double b) {
+    [newLUT LUTLoopWithBlock:^(size_t r, size_t g, size_t b) {
         LUTColor *startColor = [self colorAtR:r g:g b:b];
         LUTColor *newColor = [otherLUT colorAtColor:startColor];
         [newLUT setColor:newColor r:r g:g b:b];
@@ -77,7 +77,7 @@
 - (LUT1D *)LUT1D{
     LUT1D *lut1D = [LUT1D LUTOfSize:[self size] inputLowerBound:[self inputLowerBound] inputUpperBound:[self inputUpperBound]];
     
-    [lut1D LUTLoopWithBlock:^(double r, double g, double b) {
+    [lut1D LUTLoopWithBlock:^(size_t r, size_t g, size_t b) {
         LUTColor *color = [self colorAtR:r g:g b:b];
         [lut1D setColor:color r:r g:g b:b];
     }];
@@ -106,7 +106,7 @@
     }
     
     
-    [newLUT LUTLoopWithBlock:^(double r, double g, double b) {
+    [newLUT LUTLoopWithBlock:^(size_t r, size_t g, size_t b) {
         [newLUT setColor:convertToMonoBlock([newLUT colorAtR:r g:g b:b])
                        r:r
                        g:g

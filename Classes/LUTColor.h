@@ -74,6 +74,11 @@ typedef double LUTColorValue;
 - (LUTColor *)clampedWithLowerBound:(double)lowerBound
                          upperBound:(double)upperBound;
 
+- (LUTColor *)remappedFromInputLow:(double)inputLow
+                         inputHigh:(double)inputHigh
+                         outputLow:(double)outputLow
+                        outputHigh:(double)outputHigh;
+
 /**
  *  Linearly interpolate between two colors by a percentage amount.
  *
