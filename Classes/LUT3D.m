@@ -126,12 +126,7 @@
 
 
 
-- (id)copyWithZone:(NSZone *)zone{
-    LUT3D *copiedLUT = [LUT3D LUTOfSize:[self size] inputLowerBound:[self inputLowerBound] inputUpperBound:[self inputUpperBound]];
-    [copiedLUT setLatticeArray:[[self latticeArray] mutableCopyWithZone:zone]];
-    
-    return copiedLUT;
-}
+
 
 + (NSMutableArray *)blankLatticeArrayOfSize:(NSUInteger)size {
     NSMutableArray *blankArray = [NSMutableArray arrayWithCapacity:size];
@@ -220,6 +215,20 @@
     LUTColor *C0 = [C00 lerpTo:C10 amount:1.0 - (upperBluePoint - bluePoint)];
 
     return [C0 lerpTo:C1 amount:1.0 - (upperGreenPoint - greenPoint)];
+}
+
++ (M13OrderedDictionary *)LUT3DDefaultSizes{
+    return M13OrderedDictionaryFromOrderedArrayWithDictionaries(@[@{@"17": @(17)},
+                                                                  @{@"32": @(32)},
+                                                                  @{@"33": @(33)},
+                                                                  @{@"64": @(64)}]);
+}
+
+- (id)copyWithZone:(NSZone *)zone{
+    LUT3D *copiedLUT = [LUT3D LUTOfSize:[self size] inputLowerBound:[self inputLowerBound] inputUpperBound:[self inputUpperBound]];
+    [copiedLUT setLatticeArray:[[self latticeArray] mutableCopyWithZone:zone]];
+    
+    return copiedLUT;
 }
 
 

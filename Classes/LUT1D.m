@@ -270,6 +270,14 @@
     return newLUT;
 }
 
++ (M13OrderedDictionary *)LUT1DDefaultSizes{
+    return M13OrderedDictionaryFromOrderedArrayWithDictionaries(@[@{@"8-bit": @(256)},
+                                                                  @{@"10-bit": @(1024)},
+                                                                  @{@"12-bit": @(4096)},
+                                                                  @{@"14-bit": @(16384)},
+                                                                  @{@"16-bit": @(65536)}]);
+}
+
 - (id)copyWithZone:(NSZone *)zone{
     LUT1D *copiedLUT = [LUT1D LUTOfSize:[self size] inputLowerBound:[self inputLowerBound] inputUpperBound:[self inputUpperBound]];
     copiedLUT.redCurve = [self.redCurve mutableCopyWithZone:zone];

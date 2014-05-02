@@ -34,7 +34,7 @@ typedef NS_ENUM(NSInteger, LUTMonoConversionMethod) {
 
 
 + (M13OrderedDictionary *)LUTMonoConversionMethods;
-
++ (M13OrderedDictionary *)LUT3DDefaultSizes;
 
 
 
