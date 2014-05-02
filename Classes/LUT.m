@@ -210,7 +210,7 @@
 
 - (CIFilter *)coreImageFilterWithColorSpace:(CGColorSpaceRef)colorSpace {
     NSUInteger sizeOfColorCubeFilter = [self size] > COCOALUT_MAX_CICOLORCUBE_SIZE ? COCOALUT_MAX_CICOLORCUBE_SIZE : [self size];
-    LUT3D *used3DLUT = LUTAsLUT3D(self, sizeOfColorCubeFilter);
+    LUT3D *used3DLUT = [LUTAsLUT3D(self, sizeOfColorCubeFilter) LUTByChangingInputLowerBound:0.0 inputUpperBound:1.0];
     
     size_t size = [used3DLUT size];
     size_t cubeDataSize = size * size * size * sizeof (float) * 4;
