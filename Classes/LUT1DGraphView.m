@@ -113,7 +113,7 @@
             yUnscaled = lerp1d([array[(int)floor(xAsInterpolatedIndex)] doubleValue], [array[(int)ceil(xAsInterpolatedIndex)] doubleValue], xAsInterpolatedIndex - floor(xAsInterpolatedIndex));
         }
         
-        CGFloat y = yUnscaled * pixelHeight;
+        CGFloat y = remap(yUnscaled, self.minimumOutputValue, self.maximumOutputValue, 0, 1) * pixelHeight;
         
         //NSLog(@"%f %f -> %f %f", x/pixelWidth, interpolatedY, x, y);
         // Add the point to the context's path
