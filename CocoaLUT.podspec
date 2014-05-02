@@ -14,6 +14,7 @@ Pod::Spec.new do |s|
 
   s.dependency 'RegExCategories'
   s.dependency 'M13OrderedDictionary'
+  s.dependency 'SAMCubicSpline'
 
   # iOS
   s.ios.frameworks = 'UIKit'
