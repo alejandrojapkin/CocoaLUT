@@ -52,22 +52,27 @@
 
 -(void)lutDidChange{
     if(self.lut){
-        LUT1D *lut1D = LUTAsLUT1D(self.lut, [self.lut size]);
-        //self.cubicSplinesRGBArray = [lut1D SAMCubicSplineRGBArrayWithNormalized01XAxis];
-        self.lerpRGBArray = [lut1D rgbCurveArray];
-        
-        self.minimumOutputValue = [lut1D minimumOutputValue];
-        self.maximumOutputValue = [lut1D maximumOutputValue];
-        [self display];
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            LUT1D *lut1D = LUTAsLUT1D(self.lut, [self.lut size]);
+            //self.cubicSplinesRGBArray = [lut1D SAMCubicSplineRGBArrayWithNormalized01XAxis];
+            self.lerpRGBArray = [lut1D rgbCurveArray];
+            
+            self.minimumOutputValue = [lut1D minimumOutputValue];
+            self.maximumOutputValue = [lut1D maximumOutputValue];
+
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self setNeedsDisplay:YES];
+            });
+        });
     }
 }
 
-- (void)drawRect:(NSRect)dirtyRect
-{
-    [super drawRect:dirtyRect];
-    [[NSColor whiteColor] setFill];
+- (void)drawRect:(NSRect)dirtyRect {
     
-    NSRectFill(dirtyRect);
+    [[NSColor whiteColor] setFill];
+    NSRectFill(self.bounds);
+    
+    NSRect drawingRect = self.bounds;
     
     if(!self.lerpRGBArray){
         return;
@@ -75,31 +80,29 @@
     
     CGContextRef context = [[NSGraphicsContext
                                currentContext] graphicsPort];
-    
-    
 
     //RED
     CGContextSetRGBStrokeColor(context, 1, 0, 0, 1);
-    [self drawArray:_lerpRGBArray[0] inContext:context inRect:dirtyRect];
+    [self drawArray:_lerpRGBArray[0] inContext:context inRect:drawingRect];
     //[self drawSpline:self.cubicSplinesRGBArray[0] inContext:context inRect:dirtyRect];
     //GREEN
     CGContextSetRGBStrokeColor(context, 0, 1, 0, 1);
-    [self drawArray:_lerpRGBArray[1] inContext:context inRect:dirtyRect];
+    [self drawArray:_lerpRGBArray[1] inContext:context inRect:drawingRect];
     //[self drawSpline:self.cubicSplinesRGBArray[1] inContext:context inRect:dirtyRect];
     //BLUE
     CGContextSetRGBStrokeColor(context, 0, 0, 1, 1);
-    [self drawArray:_lerpRGBArray[2] inContext:context inRect:dirtyRect];
+    [self drawArray:_lerpRGBArray[2] inContext:context inRect:drawingRect];
     //[self drawSpline:self.cubicSplinesRGBArray[2] inContext:context inRect:dirtyRect];
     
 }
 
-- (void)drawArray:(NSArray *)array inContext:(CGContextRef)context inRect:(NSRect)dirtyRect{
-    CGFloat pixelWidth = dirtyRect.size.width;
-    CGFloat pixelHeight = dirtyRect.size.height;
+- (void)drawArray:(NSArray *)array inContext:(CGContextRef)context inRect:(NSRect)rect {
+    CGFloat pixelWidth = rect.size.width;
+    CGFloat pixelHeight = rect.size.height;
     
     //NSLog(@"Drawing in %f %f", pixelWidth, pixelHeight);
     
-    CGContextSetLineWidth(context, 1.0);
+    CGContextSetLineWidth(context, 2.0);
     CGContextBeginPath(context);
     
     for (CGFloat x = 0.0f; x < pixelWidth; x++) {
