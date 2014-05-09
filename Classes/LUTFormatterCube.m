@@ -21,6 +21,8 @@
     NSUInteger __block cubeSize = 0;
     NSUInteger __block sizeLineIndex = 0;
     
+    NSMutableDictionary *data = [NSMutableDictionary dictionary];
+    
     dispatch_apply([lines count], dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0) , ^(size_t index){
         NSString *line = lines[index];
         NSString *titleMatch;
@@ -28,6 +30,10 @@
             NSString *sizeString = [line componentsSeparatedByString:@" "][1];
             cubeSize = sizeString.integerValue;
             sizeLineIndex = index;
+        }
+        else if ([line rangeOfString:@"LUT_3D_INPUT_RANGE"].location != NSNotFound) {
+            [data setObject:@([[line componentsSeparatedByString:@" "][1] doubleValue]) forKey:@"inputLowerBound"];
+            [data setObject:@([[line componentsSeparatedByString:@" "][2] doubleValue]) forKey:@"inputUpperBound"];
         }
         else if ((titleMatch = [line firstMatch:RX(@"(?<=TITLE \")[^\"]*(?=\")")])) {
             [title appendString:titleMatch];
@@ -61,11 +67,22 @@
         NSException *exception = [NSException exceptionWithName:@"LUTParseError" reason:@"Couldn't find LUT size in file" userInfo:nil];
         @throw exception;
     }
-
-    LUT3D *lut3D = [LUT3D LUTOfSize:cubeSize inputLowerBound:0.0 inputUpperBound:1.0];
+    
+    NSUInteger cubeLinesStartIndex = findFirstLUTLineInLines(lines, @" ", 3, (int)sizeLineIndex+1);
+    
+    LUT3D *lut3D;
+    if([data objectForKey:@"inputLowerBound"] != nil){
+        lut3D = [LUT3D LUTOfSize:cubeSize inputLowerBound:[[data objectForKey:@"inputLowerBound"] doubleValue] inputUpperBound:[[data objectForKey:@"inputUpperBound"] doubleValue]];
+    }
+    else{
+        //assume 0-1 input
+        lut3D = [LUT3D LUTOfSize:cubeSize inputLowerBound:0.0 inputUpperBound:1.0];
+    }
+    
+    
 
     NSUInteger currentCubeIndex = 0;
-    for (NSString *line in [lines subarrayWithRange:NSMakeRange(sizeLineIndex + 1, lines.count - sizeLineIndex - 1)]) {
+    for (NSString *line in [lines subarrayWithRange:NSMakeRange(cubeLinesStartIndex, lines.count - cubeLinesStartIndex)]) {
 
         if (line.length > 0 && [line rangeOfString:@"#"].location == NSNotFound) {
             NSArray *splitLine = [line componentsSeparatedByString:@" "];
@@ -138,6 +155,8 @@
     }
 
     [string appendString:[NSString stringWithFormat:@"LUT_3D_SIZE %i\n", (int)cubeSize]];
+    
+    [string appendString:[NSString stringWithFormat:@"LUT_3D_INPUT_RANGE %.6f %.6f\n", [lut inputLowerBound], [lut inputUpperBound]]];
     
     [string appendString:@"\n"];
 
