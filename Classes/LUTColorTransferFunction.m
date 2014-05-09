@@ -88,6 +88,7 @@
 
 + (M13OrderedDictionary *)knownColorTransferFunctions{
     return M13OrderedDictionaryFromOrderedArrayWithDictionaries(@[@{@"Linear": [LUTColorTransferFunction LUTColorTransferFunctionWithGamma:1.0]},
+                                                                  @{@"Cineon": [LUTColorTransferFunction cineonTransferFunction]},
                                                                   @{@"Gamma 2.2": [LUTColorTransferFunction LUTColorTransferFunctionWithGamma:2.2]},
                                                                   @{@"Gamma 2.4": [LUTColorTransferFunction LUTColorTransferFunctionWithGamma:2.4]},
                                                                   @{@"Gamma 2.6": [LUTColorTransferFunction LUTColorTransferFunctionWithGamma:2.6]},
@@ -133,6 +134,23 @@
                                                                  linearToTransformedBlock1D:^double(double value){
                                                                                             value = clampLowerBound(value, 0.0);
                                                                                             return (value <= .0031308) ? 12.92*value : 1.055*pow(value, 1.0/2.4) - .055;}];
+}
+
++ (instancetype)cineonTransferFunction{
+    //SUPER BROKEN
+    double refWhite = 685.0;
+    double refBlack = 95.0;
+    double gain = (225.0/255.0) / (1.0 - pow(10, (refBlack-refWhite) * 0.002/0.6));
+    double offset = gain - (225.0/255.0);
+    double gainMinusOffset = gain - offset;
+    
+    return [LUTColorTransferFunction LUTColorTransferFunctionWithTransformedToLinearBlock1D:^double(double value){
+                                                                    value = clamp(value, 0, 1);
+                                                                    value = 1023.0*value;
+                                                                    return pow(10, (value-refWhite) * 0.002/0.6)*gainMinusOffset;}
+                                                                 linearToTransformedBlock1D:^double(double value){
+                                                                     value = clampLowerBound(value, 0.0);
+                                                                     return clamp((refWhite + log10(((value + offset)/gain)) / (.002/.6)), 0, 1023) / 1023.0;}];
 }
 
 + (instancetype)arriLogCV3TransferFunctionWithEI:(double)EI{
