@@ -167,6 +167,26 @@ M13OrderedDictionary* M13OrderedDictionaryFromOrderedArrayWithDictionaries(NSArr
     return [[M13OrderedDictionary alloc] initWithObjects:values pairedWithKeys:keys];
 }
 
+NSUInteger findFirstLUTLineInLines(NSArray *lines, NSString *seperator, int numValues, int startLine){
+    NSNumberFormatter *formatter = [NSNumberFormatter new];
+    for (int i = startLine; i < lines.count; i++){
+        NSArray *splitLine = [lines[i] componentsSeparatedByString:seperator];
+        if(splitLine.count == numValues){
+            BOOL isLine = YES;
+            for (int j = 0; j < numValues; j++){
+                if([formatter numberFromString:splitLine[j]] == nil){
+                    isLine = NO;
+                }
+            }
+            if(isLine){
+                return i;
+            }
+        }
+    }
+    return -1;
+}
+
+
 #if TARGET_OS_IPHONE
 #elif TARGET_OS_MAC
 void LUTNSImageLog(NSImage *image) {

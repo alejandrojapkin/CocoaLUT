@@ -32,6 +32,8 @@ void timer(NSString* name, void (^block)());
 NSArray* indicesArray(double startValue, double endValue, int numIndices);
 BOOL stringIsNumeric(NSString* str);
 
+NSUInteger findFirstLUTLineInLines(NSArray *lines, NSString *seperator, int numValues, int startLine);
+
 BOOL isLUT1D(LUT* lut);
 BOOL isLUT3D(LUT* lut);
 LUT1D* LUTAsLUT1D(LUT* lut, NSUInteger size);
