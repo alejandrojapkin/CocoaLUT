@@ -18,7 +18,8 @@ Do you need something like this in Python? Try [pylut](http://github.com/gregcot
   - Autodesk Lustre 3D LUT (.3dl)
   - Unwrapped Texture LUT Image (.tiff, .dpx, .png)
   - CMS Test Pattern LUT Image (.tiff, .dpx, .png)
-- Reads 1D LUTs
+- Reads and writes 1D LUTs
+  - DaVinci Resolve Cube LUT (.cube)
   - DaVinci Resolve 1D LUT (.ilut, .olut)
   - Discreet 1D LUT (.lut)
 - Has a format-independent internal data structure. You can create LUTs and use them in-memory.
@@ -27,6 +28,8 @@ Do you need something like this in Python? Try [pylut](http://github.com/gregcot
 - Generate visualizations for LUTs with Scene Kit
 - Resize LUTs
 - Reverse LUTs
+- Extract the color shift from a 3D LUT
+- Extract the contrast shift from a 3D LUT
 
 ## Installation
 
@@ -35,7 +38,7 @@ it simply add the following line to your Podfile:
 
     pod 'CocoaLUT', :head
 
-## Author
+## Authors
 
 - Wil Gieseler (@wilg)
 - Greg Cotten (@gregcotten)
