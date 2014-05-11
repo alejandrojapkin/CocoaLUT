@@ -74,6 +74,10 @@
     return extractedLUT;
 }
 
+- (instancetype)LUT3DByExtractingContrastOnly{
+    return [[self LUT1D] LUT3DOfSize:[self size]];
+}
+
 - (LUT1D *)LUT1D{
     LUT1D *lut1D = [LUT1D LUTOfSize:[self size] inputLowerBound:[self inputLowerBound] inputUpperBound:[self inputUpperBound]];
     
