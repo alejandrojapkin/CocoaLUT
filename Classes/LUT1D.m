@@ -74,6 +74,26 @@
     }
 }
 
+- (LUT *)LUTByCombiningWithLUT:(LUT *)otherLUT{
+    LUT *combinedLUT;
+    if(isLUT1D(otherLUT)){
+        combinedLUT = [LUT1D LUTOfSize:[self size] inputLowerBound:[self inputLowerBound] inputUpperBound:[self inputUpperBound]];
+    }
+    else{
+        combinedLUT = [LUT3D LUTOfSize:[otherLUT size] inputLowerBound:[self inputLowerBound] inputUpperBound:[self inputUpperBound]];
+    }
+    
+    LUT *selfResizedLUT = [self LUTByResizingToSize:[combinedLUT size]];
+    
+    [combinedLUT LUTLoopWithBlock:^(size_t r, size_t g, size_t b) {
+        LUTColor *startColor = [selfResizedLUT colorAtR:r g:g b:b];
+        LUTColor *newColor = [otherLUT colorAtColor:startColor];
+        [combinedLUT setColor:newColor r:r g:g b:b];
+    }];
+    
+    return combinedLUT;
+}
+
 - (NSArray *)rgbCurveArray{
     return @[[self.redCurve mutableCopy], [self.greenCurve mutableCopy], [self.blueCurve mutableCopy]];
 }

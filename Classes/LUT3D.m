@@ -43,7 +43,7 @@
     });
 }
 
-- (instancetype)LUTByCombiningWithLUT:(LUT *)otherLUT {
+- (LUT *)LUTByCombiningWithLUT:(LUT *)otherLUT {
     LUT3D *newLUT = [LUT3D LUTOfSize:[self size] inputLowerBound:[self inputLowerBound] inputUpperBound:[self inputUpperBound]];
     
 //    if([otherLUT inputLowerBound] > [self inputLowerBound] || [otherLUT inputUpperBound] < [self inputUpperBound]){
@@ -69,7 +69,7 @@
         return nil;
     }
     
-    LUT3D *extractedLUT = [self LUTByCombiningWithLUT:reversed1D];
+    LUT3D *extractedLUT = (LUT3D *)[self LUTByCombiningWithLUT:reversed1D];
     
     return extractedLUT;
 }

@@ -86,7 +86,7 @@ typedef NS_ENUM(NSInteger, LUTImageRenderPath) {
  *
  *  @return A new LUT with the same lattice size as self.lattice.size.
  */
-- (instancetype)LUTByCombiningWithLUT:(LUT *)otherLUT;
+- (LUT *)LUTByCombiningWithLUT:(LUT *)otherLUT;
 
 - (instancetype)LUTByClampingLowerBound:(double)lowerBound
                              upperBound:(double)upperBound;
