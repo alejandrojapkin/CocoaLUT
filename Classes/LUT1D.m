@@ -234,10 +234,10 @@
             double remappedIndex = remap(i, 0, [self size]-1, newLowerBound, newUpperBound);
 
             if (remappedIndex <= minValue){
-                [newCurve addObject:@(minValue)];
+                [newCurve addObject:@([self inputLowerBound])];
             }
             else if(remappedIndex >= maxValue){
-                [newCurve addObject:@(maxValue)];
+                [newCurve addObject:@([self inputUpperBound])];
             }
             else{
                 for(int j = 0; j < [self size]; j++){
