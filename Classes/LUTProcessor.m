@@ -37,7 +37,7 @@
 
 - (void)completedWithLUT:(LUT *)lut {
     self.progress = 1;
-    //NSLog(@"-> Processor finished in %fs", -[_startTime timeIntervalSinceNow]);
+    NSLog(@"-> Processor finished in %fs", -[_startTime timeIntervalSinceNow]);
     dispatch_async(dispatch_get_main_queue(), ^{
         self.completionHandler(lut);
     });
