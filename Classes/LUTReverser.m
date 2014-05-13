@@ -38,20 +38,6 @@
         }
         return;
     }
-    
-    
-    
-    if(isLUT1D(self.lut)){
-        LUT1D *reversedLUT1D = [(LUT1D *)self.lut LUT1DByReversing];
-        if(reversedLUT1D != nil){
-            [self completedWithLUT:reversedLUT1D];
-        }
-        else{
-            //not reversible
-            [self didCancel];
-        }
-        
-    }
 
     
     self.queue = [[NSOperationQueue alloc] init];
