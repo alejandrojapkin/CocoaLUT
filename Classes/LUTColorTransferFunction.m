@@ -89,6 +89,8 @@
 + (M13OrderedDictionary *)knownColorTransferFunctions{
     return M13OrderedDictionaryFromOrderedArrayWithDictionaries(@[@{@"Linear": [LUTColorTransferFunction LUTColorTransferFunctionWithGamma:1.0]},
                                                                   @{@"Cineon": [LUTColorTransferFunction cineonTransferFunction]},
+                                                                  @{@"JPLog": [LUTColorTransferFunction JPLogTransferFunction]},
+                                                                  @{@"REDLogFilm": [LUTColorTransferFunction cineonTransferFunction]},
                                                                   @{@"Gamma 2.2": [LUTColorTransferFunction LUTColorTransferFunctionWithGamma:2.2]},
                                                                   @{@"Gamma 2.4": [LUTColorTransferFunction LUTColorTransferFunctionWithGamma:2.4]},
                                                                   @{@"Gamma 2.6": [LUTColorTransferFunction LUTColorTransferFunctionWithGamma:2.6]},
@@ -105,13 +107,11 @@
 +(instancetype)LUTColorTransferFunctionWithGamma:(double)gamma{
     
     return [LUTColorTransferFunction LUTColorTransferFunctionWithTransformedToLinearBlock1D:^double(double value) {
-                                                                                            value = clampLowerBound(value, 0.0);
                                                                                             if(gamma == 1.0){
                                                                                                 return value;
                                                                                             }
                                                                                             return pow(value, gamma);}
                                                                  linearToTransformedBlock1D:^double(double value) {
-                                                                                            value = clampLowerBound(value, 0.0);
                                                                                             if(gamma == 1.0){
                                                                                                 return value;
                                                                                              }
@@ -120,11 +120,12 @@
 
 + (instancetype)rec709TransferFunction{
     return [LUTColorTransferFunction LUTColorTransferFunctionWithTransformedToLinearBlock1D:^double(double value){
-                                                                                            value = clampLowerBound(value, 0.0);
+                                                                                            value = clamp(value, 0.0, 1.0);
                                                                                             return (value <= .081) ? value/4.5 : pow((value+.099)/1.099, 2.2);}
                                                                  linearToTransformedBlock1D:^double(double value){
                                                                                             value = clampLowerBound(value, 0.0);
-                                                                                            return (value <= .018) ? 4.5*value : 1.099*pow(value, 1.0/2.2) - .099;} ];
+                                                                                            double output = (value <= .018) ? 4.5*value : 1.099*pow(value, 1.0/2.2) - .099;
+                                                                                            return clamp(output, 0.0, 1.0);}];
 }
 
 + (instancetype)sRGBTransferFunction{
@@ -133,24 +134,33 @@
                                                                                             return (value <= .04045) ? value/12.92 : pow((value+.055)/1.055, 2.4);}
                                                                  linearToTransformedBlock1D:^double(double value){
                                                                                             value = clampLowerBound(value, 0.0);
-                                                                                            return (value <= .0031308) ? 12.92*value : 1.055*pow(value, 1.0/2.4) - .055;}];
+                                                                                            double output = (value <= .0031308) ? 12.92*value : 1.055*pow(value, 1.0/2.4) - .055;
+                                                                                            return clamp(output, 0.0, 1.0);}];
 }
 
 + (instancetype)cineonTransferFunction{
-    //SUPER BROKEN
-    double refWhite = 685.0;
-    double refBlack = 95.0;
-    double gain = (225.0/255.0) / (1.0 - pow(10, (refBlack-refWhite) * 0.002/0.6));
-    double offset = gain - (225.0/255.0);
-    double gainMinusOffset = gain - offset;
+    return [LUTColorTransferFunction LUTColorTransferFunctionWithTransformedToLinearBlock1D:^double(double value){
+                                                                    value = clamp(value, 0.0, 1.0);
+                                                                    return pow(10.0,(1023.0*value-685.0)/300.0)-.0108/(1-.0108);}
+                                                                 linearToTransformedBlock1D:^double(double value){
+                                                                     double output = (300.0*log(value+27.0/2473.0) + 685.0*log(10.0))/(1023.0*log(10.0));
+                                                                     return clamp(output, 0.0, 1.0);}];
+}
+
++ (instancetype)JPLogTransferFunction{
+    double pdxLinReference = .18; //i
+    double pdxLogReference = 445.0; //g
+    double pdxNegativeGamma = .6; //n
+    double pdxDensityPerCodeValue = .002; //d
     
     return [LUTColorTransferFunction LUTColorTransferFunctionWithTransformedToLinearBlock1D:^double(double value){
-                                                                    value = clamp(value, 0, 1);
-                                                                    value = 1023.0*value;
-                                                                    return pow(10, (value-refWhite) * 0.002/0.6)*gainMinusOffset;}
+                                                                    value = clamp(value, 0.0, 1.0);
+                                                                    return pow(10.0, (value*1023.0 - pdxLogReference)*pdxDensityPerCodeValue/pdxNegativeGamma) * pdxLinReference;}
                                                                  linearToTransformedBlock1D:^double(double value){
-                                                                     value = clampLowerBound(value, 0.0);
-                                                                     return clamp((refWhite + log10(((value + offset)/gain)) / (.002/.6)), 0, 1023) / 1023.0;}];
+                                                                     value = MAX( value, 1e-10 ) / pdxLinReference;
+                                                                     double output = pdxLogReference +
+                                                                     log10(value)*pdxNegativeGamma/pdxDensityPerCodeValue;
+                                                                     return clamp(output/1023.0, 0.0, 1.0);}];
 }
 
 + (instancetype)arriLogCV3TransferFunctionWithEI:(double)EI{
@@ -196,12 +206,14 @@
     
     
     return [LUTColorTransferFunction LUTColorTransferFunctionWithTransformedToLinearBlock1D:^double(double value){
-                                                                                            value = clampLowerBound(value, 0.0);
+                                                                                            value = clamp(value, 0.0, 1.0);
                                                                                             return (value > e * cut + f) ? (pow(10.0, (value - d) / c) - b) / a: (value - f) / e;}
         
                                                                  linearToTransformedBlock1D:^double(double value){
                                                                                             value = clampLowerBound(value, 0.0);
-                                                                                            return (value > cut) ? c * log10(a * value + b) + d: e * value + f;}];
+                                                                                            double output = (value > cut) ? c * log10(a * value + b) + d: e * value + f;
+                                                                                            return clamp(output, 0.0, 1.0);}];
+    
 }
 
 + (instancetype)arriK1S1VideoCurveWithMaxValue:(double)maxValue{
@@ -224,25 +236,27 @@
 + (instancetype)bmdFilmTransferFunction {
     
     return [LUTColorTransferFunction LUTColorTransferFunctionWithTransformedToLinearBlock1D:^double(double value){
-                                                                                            value = clampLowerBound(value, 0.0);
+                                                                                            value = clamp(value, 0.0, 1.0);
                                                                                             return (value <= 0.15) ? 0.286464*value : 0.13*(pow(10, 2.2987*value + -0.701) + -.22);}
             
                                                                  linearToTransformedBlock1D:^double(double value){
                                                                                              value = clampLowerBound(value, 0.0);
-                                                                                             return (value <= 0.0286464) ? value/0.286464 : 0.18893*(log(384.62*value + 11.0) - .4341422747);}];
+                                                                                             double output = (value <= 0.0286464) ? value/0.286464 : 0.18893*(log(384.62*value + 11.0) - .4341422747);
+                                                                                            return clamp(output, 0.0, 1.0);}];
 }
 
 + (instancetype)canonLogTransferFunction {
     
     return [LUTColorTransferFunction LUTColorTransferFunctionWithTransformedToLinearBlock1D:^double(double value){
-                                                                                            value = clampLowerBound(value, 0.0);
+                                                                                            value = clamp(value, 0.0, 1.0);
                                                                                             double valueAsIRE = (value*1023.0 - 64.0) / 876.0;
                                                                                             return (pow(10,(valueAsIRE-0.0730597)/0.529136)-1)/10.1596;}
             
                                                                  linearToTransformedBlock1D:^double(double value){
                                                                                             value = clampLowerBound(value, 0.0);
                                                                                             double valueAsIRE = .529136*log10(10.1596*value+1)+.0730597;
-                                                                                            return (876.0*valueAsIRE + 64.0)/1023.0;}];
+                                                                                            double output = (876.0*valueAsIRE + 64.0)/1023.0;
+                                                                                            return clamp(output, 0.0, 1.0);}];
 }
 
 //4096
