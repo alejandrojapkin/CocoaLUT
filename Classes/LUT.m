@@ -228,10 +228,10 @@
 
 
 - (id)copyWithZone:(NSZone *)zone {
-    LUT *copiedLUT = [LUT LUTOfSize:[self size] inputLowerBound:[self inputLowerBound] inputUpperBound:[self inputUpperBound]];
-    [copiedLUT setMetadata:[[self metadata] copyWithZone:zone]];
-    [copiedLUT setDescription:[[self description] copyWithZone:zone]];
-    [copiedLUT setTitle:[[self title] copyWithZone:zone]];
+    LUT *copiedLUT = [[self class] LUTOfSize:[self size] inputLowerBound:[self inputLowerBound] inputUpperBound:[self inputUpperBound]];
+    [copiedLUT setMetadata:[[self metadata] mutableCopyWithZone:zone]];
+    [copiedLUT setDescription:[[self description] mutableCopyWithZone:zone]];
+    [copiedLUT setTitle:[[self title] mutableCopyWithZone:zone]];
     return copiedLUT;
 }
 

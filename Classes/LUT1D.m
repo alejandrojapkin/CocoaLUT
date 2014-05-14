@@ -327,7 +327,7 @@
 }
 
 - (id)copyWithZone:(NSZone *)zone{
-    LUT1D *copiedLUT = [LUT1D LUTOfSize:[self size] inputLowerBound:[self inputLowerBound] inputUpperBound:[self inputUpperBound]];
+    LUT1D *copiedLUT = [super copyWithZone:zone];
     copiedLUT.redCurve = [self.redCurve mutableCopyWithZone:zone];
     copiedLUT.greenCurve = [self.greenCurve mutableCopyWithZone:zone];
     copiedLUT.blueCurve = [self.blueCurve mutableCopyWithZone:zone];
