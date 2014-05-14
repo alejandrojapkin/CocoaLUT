@@ -23,7 +23,7 @@
     [super process];
     
     if([self.lut equalsIdentityLUT]){
-        [self completedWithLUT:self.lut];
+        [self completedWithLUT:[self.lut copy]];
         return;
     }
     
