@@ -148,9 +148,10 @@
 }
 
 - (LUTColor *)identityColorAtR:(double)redPoint g:(double)greenPoint b:(double)bluePoint{
-    double ratio = remap(1.0, 0, [self size] - 1, [self inputLowerBound], [self inputUpperBound]);
-    
-    return [LUTColor colorWithRed:ratio*redPoint green:ratio*greenPoint blue:ratio*bluePoint];
+    double red = remap(redPoint, 0, [self size] - 1, [self inputLowerBound], [self inputUpperBound]);
+    double green = remap(greenPoint, 0, [self size] - 1, [self inputLowerBound], [self inputUpperBound]);
+    double blue = remap(bluePoint, 0, [self size] - 1, [self inputLowerBound], [self inputUpperBound]);
+    return [LUTColor colorWithRed:red green:green blue:blue];
 }
 
 - (LUTColor *)colorAtColor:(LUTColor *)color{
