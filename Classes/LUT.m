@@ -137,6 +137,9 @@
 
 - (instancetype)LUTByChangingInputLowerBound:(double)inputLowerBound
                              inputUpperBound:(double)inputUpperBound{
+    if(inputLowerBound == [self inputLowerBound] && inputUpperBound == [self inputUpperBound]){
+        return [self copy];
+    }
     LUT *newLUT = [[self class] LUTOfSize:[self size] inputLowerBound:inputLowerBound inputUpperBound:inputUpperBound];
     
     [newLUT LUTLoopWithBlock:^(size_t r, size_t g, size_t b) {
