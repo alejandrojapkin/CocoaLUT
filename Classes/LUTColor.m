@@ -26,6 +26,10 @@
     return [LUTColor colorWithRed:nsremapint01(r, maxBits) green:nsremapint01(g, maxBits) blue:nsremapint01(b, maxBits)];
 }
 
++ (instancetype)colorFromIntegersWithMaxOutputValue:(NSUInteger)maxOutputValue red:(NSUInteger)r green:(NSUInteger)g blue:(NSUInteger)b {
+    return [LUTColor colorWithRed:nsremapint01(r, maxOutputValue) green:nsremapint01(g, maxOutputValue) blue:nsremapint01(b, maxOutputValue)];
+}
+
 - (LUTColor *)clampedWithLowerBound:(double)lowerBound
                          upperBound:(double)upperBound{
     return [LUTColor colorWithRed:clamp(self.red, lowerBound, upperBound)
