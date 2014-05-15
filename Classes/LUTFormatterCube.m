@@ -13,33 +13,40 @@
 @implementation LUTFormatterCube
 
 + (LUT *)LUTFromLines:(NSArray *)lines {
-    
-    NSMutableString __block *description = [NSMutableString stringWithString:@""];
     NSMutableString __block *title = [NSMutableString stringWithString:@""];
-    NSMutableDictionary __block *metadata = [NSMutableDictionary dictionary];
+    NSString *description;
+    NSMutableDictionary *metadata;
 
     NSUInteger __block cubeSize = 0;
-    NSUInteger __block sizeLineIndex = 0;
     
     NSMutableDictionary *data = [NSMutableDictionary dictionary];
     
     BOOL __block isLUT3D = NO;
     BOOL __block isLUT1D = NO;
     
-    dispatch_apply([lines count], dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0) , ^(size_t index){
-        NSString *line = lines[index];
+    NSUInteger cubeLinesStartIndex = findFirstLUTLineInLines(lines, @" ", 3, 0);
+    
+    if(cubeLinesStartIndex == -1){
+        @throw [NSException exceptionWithName:@"LUTParserError" reason:@"Couldn't find start of LUT data lines." userInfo:nil];
+    }
+    
+    NSArray *headerLines = [lines subarrayWithRange:NSMakeRange(0, cubeLinesStartIndex)];
+    
+    NSDictionary *metadataAndDescription = [LUTMetadataFormatter metadataAndDescriptionFromLines:headerLines];
+    metadata = [metadataAndDescription objectForKey:@"metadata"];
+    description = [metadataAndDescription objectForKey:@"description"];
+    
+    for(NSString *line in headerLines){
         NSString *titleMatch;
         if ([line rangeOfString:@"LUT_3D_SIZE"].location != NSNotFound) {
             isLUT3D = YES;
             NSString *sizeString = [line componentsSeparatedByString:@" "][1];
             cubeSize = sizeString.integerValue;
-            sizeLineIndex = index;
         }
         else if ([line rangeOfString:@"LUT_1D_SIZE"].location != NSNotFound) {
             isLUT1D = YES;
             NSString *sizeString = [line componentsSeparatedByString:@" "][1];
             cubeSize = sizeString.integerValue;
-            sizeLineIndex = index;
         }
         else if ([line rangeOfString:@"LUT_3D_INPUT_RANGE"].location != NSNotFound) {
             [data setObject:@([[line componentsSeparatedByString:@" "][1] doubleValue]) forKey:@"inputLowerBound"];
@@ -52,30 +59,7 @@
         else if ((titleMatch = [line firstMatch:RX(@"(?<=TITLE \")[^\"]*(?=\")")])) {
             [title appendString:titleMatch];
         }
-        else if (line.length > 0 && [[line substringToIndex:1] isEqualToString:@"#"]) {
-            NSString *comment;
-            if (line.length > 2 && [[line substringToIndex:2] isEqualToString:@"# "]) {
-                comment = [line substringFromIndex:2];
-            }
-            else {
-                comment = [line substringFromIndex:1];
-            }
-            
-            BOOL isKeyValue = NO;
-            if ([comment rangeOfString:@":"].location != NSNotFound) {
-                NSArray *split = [comment componentsSeparatedByString:@":"];
-                if (split.count == 2) {
-                    metadata[[split[0] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]] = [split[1] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-                    isKeyValue = YES;
-                }
-            }
-            
-            if (!isKeyValue) {
-                [description appendString:comment];
-                [description appendString:@"\n"];
-            }
-        }
-    });
+    }
     
     if (cubeSize == 0) {
         NSException *exception = [NSException exceptionWithName:@"LUTParseError" reason:@"Couldn't find LUT size in file" userInfo:nil];
@@ -86,7 +70,7 @@
         @throw [NSException exceptionWithName:@"LUTParserError" reason:@"Couldn't figure out if 3D or 1D LUT" userInfo:nil];
     }
     
-    NSUInteger cubeLinesStartIndex = findFirstLUTLineInLines(lines, @" ", 3, (int)sizeLineIndex+1);
+    
     
     LUT *lut;
     
@@ -155,16 +139,10 @@
             }
         }
     }
-    
-    
-    
-
-    
-
 
     [lut setTitle:title];
     [lut setDescription:description];
-    [[lut metadata] setValuesForKeysWithDictionary:metadata];
+    [lut setMetadata:metadata];
 
     return lut;
 }
@@ -179,23 +157,10 @@
         [string appendString:[NSString stringWithFormat:@"TITLE \"%@\"\n", lut.title]];
     }
     
+    
+    //metadata and description write
+    [string appendString: [LUTMetadataFormatter stringFromMetadata:lut.metadata description:lut.description]];
     [string appendString:@"\n"];
-    
-    if (lut.description && lut.description.length > 0) {
-        for (NSString *line in [lut.description componentsSeparatedByCharactersInSet:NSCharacterSet.newlineCharacterSet]) {
-            [string appendString:[NSString stringWithFormat:@"# %@\n", line]];
-        }
-    }
-    
-    [string appendString:@"\n"];
-    
-    if (lut.metadata && lut.metadata.count > 0) {
-        for (NSString *key in lut.metadata) {
-            [string appendString:[NSString stringWithFormat:@"# %@: %@\n", key, lut.metadata[key]]];
-        }
-        [string appendString:@"\n"];
-    }
-    
     
     if(isLUT1D(lut)){
         //maybe implement writing a CUBE as 1D here?

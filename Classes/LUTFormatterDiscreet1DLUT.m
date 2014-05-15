@@ -12,6 +12,9 @@
 
 + (LUT *)LUTFromLines:(NSArray *)lines {
     
+    NSString *description;
+    NSMutableDictionary *metadata;
+    
     NSMutableArray *redCurve = [NSMutableArray array];
     NSMutableArray *greenCurve = [NSMutableArray array];
     NSMutableArray *blueCurve = [NSMutableArray array];
@@ -21,6 +24,18 @@
     NSMutableArray *trimmedLines = [NSMutableArray array];
     int maxCodeValue = -1;
     int indices = -1;
+    
+    NSUInteger lutLinesStartIndex = findFirstLUTLineInLines(lines, @"", 1, 0);
+    
+    if(lutLinesStartIndex == -1){
+        @throw [NSException exceptionWithName:@"LUTParserError" reason:@"Couldn't find start of LUT data lines." userInfo:nil];
+    }
+    
+    NSArray *headerLines = [lines subarrayWithRange:NSMakeRange(0, lutLinesStartIndex)];
+    
+    NSDictionary *metadataAndDescription = [LUTMetadataFormatter metadataAndDescriptionFromLines:headerLines];
+    metadata = [metadataAndDescription objectForKey:@"metadata"];
+    description = [metadataAndDescription objectForKey:@"description"];
     
     //trim for lut values only and grab the max code value
     for (NSString *line in lines) {
@@ -50,7 +65,10 @@
         [blueCurve addObject:@(nsremapint01([trimmedLines[i] integerValue], maxCodeValue))];
     }
     
-    return [LUT1D LUT1DWithRedCurve:redCurve greenCurve:greenCurve blueCurve:blueCurve lowerBound:0.0 upperBound:1.0];
+    LUT1D *lut = [LUT1D LUT1DWithRedCurve:redCurve greenCurve:greenCurve blueCurve:blueCurve lowerBound:0.0 upperBound:1.0];
+    [lut setMetadata:metadata];
+    [lut setDescription:description];
+    return lut;
 }
 
 + (NSString *)stringFromLUT:(LUT *)lut {
