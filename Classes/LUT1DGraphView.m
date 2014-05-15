@@ -39,7 +39,6 @@
 }
 
 -(void)initialize{
-    
     self.lut = [LUT1D LUTIdentityOfSize:33 inputLowerBound:0 inputUpperBound:1];
     self.interpolation = LUT1DGraphViewInterpolationLinear;
     [self lutDidChange];
@@ -51,8 +50,11 @@
 }
 
 -(void)setInterpolation:(LUT1DGraphViewInterpolation)interpolation{
-    _interpolation = interpolation;
-    [self setNeedsDisplay:YES];
+    if(interpolation != _interpolation){
+        _interpolation = interpolation;
+        [self setNeedsDisplay:YES];
+    }
+    //no need to redraw if the interpolation didn't actually change!
 }
 
 -(void)lutDidChange{
@@ -104,8 +106,6 @@
         CGContextSetRGBStrokeColor(context, 0, 0, 1, 1);
         [self drawSpline:self.cubicSplinesRGBArray[2] inContext:context inRect:drawingRect];
     }
-    
-    
 }
 
 - (void)drawArray:(NSArray *)array inContext:(CGContextRef)context inRect:(NSRect)rect {
@@ -141,24 +141,10 @@
         }
         
     }
-    
-//    for (int xIndex = 0; xIndex < array.count; xIndex++){
-//        CGFloat yUnscaled = [array[xIndex] doubleValue];
-//        
-//        CGFloat x = remap(xIndex, 0, array.count-1, 0, pixelWidth-1);
-//        CGFloat y = yUnscaled*pixelHeight;
-//        
-//        
-//        //NSLog(@"%d %f -> %f %f", xIndex, yUnscaled, x, y);
-//        if (x == 0.0f) {
-//            CGContextMoveToPoint(context, x, y);
-//        } else {
-//            CGContextAddLineToPoint(context, x, y);
-//        }
-//    }
 
     CGContextStrokePath(context);
 }
+
 
 - (void)drawSpline:(SAMCubicSpline *)spline inContext:(CGContextRef)context inRect:(NSRect)rect{
     CGFloat xOrigin = rect.origin.x;
@@ -191,7 +177,7 @@
     
 }
 
-- (M13OrderedDictionary *)interpolationMethods{
++ (M13OrderedDictionary *)interpolationMethods{
     return M13OrderedDictionaryFromOrderedArrayWithDictionaries(@[@{@"Linear": @(LUT1DGraphViewInterpolationLinear)},
                                                                   @{@"Cubic": @(LUT1DGraphViewInterpolationCubic)}]);
 }

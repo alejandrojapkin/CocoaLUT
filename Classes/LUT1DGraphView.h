@@ -22,6 +22,6 @@ typedef NS_ENUM(NSInteger, LUT1DGraphViewInterpolation) {
 
 -(void)lutDidChange;
 
--(M13OrderedDictionary *)interpolationMethods;
++(M13OrderedDictionary *)interpolationMethods;
 
 @end
