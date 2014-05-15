@@ -66,6 +66,24 @@ double lerp1d(double beginning, double end, double value01) {
     return beginning + range * value01;
 }
 
+double smootherstep(double beginning, double end, double percentage)
+{
+    if(percentage < 0 || percentage > 1){
+        @throw [NSException exceptionWithName:@"Invalid Smoothstep" reason:@"Percentage out of bounds [0-1]" userInfo:nil];
+    }
+    percentage = remap(percentage, 0, 1, beginning, end);
+    return percentage*percentage*percentage*(percentage*(percentage*6.0 - 15.0) + 10.0);
+}
+
+double smoothstep(double beginning, double end, double percentage){
+    if(percentage < 0 || percentage > 1){
+        @throw [NSException exceptionWithName:@"Invalid Smoothstep" reason:@"Percentage out of bounds [0-1]" userInfo:nil];
+    }
+    percentage = remap(percentage, 0, 1, beginning, end);
+    // Evaluate polynomial
+    return percentage*percentage*(3 - 2*percentage);
+}
+
 float distancecalc(float x1, float y1, float z1, float x2, float y2, float z2) {
     float dx = x2 - x1;
     float dy = y2 - y1;
