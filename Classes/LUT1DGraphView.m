@@ -161,7 +161,7 @@
         CGFloat interpolatedY = [spline interpolate:x / (pixelWidth)];
         
         CGFloat xMapped = remap(x, 0, pixelWidth-1, xOrigin, xOrigin + pixelWidth-1);
-        CGFloat yMapped = remap(interpolatedY, 0, 1, yOrigin, yOrigin + pixelHeight-1);
+        CGFloat yMapped = remap(clamp(interpolatedY, 0, 1), 0, 1, yOrigin, yOrigin + pixelHeight-1);
         
         //NSLog(@"%f %f -> %f %f", x/pixelWidth, interpolatedY, x, y);
         // Add the point to the context's path
