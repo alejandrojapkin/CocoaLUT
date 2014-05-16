@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 
 @class LUTColor;
+@class LUTFormatter;
 
 typedef NS_ENUM(NSInteger, LUTImageRenderPath) {
     LUTImageRenderPathCoreImage,
@@ -51,6 +52,8 @@ typedef NS_ENUM(NSInteger, LUTImageRenderPath) {
  *  @return A new `LUT` with the contents of url.
  */
 + (instancetype)LUTFromURL:(NSURL *)url;
+
++ (LUTFormatter *)LUTFormatterForUTI:(NSString *)utiString;
 
 - (instancetype)initWithSize:(NSUInteger)size
              inputLowerBound:(double)inputLowerBound

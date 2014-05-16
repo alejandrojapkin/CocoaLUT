@@ -82,6 +82,19 @@
     return nil;
 }
 
++ (LUTFormatter *)LUTFormatterForUTI:(NSString *)utiString{
+    NSDictionary *dictionary = @{@"com.blackmagicdesign.cube": [LUTFormatterCube class],
+                                 @"com.autodesk.3dl": [LUTFormatter3DL class],
+                                 @"com.discreet.lut": [LUTFormatterDiscreet1DLUT class],
+                                 @"com.blackmagicdesign.olut": [LUTFormatterOLUT class],
+                                 @"com.blackmagicdesign.ilut": [LUTFormatterILUT class],
+                                 @"public.unwrapped-cube-lut": [LUTFormatterUnwrappedTexture class],
+                                 @"public.cms-test-pattern-lut": [LUTFormatterCMSTestPattern class]};
+    
+    return dictionary[utiString];
+    
+}
+
 + (instancetype)LUTOfSize:(NSUInteger)size
           inputLowerBound:(double)inputLowerBound
           inputUpperBound:(double)inputUpperBound{
