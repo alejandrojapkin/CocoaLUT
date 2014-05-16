@@ -76,32 +76,32 @@
 
 + (NSString *)stringFromLUT:(LUT *)lut withOptions:(NSDictionary *)options {
     options = options[@"com.discreet.lut"];
+
     NSMutableString *string = [NSMutableString stringWithString:@""];
     
     NSUInteger integerMaxOutput;
     
-    if(options[@"integerMaxOutput"] == nil){
+    if(options == nil || options[@"integerMaxOutput"] == nil){
         integerMaxOutput = [[[[self class] defaultOptions] objectForKey:@"integerMaxOutput"] integerValue];
     }
     else{
         integerMaxOutput = [options[@"integerMaxOutput"] integerValue];
     }
-    
+
     [string appendString:[NSString stringWithFormat:@"#\n# Discreet LUT file\n#\tChannels: 3\n# Input Samples: %d\n# Ouput Scale: %d\n#\n# Exported from CocoaLUT\n#\nLUT: 3 %d\n", (int)[lut size], (int)integerMaxOutput, (int)[lut size]]];
     
     LUT1D *lut1D = LUTAsLUT1D(lut, [lut size]);
-
     
     //write red
-    for (int i = 0; i < 1024; i++) {
+    for (int i = 0; i < [lut size]; i++) {
         [string appendString:[NSString stringWithFormat:@"%d\n", (int)([lut1D valueAtR:i]*(double)integerMaxOutput) ]];
     }
     //write green
-    for (int i = 0; i < 1024; i++) {
+    for (int i = 0; i < [lut size]; i++) {
         [string appendString:[NSString stringWithFormat:@"%d\n", (int)([lut1D valueAtG:i]*(double)integerMaxOutput) ]];
     }
     //write blue
-    for (int i = 0; i < 1024; i++) {
+    for (int i = 0; i < [lut size]; i++) {
         [string appendString:[NSString stringWithFormat:@"%d\n", (int)([lut1D valueAtB:i]*(double)integerMaxOutput) ]];
     }
     

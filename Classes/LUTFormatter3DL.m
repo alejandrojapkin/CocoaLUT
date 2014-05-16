@@ -106,14 +106,14 @@
     
     
     //validate options
-    if(options[@"integerMaxOutput"] == nil){
+    if(options == nil || options[@"integerMaxOutput"] == nil){
         integerMaxOutput = [[[[self class] defaultOptions] objectForKey:@"integerMaxOutput"] integerValue];
     }
     else{
         integerMaxOutput = [options[@"integerMaxOutput"] integerValue];
     }
     
-    if(options[@"fileTypeVariant"] == nil){
+    if(options == nil || options[@"fileTypeVariant"] == nil){
         fileTypeVariant = [[[self class] defaultOptions] objectForKey:@"fileTypeVariant"];
         
     }
@@ -121,7 +121,7 @@
         fileTypeVariant = options[@"fileTypeVariant"];
     }
     
-    if(options[@"lutSize"] == nil){
+    if(options == nil || options[@"lutSize"] == nil){
         lutSize = [[[[self class] defaultOptions] objectForKey:@"lutSize"] integerValue];
     }
     else{
