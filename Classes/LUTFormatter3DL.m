@@ -102,25 +102,25 @@
     [string appendString:@"\n"];
     
     NSUInteger maxOutput;
-
+    NSString *fileTypeVariant = options[@"fileTypeVariant"];
     
     if(options[@"integerMaxOutput"] == nil){
-        maxOutput = pow(2, 12) - 1; //default for now
+        maxOutput = [[[[self class] defaultOptions] objectForKey:@"integerMaxOutput"] integerValue];
     }
     else{
         maxOutput = [options[@"integerMaxOutput"] integerValue];
     }
     
-    if(options[@"fileTypeVariant"] == nil){
-        NSException *exception = [NSException exceptionWithName:@"LUTFormatter3DLError" reason:@"No fileTypeVariant (Nuke or Lustre) in options." userInfo:nil];
-        @throw exception;
+    if(fileTypeVariant == nil){
+        fileTypeVariant = [[[self class] defaultOptions] objectForKey:@"fileTypeVariant"];
         
     }
-    else if([options[@"fileTypeVariant"] isEqualToString:@"Nuke"]){
+    
+    if([fileTypeVariant isEqualToString:@"Nuke"]){
         [string appendString:[indicesIntegerArray(0, (int)maxOutput, (int)[lut size]) componentsJoinedByString:@" "]];
         [string appendString:@"\n"];
     }
-    else if([options[@"fileTypeVariant"] isEqualToString:@"Lustre"]){
+    else if([fileTypeVariant isEqualToString:@"Lustre"]){
         double sizeToDepth = log2([lut size]-1);
         if(sizeToDepth != (int)sizeToDepth){
             NSException *exception = [NSException exceptionWithName:@"LUTFormatter3DLError" reason:@"Lustre lut size invalid. Size must be 2^x + 1" userInfo:nil];
@@ -144,7 +144,7 @@
     numberFormatter.numberStyle = NSNumberFormatterNoStyle;
     [numberFormatter setPaddingPosition:NSNumberFormatterPadBeforePrefix];
     
-    [numberFormatter setMinimumIntegerDigits:[NSString stringWithFormat:@"%d", (int)maxOutput].length];
+    [numberFormatter setFormatWidth: [NSString stringWithFormat:@"%d", (int)maxOutput].length];
     [numberFormatter setPaddingCharacter:@""];
     for (int i = 0; i < arrayLength; i++) {
         
@@ -176,6 +176,11 @@
 
 + (NSDictionary *)allOptions{
     return @{@"fileTypeVariant": @[@"Nuke", @"Lustre"]};
+}
+
++ (NSDictionary *)defaultOptions{
+    return @{@"fileTypeVariant": @"Nuke",
+             @"integerMaxOutput": @((int)(pow(2, 16) - 1))};
 }
 
 @end
