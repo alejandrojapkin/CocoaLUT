@@ -42,7 +42,7 @@ typedef NS_ENUM(NSInteger, LUTImageRenderPath) {
 /**
  *  LUT File specific settings such as the integer output depth (for integer luts) and the variant type of the file (ex: .3dl has a Nuke and Lustre type). This shouldn't be modified after setting.
  */
-@property (strong) NSMutableDictionary *passthroughFileOptions;
+@property (strong) NSDictionary *passthroughFileOptions;
 
 /**
  *  Returns a new `LUT` by reading the contents of a file represented by a file URL. It will automatically detect the type of LUT file format.
