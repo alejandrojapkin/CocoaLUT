@@ -40,7 +40,7 @@
     return [LUT1D LUT1DWithRedCurve:redCurve greenCurve:greenCurve blueCurve:blueCurve lowerBound:0 upperBound:1];
 }
 
-+ (NSString *)stringFromLUT:(LUT *)lut {
++ (NSString *)stringFromLUT:(LUT *)lut withOptions:(NSDictionary *)options {
     
     NSMutableString *string = [NSMutableString stringWithString:@""];
     

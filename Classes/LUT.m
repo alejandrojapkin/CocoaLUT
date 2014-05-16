@@ -36,6 +36,7 @@
             @throw [NSException exceptionWithName:@"LUTCreationError" reason:@"Input Lower Bound >= Input Upper Bound" userInfo:nil];
         }
         self.metadata = [NSMutableDictionary dictionary];
+        self.passthroughFileOptions = [NSMutableDictionary dictionary];
         self.size = size;
         self.inputLowerBound = inputLowerBound;
         self.inputUpperBound = inputUpperBound;
@@ -232,6 +233,7 @@
     [copiedLUT setMetadata:[[self metadata] mutableCopyWithZone:zone]];
     [copiedLUT setDescription:[[self description] mutableCopyWithZone:zone]];
     [copiedLUT setTitle:[[self title] mutableCopyWithZone:zone]];
+    [copiedLUT setPassthroughFileOptions:[[self passthroughFileOptions] mutableCopyWithZone:zone]];
     return copiedLUT;
 }
 

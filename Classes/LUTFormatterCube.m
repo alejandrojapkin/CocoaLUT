@@ -147,7 +147,7 @@
     return lut;
 }
 
-+ (NSString *)stringFromLUT:(LUT *)lut {
++ (NSString *)stringFromLUT:(LUT *)lut withOptions:(NSDictionary *)options{
     
     NSMutableString *string = [NSMutableString stringWithString:@""];
     

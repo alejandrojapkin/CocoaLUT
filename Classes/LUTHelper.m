@@ -91,11 +91,20 @@ float distancecalc(float x1, float y1, float z1, float x2, float y2, float z2) {
     return sqrt((float)(dx * dx + dy * dy + dz * dz));
 }
 
-NSArray* indicesArray(double startValue, double endValue, int numIndices){
+NSArray* indicesDoubleArray(double startValue, double endValue, int numIndices){
     NSMutableArray *indices = [NSMutableArray array];
     double ratio = remap(1, 0, numIndices - 1, startValue, endValue);
     for (int i = 0; i < numIndices; i++) {
         [indices addObject:@((double)i * ratio)];
+    }
+    return indices;
+}
+
+NSArray* indicesIntegerArray(int startValue, int endValue, int numIndices){
+    NSMutableArray *indices = [NSMutableArray array];
+    double ratio = remap(1, 0, numIndices - 1, startValue, endValue);
+    for (int i = 0; i < numIndices; i++) {
+        [indices addObject:@((long)round((double)i * ratio))];
     }
     return indices;
 }

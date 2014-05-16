@@ -37,12 +37,16 @@
     return nil;
 }
 
-+ (NSData *)dataFromLUT:(LUT *)lut {
-    return [[self stringFromLUT:lut] dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES];
++ (NSData *)dataFromLUT:(LUT *)lut withOptions:(NSDictionary *)options {
+    return [[self stringFromLUT:lut withOptions:options] dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES];
 }
 
-+ (NSString *)stringFromLUT:(LUT *)lut {
++ (NSString *)stringFromLUT:(LUT *)lut withOptions:(NSDictionary *)options {
     [NSException raise:@"stringFromLUT is unimplemented" format:nil];
+    return nil;
+}
+
++ (NSDictionary *)allOptions {
     return nil;
 }
 

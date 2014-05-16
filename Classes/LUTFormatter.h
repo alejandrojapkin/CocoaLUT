@@ -71,10 +71,10 @@
  *  The default implementation encodes the returned value from stringFromLUT: as UTF-8 text.
  *
  *  @param lut The LUT that is to be formatted.
- *
+ *  @param lut The options for the formatter (ex: outputIntegerDepth or fileTypeVariant)
  *  @return A data blob containing the contents of the LUT.
  */
-+ (NSData *)dataFromLUT:(LUT *)lut;
++ (NSData *)dataFromLUT:(LUT *)lut withOptions:(NSDictionary *)options;
 
 /**
  *  Converts the provided `LUT` to a string in the formatter's file type.
@@ -82,9 +82,12 @@
  *  The default implementation raises an exception and is intended to be implemented by a subclass.
  *
  *  @param lut The LUT that is to be formatted.
+ *  @param lut The options for the formatter (ex: outputIntegerDepth or fileTypeVariant)
  *
  *  @return A string containing the contents of the LUT.
  */
-+ (NSString *)stringFromLUT:(LUT *)lut;
++ (NSString *)stringFromLUT:(LUT *)lut withOptions:(NSDictionary *)options;
+
++ (NSDictionary *)allOptions;
 
 @end

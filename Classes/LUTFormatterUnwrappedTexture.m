@@ -11,7 +11,7 @@
 
 @implementation LUTFormatterUnwrappedTexture
 
-+ (NSData *)dataFromLUT:(LUT *)lut {
++ (NSData *)dataFromLUT:(LUT *)lut withOptions:(NSDictionary *)options {
 #if TARGET_OS_IPHONE
     return UIImagePNGRepresentation([self imageFromLUT:lut]);
 # elif TARGET_OS_MAC
