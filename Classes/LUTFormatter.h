@@ -90,4 +90,6 @@
 
 + (NSDictionary *)allOptions;
 
++ (NSDictionary *)defaultOptions;
+
 @end

@@ -33,8 +33,7 @@
 }
 
 + (LUT *)LUTFromLines:(NSArray *)lines {
-    [NSException raise:@"LUTFromLines is unimplemented" format:nil];
-    return nil;
+    @throw [NSException exceptionWithName:@"NotImplemented" reason:[NSString stringWithFormat:@"\"%s\" Not Implemented", __func__] userInfo:nil];
 }
 
 + (NSData *)dataFromLUT:(LUT *)lut withOptions:(NSDictionary *)options {
@@ -42,12 +41,15 @@
 }
 
 + (NSString *)stringFromLUT:(LUT *)lut withOptions:(NSDictionary *)options {
-    [NSException raise:@"stringFromLUT is unimplemented" format:nil];
-    return nil;
+    @throw [NSException exceptionWithName:@"NotImplemented" reason:[NSString stringWithFormat:@"\"%s\" Not Implemented", __func__] userInfo:nil];
 }
 
 + (NSDictionary *)allOptions {
-    return nil;
+    @throw [NSException exceptionWithName:@"NotImplemented" reason:[NSString stringWithFormat:@"\"%s\" Not Implemented", __func__] userInfo:nil];
+}
+
++ (NSDictionary *)defaultOptions{
+    @throw [NSException exceptionWithName:@"NotImplemented" reason:[NSString stringWithFormat:@"\"%s\" Not Implemented", __func__] userInfo:nil];
 }
 
 
