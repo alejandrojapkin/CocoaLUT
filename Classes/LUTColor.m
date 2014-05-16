@@ -46,6 +46,45 @@
                              blue:contrastStretch(self.blue, currentMin, currentMax, finalMin, finalMax)];
 }
 
+- (LUTColor *)colorByAddingColor:(LUTColor *)offsetColor{
+    return [LUTColor colorWithRed:self.red+offsetColor.red green:self.green+offsetColor.green blue:self.blue+offsetColor.blue];
+}
+
+//thanks http://alienryderflex.com/saturation.html
+//  The "saturation" parameter works like this:
+//    0.0 creates a black-and-white image.
+//    0.5 reduces the color saturation by half.
+//    1.0 causes no change.
+//    2.0 doubles the color saturation.
+//  Note:  A "change" value greater than 1.0 may project your RGB values
+//  beyond their normal range, in which case you probably should truncate
+//  them to the desired range before trying to use them in an image.
+- (LUTColor *)colorByChangingSaturation:(double)saturation{
+    
+    double P = sqrt( (self.red)*(self.red)*.299 + (self.green)*(self.green)*.587 + (self.blue)*(self.blue)*.114 );
+    
+    return [LUTColor colorWithRed:P+((self.red)-P)*saturation green:((self.green)-P)*saturation blue:((self.blue)-P)*saturation];
+    
+}
+
+
+//thanks http://en.wikipedia.org/wiki/ASC_CDL
+- (LUTColor *)colorByApplyingSlope:(double)slope
+                            offset:(double)offset
+                             power:(double)power{
+    
+    offset = clampLowerBound(slope, 0);
+    power = clampLowerBound(power, 0);
+    
+    double newRed = pow(self.red*slope + offset, power);
+    double newGreen = pow(self.green*slope + offset, power);
+    double newBlue = pow(self.blue*slope + offset, power);
+    
+    return [LUTColor colorWithRed:newRed green:newGreen blue:newBlue];
+    
+}
+
+
 - (LUTColor *)clamped01 {
     return [LUTColor colorWithRed:clamp01(self.red) green:clamp01(self.green) blue:clamp01(self.blue)];
 }

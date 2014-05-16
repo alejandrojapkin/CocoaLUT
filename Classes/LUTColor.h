@@ -80,6 +80,14 @@ typedef double LUTColorValue;
                          outputLow:(double)outputLow
                         outputHigh:(double)outputHigh;
 
+- (LUTColor *)colorByAddingColor:(LUTColor *)offsetColor;
+
+- (LUTColor *)colorByChangingSaturation:(double)saturation;
+
+- (LUTColor *)colorByApplyingSlope:(double)slope
+                            offset:(double)offset
+                             power:(double)power;
+
 /**
  *  Linearly interpolate between two colors by a percentage amount.
  *
