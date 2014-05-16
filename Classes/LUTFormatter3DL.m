@@ -13,6 +13,7 @@
     
     NSString *description;
     NSMutableDictionary *metadata;
+    NSMutableDictionary *passthroughFileOptions = [NSMutableDictionary dictionary];
 
     NSUInteger __block cubeSize = 0;
     NSUInteger  __block maxOutput = 0;
@@ -29,23 +30,23 @@
     metadata = [metadataAndDescription objectForKey:@"metadata"];
     description = [metadataAndDescription objectForKey:@"description"];
     
-    BOOL isNuke3DL = NO;
     // Find the size
     for(NSString *line in headerLines) {
         if ([line rangeOfString:@"Mesh"].location != NSNotFound) {
             NSArray *components = [line componentsSeparatedByString:@" "];
-            
             NSInteger inputDepth = [components[1] integerValue];
             maxOutput = pow(2, [components[2] integerValue]) - 1;
             cubeSize = pow(2, inputDepth) + 1;
+            [passthroughFileOptions setObject:@"Lustre" forKey:@"fileTypeVariant"];
+            break;
         }
         if ([line rangeOfString:@"#"].location == NSNotFound && [line rangeOfString:@"0"].location != NSNotFound) {
             NSArray *components = [line componentsSeparatedByString:@" "];
             components = [components filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"SELF != ''"]];
-            
             maxOutput = [components[components.count - 1] intValue];
             cubeSize = components.count;
-            isNuke3DL = YES;
+            [passthroughFileOptions setObject:@"Nuke" forKey:@"fileTypeVariant"];
+            break;
         }
             
     }
@@ -54,6 +55,8 @@
         NSException *exception = [NSException exceptionWithName:@"LUTParseError" reason:@"Couldn't find LUT size or output depth in file" userInfo:nil];
         @throw exception;
     }
+    
+    [passthroughFileOptions setObject:@(maxOutput) forKey:@"integerMaxOutput"];
     
     
 
@@ -86,15 +89,93 @@
     
     [lut setMetadata:metadata];
     [lut setDescription:description];
+    [lut setPassthroughFileOptions:passthroughFileOptions];
 
     return lut;
 
 }
 
-+ (NSString *)stringFromLUT:(LUT *)lut {
++ (NSString *)stringFromLUT:(LUT *)lut withOptions:(NSDictionary *)options {
+    NSMutableString *string = [NSMutableString stringWithString:@""];
+    
+    [string appendString: [LUTMetadataFormatter stringFromMetadata:lut.metadata description:lut.description]];
+    [string appendString:@"\n"];
+    
+    NSUInteger maxOutput;
 
-    return nil;
+    
+    if(options[@"integerMaxOutput"] == nil){
+        maxOutput = pow(2, 12) - 1; //default for now
+    }
+    else{
+        maxOutput = [options[@"integerMaxOutput"] integerValue];
+    }
+    
+    if(options[@"fileTypeVariant"] == nil){
+        NSException *exception = [NSException exceptionWithName:@"LUTFormatter3DLError" reason:@"No fileTypeVariant (Nuke or Lustre) in options." userInfo:nil];
+        @throw exception;
+        
+    }
+    else if([options[@"fileTypeVariant"] isEqualToString:@"Nuke"]){
+        [string appendString:[indicesIntegerArray(0, (int)maxOutput, (int)[lut size]) componentsJoinedByString:@" "]];
+        [string appendString:@"\n"];
+    }
+    else if([options[@"fileTypeVariant"] isEqualToString:@"Lustre"]){
+        double sizeToDepth = log2([lut size]-1);
+        if(sizeToDepth != (int)sizeToDepth){
+            NSException *exception = [NSException exceptionWithName:@"LUTFormatter3DLError" reason:@"Lustre lut size invalid. Size must be 2^x + 1" userInfo:nil];
+            @throw exception;
+            
+        }
+        [string appendString:@"3DMESH\n"];
+        [string appendString:[NSString stringWithFormat:@"Mesh %d %d\n", (int)sizeToDepth, (int)log2(maxOutput+1)]];
+        [string appendString:[indicesIntegerArray(0, 1023, (int) [lut size]) componentsJoinedByString:@" "]];
+        [string appendString:@"\n"];
+        
+    }
+    
+    [string appendString:@"\n"];
+    
+   
+    NSUInteger lutSize = [lut size];
+    NSUInteger arrayLength = lutSize * lutSize * lutSize;
+    
+    NSNumberFormatter * numberFormatter = [[NSNumberFormatter alloc] init];
+    numberFormatter.numberStyle = NSNumberFormatterNoStyle;
+    [numberFormatter setPaddingPosition:NSNumberFormatterPadBeforePrefix];
+    
+    [numberFormatter setMinimumIntegerDigits:[NSString stringWithFormat:@"%d", (int)maxOutput].length];
+    [numberFormatter setPaddingCharacter:@""];
+    for (int i = 0; i < arrayLength; i++) {
+        
+        
+        int redIndex = i / (lutSize * lutSize);
+        int greenIndex = ((i % (lutSize * lutSize)) / (lutSize) );
+        int blueIndex = i % lutSize;
+        
+        LUTColor *color = [lut colorAtR:redIndex g:greenIndex b:blueIndex];
+        
+        
+        
+        NSString *redFormatted = [numberFormatter stringFromNumber:@((int)(color.red*maxOutput))];
+        NSString *greenFormatted = [numberFormatter stringFromNumber:@((int)(color.green*maxOutput))];
+        NSString *blueFormatted = [numberFormatter stringFromNumber:@((int)(color.blue*maxOutput))];
+        
+        [string appendString:[NSString stringWithFormat:@"%@ %@ %@", redFormatted, greenFormatted, blueFormatted]];
+        
+        if(i != arrayLength - 1) {
+            [string appendString:@"\n"];
+        }
+        
+    }
+    
+    
+    return string;
 
+}
+
++ (NSDictionary *)allOptions{
+    return @{@"fileTypeVariant": @[@"Nuke", @"Lustre"]};
 }
 
 @end
