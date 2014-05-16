@@ -16,7 +16,7 @@
     NSMutableDictionary *passthroughFileOptions = [NSMutableDictionary dictionary];
 
     NSUInteger __block cubeSize = 0;
-    NSUInteger  __block maxOutput = 0;
+    NSUInteger  __block integerMaxOutput = 0;
     
     NSUInteger cubeLinesStartIndex = findFirstLUTLineInLines(lines, @" ", 3, 0);
     
@@ -35,7 +35,7 @@
         if ([line rangeOfString:@"Mesh"].location != NSNotFound) {
             NSArray *components = [line componentsSeparatedByString:@" "];
             NSInteger inputDepth = [components[1] integerValue];
-            maxOutput = pow(2, [components[2] integerValue]) - 1;
+            integerMaxOutput = pow(2, [components[2] integerValue]) - 1;
             cubeSize = pow(2, inputDepth) + 1;
             [passthroughFileOptions setObject:@"Lustre" forKey:@"fileTypeVariant"];
             break;
@@ -43,7 +43,7 @@
         if ([line rangeOfString:@"#"].location == NSNotFound && [line rangeOfString:@"0"].location != NSNotFound) {
             NSArray *components = [line componentsSeparatedByString:@" "];
             components = [components filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"SELF != ''"]];
-            maxOutput = [components[components.count - 1] intValue];
+            integerMaxOutput = [components[components.count - 1] intValue];
             cubeSize = components.count;
             [passthroughFileOptions setObject:@"Nuke" forKey:@"fileTypeVariant"];
             break;
@@ -51,12 +51,12 @@
             
     }
 
-    if (cubeSize == 0 || maxOutput == 0) {
+    if (cubeSize == 0 || integerMaxOutput == 0) {
         NSException *exception = [NSException exceptionWithName:@"LUTParseError" reason:@"Couldn't find LUT size or output depth in file" userInfo:nil];
         @throw exception;
     }
     
-    [passthroughFileOptions setObject:@(maxOutput) forKey:@"integerMaxOutput"];
+    [passthroughFileOptions setObject:@(integerMaxOutput) forKey:@"integerMaxOutput"];
     
     
 
@@ -74,7 +74,7 @@
                 LUTColorValue greenValue    = ((NSString *)splitLine[1]).doubleValue;
                 LUTColorValue blueValue     = ((NSString *)splitLine[2]).doubleValue;
 
-                LUTColor *color = [LUTColor colorFromIntegersWithMaxOutputValue:maxOutput red:redValue green:greenValue blue:blueValue];
+                LUTColor *color = [LUTColor colorFromIntegersWithMaxOutputValue:integerMaxOutput red:redValue green:greenValue blue:blueValue];
 
                 NSUInteger redIndex     = currentCubeIndex / (cubeSize * cubeSize);
 				NSUInteger greenIndex   = (currentCubeIndex % (cubeSize * cubeSize)) / cubeSize;
@@ -89,7 +89,7 @@
     
     [lut setMetadata:metadata];
     [lut setDescription:description];
-    [lut setPassthroughFileOptions:passthroughFileOptions];
+    [lut setPassthroughFileOptions:@{@"com.autodesk.3dl": passthroughFileOptions}];
 
     return lut;
 
@@ -98,37 +98,57 @@
 + (NSString *)stringFromLUT:(LUT *)lut withOptions:(NSDictionary *)options {
     NSMutableString *string = [NSMutableString stringWithString:@""];
     
-    [string appendString: [LUTMetadataFormatter stringFromMetadata:lut.metadata description:lut.description]];
-    [string appendString:@"\n"];
+    options = options[@"com.autodesk.3dl"];
     
-    NSUInteger maxOutput;
-    NSString *fileTypeVariant = options[@"fileTypeVariant"];
+    NSUInteger integerMaxOutput;
+    NSString *fileTypeVariant;
+    NSUInteger lutSize;
     
+    
+    //validate options
     if(options[@"integerMaxOutput"] == nil){
-        maxOutput = [[[[self class] defaultOptions] objectForKey:@"integerMaxOutput"] integerValue];
+        integerMaxOutput = [[[[self class] defaultOptions] objectForKey:@"integerMaxOutput"] integerValue];
     }
     else{
-        maxOutput = [options[@"integerMaxOutput"] integerValue];
+        integerMaxOutput = [options[@"integerMaxOutput"] integerValue];
     }
     
-    if(fileTypeVariant == nil){
+    if(options[@"fileTypeVariant"] == nil){
         fileTypeVariant = [[[self class] defaultOptions] objectForKey:@"fileTypeVariant"];
         
     }
+    else{
+        fileTypeVariant = options[@"fileTypeVariant"];
+    }
     
+    if(options[@"lutSize"] == nil){
+        lutSize = [[[[self class] defaultOptions] objectForKey:@"lutSize"] integerValue];
+    }
+    else{
+        lutSize = [options[@"lutSize"] integerValue];
+    }
+    //----------------
+    
+    lut = LUTAsLUT3D(lut, lutSize);
+    
+    [string appendString: [LUTMetadataFormatter stringFromMetadata:lut.metadata description:lut.description]];
+    [string appendString:@"\n"];
+    
+    
+    //write header
     if([fileTypeVariant isEqualToString:@"Nuke"]){
-        [string appendString:[indicesIntegerArray(0, (int)maxOutput, (int)[lut size]) componentsJoinedByString:@" "]];
+        [string appendString:[indicesIntegerArray(0, (int)integerMaxOutput, (int)[lut size]) componentsJoinedByString:@" "]];
         [string appendString:@"\n"];
     }
     else if([fileTypeVariant isEqualToString:@"Lustre"]){
-        double sizeToDepth = log2([lut size]-1);
+        double sizeToDepth = log2(lutSize-1);
         if(sizeToDepth != (int)sizeToDepth){
             NSException *exception = [NSException exceptionWithName:@"LUTFormatter3DLError" reason:@"Lustre lut size invalid. Size must be 2^x + 1" userInfo:nil];
             @throw exception;
             
         }
         [string appendString:@"3DMESH\n"];
-        [string appendString:[NSString stringWithFormat:@"Mesh %d %d\n", (int)sizeToDepth, (int)log2(maxOutput+1)]];
+        [string appendString:[NSString stringWithFormat:@"Mesh %d %d\n", (int)sizeToDepth, (int)log2(integerMaxOutput+1)]];
         [string appendString:[indicesIntegerArray(0, 1023, (int) [lut size]) componentsJoinedByString:@" "]];
         [string appendString:@"\n"];
         
@@ -137,14 +157,13 @@
     [string appendString:@"\n"];
     
    
-    NSUInteger lutSize = [lut size];
     NSUInteger arrayLength = lutSize * lutSize * lutSize;
     
     NSNumberFormatter * numberFormatter = [[NSNumberFormatter alloc] init];
     numberFormatter.numberStyle = NSNumberFormatterNoStyle;
     [numberFormatter setPaddingPosition:NSNumberFormatterPadBeforePrefix];
     
-    [numberFormatter setFormatWidth: [NSString stringWithFormat:@"%d", (int)maxOutput].length];
+    [numberFormatter setFormatWidth: [NSString stringWithFormat:@"%d", (int)integerMaxOutput].length];
     [numberFormatter setPaddingCharacter:@""];
     for (int i = 0; i < arrayLength; i++) {
         
@@ -157,9 +176,9 @@
         
         
         
-        NSString *redFormatted = [numberFormatter stringFromNumber:@((int)(color.red*maxOutput))];
-        NSString *greenFormatted = [numberFormatter stringFromNumber:@((int)(color.green*maxOutput))];
-        NSString *blueFormatted = [numberFormatter stringFromNumber:@((int)(color.blue*maxOutput))];
+        NSString *redFormatted = [numberFormatter stringFromNumber:@((int)(color.red*integerMaxOutput))];
+        NSString *greenFormatted = [numberFormatter stringFromNumber:@((int)(color.green*integerMaxOutput))];
+        NSString *blueFormatted = [numberFormatter stringFromNumber:@((int)(color.blue*integerMaxOutput))];
         
         [string appendString:[NSString stringWithFormat:@"%@ %@ %@", redFormatted, greenFormatted, blueFormatted]];
         
@@ -175,12 +194,28 @@
 }
 
 + (NSDictionary *)allOptions{
-    return @{@"fileTypeVariant": @[@"Nuke", @"Lustre"]};
+    
+    NSDictionary *lustreOptions =
+                @{@"integerMaxOutput": M13OrderedDictionaryFromOrderedArrayWithDictionaries(@[@{@"12-bit": @(pow(2, 12) - 1)},
+                                                                                              @{@"16-bit": @(pow(2, 16) - 1)}]),
+                  @"lutSize": M13OrderedDictionaryFromOrderedArrayWithDictionaries(@[@{@"17": @(17)},
+                                                                                     @{@"33": @(33)},
+                                                                                     @{@"65": @(65)}])};
+    
+    NSDictionary *nukeOptions =
+                @{@"integerMaxOutput": M13OrderedDictionaryFromOrderedArrayWithDictionaries(@[@{@"12-bit": @(pow(2, 12) - 1)},
+                                                                                              @{@"16-bit": @(pow(2, 16) - 1)}]),
+                  @"lutSize": M13OrderedDictionaryFromOrderedArrayWithDictionaries(@[@{@"32": @(17)},
+                                                                                     @{@"64": @(33)}])};
+    
+    return @{@"Nuke": nukeOptions,
+             @"Lustre": lustreOptions};
 }
 
 + (NSDictionary *)defaultOptions{
     return @{@"fileTypeVariant": @"Nuke",
-             @"integerMaxOutput": @((int)(pow(2, 16) - 1))};
+             @"integerMaxOutput": @((int)(pow(2, 16) - 1)),
+             @"lutSize": @(32)};
 }
 
 @end
