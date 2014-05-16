@@ -44,13 +44,7 @@
 
 + (NSImage *)imageFromLUT:(LUT *)lut {
     
-    LUT3D *lut3D;
-    if(isLUT1D(lut)){
-        lut3D = LUTAsLUT3D(lut, 64);
-    }
-    else{
-        lut3D = (LUT3D *)lut;
-    }
+    LUT3D *lut3D = LUTAsLUT3D(lut, clampUpperBound([lut size], 64));
     
     int cubeSize = (int)[lut3D size];
     int height = round(sqrt(cubeSize)*(double)cubeSize);
