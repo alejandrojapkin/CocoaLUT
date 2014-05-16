@@ -70,23 +70,24 @@
     LUT1D *lut = [LUT1D LUT1DWithRedCurve:redCurve greenCurve:greenCurve blueCurve:blueCurve lowerBound:0.0 upperBound:1.0];
     [lut setMetadata:metadata];
     [lut setDescription:description];
-    [lut setPassthroughFileOptions:@{@"com.discreet.lut": passthroughFileOptions}];
+    [lut setPassthroughFileOptions:@{[LUTFormatterDiscreet1DLUT utiString]: passthroughFileOptions}];
     return lut;
 }
 
 + (NSString *)stringFromLUT:(LUT *)lut withOptions:(NSDictionary *)options {
-    options = options[@"com.discreet.lut"];
+    options = options[[LUTFormatterDiscreet1DLUT utiString]];
 
     NSMutableString *string = [NSMutableString stringWithString:@""];
     
     NSUInteger integerMaxOutput;
     
+    //validate options
     if(options == nil || options[@"integerMaxOutput"] == nil){
-        integerMaxOutput = [[[[self class] defaultOptions] objectForKey:@"integerMaxOutput"] integerValue];
+        //set to default if missing options
+        options = [[LUTFormatterDiscreet1DLUT defaultOptions] objectForKey:[LUTFormatterDiscreet1DLUT utiString]];
     }
-    else{
-        integerMaxOutput = [options[@"integerMaxOutput"] integerValue];
-    }
+    
+    integerMaxOutput = [options[@"integerMaxOutput"] integerValue];
 
     [string appendString:[NSString stringWithFormat:@"#\n# Discreet LUT file\n#\tChannels: 3\n# Input Samples: %d\n# Ouput Scale: %d\n#\n# Exported from CocoaLUT\n#\nLUT: 3 %d\n", (int)[lut size], (int)integerMaxOutput, (int)[lut size]]];
     
@@ -119,7 +120,12 @@
 }
 
 + (NSDictionary *)defaultOptions{
-    return @{@"integerMaxOutput": @((int)(pow(2, 12) - 1))};
+    NSDictionary *dictionary = @{@"integerMaxOutput": @((int)(pow(2, 12) - 1))};
+    return @{[LUTFormatterDiscreet1DLUT utiString]:dictionary};
+}
+
++ (NSString *)utiString{
+    return @"com.discreet.lut";
 }
 
 

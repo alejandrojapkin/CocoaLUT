@@ -58,4 +58,8 @@
     
 }
 
++ (NSString *)utiString{
+    return @"com.blackmagicdesign.olut";
+}
+
 @end

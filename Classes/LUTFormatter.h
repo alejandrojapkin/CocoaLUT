@@ -92,4 +92,6 @@
 
 + (NSDictionary *)defaultOptions;
 
++ (NSString *)utiString;
+
 @end

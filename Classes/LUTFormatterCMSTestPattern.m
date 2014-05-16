@@ -134,5 +134,9 @@
 }
 #endif
 
++ (NSString *)utiString{
+    return @"public.cms-test-pattern-lut";
+}
+
 
 @end

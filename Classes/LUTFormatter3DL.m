@@ -89,7 +89,7 @@
     
     [lut setMetadata:metadata];
     [lut setDescription:description];
-    [lut setPassthroughFileOptions:@{@"com.autodesk.3dl": passthroughFileOptions}];
+    [lut setPassthroughFileOptions:@{[LUTFormatter3DL utiString]: passthroughFileOptions}];
 
     return lut;
 
@@ -98,7 +98,10 @@
 + (NSString *)stringFromLUT:(LUT *)lut withOptions:(NSDictionary *)options {
     NSMutableString *string = [NSMutableString stringWithString:@""];
     
-    options = options[@"com.autodesk.3dl"];
+    options = options[[LUTFormatter3DL utiString]];
+    if(options == nil){
+        options = [[LUTFormatter3DL defaultOptions] objectForKey:[LUTFormatter3DL utiString]];
+    }
     
     NSUInteger integerMaxOutput;
     NSString *fileTypeVariant;
@@ -106,27 +109,14 @@
     
     
     //validate options
-    if(options == nil || options[@"integerMaxOutput"] == nil){
-        integerMaxOutput = [[[[self class] defaultOptions] objectForKey:@"integerMaxOutput"] integerValue];
-    }
-    else{
-        integerMaxOutput = [options[@"integerMaxOutput"] integerValue];
+    if(options == nil || options[@"fileTypeVariant"] == nil || options[@"integerMaxOutput"] == nil || options[@"lutSize"] == nil){
+        //set to default if the options aren't valid.
+        options = [[LUTFormatter3DL defaultOptions] objectForKey:[LUTFormatter3DL utiString]];
     }
     
-    if(options == nil || options[@"fileTypeVariant"] == nil){
-        fileTypeVariant = [[[self class] defaultOptions] objectForKey:@"fileTypeVariant"];
-        
-    }
-    else{
-        fileTypeVariant = options[@"fileTypeVariant"];
-    }
-    
-    if(options == nil || options[@"lutSize"] == nil){
-        lutSize = [[[[self class] defaultOptions] objectForKey:@"lutSize"] integerValue];
-    }
-    else{
-        lutSize = [options[@"lutSize"] integerValue];
-    }
+    fileTypeVariant = options[@"fileTypeVariant"];
+    integerMaxOutput = [options[@"integerMaxOutput"] integerValue];
+    lutSize = [options[@"lutSize"] integerValue];
     //----------------
     
     lut = LUTAsLUT3D(lut, lutSize);
@@ -193,6 +183,10 @@
 
 }
 
++ (NSString *)utiString{
+    return @"com.autodesk.3dl";
+}
+
 + (NSDictionary *)allOptions{
     
     NSDictionary *lustreOptions =
@@ -213,9 +207,11 @@
 }
 
 + (NSDictionary *)defaultOptions{
-    return @{@"fileTypeVariant": @"Nuke",
-             @"integerMaxOutput": @((int)(pow(2, 16) - 1)),
-             @"lutSize": @(32)};
+    NSDictionary *dictionary = @{@"fileTypeVariant": @"Nuke",
+                                 @"integerMaxOutput": @((int)(pow(2, 16) - 1)),
+                                 @"lutSize": @(32)};
+    
+    return @{[LUTFormatter3DL utiString]: dictionary};
 }
 
 @end

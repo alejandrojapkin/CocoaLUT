@@ -204,14 +204,12 @@
     }
     //but not for now
     
-    
-    
-    
-
-    
-    
     return string;
 
+}
+
++ (NSString *)utiString{
+    return @"com.blackmagicdesign.cube";
 }
 
 @end

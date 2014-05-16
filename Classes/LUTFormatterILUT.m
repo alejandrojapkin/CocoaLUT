@@ -54,4 +54,9 @@
     return string;
     
 }
+
++ (NSString *)utiString{
+    return @"com.blackmagicdesign.ilut";
+}
+
 @end

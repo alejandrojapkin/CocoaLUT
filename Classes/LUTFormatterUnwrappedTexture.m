@@ -93,4 +93,8 @@
 }
 #endif
 
++ (NSString *)utiString{
+    return @"public.unwrapped-cube-lut";
+}
+
 @end

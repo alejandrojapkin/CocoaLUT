@@ -83,13 +83,13 @@
 }
 
 + (LUTFormatter *)LUTFormatterForUTI:(NSString *)utiString{
-    NSDictionary *dictionary = @{@"com.blackmagicdesign.cube": [LUTFormatterCube class],
-                                 @"com.autodesk.3dl": [LUTFormatter3DL class],
-                                 @"com.discreet.lut": [LUTFormatterDiscreet1DLUT class],
-                                 @"com.blackmagicdesign.olut": [LUTFormatterOLUT class],
-                                 @"com.blackmagicdesign.ilut": [LUTFormatterILUT class],
-                                 @"public.unwrapped-cube-lut": [LUTFormatterUnwrappedTexture class],
-                                 @"public.cms-test-pattern-lut": [LUTFormatterCMSTestPattern class]};
+    NSDictionary *dictionary = @{[LUTFormatterCube utiString]: [LUTFormatterCube class],
+                                 [LUTFormatter3DL utiString]: [LUTFormatter3DL class],
+                                 [LUTFormatterDiscreet1DLUT utiString]: [LUTFormatterDiscreet1DLUT class],
+                                 [LUTFormatterOLUT utiString]: [LUTFormatterOLUT class],
+                                 [LUTFormatterILUT utiString]: [LUTFormatterILUT class],
+                                 [LUTFormatterUnwrappedTexture utiString]: [LUTFormatterUnwrappedTexture class],
+                                 [LUTFormatterCMSTestPattern utiString]: [LUTFormatterCMSTestPattern class]};
     
     return dictionary[utiString];
     
