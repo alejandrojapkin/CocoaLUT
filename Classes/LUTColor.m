@@ -50,7 +50,7 @@
     return [LUTColor colorWithRed:self.red+offsetColor.red green:self.green+offsetColor.green blue:self.blue+offsetColor.blue];
 }
 
-//thanks http://alienryderflex.com/saturation.html
+//thanks http://git.dyne.org/frei0r/plain/src/filter/sopsat/sopsat.cpp
 //  The "saturation" parameter works like this:
 //    0.0 creates a black-and-white image.
 //    0.5 reduces the color saturation by half.
@@ -59,11 +59,18 @@
 //  Note:  A "change" value greater than 1.0 may project your RGB values
 //  beyond their normal range, in which case you probably should truncate
 //  them to the desired range before trying to use them in an image.
-- (LUTColor *)colorByChangingSaturation:(double)saturation{
+//  ex: REC709 luma: 0.212636821677 R + 0.715182981841 G + 0.0721801964814 B
+///  AlexaWideGamut: 0.291948669899 R + 0.823830265984 G + -0.115778935883 B
+- (LUTColor *)colorByChangingSaturation:(double)saturation
+                             usingLumaR:(double)lumaR
+                                  lumaG:(double)lumaG
+                                  lumaB:(double)lumaB{
     
-    double P = sqrt( (self.red)*(self.red)*.299 + (self.green)*(self.green)*.587 + (self.blue)*(self.blue)*.114 );
+    double luma = (self.red)*lumaR + (self.green)*lumaG + (self.blue)*lumaB;
     
-    return [LUTColor colorWithRed:P+((self.red)-P)*saturation green:((self.green)-P)*saturation blue:((self.blue)-P)*saturation];
+    return [LUTColor colorWithRed:luma + saturation * (self.red - luma)
+                            green:luma + saturation * (self.green - luma)
+                             blue:luma + saturation * (self.blue - luma)];
     
 }
 
