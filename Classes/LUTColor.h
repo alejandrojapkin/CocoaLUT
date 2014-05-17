@@ -82,7 +82,10 @@ typedef double LUTColorValue;
 
 - (LUTColor *)colorByAddingColor:(LUTColor *)offsetColor;
 
-- (LUTColor *)colorByChangingSaturation:(double)saturation;
+- (LUTColor *)colorByChangingSaturation:(double)saturation
+                             usingLumaR:(double)lumaR
+                                  lumaG:(double)lumaG
+                                  lumaB:(double)lumaB;
 
 - (LUTColor *)colorByApplyingRedSlope:(double)redSlope
                             redOffset:(double)redOffset
