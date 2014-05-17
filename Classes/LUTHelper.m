@@ -198,7 +198,7 @@ NSUInteger findFirstLUTLineInLines(NSArray *lines, NSString *seperator, int numV
     NSNumberFormatter *formatter = [NSNumberFormatter new];
     for (int i = startLine; i < lines.count; i++){
         NSArray *splitLine = [lines[i] componentsSeparatedByString:seperator];
-        splitLine = [splitLine filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"SELF != ''"]];
+        splitLine = arrayWithEmptyElementsRemoved(splitLine);
 
         if(splitLine.count == numValues){
             BOOL isLine = YES;
@@ -213,6 +213,14 @@ NSUInteger findFirstLUTLineInLines(NSArray *lines, NSString *seperator, int numV
         }
     }
     return -1;
+}
+
+NSArray* arrayWithEmptyElementsRemoved(NSArray *array){
+    return [array filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"SELF != ''"]];
+}
+
+NSArray* arrayWithComponentsSeperatedByNewlineAndWhitespaceWithEmptyElementsRemoved(NSString *string){
+    return arrayWithEmptyElementsRemoved([string componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]]);
 }
 
 

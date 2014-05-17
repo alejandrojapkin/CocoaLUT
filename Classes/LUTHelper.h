@@ -35,6 +35,8 @@ NSArray* indicesDoubleArray(double startValue, double endValue, int numIndices);
 NSArray* indicesIntegerArray(int startValue, int endValue, int numIndices);
 BOOL stringIsNumeric(NSString* str);
 
+NSArray* arrayWithEmptyElementsRemoved(NSArray *array);
+NSArray* arrayWithComponentsSeperatedByNewlineAndWhitespaceWithEmptyElementsRemoved(NSString *string);
 NSUInteger findFirstLUTLineInLines(NSArray *lines, NSString *seperator, int numValues, int startLine);
 
 BOOL isLUT1D(LUT* lut);
