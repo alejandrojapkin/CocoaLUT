@@ -14,7 +14,9 @@
 + (LUT *)LUTFromData:(NSData *)data{
     NSDictionary *xml = [NSDictionary dictionaryWithXMLData:data];
     
-    
+    if(![[xml attributes][@"version"] isEqualToString:@"1.0"]){
+        @throw [NSException exceptionWithName:@"LUTFormatterArriLookParseError" reason:@"Arri Look Version not 1.0" userInfo:nil];
+    }
     
     NSArray *toneMapLines = arrayWithComponentsSeperatedByNewlineAndWhitespaceWithEmptyElementsRemoved([[xml valueForKeyPath:@"ToneMapLut"] innerText]);
 
@@ -60,8 +62,10 @@
     
     //NSLog(@"slope %@\noffset %@\npower %@", slopeSplitLine, offsetSplitLine, powerSplitLine);
     
-    LUT3D *lut3D = [LUT3D LUTIdentityOfSize:32 inputLowerBound:0.0 inputUpperBound:1.0];
+    LUT3D *lut3D = [LUT3D LUTIdentityOfSize:33 inputLowerBound:0.0 inputUpperBound:1.0];
     
+    
+    //apply in order: Saturation -> Printer Lights -> Tonemap -> SOP
     [lut3D LUTLoopWithBlock:^(size_t r, size_t g, size_t b) {
         LUTColor *color = [lut3D colorAtR:r g:g b:b];
         //  AlexaWideGamut Luma from NPM: 0.291948669899 R + 0.823830265984 G + -0.115778935883 B
@@ -77,6 +81,7 @@
                                      blueSlope:blueSlope
                                     blueOffset:blueOffset
                                      bluePower:bluePower];
+        
         [lut3D setColor:color r:r g:g b:b];
     }];
     
