@@ -61,6 +61,9 @@
     else if ([url.pathExtension.lowercaseString isEqualToString:@"lut"]) {
         return [LUTFormatterDiscreet1DLUT LUTFromFile:url];
     }
+    else if ([url.pathExtension.lowercaseString isEqualToString:@"xml"]) {
+        return [LUTFormatterArriLook LUTFromFile:url];
+    }
     else if ([@[@"tif", @"tiff", @"png", @"dpx"] containsObject:url.pathExtension.lowercaseString]) {
         @try{
             return [LUTFormatterUnwrappedTexture LUTFromFile:url];
@@ -92,7 +95,6 @@
                                  [LUTFormatterUnwrappedTexture utiString]: [LUTFormatterUnwrappedTexture class],
                                  [LUTFormatterCMSTestPattern utiString]: [LUTFormatterCMSTestPattern class],
                                  [LUTFormatterArriLook utiString]: [LUTFormatterArriLook class]};
-    
     return dictionary[utiString];
     
 }
