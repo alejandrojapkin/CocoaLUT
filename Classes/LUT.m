@@ -15,6 +15,7 @@
 #import "LUTFormatterDiscreet1DLUT.h"
 #import "LUTFormatterUnwrappedTexture.h"
 #import "LUTFormatterCMSTestPattern.h"
+#import "LUTFormatterArriLook.h"
 
 @interface LUT ()
 @end
@@ -89,7 +90,8 @@
                                  [LUTFormatterOLUT utiString]: [LUTFormatterOLUT class],
                                  [LUTFormatterILUT utiString]: [LUTFormatterILUT class],
                                  [LUTFormatterUnwrappedTexture utiString]: [LUTFormatterUnwrappedTexture class],
-                                 [LUTFormatterCMSTestPattern utiString]: [LUTFormatterCMSTestPattern class]};
+                                 [LUTFormatterCMSTestPattern utiString]: [LUTFormatterCMSTestPattern class],
+                                 [LUTFormatterArriLook utiString]: [LUTFormatterArriLook class]};
     
     return dictionary[utiString];
     
