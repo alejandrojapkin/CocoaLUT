@@ -76,16 +76,27 @@
 
 
 //thanks http://en.wikipedia.org/wiki/ASC_CDL
-- (LUTColor *)colorByApplyingSlope:(double)slope
-                            offset:(double)offset
-                             power:(double)power{
+- (LUTColor *)colorByApplyingRedSlope:(double)redSlope
+                            redOffset:(double)redOffset
+                             redPower:(double)redPower
+                           greenSlope:(double)greenSlope
+                          greenOffset:(double)greenOffset
+                           greenPower:(double)greenPower
+                             blueSlope:(double)blueSlope
+                            blueOffset:(double)blueOffset
+                             bluePower:(double)bluePower {
     
-    offset = clampLowerBound(slope, 0);
-    power = clampLowerBound(power, 0);
+    redSlope = clampLowerBound(redSlope, 0);
+    redPower = clampLowerBound(redPower, 0);
+    greenSlope = clampLowerBound(greenSlope, 0);
+    greenPower = clampLowerBound(greenPower, 0);
+    blueSlope = clampLowerBound(blueSlope, 0);
+    bluePower = clampLowerBound(bluePower, 0);
     
-    double newRed = pow(self.red*slope + offset, power);
-    double newGreen = pow(self.green*slope + offset, power);
-    double newBlue = pow(self.blue*slope + offset, power);
+    
+    double newRed = pow(self.red*redSlope + redOffset, redPower);
+    double newGreen = pow(self.green*greenSlope + greenOffset, greenPower);
+    double newBlue = pow(self.blue*blueSlope + blueOffset, bluePower);
     
     return [LUTColor colorWithRed:newRed green:newGreen blue:newBlue];
     
