@@ -64,19 +64,19 @@
     
     [lut3D LUTLoopWithBlock:^(size_t r, size_t g, size_t b) {
         LUTColor *color = [lut3D colorAtR:r g:g b:b];
-        ///  AlexaWideGamut: 0.291948669899 R + 0.823830265984 G + -0.115778935883 B
+        //  AlexaWideGamut Luma from NPM: 0.291948669899 R + 0.823830265984 G + -0.115778935883 B
         color = [color colorByChangingSaturation:saturation usingLumaR:0.291948669899 lumaG:0.823830265984 lumaB:-0.115778935883];
         color = [color colorByAddingColor:printerLight];
         color = [toneMapLUT colorAtColor:color];
         color = [color colorByApplyingRedSlope:redSlope
-                                               redOffset:redOffset
-                                                redPower:redPower
-                                              greenSlope:greenSlope
-                                             greenOffset:greenOffset
-                                              greenPower:greenPower
-                                               blueSlope:blueSlope
-                                              blueOffset:blueOffset
-                                               bluePower:bluePower];
+                                     redOffset:redOffset
+                                      redPower:redPower
+                                    greenSlope:greenSlope
+                                   greenOffset:greenOffset
+                                    greenPower:greenPower
+                                     blueSlope:blueSlope
+                                    blueOffset:blueOffset
+                                     bluePower:bluePower];
         [lut3D setColor:color r:r g:g b:b];
     }];
     
