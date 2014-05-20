@@ -148,10 +148,10 @@
 }
 
 + (instancetype)JPLogTransferFunction{
-    double pdxLinReference = .18; //i
-    double pdxLogReference = 445.0; //g
-    double pdxNegativeGamma = .6; //n
-    double pdxDensityPerCodeValue = .002; //d
+    double pdxLinReference = .18;
+    double pdxLogReference = 445.0;
+    double pdxNegativeGamma = .6;
+    double pdxDensityPerCodeValue = .002;
     
     return [LUTColorTransferFunction LUTColorTransferFunctionWithTransformedToLinearBlock1D:^double(double value){
                                                                     value = clamp(value, 0.0, 1.0);
