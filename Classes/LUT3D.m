@@ -63,7 +63,7 @@
 }
 
 - (instancetype)LUT3DByExtractingColorOnly{
-    LUT1D *reversed1D = [[self LUT1D] LUT1DByReversing];
+    LUT1D *reversed1D = [[[self LUT1D] LUTByResizingToSize:2048] LUT1DByReversing];
     
     if(reversed1D == nil){
         return nil;
