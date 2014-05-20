@@ -153,6 +153,10 @@
     @throw [NSException exceptionWithName:@"NotImplemented" reason:[NSString stringWithFormat:@"\"%s\" Not Implemented", __func__] userInfo:nil];
 }
 
+- (instancetype)LUTBySwizzling1DChannelsWithMethod:(LUT1DSwizzleChannelsMethod)method{
+     @throw [NSException exceptionWithName:@"NotImplemented" reason:[NSString stringWithFormat:@"\"%s\" Not Implemented", __func__] userInfo:nil];
+}
+
 - (instancetype)LUTByChangingInputLowerBound:(double)inputLowerBound
                              inputUpperBound:(double)inputUpperBound{
     if(inputLowerBound == [self inputLowerBound] && inputUpperBound == [self inputUpperBound]){

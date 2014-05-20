@@ -186,7 +186,7 @@
                                                                   @{@"Copy Blue Channel":@(LUT1DSwizzleChannelsMethodBlueCopiedToRGB)}]);
 }
 
-- (LUT1D *)LUT1DBySwizzlingChannelsWithMethod:(LUT1DSwizzleChannelsMethod)method{
+- (instancetype)LUTBySwizzling1DChannelsWithMethod:(LUT1DSwizzleChannelsMethod)method{
     LUT1D *swizzledLUT = [LUT1D LUTOfSize:[self size] inputLowerBound:[self inputLowerBound] inputUpperBound:[self inputUpperBound]];
     
     [swizzledLUT LUTLoopWithBlock:^(size_t r, size_t g, size_t b) {
@@ -212,7 +212,7 @@
     return swizzledLUT;
 }
 
-- (LUT1D *)LUT1DByReversing{
+- (instancetype)LUT1DByReversing{
     if(![self isReversibleWithStrictness:NO]){
         return nil;
     }

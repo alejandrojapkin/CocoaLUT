@@ -11,6 +11,14 @@
 @class LUTColor;
 @class LUTFormatter;
 
+typedef NS_ENUM(NSInteger, LUT1DSwizzleChannelsMethod) {
+    LUT1DSwizzleChannelsMethodAverageRGB,
+    LUT1DSwizzleChannelsMethodEdgesRGB,
+    LUT1DSwizzleChannelsMethodRedCopiedToRGB,
+    LUT1DSwizzleChannelsMethodGreenCopiedToRGB,
+    LUT1DSwizzleChannelsMethodBlueCopiedToRGB
+};
+
 typedef NS_ENUM(NSInteger, LUTImageRenderPath) {
     LUTImageRenderPathCoreImage,
     LUTImageRenderPathCoreImageSoftware,
@@ -95,6 +103,8 @@ typedef NS_ENUM(NSInteger, LUTImageRenderPath) {
  *  @return A new LUT with the same lattice size as self.lattice.size.
  */
 - (LUT *)LUTByCombiningWithLUT:(LUT *)otherLUT;
+
+- (instancetype)LUTBySwizzling1DChannelsWithMethod:(LUT1DSwizzleChannelsMethod)method;
 
 - (instancetype)LUTByClampingLowerBound:(double)lowerBound
                              upperBound:(double)upperBound;

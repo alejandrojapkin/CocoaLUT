@@ -15,13 +15,7 @@
 @class LUTColor;
 @class LUT3D;
 
-typedef NS_ENUM(NSInteger, LUT1DSwizzleChannelsMethod) {
-    LUT1DSwizzleChannelsMethodAverageRGB,
-    LUT1DSwizzleChannelsMethodEdgesRGB,
-    LUT1DSwizzleChannelsMethodRedCopiedToRGB,
-    LUT1DSwizzleChannelsMethodGreenCopiedToRGB,
-    LUT1DSwizzleChannelsMethodBlueCopiedToRGB
-};
+
 
 /**
  *  A one-dimensional color lookup table that is represented by three channel curves.
@@ -52,9 +46,9 @@ typedef NS_ENUM(NSInteger, LUT1DSwizzleChannelsMethod) {
                       lowerBound:(double)lowerBound
                       upperBound:(double)upperBound;
 
-- (LUT1D *)LUT1DByReversing;
 
-- (LUT1D *)LUT1DBySwizzlingChannelsWithMethod:(LUT1DSwizzleChannelsMethod)method;
+- (BOOL)isReversibleWithStrictness:(BOOL)strict;
+- (instancetype)LUT1DByReversing;
 
 + (M13OrderedDictionary *)LUT1DSwizzleChannelsMethods;
 + (M13OrderedDictionary *)LUT1DDefaultSizes;

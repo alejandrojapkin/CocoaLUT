@@ -89,6 +89,16 @@
     return lut1D;
 }
 
+- (instancetype)LUTBySwizzling1DChannelsWithMethod:(LUT1DSwizzleChannelsMethod)method{
+    if(![[self LUT1D] isReversibleWithStrictness:NO]){
+        return nil;
+    }
+    LUT3D *extractedColorLUT = [self LUT3DByExtractingColorOnly];
+    LUT1D *contrastLUT = [[self LUT1D] LUTBySwizzling1DChannelsWithMethod:method];
+    
+    return (LUT3D *)[extractedColorLUT LUTByCombiningWithLUT:contrastLUT];
+}
+
 - (instancetype)LUT3DByConvertingToMonoWithConversionMethod:(LUTMonoConversionMethod)conversionMethod{
     LUT3D *newLUT = [self copy];
     
