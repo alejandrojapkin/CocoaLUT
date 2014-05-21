@@ -13,7 +13,9 @@
 @interface LUTPreviewScene : SCNScene
 
 @property float animationPercentage;
+@property (strong) SCNNode *dotGroup;
 
-+ (SCNScene *)sceneForLUT:(LUT *)lut;
++ (instancetype)sceneForLUT:(LUT *)lut;
+
 
 @end

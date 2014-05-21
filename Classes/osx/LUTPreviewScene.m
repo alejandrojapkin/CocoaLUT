@@ -31,14 +31,16 @@
 
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
-    [self updateNodes];
+    if([keyPath isEqualToString:@"animationPercentage"]){
+        [self updateNodes];
+    }
+             
 }
 
 - (void)updateNodes{
-    for(LUTColorNode *node in [self.rootNode.childNodes[0] childNodes]){
+    for(LUTColorNode *node in self.dotGroup.childNodes){
         [node changeToAnimationPercentage:self.animationPercentage];
     }
-    
 }
 
 + (instancetype)sceneForLUT:(LUT *)lut {
@@ -60,6 +62,10 @@
         
         SCNSphere *dot = [SCNSphere sphereWithRadius:0.0010f];
         dot.firstMaterial.diffuse.contents = identityColor.NSColor;
+//        double radius = .0010f;
+//        SCNPlane *dot = [SCNPlane planeWithWidth:2.0*radius height:2.0*radius];
+//        dot.cornerRadius = radius;
+//        dot.firstMaterial.diffuse.contents = identityColor.NSColor;
         
         LUTColorNode *node = (LUTColorNode*)[LUTColorNode nodeWithGeometry:dot];
         node.identityColor = identityColor;
@@ -67,9 +73,12 @@
         [node changeToAnimationPercentage:scene.animationPercentage];
         
         @synchronized(dotGroup) {
+            
             [dotGroup addChildNode:node];
         }
     }];
+    
+    scene.dotGroup = dotGroup;
     
     return scene;
 }
