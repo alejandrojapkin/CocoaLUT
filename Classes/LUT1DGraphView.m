@@ -87,7 +87,7 @@
     CGContextRef context = [[NSGraphicsContext
                                currentContext] graphicsPort];
 
-    //RED
+    [self drawGridInContext:context inRect:drawingRect numXDivs:5 transparency:.3];
     
     if(self.interpolation == LUT1DGraphViewInterpolationLinear){
         CGContextSetRGBStrokeColor(context, 1, 0, 0, 1);
@@ -105,6 +105,42 @@
         CGContextSetRGBStrokeColor(context, 0, 0, 1, 1);
         [self drawSpline:self.cubicSplinesRGBArray[2] inContext:context inRect:drawingRect];
     }
+}
+
+- (void)drawGridInContext:(CGContextRef)context
+                   inRect:(NSRect)rect
+                 numXDivs:(int)numDivs
+             transparency:(double)transparency{
+    CGFloat xOrigin = rect.origin.x;
+    CGFloat yOrigin = rect.origin.y;
+    CGFloat pixelWidth = rect.size.width;
+    CGFloat pixelHeight = rect.size.height;
+    
+    NSArray *xIndices = indicesIntegerArray(xOrigin, xOrigin + pixelWidth, numDivs);
+    
+    CGContextSetRGBStrokeColor(context, 1.0-transparency, 1.0-transparency, 1.0-transparency, 1);
+    CGContextSetLineWidth(context, 2.0);
+    
+    for (NSNumber *index in xIndices){
+        NSUInteger indexAsInt = [index integerValue];
+        
+        CGContextBeginPath(context);
+        CGContextMoveToPoint(context, indexAsInt, yOrigin);
+        CGContextAddLineToPoint(context, indexAsInt, yOrigin + pixelHeight);
+        CGContextStrokePath(context);
+    }
+    
+    NSArray *yIndices = indicesIntegerArray(yOrigin, yOrigin + pixelHeight, numDivs);
+    
+    for (NSNumber *index in yIndices){
+        NSUInteger indexAsInt = [index integerValue];
+        
+        CGContextBeginPath(context);
+        CGContextMoveToPoint(context, xOrigin, indexAsInt);
+        CGContextAddLineToPoint(context, xOrigin + pixelWidth, indexAsInt);
+        CGContextStrokePath(context);
+    }
+    
 }
 
 - (void)drawArray:(NSArray *)array inContext:(CGContextRef)context inRect:(NSRect)rect {
