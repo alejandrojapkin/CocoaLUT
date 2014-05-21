@@ -39,7 +39,6 @@
 }
 
 -(void)initialize{
-    self.lut = [LUT1D LUTIdentityOfSize:33 inputLowerBound:0 inputUpperBound:1];
     self.interpolation = LUT1DGraphViewInterpolationLinear;
     [self lutDidChange];
 }
