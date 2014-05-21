@@ -103,12 +103,9 @@
     CGContextRef context = [[NSGraphicsContext
                                currentContext] graphicsPort];
 
-    //RED
-    TICK;
     [self drawGridInContext:context inRect:drawingRect numXDivs:5 transparency:.2];
 
     [self drawCurveWithCurrentInterpolationInContext:context inRect:drawingRect];
-    TOCK;
 }
 
 - (void)drawGridInContext:(CGContextRef)context
@@ -226,7 +223,7 @@
     }
     if(self.interpolation == LUT1DGraphViewInterpolationLinear){
         double remappedIndex = remap(xNormalized, 0, 1, 0, self.colorCurve.count - 1);
-        return [self.lut colorAtInterpolatedR:remappedIndex g:remappedIndex b:remappedIndex];
+        return [[self.lut colorAtInterpolatedR:remappedIndex g:remappedIndex b:remappedIndex] remappedFromInputLow:self.minimumOutputValue inputHigh:self.maximumOutputValue outputLow:0 outputHigh:1];
     }
     else if(self.interpolation == LUT1DGraphViewInterpolationCubic){
         return [LUTColor colorWithRed:[self.cubicSplinesRGBArray[0] interpolate:xNormalized] green:[self.cubicSplinesRGBArray[1] interpolate:xNormalized] blue:[self.cubicSplinesRGBArray[2] interpolate:xNormalized]];
