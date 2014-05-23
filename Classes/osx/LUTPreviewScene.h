@@ -13,11 +13,7 @@
 @interface LUTPreviewScene : SCNScene
 
 @property float animationPercentage;
-@property (strong, nonatomic) SCNNode *dotGroup;
-@property (strong) SCNNode *centerDot;
-
-@property (strong, nonatomic) SCNNode *cameraNode;
-
+@property (strong) SCNNode *dotGroup;
 
 + (instancetype)sceneForLUT:(LUT *)lut;
 
