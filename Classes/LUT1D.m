@@ -162,17 +162,15 @@
         double normalizedGIndex = remap(g, 0, [self size]-1, 0, 1);
         double normalizedBIndex = remap(b, 0, [self size]-1, 0, 1);
         LUTColor *color = [self colorAtR:r g:g b:b];
-        double red = remap(color.red, minValue, maxValue, 0, 1);
-        double green = remap(color.green, minValue, maxValue, 0, 1);
-        double blue = remap(color.blue, minValue, maxValue, 0, 1);
+        
         #if TARGET_OS_IPHONE
-        redArray[r] = [NSValue valueWithCGPoint: CGPointMake(normalizedRIndex, red)];
-        greenArray[g] = [NSValue valueWithCGPoint: CGPointMake(normalizedGIndex, green)];
-        blueArray[b] = [NSValue valueWithCGPoint: CGPointMake(normalizedBIndex, blue)];
+        redArray[r] = [NSValue valueWithCGPoint: CGPointMake(normalizedRIndex, color.red)];
+        greenArray[g] = [NSValue valueWithCGPoint: CGPointMake(normalizedGIndex, color.green)];
+        blueArray[b] = [NSValue valueWithCGPoint: CGPointMake(normalizedBIndex, color.blue)];
         #else
-        redArray[r] = [NSValue valueWithPoint: CGPointMake(normalizedRIndex, red)];
-        greenArray[g] = [NSValue valueWithPoint: CGPointMake(normalizedGIndex, green)];
-        blueArray[b] =  [NSValue valueWithPoint: CGPointMake(normalizedBIndex, blue)];
+        redArray[r] = [NSValue valueWithPoint: CGPointMake(normalizedRIndex, color.red)];
+        greenArray[g] = [NSValue valueWithPoint: CGPointMake(normalizedGIndex, color.green)];
+        blueArray[b] =  [NSValue valueWithPoint: CGPointMake(normalizedBIndex, color.blue)];
         #endif
     }];
     
