@@ -26,6 +26,7 @@ double clampUpperBound(double value, double upperBound);
 double remapint01(int value, int maxValue);
 double nsremapint01(NSInteger value, NSInteger maxValue);
 double remap(double value, double inputLow, double inputHigh, double outputLow, double outputHigh);
+double remapNoError(double value, double inputLow, double inputHigh, double outputLow, double outputHigh);
 double lerp1d(double beginning, double end, double value01);
 double smootherstep(double beginning, double end, double percentage);
 double smoothstep(double beginning, double end, double percentage);

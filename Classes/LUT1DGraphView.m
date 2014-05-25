@@ -165,7 +165,7 @@
             yUnscaled = lerp1d([array[(int)floor(xAsInterpolatedIndex)] doubleValue], [array[(int)ceil(xAsInterpolatedIndex)] doubleValue], xAsInterpolatedIndex - floor(xAsInterpolatedIndex));
         }
         CGFloat xMapped = remap(x, 0, pixelWidth-1, xOrigin, xOrigin + pixelWidth-1);
-        CGFloat yMapped = remap(yUnscaled, self.minimumOutputValue, self.maximumOutputValue, yOrigin, yOrigin + pixelHeight - 1);
+        CGFloat yMapped = remapNoError(yUnscaled, clampUpperBound(self.minimumOutputValue, 0), clampLowerBound(self.maximumOutputValue, 1), yOrigin, yOrigin + pixelHeight - 1);
         //NSLog(@"%f %f -> %f %f", x/pixelWidth, interpolatedY, x, y);
         // Add the point to the context's path
         
@@ -184,7 +184,7 @@
         CGContextSetRGBFillColor(context, 0, 0, 0, 1);
         for (int x = 0; x < [self.lut size]; x++){
             CGFloat xMapped = remap(x, 0, [self.lut size]-1, xOrigin, xOrigin + pixelWidth-1);
-            CGFloat yMapped = remap([array[x] doubleValue], self.minimumOutputValue, self.maximumOutputValue, yOrigin, yOrigin + pixelHeight - 1);
+            CGFloat yMapped = remapNoError([array[x] doubleValue], clampUpperBound(self.minimumOutputValue, 0), clampLowerBound(self.maximumOutputValue, 1), yOrigin, yOrigin + pixelHeight - 1);
             CGContextFillEllipseInRect(context, CGRectMake(xMapped-(3.0/2.0)*thickness, yMapped-(3.0/2.0)*thickness, 3.0*thickness, 3.0*thickness));
         }
     }
@@ -207,7 +207,7 @@
         CGFloat interpolatedY = [spline interpolate:x / (pixelWidth)];
         
         CGFloat xMapped = remap(x, 0, pixelWidth-1, xOrigin, xOrigin + pixelWidth-1);
-        CGFloat yMapped = remap(clamp(interpolatedY, 0, 1), 0, 1, yOrigin, yOrigin + pixelHeight-1);
+        CGFloat yMapped = remapNoError(interpolatedY, clampUpperBound(self.minimumOutputValue, 0), clampLowerBound(self.maximumOutputValue, 1), yOrigin, yOrigin + pixelHeight-1);
         
         //NSLog(@"%f %f -> %f %f", x/pixelWidth, interpolatedY, x, y);
         // Add the point to the context's path
@@ -225,7 +225,7 @@
         CGContextSetRGBFillColor(context, 0, 0, 0, 1);
         for (int x = 0; x < [self.lut size]; x++){
             CGFloat xMapped = remap(x, 0, [self.lut size]-1, xOrigin, xOrigin + pixelWidth-1);
-            CGFloat yMapped = remap([spline interpolate:(double)x/((double)[self.lut size]-1.0)], self.minimumOutputValue, self.maximumOutputValue, yOrigin, yOrigin + pixelHeight - 1);
+            CGFloat yMapped = remapNoError([spline interpolate:(double)x/((double)[self.lut size]-1.0)], clampUpperBound(self.minimumOutputValue, 0), clampLowerBound(self.maximumOutputValue, 1), yOrigin, yOrigin + pixelHeight - 1);
             CGContextFillEllipseInRect(context, CGRectMake(xMapped-3, yMapped-3, 6, 6));
         }
     }
