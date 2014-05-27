@@ -132,6 +132,14 @@
                                  g:(double)greenPoint
                                  b:(double)bluePoint{
     
+    if ((redPoint < 0   || redPoint     > self.size - 1) ||
+        (greenPoint < 0 || greenPoint   > self.size - 1) ||
+        (bluePoint < 0  || bluePoint    > self.size - 1)) {
+        @throw [NSException exceptionWithName:@"InvalidInputs"
+                                       reason:[NSString stringWithFormat:@"Tried to access out-of-bounds point r:%f g:%f b:%f", redPoint, greenPoint, bluePoint]
+                                     userInfo:nil];
+    }
+    
     //red
     int redBottomIndex = floor(redPoint);
     int redTopIndex = ceil(redPoint);

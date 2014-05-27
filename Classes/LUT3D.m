@@ -194,9 +194,9 @@
 - (LUTColor *)colorAtInterpolatedR:(double)redPoint g:(double)greenPoint b:(double)bluePoint {
     NSUInteger cubeSize = self.size;
 
-    if ((0 < redPoint   && redPoint     > cubeSize - 1) ||
-        (0 < greenPoint && greenPoint   > cubeSize - 1) ||
-        (0 < bluePoint  && bluePoint    > cubeSize - 1)) {
+    if ((redPoint < 0   || redPoint     > self.size - 1) ||
+        (greenPoint < 0 || greenPoint   > self.size - 1) ||
+        (bluePoint < 0  || bluePoint    > self.size - 1)) {
         @throw [NSException exceptionWithName:@"InvalidInputs"
                                        reason:[NSString stringWithFormat:@"Tried to access out-of-bounds lattice point r:%f g:%f b:%f", redPoint, greenPoint, bluePoint]
                                      userInfo:nil];
