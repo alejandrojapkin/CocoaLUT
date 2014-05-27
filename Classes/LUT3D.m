@@ -93,7 +93,7 @@
 }
 
 - (instancetype)LUT3DByConvertingToMonoWithConversionMethod:(LUTMonoConversionMethod)conversionMethod{
-    LUT3D *newLUT = [self copy];
+    LUT3D *newLUT = [LUT3D LUTOfSize:[self size] inputLowerBound:[self inputLowerBound] inputUpperBound:[self inputUpperBound]];
     
     typedef LUTColor* (^converter)(LUTColor *);
     
@@ -114,7 +114,7 @@
     
     
     [newLUT LUTLoopWithBlock:^(size_t r, size_t g, size_t b) {
-        [newLUT setColor:convertToMonoBlock([newLUT colorAtR:r g:g b:b])
+        [newLUT setColor:convertToMonoBlock([self colorAtR:r g:g b:b])
                        r:r
                        g:g
                        b:b];
