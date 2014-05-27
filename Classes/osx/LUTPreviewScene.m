@@ -23,6 +23,16 @@
 }
 @end
 
+@implementation LUTPreviewSceneView
+
+- (void)setScene:(SCNScene *)scene{
+    [super setScene:scene];
+    [(LUTPreviewScene *)self.scene setAnimationPercentage:1.0];
+    [(LUTPreviewScene *)self.scene updateNodes];
+}
+
+@end
+
 @implementation LUTPreviewScene
 
 - (void)dealloc{
@@ -57,6 +67,8 @@
     [scene.rootNode addChildNode:dotGroup];
     double radius = .013;
     
+    double initialAnimationPercentage = (lut3D.maximumOutputValue - lut3D.minimumOutputValue) > (lut3D.inputUpperBound - lut3D.inputLowerBound) ? 1.0 : 0.0;
+    
     [lut3D LUTLoopWithBlock:^(size_t r, size_t g, size_t b) {
         LUTColor *identityColor = [lut3D identityColorAtR:r g:g b:b];
         LUTColor *transformedColor = [lut3D colorAtR:r g:g b:b];
@@ -79,7 +91,7 @@
         LUTColorNode *node = (LUTColorNode*)[LUTColorNode nodeWithGeometry:dot];
         node.identityColor = identityColor;
         node.transformedColor = transformedColor;
-        [node changeToAnimationPercentage:scene.animationPercentage];
+        [node changeToAnimationPercentage:initialAnimationPercentage];
         
         @synchronized(dotGroup) {
             
