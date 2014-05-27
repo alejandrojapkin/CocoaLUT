@@ -65,9 +65,22 @@
     
     SCNNode *dotGroup = [SCNNode node];
     [scene.rootNode addChildNode:dotGroup];
-    double radius = .013;
     
-    double initialAnimationPercentage = (lut3D.maximumOutputValue - lut3D.minimumOutputValue) > (lut3D.inputUpperBound - lut3D.inputLowerBound) ? 1.0 : 0.0;
+    double radius;
+    double initialAnimationPercentage;
+    
+    double minimumOutputValue = lut3D.minimumOutputValue;
+    double maximumOutputValue = lut3D.maximumOutputValue;
+    
+    if((maximumOutputValue - minimumOutputValue) > (lut3D.inputUpperBound - lut3D.inputLowerBound)){
+        initialAnimationPercentage = 1.0;
+        radius = .013 * clampLowerBound(maximumOutputValue - minimumOutputValue, 1);
+    }
+    else{
+        initialAnimationPercentage = 0.0;
+        radius = .013 * clampLowerBound(lut3D.inputUpperBound - lut3D.inputLowerBound, 1);
+    }
+    
     
     [lut3D LUTLoopWithBlock:^(size_t r, size_t g, size_t b) {
         LUTColor *identityColor = [lut3D identityColorAtR:r g:g b:b];
@@ -86,7 +99,7 @@
         
         SCNBox *dot = [SCNBox boxWithWidth:2.0*radius height:2.0*radius length:2.0*radius chamferRadius:radius];
         dot.chamferSegmentCount = 1.0; //efficient for rendering but makes it look like a polygon
-        dot.firstMaterial.diffuse.contents = identityColor.NSColor;
+        dot.firstMaterial.diffuse.contents = [identityColor remappedFromInputLow:lut3D.inputLowerBound inputHigh:lut3D.inputUpperBound outputLow:0 outputHigh:1 noError:YES].NSColor;
         
         LUTColorNode *node = (LUTColorNode*)[LUTColorNode nodeWithGeometry:dot];
         node.identityColor = identityColor;
