@@ -126,10 +126,20 @@
 - (LUTColor *)remappedFromInputLow:(double)inputLow
                          inputHigh:(double)inputHigh
                          outputLow:(double)outputLow
-                        outputHigh:(double)outputHigh{
-    return [LUTColor colorWithRed:remap(self.red, inputLow, inputHigh, outputLow, outputHigh)
-                            green:remap(self.green, inputLow, inputHigh, outputLow, outputHigh)
-                             blue:remap(self.blue, inputLow, inputHigh, outputLow, outputHigh)];
+                        outputHigh:(double)outputHigh
+                           noError:(BOOL)noError{
+    if(noError){
+        return [LUTColor colorWithRed:remapNoError(self.red, inputLow, inputHigh, outputLow, outputHigh)
+                                green:remapNoError(self.green, inputLow, inputHigh, outputLow, outputHigh)
+                                 blue:remapNoError(self.blue, inputLow, inputHigh, outputLow, outputHigh)];
+        
+    }
+    else{
+        return [LUTColor colorWithRed:remap(self.red, inputLow, inputHigh, outputLow, outputHigh)
+                                green:remap(self.green, inputLow, inputHigh, outputLow, outputHigh)
+                                 blue:remap(self.blue, inputLow, inputHigh, outputLow, outputHigh)];
+    }
+    
 }
 
 - (NSString *)description{

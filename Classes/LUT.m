@@ -149,6 +149,25 @@
     return newLUT;
 }
 
+- (instancetype)LUTByRemappingValuesWithInputLow:(double)inputLow
+                                       inputHigh:(double)inputHigh
+                                       outputLow:(double)outputLow
+                                      outputHigh:(double)outputHigh
+                                         noError:(BOOL)noError{
+    LUT *newLUT = [[self class] LUTOfSize:[self size] inputLowerBound:[self inputLowerBound] inputUpperBound:[self inputUpperBound]];
+    
+    [newLUT LUTLoopWithBlock:^(size_t r, size_t g, size_t b) {
+        [newLUT setColor:[[self colorAtR:r g:g b:b] remappedFromInputLow:inputLow
+                                                               inputHigh:inputHigh
+                                                               outputLow:outputLow
+                                                              outputHigh:outputHigh
+                                                                 noError:noError] r:r g:g b:b];
+    }];
+    
+    return newLUT;
+    
+}
+
 - (instancetype)LUTByCombiningWithLUT:(LUT *)otherLUT {
     @throw [NSException exceptionWithName:@"NotImplemented" reason:[NSString stringWithFormat:@"\"%s\" Not Implemented", __func__] userInfo:nil];
 }

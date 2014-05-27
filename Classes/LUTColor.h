@@ -78,7 +78,8 @@ typedef double LUTColorValue;
 - (LUTColor *)remappedFromInputLow:(double)inputLow
                          inputHigh:(double)inputHigh
                          outputLow:(double)outputLow
-                        outputHigh:(double)outputHigh;
+                        outputHigh:(double)outputHigh
+                           noError:(BOOL)noError;
 
 - (LUTColor *)colorByAddingColor:(LUTColor *)offsetColor;
 - (LUTColor *)colorBySubtractingColor:(LUTColor *)offsetColor;
