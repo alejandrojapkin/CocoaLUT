@@ -46,13 +46,6 @@
 - (LUT *)LUTByCombiningWithLUT:(LUT *)otherLUT {
     LUT3D *newLUT = [LUT3D LUTOfSize:[self size] inputLowerBound:[self inputLowerBound] inputUpperBound:[self inputUpperBound]];
     
-//    if([otherLUT inputLowerBound] > [self inputLowerBound] || [otherLUT inputUpperBound] < [self inputUpperBound]){
-//        //other LUT does not encompass the range of the current LUT - this won't work for us!
-//        @throw [NSException exceptionWithName:@"InvalidCombiningLUT"
-//                                       reason:[NSString stringWithFormat:@"LUT to combine with does not encompass the full input range of the current LUT."]
-//                                     userInfo:nil];
-//    }
-    
     [newLUT LUTLoopWithBlock:^(size_t r, size_t g, size_t b) {
         LUTColor *startColor = [self colorAtR:r g:g b:b];
         LUTColor *newColor = [otherLUT colorAtColor:startColor];
