@@ -154,8 +154,6 @@
     NSMutableArray *redArray = [NSMutableArray array];
     NSMutableArray *greenArray = [NSMutableArray array];
     NSMutableArray *blueArray = [NSMutableArray array];
-    double minValue = [self minimumOutputValue];
-    double maxValue = [self maximumOutputValue];
     
     [self LUTLoopWithBlock:^(size_t r, size_t g, size_t b) {
         double normalizedRIndex = remap(r, 0, [self size]-1, 0, 1);
