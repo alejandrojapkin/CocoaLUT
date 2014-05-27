@@ -9,6 +9,11 @@
 #import <Foundation/Foundation.h>
 #import "CocoaLUT.h"
 
+#define LEGAL_LEVELS_MIN 0.06256109481 //64.0/1023.0
+#define LEGAL_LEVELS_MAX 0.91886608015 //940.0/1023.0
+#define EXTENDED_LEVELS_MIN 0.0 //0.00391006842 //4.0/1023.0
+#define EXTENDED_LEVELS_MAX 1.0 //0.99608993157 //1019.0/1023.0
+
 /**
  *  Used to represent the value of a channel for a `LUTColor`.
  */
