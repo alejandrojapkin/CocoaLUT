@@ -50,6 +50,16 @@
     return [LUTColor colorWithRed:self.red+offsetColor.red green:self.green+offsetColor.green blue:self.blue+offsetColor.blue];
 }
 
+- (LUTColor *)colorBySubtractingColor:(LUTColor *)offsetColor{
+    return [LUTColor colorWithRed:self.red-offsetColor.red green:self.green-offsetColor.green blue:self.blue-offsetColor.blue];
+}
+
+- (LUTColor *)colorByInvertingColorWithMinimumValue:(double)minimumValue
+                                       maximumValue:(double)maximumValue{
+    double distance = abs(maximumValue-minimumValue);
+    return [LUTColor colorWithRed:distance - self.red green:distance - self.green blue:distance - self.blue];
+}
+
 //thanks http://git.dyne.org/frei0r/plain/src/filter/sopsat/sopsat.cpp
 //  The "saturation" parameter works like this:
 //    0.0 creates a black-and-white image.

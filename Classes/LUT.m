@@ -172,6 +172,17 @@
     return newLUT;
 }
 
+- (instancetype)LUTByInvertingColor{
+    LUT *newLUT = [[self class] LUTOfSize:[self size] inputLowerBound:self.inputLowerBound inputUpperBound:self.inputUpperBound];
+    
+    [newLUT LUTLoopWithBlock:^(size_t r, size_t g, size_t b) {
+        LUTColor *startColor = [self colorAtR:r g:g b:b];
+        [newLUT setColor:[startColor colorByInvertingColorWithMinimumValue:0 maximumValue:1] r:r g:g b:b];
+    }];
+    
+    return newLUT;
+}
+
 - (LUTColor *)identityColorAtR:(double)redPoint g:(double)greenPoint b:(double)bluePoint{
     double red = remap(redPoint, 0, [self size] - 1, [self inputLowerBound], [self inputUpperBound]);
     double green = remap(greenPoint, 0, [self size] - 1, [self inputLowerBound], [self inputUpperBound]);

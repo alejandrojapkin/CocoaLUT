@@ -81,6 +81,10 @@ typedef double LUTColorValue;
                         outputHigh:(double)outputHigh;
 
 - (LUTColor *)colorByAddingColor:(LUTColor *)offsetColor;
+- (LUTColor *)colorBySubtractingColor:(LUTColor *)offsetColor;
+
+- (LUTColor *)colorByInvertingColorWithMinimumValue:(double)minimumValue
+                                       maximumValue:(double)maximumValue;
 
 - (LUTColor *)colorByChangingSaturation:(double)saturation
                              usingLumaR:(double)lumaR
