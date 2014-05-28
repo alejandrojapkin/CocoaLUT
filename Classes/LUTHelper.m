@@ -61,6 +61,15 @@ double remapNoError(double value, double inputLow, double inputHigh, double outp
     return outputLow + ((value - inputLow)*(outputHigh - outputLow))/(inputHigh - inputLow);
 }
 
+BOOL outOfBounds(double value, double min, double max, BOOL inclusive){
+    if(inclusive){
+        return value < min || value > max;
+    }
+    else{
+        return value <= min || value >= max;
+    }
+}
+
 
 double lerp1d(double beginning, double end, double value01) {
     if (value01 < 0 || value01 > 1){
