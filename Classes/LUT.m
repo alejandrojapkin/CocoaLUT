@@ -153,7 +153,7 @@
                                        inputHigh:(double)inputHigh
                                        outputLow:(double)outputLow
                                       outputHigh:(double)outputHigh
-                                         noError:(BOOL)noError{
+                                         bounded:(BOOL)bounded{
     LUT *newLUT = [[self class] LUTOfSize:[self size] inputLowerBound:[self inputLowerBound] inputUpperBound:[self inputUpperBound]];
     
     [newLUT LUTLoopWithBlock:^(size_t r, size_t g, size_t b) {
@@ -161,7 +161,7 @@
                                                                inputHigh:inputHigh
                                                                outputLow:outputLow
                                                               outputHigh:outputHigh
-                                                                 noError:noError] r:r g:g b:b];
+                                                                 bounded:bounded] r:r g:g b:b];
     }];
     
     return newLUT;

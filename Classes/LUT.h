@@ -113,7 +113,7 @@ typedef NS_ENUM(NSInteger, LUTImageRenderPath) {
                                        inputHigh:(double)inputHigh
                                        outputLow:(double)outputLow
                                       outputHigh:(double)outputHigh
-                                         noError:(BOOL)noError;
+                                         bounded:(BOOL)bounded;
 
 - (instancetype)LUTByChangingInputLowerBound:(double)inputLowerBound inputUpperBound:(double)inputUpperBound;
 

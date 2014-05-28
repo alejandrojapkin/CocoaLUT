@@ -99,7 +99,7 @@
         
         SCNBox *dot = [SCNBox boxWithWidth:2.0*radius height:2.0*radius length:2.0*radius chamferRadius:radius];
         dot.chamferSegmentCount = 1.0; //efficient for rendering but makes it look like a polygon
-        dot.firstMaterial.diffuse.contents = [identityColor remappedFromInputLow:lut3D.inputLowerBound inputHigh:lut3D.inputUpperBound outputLow:0 outputHigh:1 noError:YES].NSColor;
+        dot.firstMaterial.diffuse.contents = [identityColor remappedFromInputLow:lut3D.inputLowerBound inputHigh:lut3D.inputUpperBound outputLow:0 outputHigh:1 bounded:NO].NSColor;
         
         LUTColorNode *node = (LUTColorNode*)[LUTColorNode nodeWithGeometry:dot];
         node.identityColor = identityColor;

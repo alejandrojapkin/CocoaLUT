@@ -127,8 +127,8 @@
                          inputHigh:(double)inputHigh
                          outputLow:(double)outputLow
                         outputHigh:(double)outputHigh
-                           noError:(BOOL)noError{
-    if(noError){
+                           bounded:(BOOL)bounded{
+    if(!bounded){
         return [LUTColor colorWithRed:remapNoError(self.red, inputLow, inputHigh, outputLow, outputHigh)
                                 green:remapNoError(self.green, inputLow, inputHigh, outputLow, outputHigh)
                                  blue:remapNoError(self.blue, inputLow, inputHigh, outputLow, outputHigh)];
