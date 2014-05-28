@@ -87,7 +87,7 @@
     CGContextRef context = [[NSGraphicsContext
                                currentContext] graphicsPort];
 
-    [self drawGridInContext:context inRect:drawingRect numXDivs:5 transparency:.3];
+    [self drawGridInContext:context inRect:drawingRect numXDivs:33 transparency:.3];
     
     if(self.interpolation == LUT1DGraphViewInterpolationLinear){
         CGContextSetRGBStrokeColor(context, 1, 0, 0, 1);
@@ -116,28 +116,28 @@
     CGFloat pixelWidth = rect.size.width;
     CGFloat pixelHeight = rect.size.height;
     
-    NSArray *xIndices = indicesIntegerArray(xOrigin, xOrigin + pixelWidth, numDivs);
+    NSArray *xIndices = indicesDoubleArray(xOrigin, xOrigin + pixelWidth, numDivs);
     
     CGContextSetRGBStrokeColor(context, 1.0-transparency, 1.0-transparency, 1.0-transparency, 1);
     CGContextSetLineWidth(context, 2.0);
     
     for (NSNumber *index in xIndices){
-        NSUInteger indexAsInt = [index integerValue];
+        double indexAsDouble = [index doubleValue];
         
         CGContextBeginPath(context);
-        CGContextMoveToPoint(context, indexAsInt, yOrigin);
-        CGContextAddLineToPoint(context, indexAsInt, yOrigin + pixelHeight);
+        CGContextMoveToPoint(context, indexAsDouble, yOrigin);
+        CGContextAddLineToPoint(context, indexAsDouble, yOrigin + pixelHeight);
         CGContextStrokePath(context);
     }
     
-    NSArray *yIndices = indicesIntegerArray(yOrigin, yOrigin + pixelHeight, numDivs);
+    NSArray *yIndices = indicesDoubleArray(yOrigin, yOrigin + pixelHeight, numDivs);
     
     for (NSNumber *index in yIndices){
-        NSUInteger indexAsInt = [index integerValue];
+        double indexAsDouble = [index doubleValue];
         
         CGContextBeginPath(context);
-        CGContextMoveToPoint(context, xOrigin, indexAsInt);
-        CGContextAddLineToPoint(context, xOrigin + pixelWidth, indexAsInt);
+        CGContextMoveToPoint(context, xOrigin, indexAsDouble);
+        CGContextAddLineToPoint(context, xOrigin + pixelWidth, indexAsDouble);
         CGContextStrokePath(context);
     }
     
@@ -154,9 +154,9 @@
     CGContextSetLineWidth(context, thickness);
     CGContextBeginPath(context);
     
-    for (CGFloat x = 0.0f; x < pixelWidth; x++) {
+    for (CGFloat x = 0.0f; x <= pixelWidth; x++) {
         // Get the Y value of our point
-        double xAsInterpolatedIndex = remap(x, 0, pixelWidth-1, 0, array.count-1);
+        double xAsInterpolatedIndex = remap(x, 0, pixelWidth, 0, array.count-1);
         CGFloat yUnscaled;
         if(x == pixelWidth-1){
             yUnscaled = [array[array.count-1] doubleValue];
@@ -164,8 +164,8 @@
         else{
             yUnscaled = lerp1d([array[(int)floor(xAsInterpolatedIndex)] doubleValue], [array[(int)ceil(xAsInterpolatedIndex)] doubleValue], xAsInterpolatedIndex - floor(xAsInterpolatedIndex));
         }
-        CGFloat xMapped = remap(x, 0, pixelWidth-1, xOrigin, xOrigin + pixelWidth-1);
-        CGFloat yMapped = remapNoError(yUnscaled, clampUpperBound(self.minimumOutputValue, 0), clampLowerBound(self.maximumOutputValue, 1), yOrigin, yOrigin + pixelHeight - 1);
+        CGFloat xMapped = remap(x, 0, pixelWidth, xOrigin, xOrigin + pixelWidth);
+        CGFloat yMapped = remapNoError(yUnscaled, clampUpperBound(self.minimumOutputValue, 0), clampLowerBound(self.maximumOutputValue, 1), yOrigin, yOrigin + pixelHeight);
         //NSLog(@"%f %f -> %f %f", x/pixelWidth, interpolatedY, x, y);
         // Add the point to the context's path
         
@@ -183,8 +183,8 @@
     if([self.lut size] < pixelWidth/2.0){
         CGContextSetRGBFillColor(context, 0, 0, 0, 1);
         for (int x = 0; x < [self.lut size]; x++){
-            CGFloat xMapped = remap(x, 0, [self.lut size]-1, xOrigin, xOrigin + pixelWidth-1);
-            CGFloat yMapped = remapNoError([array[x] doubleValue], clampUpperBound(self.minimumOutputValue, 0), clampLowerBound(self.maximumOutputValue, 1), yOrigin, yOrigin + pixelHeight - 1);
+            CGFloat xMapped = remap(x, 0, [self.lut size]-1, xOrigin, xOrigin + pixelWidth);
+            CGFloat yMapped = remapNoError([array[x] doubleValue], clampUpperBound(self.minimumOutputValue, 0), clampLowerBound(self.maximumOutputValue, 1), yOrigin, yOrigin + pixelHeight);
             CGContextFillEllipseInRect(context, CGRectMake(xMapped-(3.0/2.0)*thickness, yMapped-(3.0/2.0)*thickness, 3.0*thickness, 3.0*thickness));
         }
     }
@@ -202,12 +202,12 @@
     
     CGContextSetLineWidth(context, 2.0);
     CGContextBeginPath(context);
-    for (CGFloat x = 0.0f; x < pixelWidth; x++) {
+    for (CGFloat x = 0.0f; x <= pixelWidth; x++) {
         // Get the Y value of our point
         CGFloat interpolatedY = [spline interpolate:x / (pixelWidth)];
         
-        CGFloat xMapped = remap(x, 0, pixelWidth-1, xOrigin, xOrigin + pixelWidth-1);
-        CGFloat yMapped = remapNoError(interpolatedY, clampUpperBound(self.minimumOutputValue, 0), clampLowerBound(self.maximumOutputValue, 1), yOrigin, yOrigin + pixelHeight-1);
+        CGFloat xMapped = remap(x, 0, pixelWidth, xOrigin, xOrigin + pixelWidth);
+        CGFloat yMapped = remapNoError(interpolatedY, clampUpperBound(self.minimumOutputValue, 0), clampLowerBound(self.maximumOutputValue, 1), yOrigin, yOrigin + pixelHeight);
         
         //NSLog(@"%f %f -> %f %f", x/pixelWidth, interpolatedY, x, y);
         // Add the point to the context's path
@@ -224,8 +224,8 @@
     if([self.lut size] < pixelWidth/2.0){
         CGContextSetRGBFillColor(context, 0, 0, 0, 1);
         for (int x = 0; x < [self.lut size]; x++){
-            CGFloat xMapped = remap(x, 0, [self.lut size]-1, xOrigin, xOrigin + pixelWidth-1);
-            CGFloat yMapped = remapNoError([spline interpolate:(double)x/((double)[self.lut size]-1.0)], clampUpperBound(self.minimumOutputValue, 0), clampLowerBound(self.maximumOutputValue, 1), yOrigin, yOrigin + pixelHeight - 1);
+            CGFloat xMapped = remap(x, 0, [self.lut size]-1, xOrigin, xOrigin + pixelWidth);
+            CGFloat yMapped = remapNoError([spline interpolate:(double)x/((double)[self.lut size]-1.0)], clampUpperBound(self.minimumOutputValue, 0), clampLowerBound(self.maximumOutputValue, 1), yOrigin, yOrigin + pixelHeight);
             CGContextFillEllipseInRect(context, CGRectMake(xMapped-3, yMapped-3, 6, 6));
         }
     }
