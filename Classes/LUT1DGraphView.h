@@ -17,8 +17,10 @@ typedef NS_ENUM(NSInteger, LUT1DGraphViewInterpolation) {
 
 @interface LUT1DGraphView : NSView
 
-@property (strong, nonatomic) LUT *lut;
+@property (strong, nonatomic) LUT1D *lut;
 @property (assign, nonatomic) LUT1DGraphViewInterpolation interpolation;
+
+@property (strong) NSString *colorStringAtMousePoint;
 
 -(void)lutDidChange;
 
