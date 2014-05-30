@@ -143,7 +143,7 @@
 }
 
 - (NSString *)description{
-    return [NSString stringWithFormat:@"%.6f %.6f %.6f", self.red, self.green, self.blue];
+    return [NSString stringWithFormat:@"(%.6f, %.6f, %.6f)", self.red, self.green, self.blue];
 }
 
 - (BOOL)isEqualToLUTColor:(LUTColor *)otherColor{
