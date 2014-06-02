@@ -266,6 +266,17 @@
         [newRGBCurves addObject:[NSMutableArray arrayWithArray:newCurve]];
     }
     
+    //ease edges
+//    if(![self isReversibleWithStrictness:YES]){
+//        for (NSMutableArray *curve in newRGBCurves){
+//            curve[0] = @(clampLowerBound([curve[1] doubleValue] - (([curve[2] doubleValue] - [curve[1] doubleValue])), self.inputLowerBound));
+//            curve[self.size - 1] = @(clampUpperBound([curve[self.size-2] doubleValue] + (([curve[self.size-2] doubleValue] - [curve[self.size-3] doubleValue])), self.inputUpperBound));
+//        }
+//    }
+    
+    
+    
+    
     return [LUT1D LUT1DWithRedCurve:newRGBCurves[0]
                          greenCurve:newRGBCurves[1]
                           blueCurve:newRGBCurves[2]
