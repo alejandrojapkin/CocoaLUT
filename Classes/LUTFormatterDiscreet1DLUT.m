@@ -69,7 +69,7 @@
     
     LUT1D *lut = [LUT1D LUT1DWithRedCurve:redCurve greenCurve:greenCurve blueCurve:blueCurve lowerBound:0.0 upperBound:1.0];
     [lut setMetadata:metadata];
-    [lut setDescription:description];
+    lut.descriptionText = description;
     [lut setPassthroughFileOptions:@{[LUTFormatterDiscreet1DLUT utiString]: passthroughFileOptions}];
     return lut;
 }

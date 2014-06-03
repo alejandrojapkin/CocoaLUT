@@ -88,7 +88,7 @@
     }
     
     [lut setMetadata:metadata];
-    [lut setDescription:description];
+    lut.descriptionText = description;
     [lut setPassthroughFileOptions:@{[LUTFormatter3DL utiString]: passthroughFileOptions}];
 
     return lut;

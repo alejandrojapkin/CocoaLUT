@@ -141,7 +141,7 @@
     }
 
     [lut setTitle:title];
-    [lut setDescription:description];
+    lut.descriptionText = description;
     [lut setMetadata:metadata];
 
     return lut;
