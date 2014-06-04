@@ -23,33 +23,25 @@
 }
 @end
 
-@implementation LUTPreviewSceneView
+@implementation LUTPreviewSceneViewController
 
-- (void)setScene:(SCNScene *)scene{
-    [super setScene:scene];
-    [(LUTPreviewScene *)self.scene setAnimationPercentage:1.0];
-    [(LUTPreviewScene *)self.scene updateNodes];
+- (void)setSceneWithLUT:(LUT *)lut{
+    self.sceneView.scene = [LUTPreviewScene sceneForLUT:lut];
+    self.animationPercentage = 1.0;
+}
+
+- (void)setAnimationPercentage:(double)animationPercentage{
+    _animationPercentage = animationPercentage;
+    [(LUTPreviewScene *)self.sceneView.scene updateNodesToPercentage:animationPercentage];
 }
 
 @end
 
 @implementation LUTPreviewScene
 
-- (void)dealloc{
-    [self removeObserver:self forKeyPath:@"animationPercentage"];
-}
-
-
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
-    if([keyPath isEqualToString:@"animationPercentage"]){
-        [self updateNodes];
-    }
-             
-}
-
-- (void)updateNodes{
+- (void)updateNodesToPercentage:(double)percentage{
     for(LUTColorNode *node in self.dotGroup.childNodes){
-        [node changeToAnimationPercentage:self.animationPercentage];
+        [node changeToAnimationPercentage:percentage];
     }
 }
 
@@ -59,9 +51,6 @@
     LUT3D *lut3D = LUTAsLUT3D(lut, LATTICE_SIZE);
     
     LUTPreviewScene *scene = [self scene];
-    scene.animationPercentage = 1.0;
-    [scene addObserver:scene forKeyPath:@"animationPercentage" options:NSKeyValueObservingOptionNew context:NULL];
-    
     
     SCNNode *dotGroup = [SCNNode node];
     [scene.rootNode addChildNode:dotGroup];
