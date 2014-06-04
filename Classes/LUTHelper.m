@@ -171,7 +171,7 @@ void LUTConcurrentRectLoop(NSUInteger width, NSUInteger height, void (^block)(NS
 }
 
 CGSize CGSizeProportionallyScaled(CGSize currentSize, CGSize targetSize) {
-    if ( NSEqualSizes(currentSize, targetSize) == NO ) {
+    if ( CGSizeEqualToSize(currentSize, targetSize) == NO ) {
         float widthFactor  = targetSize.width / currentSize.width;
         float heightFactor = targetSize.height / currentSize.height;
         
