@@ -33,8 +33,8 @@
     NSArray *headerLines = [lines subarrayWithRange:NSMakeRange(0, cubeLinesStartIndex)];
     
     NSDictionary *metadataAndDescription = [LUTMetadataFormatter metadataAndDescriptionFromLines:headerLines];
-    metadata = [metadataAndDescription objectForKey:@"metadata"];
-    description = [metadataAndDescription objectForKey:@"description"];
+    metadata = metadataAndDescription[@"metadata"];
+    description = metadataAndDescription[@"description"];
     
     for(NSString *line in headerLines){
         NSString *titleMatch;
@@ -49,12 +49,12 @@
             cubeSize = sizeString.integerValue;
         }
         else if ([line rangeOfString:@"LUT_3D_INPUT_RANGE"].location != NSNotFound) {
-            [data setObject:@([[line componentsSeparatedByString:@" "][1] doubleValue]) forKey:@"inputLowerBound"];
-            [data setObject:@([[line componentsSeparatedByString:@" "][2] doubleValue]) forKey:@"inputUpperBound"];
+            data[@"inputLowerBound"] = @([[line componentsSeparatedByString:@" "][1] doubleValue]);
+            data[@"inputUpperBound"] = @([[line componentsSeparatedByString:@" "][2] doubleValue]);
         }
         else if ([line rangeOfString:@"LUT_1D_INPUT_RANGE"].location != NSNotFound) {
-            [data setObject:@([[line componentsSeparatedByString:@" "][1] doubleValue]) forKey:@"inputLowerBound"];
-            [data setObject:@([[line componentsSeparatedByString:@" "][2] doubleValue]) forKey:@"inputUpperBound"];
+            data[@"inputLowerBound"] = @([[line componentsSeparatedByString:@" "][1] doubleValue]);
+            data[@"inputUpperBound"] = @([[line componentsSeparatedByString:@" "][2] doubleValue]);
         }
         else if ((titleMatch = [line firstMatch:RX(@"(?<=TITLE \")[^\"]*(?=\")")])) {
             [title appendString:titleMatch];
@@ -75,8 +75,8 @@
     LUT *lut;
     
     if(isLUT3D){
-        if([data objectForKey:@"inputLowerBound"] != nil){
-            lut = [LUT3D LUTOfSize:cubeSize inputLowerBound:[[data objectForKey:@"inputLowerBound"] doubleValue] inputUpperBound:[[data objectForKey:@"inputUpperBound"] doubleValue]];
+        if(data[@"inputLowerBound"] != nil){
+            lut = [LUT3D LUTOfSize:cubeSize inputLowerBound:[data[@"inputLowerBound"] doubleValue] inputUpperBound:[data[@"inputUpperBound"] doubleValue]];
         }
         else{
             //assume 0-1 input
@@ -110,8 +110,8 @@
     }
     else{
         //1D LUT
-        if([data objectForKey:@"inputLowerBound"] != nil){
-            lut = [LUT1D LUTOfSize:cubeSize inputLowerBound:[[data objectForKey:@"inputLowerBound"] doubleValue] inputUpperBound:[[data objectForKey:@"inputUpperBound"] doubleValue]];
+        if(data[@"inputLowerBound"] != nil){
+            lut = [LUT1D LUTOfSize:cubeSize inputLowerBound:[data[@"inputLowerBound"] doubleValue] inputUpperBound:[data[@"inputUpperBound"] doubleValue]];
         }
         else{
             //assume 0-1 input

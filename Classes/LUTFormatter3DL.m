@@ -27,8 +27,8 @@
     NSArray *headerLines = [lines subarrayWithRange:NSMakeRange(0, cubeLinesStartIndex)];
     
     NSDictionary *metadataAndDescription = [LUTMetadataFormatter metadataAndDescriptionFromLines:headerLines];
-    metadata = [metadataAndDescription objectForKey:@"metadata"];
-    description = [metadataAndDescription objectForKey:@"description"];
+    metadata = metadataAndDescription[@"metadata"];
+    description = metadataAndDescription[@"description"];
     
     // Find the size
     for(NSString *line in headerLines) {
@@ -37,7 +37,7 @@
             NSInteger inputDepth = [components[1] integerValue];
             integerMaxOutput = pow(2, [components[2] integerValue]) - 1;
             cubeSize = pow(2, inputDepth) + 1;
-            [passthroughFileOptions setObject:@"Lustre" forKey:@"fileTypeVariant"];
+            passthroughFileOptions[@"fileTypeVariant"] = @"Lustre";
             break;
         }
         if ([line rangeOfString:@"#"].location == NSNotFound && [line rangeOfString:@"0"].location != NSNotFound) {
@@ -45,7 +45,7 @@
             components = [components filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"SELF != ''"]];
             integerMaxOutput = [components[components.count - 1] intValue];
             cubeSize = components.count;
-            [passthroughFileOptions setObject:@"Nuke" forKey:@"fileTypeVariant"];
+            passthroughFileOptions[@"fileTypeVariant"] = @"Nuke";
             break;
         }
             
@@ -56,7 +56,7 @@
         @throw exception;
     }
     
-    [passthroughFileOptions setObject:@(integerMaxOutput) forKey:@"integerMaxOutput"];
+    passthroughFileOptions[@"integerMaxOutput"] = @(integerMaxOutput);
     
     
 
@@ -100,7 +100,7 @@
     
     options = options[[LUTFormatter3DL utiString]];
     if(options == nil){
-        options = [[LUTFormatter3DL defaultOptions] objectForKey:[LUTFormatter3DL utiString]];
+        options = [LUTFormatter3DL defaultOptions][[LUTFormatter3DL utiString]];
     }
     
     NSUInteger integerMaxOutput;
@@ -111,7 +111,7 @@
     //validate options
     if(options == nil || options[@"fileTypeVariant"] == nil || options[@"integerMaxOutput"] == nil || options[@"lutSize"] == nil){
         //set to default if the options aren't valid.
-        options = [[LUTFormatter3DL defaultOptions] objectForKey:[LUTFormatter3DL utiString]];
+        options = [LUTFormatter3DL defaultOptions][[LUTFormatter3DL utiString]];
     }
     
     fileTypeVariant = options[@"fileTypeVariant"];

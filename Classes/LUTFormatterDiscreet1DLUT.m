@@ -35,8 +35,8 @@
     NSArray *headerLines = [lines subarrayWithRange:NSMakeRange(0, lutLinesStartIndex)];
     
     NSDictionary *metadataAndDescription = [LUTMetadataFormatter metadataAndDescriptionFromLines:headerLines];
-    metadata = [metadataAndDescription objectForKey:@"metadata"];
-    description = [metadataAndDescription objectForKey:@"description"];
+    metadata = metadataAndDescription[@"metadata"];
+    description = metadataAndDescription[@"description"];
     
     //trim for lut values only and grab the max code value
     for (NSString *line in lines) {
@@ -84,7 +84,7 @@
     //validate options
     if(options == nil || options[@"integerMaxOutput"] == nil){
         //set to default if missing options
-        options = [[LUTFormatterDiscreet1DLUT defaultOptions] objectForKey:[LUTFormatterDiscreet1DLUT utiString]];
+        options = [LUTFormatterDiscreet1DLUT defaultOptions][[LUTFormatterDiscreet1DLUT utiString]];
     }
     
     integerMaxOutput = [options[@"integerMaxOutput"] integerValue];
