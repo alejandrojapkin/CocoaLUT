@@ -103,7 +103,7 @@
     CGContextRef context = [[NSGraphicsContext
                                currentContext] graphicsPort];
 
-    [self drawGridInContext:context inRect:drawingRect numXDivs:clamp(self.lut.size, 0, 64) transparency:.3];
+    [self drawGridInContext:context inRect:drawingRect numXDivs:clamp(self.lut.size, 0, 64) transparency:.2];
     
     if(self.interpolation == LUT1DGraphViewInterpolationLinear){
         [self drawLUT1D:self.lut inContext:context inRect:drawingRect thickness:2.0];
@@ -172,7 +172,8 @@
     NSArray *xIndices = indicesDoubleArray(xOrigin, xOrigin + pixelWidth, numDivs);
     
     CGContextSetRGBStrokeColor(context, 1.0-transparency, 1.0-transparency, 1.0-transparency, 1);
-    CGContextSetLineWidth(context, 2.0);
+    CGFloat strokeWidth = [[self window] backingScaleFactor] > 1 ? 0.5 : 1;
+    CGContextSetLineWidth(context, strokeWidth);
     
     for (NSNumber *index in xIndices){
         double indexAsDouble = [index doubleValue];
