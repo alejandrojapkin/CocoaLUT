@@ -16,6 +16,7 @@
 #import "LUTFormatterUnwrappedTexture.h"
 #import "LUTFormatterCMSTestPattern.h"
 #import "LUTFormatterArriLook.h"
+#import "LUTFormatterICCProfile.h"
 
 @interface LUT ()
 @end
@@ -64,6 +65,9 @@
     else if ([url.pathExtension.lowercaseString isEqualToString:@"xml"]) {
         return [LUTFormatterArriLook LUTFromFile:url];
     }
+    else if ([url.pathExtension.lowercaseString isEqualToString:@"icc"]) {
+        return [LUTFormatterICCProfile LUTFromFile:url];
+    }
     else if ([@[@"tif", @"tiff", @"png", @"dpx"] containsObject:url.pathExtension.lowercaseString]) {
         @try{
             return [LUTFormatterUnwrappedTexture LUTFromFile:url];
@@ -94,7 +98,8 @@
                                  [LUTFormatterILUT utiString]: [LUTFormatterILUT class],
                                  [LUTFormatterUnwrappedTexture utiString]: [LUTFormatterUnwrappedTexture class],
                                  [LUTFormatterCMSTestPattern utiString]: [LUTFormatterCMSTestPattern class],
-                                 [LUTFormatterArriLook utiString]: [LUTFormatterArriLook class]};
+                                 [LUTFormatterArriLook utiString]: [LUTFormatterArriLook class],
+                                 [LUTFormatterICCProfile utiString]: [LUTFormatterICCProfile class]};
     return dictionary[utiString];
     
 }

@@ -51,6 +51,8 @@ typedef double LUTColorValue;
  */
 + (instancetype)colorWithRed:(LUTColorValue)r green:(LUTColorValue)g blue:(LUTColorValue)b;
 
++ (instancetype)colorFromNSColor:(NSColor *)color;
+
 /**
  *  Returns a new color with the provided integer channel values and a bit depth of the color system. Values will be converted to floating-point.
  *
