@@ -128,5 +128,9 @@
     return @"com.discreet.lut";
 }
 
++ (NSArray *)fileExtensions{
+    return @[@"lut"];
+}
+
 
 @end

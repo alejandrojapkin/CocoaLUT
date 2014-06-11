@@ -94,4 +94,6 @@
 
 + (NSString *)utiString;
 
++ (NSArray *)fileExtensions;
+
 @end

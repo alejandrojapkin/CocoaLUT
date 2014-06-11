@@ -187,6 +187,10 @@
     return @"com.autodesk.3dl";
 }
 
++ (NSArray *)fileExtensions{
+    return @[@"3dl"];
+}
+
 + (NSDictionary *)allOptions{
     
     NSDictionary *lustreOptions =

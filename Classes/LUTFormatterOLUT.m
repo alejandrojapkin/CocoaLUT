@@ -62,4 +62,8 @@
     return @"com.blackmagicdesign.olut";
 }
 
++ (NSArray *)fileExtensions{
+    return @[@"olut"];
+}
+
 @end

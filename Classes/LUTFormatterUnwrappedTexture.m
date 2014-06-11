@@ -97,4 +97,8 @@
     return @"public.unwrapped-cube-lut";
 }
 
++ (NSArray *)fileExtensions{
+    return @[@"tiff", @"tif", @"dpx", @"png"];
+}
+
 @end

@@ -27,4 +27,8 @@
     return @"com.apple.colorsync-profile";
 }
 
++ (NSArray *)fileExtensions{
+    return @[@"icc", @"icm", @"pf", @"prof"];
+}
+
 @end

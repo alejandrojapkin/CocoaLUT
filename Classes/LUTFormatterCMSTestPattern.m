@@ -138,5 +138,9 @@
     return @"public.cms-test-pattern-lut";
 }
 
++ (NSArray *)fileExtensions{
+    return @[@"tiff", @"tif", @"dpx", @"png"];
+}
+
 
 @end

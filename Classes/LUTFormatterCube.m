@@ -212,4 +212,8 @@
     return @"com.blackmagicdesign.cube";
 }
 
++ (NSArray *)fileExtensions{
+    return @[@"cube"];
+}
+
 @end

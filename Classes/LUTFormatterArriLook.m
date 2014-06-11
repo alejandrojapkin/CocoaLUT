@@ -92,4 +92,8 @@
     return @"public.xml";
 }
 
++ (NSArray *)fileExtensions{
+    return @[@"xml"];
+}
+
 @end

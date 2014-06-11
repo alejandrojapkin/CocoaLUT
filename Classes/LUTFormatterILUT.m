@@ -59,4 +59,8 @@
     return @"com.blackmagicdesign.ilut";
 }
 
++ (NSArray *)fileExtensions{
+    return @[@"ilut"];
+}
+
 @end
