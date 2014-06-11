@@ -48,7 +48,7 @@
 + (instancetype)sceneForLUT:(LUT *)lut {
     
     
-    LUT3D *lut3D = LUTAsLUT3D(lut, LATTICE_SIZE);
+    LUT3D *lut3D = LUTAsLUT3D(lut, MIN(LATTICE_SIZE, lut.size));
     
     LUTPreviewScene *scene = [self scene];
     
