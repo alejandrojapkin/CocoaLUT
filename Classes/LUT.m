@@ -47,6 +47,10 @@
 }
 
 + (instancetype)LUTFromURL:(NSURL *)url {
+//    NSString *filePath = [url path];
+//    CFStringRef fileExtension = (__bridge CFStringRef) [filePath pathExtension];
+//    NSString *fileUTI = (__bridge NSString *)UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, fileExtension, NULL);
+    
     if ([url.pathExtension.lowercaseString isEqualToString:@"cube"]){
         return [LUTFormatterCube LUTFromFile:url];
     }
@@ -65,7 +69,7 @@
     else if ([url.pathExtension.lowercaseString isEqualToString:@"xml"]) {
         return [LUTFormatterArriLook LUTFromFile:url];
     }
-    else if ([url.pathExtension.lowercaseString isEqualToString:@"icc"]) {
+    else if ([@[@"icc", @"icm", @"pf", @"prof"] containsObject:url.pathExtension.lowercaseString]) {
         return [LUTFormatterICCProfile LUTFromFile:url];
     }
     else if ([@[@"tif", @"tiff", @"png", @"dpx"] containsObject:url.pathExtension.lowercaseString]) {
