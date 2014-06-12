@@ -280,7 +280,7 @@
     CGPathRelease(bluePath);
     
     if(self.lut.size < pixelWidth/2.0){
-        CGContextSetRGBFillColor(context, 0, 0, 0, 1);
+        
         [self.lut LUTLoopWithBlock:^(size_t r, size_t g, size_t b) {
             double indexAsXPixel = remap(r, 0, self.lut.size - 1, xOrigin, pixelWidth - xOrigin);
             
@@ -288,8 +288,11 @@
             double redYMapped = remapNoError(color.red, clampUpperBound(self.minimumOutputValue, 0), clampLowerBound(self.maximumOutputValue, 1), yOrigin, yOrigin + pixelHeight);
             double greenYMapped = remapNoError(color.green, clampUpperBound(self.minimumOutputValue, 0), clampLowerBound(self.maximumOutputValue, 1), yOrigin, yOrigin + pixelHeight);
             double blueYMapped = remapNoError(color.blue, clampUpperBound(self.minimumOutputValue, 0), clampLowerBound(self.maximumOutputValue, 1), yOrigin, yOrigin + pixelHeight);
+            CGContextSetRGBFillColor(context, 1, 0, 0, 1);
             CGContextFillEllipseInRect(context, CGRectMake(indexAsXPixel-(3.0/2.0)*thickness, redYMapped-(3.0/2.0)*thickness, 3.0*thickness, 3.0*thickness));
+            CGContextSetRGBFillColor(context, 0, 1, 0, 1);
             CGContextFillEllipseInRect(context, CGRectMake(indexAsXPixel-(3.0/2.0)*thickness, greenYMapped-(3.0/2.0)*thickness, 3.0*thickness, 3.0*thickness));
+            CGContextSetRGBFillColor(context, 0, 0, 1, 1);
             CGContextFillEllipseInRect(context, CGRectMake(indexAsXPixel-(3.0/2.0)*thickness, blueYMapped-(3.0/2.0)*thickness, 3.0*thickness, 3.0*thickness));
             
             
