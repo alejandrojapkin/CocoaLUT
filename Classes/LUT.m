@@ -178,6 +178,12 @@
 }
 
 - (instancetype)LUTByChangingStrength:(double)strength{
+    if(strength > 1.0){
+        @throw [NSException exceptionWithName:@"ChangeStrengthError" reason:[NSString stringWithFormat:@"You can't set the strength of the LUT past 1.0 (%f)", strength] userInfo:nil];
+    }
+    if(strength == 1.0){
+        return [self copy];
+    }
     LUT *newLUT = [[self class] LUTOfSize:[self size] inputLowerBound:[self inputLowerBound] inputUpperBound:[self inputUpperBound]];
     
     [newLUT LUTLoopWithBlock:^(size_t r, size_t g, size_t b) {
