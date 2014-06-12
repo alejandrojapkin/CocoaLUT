@@ -10,13 +10,12 @@
 #import <QuartzCore/QuartzCore.h>
 
 @interface LUTPreviewView () {
-    CALayer *_maskLayer;
-    NSView *_borderView;
-    NSImageView *_normalImageView;
-    NSImageView *_lutImageView;
-    AVPlayerLayer *_avPlayerLayer;
 }
-
+@property (strong) CALayer *normalImageLayer;
+@property (strong) CALayer *lutImageLayer;
+@property (strong) CALayer *avPlayerLayer;
+@property (strong) CALayer *maskLayer;
+@property (strong) NSView  *borderView;
 @end
 
 @implementation LUTPreviewView
@@ -44,9 +43,8 @@
                      forKey:kCATransactionDisableActions];
 
     _maskLayer.frame = CGRectMake(0, 0, self.bounds.size.width * self.maskAmount, self.bounds.size.height);
-    _normalImageView.frame = self.bounds;
-    _lutImageView.frame = self.bounds;
-    
+    self.normalImageLayer.frame = self.bounds;
+    self.lutImageLayer.frame = self.bounds;
     
     _borderView.frame = CGRectMake(self.bounds.size.width * self.maskAmount, 0, 1, self.bounds.size.height);
     
@@ -74,19 +72,20 @@
     if (_lut) {
         CIFilter *filter = _lut.coreImageFilterWithCurrentColorSpace;
         if (filter) {
-            [_lutImageView setContentFilters:@[filter]];
+            self.lutImageLayer.filters = @[filter];
             return;
         }
     }
     
-    [_lutImageView setContentFilters:@[]];
+    [self.lutImageLayer setFilters:@[]];
 
 }
 
 - (void)setPreviewImage:(NSImage *)previewImage {
     _previewImage = previewImage;
-    [_normalImageView setImage:self.previewImage];
-    [_lutImageView setImage:self.previewImage];
+//    NSLog(@"recommendedLayerContentsScale:0 %f", [previewImage recommendedLayerContentsScale:2]);
+    self.lutImageLayer.contents = self.previewImage;
+    self.normalImageLayer.contents = self.previewImage;
     [self setupPlaybackLayers];
 }
 
@@ -96,6 +95,10 @@
 }
 
 - (BOOL)acceptsFirstResponder {
+    return YES;
+}
+
+- (BOOL)isOpaque {
     return YES;
 }
 
@@ -120,17 +123,16 @@
     self.wantsLayer = YES;
     self.layer.backgroundColor = NSColor.blackColor.CGColor;
     
-    _normalImageView = [[NSImageView alloc] initWithFrame:self.bounds];
-    [_normalImageView setImage:self.previewImage];
-    _normalImageView.imageScaling = NSImageScaleProportionallyUpOrDown;
-    [_normalImageView unregisterDraggedTypes];
-    [self addSubview:_normalImageView];
     
-    _lutImageView = [[NSImageView alloc] initWithFrame:self.bounds];
-    _lutImageView.imageScaling = NSImageScaleProportionallyUpOrDown;
-    [_lutImageView unregisterDraggedTypes];
-    [self addSubview:_lutImageView];
-
+    self.normalImageLayer = [[CALayer alloc] init];
+    self.normalImageLayer.contentsGravity = kCAGravityResizeAspect;
+    self.lutImageLayer = [[CALayer alloc] init];
+    self.lutImageLayer.contentsGravity = kCAGravityResizeAspect;
+    self.layerUsesCoreImageFilters = YES;
+    
+    [self.layer addSublayer:self.normalImageLayer];
+    [self.layer addSublayer:self.lutImageLayer];
+    
     _maskLayer = [CALayer layer];
     _maskLayer.backgroundColor = NSColor.whiteColor.CGColor;
     _maskLayer.frame = CGRectMake(0, 0, self.bounds.size.width * self.maskAmount, self.bounds.size.height);
@@ -150,23 +152,17 @@
 
 - (void)setupPlaybackLayers {
     if (self.isVideo) {
-        [_lutImageView setHidden:YES];
-        [_normalImageView setHidden:YES];
         if (!_avPlayerLayer) {
             _avPlayerLayer = [AVPlayerLayer playerLayerWithPlayer:self.avPlayer];
             _avPlayerLayer.bounds = self.bounds;
             _avPlayerLayer.backgroundColor = NSColor.redColor.CGColor;
         }
         [self.layer addSublayer:_avPlayerLayer];
-//        _avPlayerLayer.mask = _maskLayer;
     }
     else {
         [_avPlayerLayer removeFromSuperlayer];
         _avPlayerLayer = nil;
-
-        [_lutImageView setHidden:NO];
-        [_normalImageView setHidden:NO];
-        _lutImageView.layer.mask = _maskLayer;
+        self.lutImageLayer.mask = _maskLayer;
     }
 
 }
