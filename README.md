@@ -18,11 +18,13 @@ Do you need something like this in Python? Try [pylut](http://github.com/gregcot
   - Autodesk Lustre / Nuke 3D LUT (.3dl)
   - Unwrapped Texture LUT Image (.tiff, .dpx, .png)
   - CMS Test Pattern LUT Image (.tiff, .dpx, .png)
-  - Arri Look (.xml) as a 3D LUT
 - Reads and writes 1D LUTs
   - DaVinci Resolve Cube LUT (.cube)
   - DaVinci Resolve 1D LUT (.ilut, .olut)
   - Discreet 1D LUT (.lut)
+- Reads non-LUT formats as LUTs
+  - Arri Look (.xml) as a 3D LUT
+  - ICC/ColorSync Profiles (.icc, .icm, .pf, .prof) as a 3D LUT
 - Has a format-independent internal data structure. You can create LUTs and use them in-memory.
 - Apply LUTs to NSImage, CIImage, and UIImage
 - Generate Core Image Filters (CIFilter / CIColorCube) from LUTs
