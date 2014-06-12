@@ -16,8 +16,34 @@
 @property (assign) double minimumOutputValue;
 @property (assign) double maximumOutputValue;
 
-@property (assign) NSPoint mousePoint;
 
+
+
+@end
+
+@implementation LUT1DGraphViewController
+
+- (void)initialize{
+    [self.graphView addObserver:self forKeyPath:@"mousePoint" options:NSKeyValueObservingOptionNew context:nil];
+}
+
+- (void)dealloc{
+    [self.graphView removeObserver:self forKeyPath:@"mousePoint"];
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
+    if([keyPath isEqualToString:@"mousePoint"]){
+        self.colorStringAtMousePoint = [self.graphView colorStringFromCurrentMousePoint];
+    }
+}
+
+- (void)setViewWithLUT:(LUT1D *)lut{
+    self.graphView.lut = lut;
+}
+
+- (void)setInterpolation:(LUT1DGraphViewInterpolation)interpolation{
+    self.graphView.interpolation = interpolation;
+}
 
 @end
 
@@ -155,9 +181,18 @@
     CGContextSetRGBFillColor(context, 0, 0, 1, 1);
     CGContextFillEllipseInRect(context, CGRectMake(xPosition-(1.0/2.0)*thickness, blueYPosition-(1.0/2.0)*thickness, thickness, thickness));
     
-    self.colorStringAtMousePoint = [NSString stringWithFormat:@"x = %.6f %@", remap(xPositionAsInterpolatedIndex, 0, self.lut.size - 1, self.lut.inputLowerBound, self.lut.inputUpperBound), [colorAtXPosition description]];
+}
+
+- (NSString *)colorStringFromCurrentMousePoint{
+    CGFloat xOrigin = self.bounds.origin.x;
+    CGFloat pixelWidth = self.bounds.size.width;
     
-    //[(NSTextField *)[self subviews][1] setStringValue:self.colorStringAtMousePoint];
+    double xPosition = self.mousePoint.x;
+    double xPositionAsInterpolatedIndex = remap(xPosition, xOrigin, pixelWidth - xOrigin, 0, self.lut.size - 1);
+    
+    LUTColor *colorAtXPosition = [self.lut colorAtInterpolatedR:xPositionAsInterpolatedIndex g:xPositionAsInterpolatedIndex b:xPositionAsInterpolatedIndex];
+    
+    return [NSString stringWithFormat:@"x = %.6f %@", remap(xPositionAsInterpolatedIndex, 0, self.lut.size - 1, self.lut.inputLowerBound, self.lut.inputUpperBound), [colorAtXPosition description]];
 }
 
 - (void)drawGridInContext:(CGContextRef)context
