@@ -68,25 +68,35 @@
 
 - (void)setLut:(LUT *)lut {
     _lut = lut;
-    
-    if (_lut) {
-        CIFilter *filter = _lut.coreImageFilterWithCurrentColorSpace;
-        if (filter) {
-            self.lutImageLayer.filters = @[filter];
-            return;
-        }
-    }
-    
-    [self.lutImageLayer setFilters:@[]];
+    dispatch_async(dispatch_get_current_queue(), ^{
+        [self updateImageViews];
+//        if (_lut) {
+//            CIFilter *filter = _lut.coreImageFilterWithCurrentColorSpace;
+//            if (filter) {
+//                self.lutImageLayer.filters = @[filter];
+//                return;
+//            }
+//        }
+//        [self.lutImageLayer setFilters:@[]];
+    });
+}
 
+- (void)updateImageViews {
+    NSImage *lutImage = self.previewImage;
+    if (self.lut) {
+        lutImage = [self.lut processNSImage:self.previewImage renderPath:LUTImageRenderPathCoreImage];
+    }
+    self.lutImageLayer.contents = lutImage;
+    self.normalImageLayer.contents = self.previewImage;
 }
 
 - (void)setPreviewImage:(NSImage *)previewImage {
     _previewImage = previewImage;
-//    NSLog(@"recommendedLayerContentsScale:0 %f", [previewImage recommendedLayerContentsScale:2]);
-    self.lutImageLayer.contents = self.previewImage;
-    self.normalImageLayer.contents = self.previewImage;
-    [self setupPlaybackLayers];
+    dispatch_async(dispatch_get_current_queue(), ^{
+//        NSLog(@"recommendedLayerContentsScale:0 %f", [previewImage recommendedLayerContentsScale:2]);
+        [self updateImageViews];
+        [self setupPlaybackLayers];
+    });
 }
 
 - (void)setAvPlayer:(AVPlayer *)avPlayer {
