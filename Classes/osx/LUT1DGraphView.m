@@ -98,6 +98,10 @@
     //no need to redraw if the interpolation didn't actually change!
 }
 
+-(BOOL)isOpaque {
+    return YES;
+}
+
 -(void)lutDidChange{
     if(self.lut){
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
