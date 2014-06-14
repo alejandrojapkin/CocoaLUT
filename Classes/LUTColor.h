@@ -119,27 +119,18 @@ typedef double LUTColorValue;
  */
 - (LUTColor *)lerpTo:(LUTColor *)otherColor amount:(double)amount;
 
-#if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR
 /**
- *  A `UIColor` representation of the receiver.
- *
- *  @return A `UIColor`.
- */
-- (UIColor *)UIColor;
-+ (instancetype)colorWithUIColor:(UIColor *)color;
-#elif TARGET_OS_MAC
-/**
- *  A `NSColor` representation of the receiver.
- *
- *  @return A `NSColor`.
- */
-- (NSColor *)NSColor;
-/**
- *  A LUTColor representation of an NSColor.
+ *  A LUTColor representation of the system color. On OS X this takes an NSColor, on iOS a UIColor.
  *
  *  @return A `LUTColor`.
  */
-+ (instancetype)colorWithNSColor:(NSColor *)color;
-#endif
++ (instancetype)colorWithSystemColor:(SystemColor *)color;
+
+/**
+ *  A system color representation of the LUTColor.
+ *
+ *  @return On OS X, an NSColor, on iOS a UIColor.
+ */
+- (SystemColor *)systemColor;
 
 @end

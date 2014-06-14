@@ -63,7 +63,7 @@
     [lut3D LUTLoopWithBlock:^(size_t r, size_t g, size_t b) {
         NSUInteger x = b * [lut3D size] + r;
         NSUInteger y = g;
-        NSColor *color = [[lut3D colorAtR:r g:g b:b].NSColor colorUsingColorSpaceName:NSDeviceRGBColorSpace];
+        NSColor *color = [[lut3D colorAtR:r g:g b:b].systemColor colorUsingColorSpaceName:NSDeviceRGBColorSpace];
         [imageRep setColor:color atX:x y:y];
     }];
     
@@ -86,7 +86,7 @@
     [lut3D LUTLoopWithBlock:^(size_t r, size_t g, size_t b) {
         NSUInteger x = b * [lut3D size] + r;
         NSUInteger y = g;
-        [lut3D setColor:[LUTColor colorWithNSColor:[imageRep colorAtX:x y:y]] r:r g:g b:b];
+        [lut3D setColor:[LUTColor colorWithSystemColor:[imageRep colorAtX:x y:y]] r:r g:g b:b];
     }];
 
     return lut3D;

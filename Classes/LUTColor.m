@@ -166,22 +166,19 @@
     return [self isEqualToLUTColor:(LUTColor *)object];
 }
 
-
+- (SystemColor *)systemColor {
 #if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR
-- (UIColor *)UIColor {
     return [UIColor colorWithRed:self.red green:self.green blue:self.blue alpha:1];
-}
-+ (instancetype)colorWithUIColor:(UIColor *)color {
-    return [LUTColor colorWithRed:[[color CIColor] red] green:[[color CIColor] green] blue:[[color CIColor] blue]];
-}
 #elif TARGET_OS_MAC
-- (NSColor *)NSColor {
     return [NSColor colorWithDeviceRed:self.red green:self.green blue:self.blue alpha:1];
-}
-+ (instancetype)colorWithNSColor:(NSColor *)color {
-    return [LUTColor colorWithRed:color.redComponent green:color.greenComponent blue:color.blueComponent];
-}
 #endif
-
+}
++ (instancetype)colorWithSystemColor:(SystemColor *)color {
+#if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR
+    return [LUTColor colorWithRed:[[color CIColor] red] green:[[color CIColor] green] blue:[[color CIColor] blue]];
+#elif TARGET_OS_MAC
+    return [LUTColor colorWithRed:color.redComponent green:color.greenComponent blue:color.blueComponent];
+#endif
+}
 
 @end

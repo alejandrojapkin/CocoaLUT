@@ -120,11 +120,7 @@
         SCNBox *dot = [SCNBox boxWithWidth:2.0*radius height:2.0*radius length:2.0*radius chamferRadius:radius];
         dot.chamferSegmentCount = 1.0; //efficient for rendering but makes it look like a polygon
         
-        #if TARGET_OS_IPHONE
-        dot.firstMaterial.diffuse.contents = [identityColor remappedFromInputLow:lut3D.inputLowerBound inputHigh:lut3D.inputUpperBound outputLow:0 outputHigh:1 bounded:NO].UIColor;
-        #elif TARGET_OS_MAC
-        dot.firstMaterial.diffuse.contents = [identityColor remappedFromInputLow:lut3D.inputLowerBound inputHigh:lut3D.inputUpperBound outputLow:0 outputHigh:1 bounded:NO].NSColor;
-        #endif
+        dot.firstMaterial.diffuse.contents = [identityColor remappedFromInputLow:lut3D.inputLowerBound inputHigh:lut3D.inputUpperBound outputLow:0 outputHigh:1 bounded:NO].systemColor;
         
         LUTColorNode *node = (LUTColorNode*)[LUTColorNode nodeWithGeometry:dot];
         node.identityColor = identityColor;
@@ -156,33 +152,23 @@
                      length:(double)length
                      radius:(double)radius{
     
-    #if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR
-    UIColor *red    = UIColor.redColor;
-    UIColor *green  = UIColor.greenColor;
-    UIColor *blue   = UIColor.blueColor;
-    #elif TARGET_OS_MAC
-    NSColor *red    = NSColor.redColor;
-    NSColor *green  = NSColor.greenColor;
-    NSColor *blue   = NSColor.blueColor;
-    #endif
-    
     SCNNode *axes = [SCNNode node];
     
     SCNCylinder *redLineGeometry = [SCNCylinder cylinderWithRadius:radius height:length];
-    redLineGeometry.firstMaterial.diffuse.contents = red;
+    redLineGeometry.firstMaterial.diffuse.contents = SystemColor.redColor;
     
     SCNCylinder *greenLineGeometry = [SCNCylinder cylinderWithRadius:radius height:length];
-    greenLineGeometry.firstMaterial.diffuse.contents = green;
+    greenLineGeometry.firstMaterial.diffuse.contents = SystemColor.greenColor;
     
     SCNCylinder *blueLineGeometry = [SCNCylinder cylinderWithRadius:radius height:length];
-    blueLineGeometry.firstMaterial.diffuse.contents = blue;
+    blueLineGeometry.firstMaterial.diffuse.contents = SystemColor.blueColor;
     
     SCNCone *redAxisPointerGeometry = [SCNCone coneWithTopRadius:radius*4.0 bottomRadius:0 height:radius*4.0];
-    redAxisPointerGeometry.firstMaterial.diffuse.contents = red;
+    redAxisPointerGeometry.firstMaterial.diffuse.contents = SystemColor.redColor;
     SCNCone *greenAxisPointerGeometry = [SCNCone coneWithTopRadius:radius*4.0 bottomRadius:0 height:radius*4.0];
-    greenAxisPointerGeometry.firstMaterial.diffuse.contents = green;
+    greenAxisPointerGeometry.firstMaterial.diffuse.contents = SystemColor.greenColor;
     SCNCone *blueAxisPointerGeometry = [SCNCone coneWithTopRadius:radius*4.0 bottomRadius:0 height:radius*4.0];
-    blueAxisPointerGeometry.firstMaterial.diffuse.contents = blue;
+    blueAxisPointerGeometry.firstMaterial.diffuse.contents = SystemColor.blueColor;
     double axisPointerOffset = redAxisPointerGeometry.height/2.0;
     
     SCNNode *xAxis = [SCNNode nodeWithGeometry:redLineGeometry];
@@ -229,17 +215,11 @@
                           inputUpperBound:(double)inputUpperBound
                                    radius:(double)radius{
     
-#if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR
-    UIColor *black = UIColor.blackColor;
-#elif TARGET_OS_MAC
-    NSColor *black = NSColor.blackColor;
-#endif
-
     SCNNode *gridLines = [SCNNode node];
     
     double gridLinesLength = inputUpperBound - inputLowerBound;
     SCNCylinder *gridLineGeometry = [SCNCylinder cylinderWithRadius:radius/2.0 height:gridLinesLength];
-    gridLineGeometry.firstMaterial.diffuse.contents = black;
+    gridLineGeometry.firstMaterial.diffuse.contents = SystemColor.blackColor;
     
     
     SCNNode *x1 = [SCNNode nodeWithGeometry:gridLineGeometry];

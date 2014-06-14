@@ -420,9 +420,9 @@
     for (int x = 0; x < image.size.width; x++) {
         for (int y = 0; y < image.size.height; y++) {
             
-            LUTColor *lutColor = [LUTColor colorWithNSColor:[inImageRep colorAtX:x y:y]];
+            LUTColor *lutColor = [LUTColor colorWithSystemColor:[inImageRep colorAtX:x y:y]];
             LUTColor *transformedColor =[self colorAtColor:lutColor];
-            [imageRep setColor:transformedColor.NSColor atX:x y:y];
+            [imageRep setColor:transformedColor.systemColor atX:x y:y];
 
         }
     }

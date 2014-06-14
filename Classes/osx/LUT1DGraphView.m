@@ -47,8 +47,8 @@
     LUTColor *color = indexLUTColorAndIdentityLUTColor[1];
     LUTColor *identityColor = indexLUTColorAndIdentityLUTColor[2];
     self.colorStringAtMousePoint = [NSString stringWithFormat:@"%@ -> %@", identityColor, color];
-    self.inputColor = identityColor.NSColor;
-    self.outputColor = color.NSColor;
+    self.inputColor = identityColor.systemColor;
+    self.outputColor = color.systemColor;
 }
 
 - (void)setViewWithLUT:(LUT1D *)lut{

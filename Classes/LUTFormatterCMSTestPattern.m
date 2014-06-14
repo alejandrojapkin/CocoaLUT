@@ -80,7 +80,7 @@
             
             
             if(currentCubeIndex < cubeSize*cubeSize*cubeSize){
-                NSColor *color = [[lut3D colorAtR:redIndex g:greenIndex b:blueIndex].NSColor colorUsingColorSpaceName:NSDeviceRGBColorSpace];
+                NSColor *color = [[lut3D colorAtR:redIndex g:greenIndex b:blueIndex].systemColor colorUsingColorSpaceName:NSDeviceRGBColorSpace];
                 for(int px = (int)x*7; px < x*7+7; px++){
                     for(int py = (int)(height - (y+1))*7; py < (height - (y+1))*7+7; py++){
                         [imageRep setColor:color atX:px y:py];
@@ -126,7 +126,7 @@
         
         if(currentCubeIndex < cubeSize*cubeSize*cubeSize){
             //NSLog(@"%@", [LUTColor colorWithNSColor:[imageRep colorAtX:x*7 y:(height - (y+1))*7]]);
-            [lut setColor:[LUTColor colorWithNSColor:[imageRep colorAtX:x*7 y:(height - (y+1))*7]] r:redIndex g:greenIndex b:blueIndex];
+            [lut setColor:[LUTColor colorWithSystemColor:[imageRep colorAtX:x*7 y:(height - (y+1))*7]] r:redIndex g:greenIndex b:blueIndex];
         }
     });
     
