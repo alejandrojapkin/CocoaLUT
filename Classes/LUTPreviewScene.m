@@ -88,12 +88,12 @@
     if((maximumOutputValue - minimumOutputValue) > (lut3D.inputUpperBound - lut3D.inputLowerBound)){
         initialAnimationPercentage = 1.0;
         radius = .013 * clampLowerBound(maximumOutputValue - minimumOutputValue, 1);
-        axisLength = clampLowerBound(maximumOutputValue - minimumOutputValue, 1);
+        axisLength = 1.2*clampLowerBound(maximumOutputValue - minimumOutputValue, 1);
     }
     else{
         initialAnimationPercentage = 0.0;
         radius = .013 * clampLowerBound(lut3D.inputUpperBound - lut3D.inputLowerBound, 1);
-        axisLength = clampLowerBound(lut3D.inputUpperBound - lut3D.inputLowerBound, 1);
+        axisLength = 1.2*clampLowerBound(lut3D.inputUpperBound - lut3D.inputLowerBound, 1);
     }
     
     
