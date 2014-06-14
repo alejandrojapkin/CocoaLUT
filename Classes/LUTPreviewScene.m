@@ -136,10 +136,10 @@
     
     scene.dotGroup = dotGroup;
     
-//    scene.cubeOutline = [[self class] cubeOutlineWithInputLowerBound:lut3D.inputLowerBound
-//                                                 inputUpperBound:lut3D.inputUpperBound
-//                                                          radius:radius/2.0];
-//    scene.cubeOutline.opacity = .3;
+    scene.cubeOutline = [[self class] cubeOutlineWithInputLowerBound:lut3D.inputLowerBound
+                                                 inputUpperBound:lut3D.inputUpperBound
+                                                          radius:radius/2.0];
+    scene.cubeOutline.opacity = .3;
     
     scene.axes = [[self class] axesWithOrigin:SCNVector3Make(0,0,0)
                                        length:axisLength
