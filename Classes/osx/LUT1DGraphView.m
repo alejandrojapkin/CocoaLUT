@@ -84,15 +84,32 @@
 -(void)initialize{
     self.interpolation = LUT1DGraphViewInterpolationLinear;
     [self lutDidChange];
-    NSTrackingArea *trackingArea = [[NSTrackingArea alloc] initWithRect:self.bounds
+    self.currentTrackingArea = [[NSTrackingArea alloc] initWithRect:self.bounds
                                                 options: (NSTrackingMouseEnteredAndExited | NSTrackingMouseMoved | NSTrackingActiveInKeyWindow )
                                                   owner:self userInfo:nil];
-    [self addTrackingArea:trackingArea];
-    
+    [self addTrackingArea:self.currentTrackingArea];
+    self.mouseIsIn = NO;
+}
+
+-(void)viewDidEndLiveResize{
+    [self removeTrackingArea:self.currentTrackingArea];
+    self.currentTrackingArea = [[NSTrackingArea alloc] initWithRect:self.bounds
+                                                                options: (NSTrackingMouseEnteredAndExited | NSTrackingMouseMoved | NSTrackingActiveInKeyWindow )
+                                                                  owner:self userInfo:nil];
+    [self addTrackingArea:self.currentTrackingArea];
 }
 
 -(void)mouseMoved:(NSEvent *)theEvent{
     self.mousePoint = theEvent.locationInWindow;
+    [self setNeedsDisplay:YES];
+}
+
+-(void)mouseEntered:(NSEvent *)theEvent{
+    self.mouseIsIn = YES;
+}
+
+-(void)mouseExited:(NSEvent *)theEvent{
+    self.mouseIsIn = NO;
     [self setNeedsDisplay:YES];
 }
 
@@ -159,14 +176,17 @@
         [self drawSpline:self.cubicSplinesRGBArray[2] inContext:context inRect:drawingRect];
     }
     
+    if(self.mouseIsIn){
+        [self drawOverlayInContext:context inRect:drawingRect withPoint:self.mousePoint thickness:2.0 opacity:.8];
+    }
     
-    [self drawOverlayInContext:context inRect:drawingRect withPoint:self.mousePoint thickness:8.0];
 }
 
 - (void)drawOverlayInContext:(CGContextRef)context
                       inRect:(NSRect)rect
                    withPoint:(NSPoint)point
-                   thickness:(double)thickness{
+                   thickness:(double)thickness
+                     opacity:(double)opacity{
     
     
     CGFloat xOrigin = rect.origin.x;
@@ -188,14 +208,40 @@
     double greenYPosition = remap(colorAtXPosition.green, clampUpperBound(self.minimumOutputValue, 0), clampLowerBound(self.maximumOutputValue, 1), yOrigin, yOrigin + pixelHeight);
     double blueYPosition = remap(colorAtXPosition.blue, clampUpperBound(self.minimumOutputValue, 0), clampLowerBound(self.maximumOutputValue, 1), yOrigin, yOrigin + pixelHeight);
     
-    CGContextSetRGBFillColor(context, 1, 0, 0, 1);
-    CGContextFillEllipseInRect(context, CGRectMake(xPosition-(1.0/2.0)*thickness, redYPosition-(1.0/2.0)*thickness, thickness, thickness));
+//    CGContextSetRGBFillColor(context, 1, 0, 0, 1);
+//    CGContextFillEllipseInRect(context, CGRectMake(xPosition-(1.0/2.0)*thickness, redYPosition-(1.0/2.0)*thickness, thickness, thickness));
+//    
+//    CGContextSetRGBFillColor(context, 0, 1, 0, 1);
+//    CGContextFillEllipseInRect(context, CGRectMake(xPosition-(1.0/2.0)*thickness, greenYPosition-(1.0/2.0)*thickness, thickness, thickness));
+//    
+//    CGContextSetRGBFillColor(context, 0, 0, 1, 1);
+//    CGContextFillEllipseInRect(context, CGRectMake(xPosition-(1.0/2.0)*thickness, blueYPosition-(1.0/2.0)*thickness, thickness, thickness));
     
-    CGContextSetRGBFillColor(context, 0, 1, 0, 1);
-    CGContextFillEllipseInRect(context, CGRectMake(xPosition-(1.0/2.0)*thickness, greenYPosition-(1.0/2.0)*thickness, thickness, thickness));
+    CGContextSetLineWidth(context, thickness);
     
-    CGContextSetRGBFillColor(context, 0, 0, 1, 1);
-    CGContextFillEllipseInRect(context, CGRectMake(xPosition-(1.0/2.0)*thickness, blueYPosition-(1.0/2.0)*thickness, thickness, thickness));
+    CGContextSetRGBStrokeColor(context, 0, 0, 0, opacity*.5);
+    CGContextBeginPath(context);
+    CGContextMoveToPoint(context, xPosition, yOrigin);
+    CGContextAddLineToPoint(context, xPosition, yOrigin+pixelHeight);
+    CGContextStrokePath(context);
+    
+    CGContextSetRGBStrokeColor(context, 1.0, 0, 0, opacity);
+    CGContextBeginPath(context);
+    CGContextMoveToPoint(context, xOrigin, redYPosition);
+    CGContextAddLineToPoint(context, xOrigin + pixelWidth, redYPosition);
+    CGContextStrokePath(context);
+    
+    CGContextSetRGBStrokeColor(context, 0, 1.0, 0, opacity);
+    CGContextBeginPath(context);
+    CGContextMoveToPoint(context, xOrigin, greenYPosition);
+    CGContextAddLineToPoint(context, xOrigin + pixelWidth, greenYPosition);
+    CGContextStrokePath(context);
+    
+    CGContextSetRGBStrokeColor(context, 0, 0, 1.0, opacity);
+    CGContextBeginPath(context);
+    CGContextMoveToPoint(context, xOrigin, blueYPosition);
+    CGContextAddLineToPoint(context, xOrigin + pixelWidth, blueYPosition);
+    CGContextStrokePath(context);
     
 }
 
@@ -204,7 +250,7 @@
     CGFloat pixelWidth = self.bounds.size.width;
     
     double xPosition = self.mousePoint.x;
-    double xPositionAsInterpolatedIndex = remap(xPosition, xOrigin, pixelWidth - xOrigin, 0, self.lut.size - 1);
+    double xPositionAsInterpolatedIndex = remapNoError(xPosition, xOrigin, pixelWidth - xOrigin, 0, self.lut.size - 1);
     
     LUTColor *colorAtXPosition = [self.lut colorAtInterpolatedR:xPositionAsInterpolatedIndex g:xPositionAsInterpolatedIndex b:xPositionAsInterpolatedIndex];
     LUTColor *identityColorAtXPosition = [self.lut identityColorAtR:xPositionAsInterpolatedIndex g:xPositionAsInterpolatedIndex b:xPositionAsInterpolatedIndex];

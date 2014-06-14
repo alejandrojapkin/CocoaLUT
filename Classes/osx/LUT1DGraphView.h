@@ -20,6 +20,8 @@ typedef NS_ENUM(NSInteger, LUT1DGraphViewInterpolation) {
 @property (strong, nonatomic) LUT1D *lut;
 @property (assign, nonatomic) LUT1DGraphViewInterpolation interpolation;
 @property (assign) NSPoint mousePoint;
+@property (assign) BOOL mouseIsIn;
+@property (strong) NSTrackingArea *currentTrackingArea;
 
 -(void)lutDidChange;
 
