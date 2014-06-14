@@ -16,7 +16,13 @@
 #import "LUTFormatterUnwrappedTexture.h"
 #import "LUTFormatterCMSTestPattern.h"
 #import "LUTFormatterArriLook.h"
+
+#if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR
+// iOS-only formatters
+#elif TARGET_OS_MAC
+// Mac-only formatters
 #import "LUTFormatterICCProfile.h"
+#endif
 
 @interface LUT ()
 @end
@@ -69,9 +75,12 @@
     else if ([url.pathExtension.lowercaseString isEqualToString:@"xml"]) {
         return [LUTFormatterArriLook LUTFromFile:url];
     }
+#if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR
+#elif TARGET_OS_MAC
     else if ([@[@"icc", @"icm", @"pf", @"prof"] containsObject:url.pathExtension.lowercaseString]) {
         return [LUTFormatterICCProfile LUTFromFile:url];
     }
+#endif
     else if ([@[@"tif", @"tiff", @"png", @"dpx"] containsObject:url.pathExtension.lowercaseString]) {
         @try{
             return [LUTFormatterUnwrappedTexture LUTFromFile:url];
@@ -103,7 +112,11 @@
                                  [LUTFormatterUnwrappedTexture utiString]: [LUTFormatterUnwrappedTexture class],
                                  [LUTFormatterCMSTestPattern utiString]: [LUTFormatterCMSTestPattern class],
                                  [LUTFormatterArriLook utiString]: [LUTFormatterArriLook class],
-                                 [LUTFormatterICCProfile utiString]: [LUTFormatterICCProfile class]};
+#if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR
+#elif TARGET_OS_MAC
+                                 [LUTFormatterICCProfile utiString]: [LUTFormatterICCProfile class]
+#endif
+                                 };
     return dictionary[utiString];
     
 }
@@ -314,7 +327,7 @@
 }
 
 - (CIFilter *)coreImageFilterWithCurrentColorSpace {
-    #if TARGET_OS_IPHONE
+    #if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR
     return [self coreImageFilterWithColorSpace:CGColorSpaceCreateDeviceRGB()];
     #elif TARGET_OS_MAC
     //good for render, not good for viewing
@@ -365,7 +378,7 @@
     return [filter valueForKey:@"outputImage"];
 }
 
-#if TARGET_OS_IPHONE
+#if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR
 - (UIImage *)processUIImage:(UIImage *)image withColorSpace:(CGColorSpaceRef)colorSpace {
     return [[UIImage alloc] initWithCIImage:[self processCIImage:image.CIImage]];
 }

@@ -119,7 +119,7 @@ typedef double LUTColorValue;
  */
 - (LUTColor *)lerpTo:(LUTColor *)otherColor amount:(double)amount;
 
-#if TARGET_OS_IPHONE
+#if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR
 /**
  *  A `UIColor` representation of the receiver.
  *

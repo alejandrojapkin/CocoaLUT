@@ -12,7 +12,7 @@
 @implementation LUTFormatterUnwrappedTexture
 
 + (NSData *)dataFromLUT:(LUT *)lut withOptions:(NSDictionary *)options {
-#if TARGET_OS_IPHONE
+#if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR
     return UIImagePNGRepresentation([self imageFromLUT:lut]);
 # elif TARGET_OS_MAC
     return [[self imageFromLUT:lut] TIFFRepresentation];
@@ -20,14 +20,14 @@
 }
 
 + (LUT *)LUTFromData:(NSData *)data {
-#if TARGET_OS_IPHONE
+#if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR
     return [self LUTFromImage:[[UIImage alloc] initWithData:data]];
 # elif TARGET_OS_MAC
     return [self LUTFromImage:[[NSImage alloc] initWithData:data]];
 # endif
 }
 
-#if TARGET_OS_IPHONE
+#if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR
 + (UIImage *)imageFromLUT:(LUT *)lut {
     NSException *exception = [NSException exceptionWithName:@"Unsupported Platform"
                                                      reason:@"LUTFormatterUnwrappedTexture doesn't currently support iOS." userInfo:nil];

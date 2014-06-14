@@ -10,6 +10,8 @@
 #import <SceneKit/SceneKit.h>
 #import "CocoaLUT.h"
 
+#if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR
+#elif TARGET_OS_MAC
 @interface LUTPreviewSceneViewController : NSViewController
 
 @property (assign, nonatomic) double animationPercentage;
@@ -17,6 +19,7 @@
 - (void)setSceneWithLUT:(LUT *)lut;
 
 @end
+#endif
 
 @interface LUTPreviewScene : SCNScene
 

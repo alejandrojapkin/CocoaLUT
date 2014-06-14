@@ -166,7 +166,7 @@ typedef NS_ENUM(NSInteger, LUTImageRenderPath) {
  */
 - (CIImage *)processCIImage:(CIImage *)image;
 
-#if TARGET_OS_IPHONE
+#if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR
 /**
  *  Returns a `UIImage` with the receiver's color transformation applied.
  *

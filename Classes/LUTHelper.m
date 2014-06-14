@@ -237,7 +237,7 @@ NSArray* arrayWithComponentsSeperatedByNewlineAndWhitespaceWithEmptyElementsRemo
 }
 
 
-#if TARGET_OS_IPHONE
+#if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR
 #elif TARGET_OS_MAC
 void LUTNSImageLog(NSImage *image) {
     for (NSImageRep *rep in image.representations) {

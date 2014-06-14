@@ -167,7 +167,7 @@
 }
 
 
-#if TARGET_OS_IPHONE
+#if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR
 - (UIColor *)UIColor {
     return [UIColor colorWithRed:self.red green:self.green blue:self.blue alpha:1];
 }

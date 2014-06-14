@@ -23,6 +23,8 @@
 }
 @end
 
+#if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR
+#elif TARGET_OS_MAC
 @implementation LUTPreviewSceneViewController
 
 - (void)setSceneWithLUT:(LUT *)lut{
@@ -36,6 +38,7 @@
 }
 
 @end
+#endif
 
 @implementation LUTPreviewScene
 
@@ -152,23 +155,34 @@
 + (SCNNode *)axesWithOrigin:(SCNVector3)origin
                      length:(double)length
                      radius:(double)radius{
+    
+    #if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR
+    UIColor *red    = UIColor.redColor;
+    UIColor *green  = UIColor.greenColor;
+    UIColor *blue   = UIColor.blueColor;
+    #elif TARGET_OS_MAC
+    NSColor *red    = NSColor.redColor;
+    NSColor *green  = NSColor.greenColor;
+    NSColor *blue   = NSColor.blueColor;
+    #endif
+    
     SCNNode *axes = [SCNNode node];
     
     SCNCylinder *redLineGeometry = [SCNCylinder cylinderWithRadius:radius height:length];
-    redLineGeometry.firstMaterial.diffuse.contents = [NSColor redColor];
+    redLineGeometry.firstMaterial.diffuse.contents = red;
     
     SCNCylinder *greenLineGeometry = [SCNCylinder cylinderWithRadius:radius height:length];
-    greenLineGeometry.firstMaterial.diffuse.contents = [NSColor greenColor];
+    greenLineGeometry.firstMaterial.diffuse.contents = green;
     
     SCNCylinder *blueLineGeometry = [SCNCylinder cylinderWithRadius:radius height:length];
-    blueLineGeometry.firstMaterial.diffuse.contents = [NSColor blueColor];
+    blueLineGeometry.firstMaterial.diffuse.contents = blue;
     
     SCNCone *redAxisPointerGeometry = [SCNCone coneWithTopRadius:radius*4.0 bottomRadius:0 height:radius*4.0];
-    redAxisPointerGeometry.firstMaterial.diffuse.contents = [NSColor redColor];
+    redAxisPointerGeometry.firstMaterial.diffuse.contents = red;
     SCNCone *greenAxisPointerGeometry = [SCNCone coneWithTopRadius:radius*4.0 bottomRadius:0 height:radius*4.0];
-    greenAxisPointerGeometry.firstMaterial.diffuse.contents = [NSColor greenColor];
+    greenAxisPointerGeometry.firstMaterial.diffuse.contents = green;
     SCNCone *blueAxisPointerGeometry = [SCNCone coneWithTopRadius:radius*4.0 bottomRadius:0 height:radius*4.0];
-    blueAxisPointerGeometry.firstMaterial.diffuse.contents = [NSColor blueColor];
+    blueAxisPointerGeometry.firstMaterial.diffuse.contents = blue;
     double axisPointerOffset = redAxisPointerGeometry.height/2.0;
     
     SCNNode *xAxis = [SCNNode nodeWithGeometry:redLineGeometry];
@@ -214,11 +228,18 @@
 + (SCNNode *)cubeOutlineWithInputLowerBound:(double)inputLowerBound
                           inputUpperBound:(double)inputUpperBound
                                    radius:(double)radius{
+    
+#if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR
+    UIColor *black = UIColor.blackColor;
+#elif TARGET_OS_MAC
+    NSColor *black = NSColor.blackColor;
+#endif
+
     SCNNode *gridLines = [SCNNode node];
     
     double gridLinesLength = inputUpperBound - inputLowerBound;
     SCNCylinder *gridLineGeometry = [SCNCylinder cylinderWithRadius:radius/2.0 height:gridLinesLength];
-    gridLineGeometry.firstMaterial.diffuse.contents = [NSColor blackColor];
+    gridLineGeometry.firstMaterial.diffuse.contents = black;
     
     
     SCNNode *x1 = [SCNNode nodeWithGeometry:gridLineGeometry];

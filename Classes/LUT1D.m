@@ -169,7 +169,7 @@
         double normalizedBIndex = remap(b, 0, [self size]-1, 0, 1);
         LUTColor *color = [self colorAtR:r g:g b:b];
         
-        #if TARGET_OS_IPHONE
+        #if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR
         redArray[r] = [NSValue valueWithCGPoint: CGPointMake(normalizedRIndex, color.red)];
         greenArray[g] = [NSValue valueWithCGPoint: CGPointMake(normalizedGIndex, color.green)];
         blueArray[b] = [NSValue valueWithCGPoint: CGPointMake(normalizedBIndex, color.blue)];

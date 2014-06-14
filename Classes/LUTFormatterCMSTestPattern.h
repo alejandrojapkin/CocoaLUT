@@ -10,7 +10,7 @@
 
 @interface LUTFormatterCMSTestPattern : LUTFormatter
 
-#if TARGET_OS_IPHONE
+#if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR
 + (UIImage *)imageFromLUT:(LUT *)lut;
 + (LUT *)LUTFromImage:(UIImage *)image;
 #elif TARGET_OS_MAC
