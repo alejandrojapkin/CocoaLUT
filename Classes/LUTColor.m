@@ -21,16 +21,6 @@
     return color;
 }
 
-+ (instancetype)colorFromNSColor:(NSColor *)color{
-    LUTColor *lutColor = [[LUTColor alloc] init];
-    CGFloat* components = malloc(4*sizeof(CGFloat));
-    [color getComponents:components];
-    lutColor.red = components[0];
-    lutColor.green = components[1];
-    lutColor.blue = components[2];
-    return lutColor;
-}
-
 + (instancetype)colorFromIntegersWithBitDepth:(NSUInteger)bitdepth red:(NSUInteger)r green:(NSUInteger)g blue:(NSUInteger)b {
     NSUInteger maxBits = pow(2, bitdepth) - 1;
     return [LUTColor colorWithRed:nsremapint01(r, maxBits) green:nsremapint01(g, maxBits) blue:nsremapint01(b, maxBits)];
