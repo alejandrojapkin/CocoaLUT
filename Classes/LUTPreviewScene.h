@@ -10,10 +10,9 @@
 #import <SceneKit/SceneKit.h>
 #import "CocoaLUT.h"
 
-@interface LUTPreviewSceneViewController : NSObject
+@interface LUTPreviewSceneViewController : NSViewController
 
 @property (assign, nonatomic) double animationPercentage;
-@property (weak) IBOutlet SCNView *sceneView;
 
 - (void)setSceneWithLUT:(LUT *)lut;
 

@@ -26,13 +26,13 @@
 @implementation LUTPreviewSceneViewController
 
 - (void)setSceneWithLUT:(LUT *)lut{
-    self.sceneView.scene = [LUTPreviewScene sceneForLUT:lut];
+    ((SCNView *)self.view).scene = [LUTPreviewScene sceneForLUT:lut];
     self.animationPercentage = 1.0;
 }
 
 - (void)setAnimationPercentage:(double)animationPercentage{
     _animationPercentage = animationPercentage;
-    [(LUTPreviewScene *)self.sceneView.scene updateNodesToPercentage:animationPercentage];
+    [(LUTPreviewScene *)((SCNView *)self.view).scene updateNodesToPercentage:animationPercentage];
 }
 
 @end
