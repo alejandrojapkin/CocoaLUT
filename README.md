@@ -5,7 +5,7 @@
 
 CocoaLUT is a tool for importing, exporting, and manipulating [3D look up tables](https://en.wikipedia.org/wiki/3D_lookup_table) (LUTs) for colors. LUTs are often used in film and video finishing, graphics, video games, and rendering.
 
-The goal of this project is to have a fast, modern Objective-C library that works on both iOS and OS X.
+The goal of this project is to have a fast, modern Objective-C (and soon, Swift) library that works on both iOS and OS X.
 
 This project uses [LUTSpec](http://github.com/wilg/LUTSpec) for UTI standardization.
 
@@ -24,7 +24,7 @@ Do you need something like this in Python? Try [pylut](http://github.com/gregcot
   - Discreet 1D LUT (.lut)
 - Reads non-LUT formats as LUTs
   - Arri Look (.xml) as a 3D LUT
-  - ICC/ColorSync Profiles (.icc, .icm, .pf, .prof) as a 3D LUT
+  - ICC/ColorSync Profiles (.icc, .icm, .pf, .prof) as a 3D LUT *(OS X only)*
 - Has a format-independent internal data structure. You can create LUTs and use them in-memory.
 - Apply LUTs to NSImage, CIImage, and UIImage
 - Generate Core Image Filters (CIFilter / CIColorCube) from LUTs
@@ -39,7 +39,7 @@ Do you need something like this in Python? Try [pylut](http://github.com/gregcot
 CocoaLUT is available through [CocoaPods](http://cocoapods.org), to install
 it simply add the following line to your Podfile:
 
-    pod 'CocoaLUT', :head
+    pod 'CocoaLUT'
 
 ## Authors
 
