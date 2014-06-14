@@ -17,7 +17,7 @@
     
     [lut LUTLoopWithBlock:^(size_t r, size_t g, size_t b) {
         NSColor *transformedColor = [[[lut colorAtR:r g:g b:b] NSColor] colorUsingColorSpace:iccProfile];
-        [lut setColor:[LUTColor colorFromNSColor:transformedColor] r:r g:g b:b];
+        [lut setColor:[LUTColor colorWithNSColor:transformedColor] r:r g:g b:b];
     }];
     
     return lut;
