@@ -20,9 +20,11 @@ Pod::Spec.new do |s|
   # iOS
   s.ios.frameworks = 'UIKit'
   s.ios.exclude_files = 'Classes/osx'
+  s.ios.deployment_target = '7.0'
 
   # OS X
   s.osx.frameworks = 'AppKit'
   s.osx.exclude_files = 'Classes/ios'
+  s.osx.deployment_target = '10.7'
 
 end
