@@ -121,17 +121,15 @@
     
     scene.gridLines = [[self class] gridLinesWithInputLowerBound:lut3D.inputLowerBound
                                                  inputUpperBound:lut3D.inputUpperBound
-                                                          radius:radius/2.0
-                                                         opacity:.3];
-    
+                                                          radius:radius/2.0];
+    scene.gridLines.opacity = .3;
     
     return scene;
 }
 
 + (SCNNode *)gridLinesWithInputLowerBound:(double)inputLowerBound
                           inputUpperBound:(double)inputUpperBound
-                                   radius:(double)radius
-                                   opacity:(double)opacity{
+                                   radius:(double)radius{
     SCNNode *gridLines = [SCNNode node];
     
     double gridLinesLength = inputUpperBound - inputLowerBound;
@@ -209,7 +207,6 @@
     
     [gridLines addChildNode:z4];
     
-    gridLines.opacity = opacity;
     
     return gridLines;
 }
