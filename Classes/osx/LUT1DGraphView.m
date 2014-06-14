@@ -85,18 +85,10 @@
     self.interpolation = LUT1DGraphViewInterpolationLinear;
     [self lutDidChange];
     self.currentTrackingArea = [[NSTrackingArea alloc] initWithRect:self.bounds
-                                                options: (NSTrackingMouseEnteredAndExited | NSTrackingMouseMoved | NSTrackingActiveInKeyWindow )
+                                                options: (NSTrackingMouseEnteredAndExited | NSTrackingMouseMoved | NSTrackingActiveInKeyWindow | NSTrackingInVisibleRect )
                                                   owner:self userInfo:nil];
     [self addTrackingArea:self.currentTrackingArea];
     self.mouseIsIn = NO;
-}
-
--(void)viewDidEndLiveResize{
-    [self removeTrackingArea:self.currentTrackingArea];
-    self.currentTrackingArea = [[NSTrackingArea alloc] initWithRect:self.bounds
-                                                                options: (NSTrackingMouseEnteredAndExited | NSTrackingMouseMoved | NSTrackingActiveInKeyWindow )
-                                                                  owner:self userInfo:nil];
-    [self addTrackingArea:self.currentTrackingArea];
 }
 
 -(void)mouseMoved:(NSEvent *)theEvent{
