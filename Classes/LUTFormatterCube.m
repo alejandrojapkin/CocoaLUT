@@ -159,7 +159,7 @@
     
     
     //metadata and description write
-    [string appendString: [LUTMetadataFormatter stringFromMetadata:lut.metadata description:lut.description]];
+    [string appendString: [LUTMetadataFormatter stringFromMetadata:lut.metadata description:lut.descriptionText]];
     [string appendString:@"\n"];
     
     if(isLUT1D(lut)){

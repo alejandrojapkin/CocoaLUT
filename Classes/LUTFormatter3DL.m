@@ -121,7 +121,7 @@
     
     lut = LUTAsLUT3D(lut, lutSize);
     
-    [string appendString: [LUTMetadataFormatter stringFromMetadata:lut.metadata description:lut.description]];
+    [string appendString: [LUTMetadataFormatter stringFromMetadata:lut.metadata description:lut.descriptionText]];
     [string appendString:@"\n"];
     
     
