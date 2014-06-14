@@ -23,7 +23,7 @@ typedef NS_ENUM(NSInteger, LUT1DGraphViewInterpolation) {
 
 -(void)lutDidChange;
 
-- (NSString *)colorStringFromCurrentMousePoint;
+- (NSArray *)indexLUTColorAndIdentityLUTColorFromCurrentMousePoint;
 
 +(M13OrderedDictionary *)interpolationMethods;
 

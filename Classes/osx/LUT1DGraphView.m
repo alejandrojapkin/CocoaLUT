@@ -37,8 +37,16 @@
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
     if([keyPath isEqualToString:@"mousePoint"]){
-        self.colorStringAtMousePoint = [((LUT1DGraphView *)self.view) colorStringFromCurrentMousePoint];
+        [self mouseMoved];
     }
+}
+
+- (void)mouseMoved{
+    NSArray *indexLUTColorAndIdentityLUTColor = [((LUT1DGraphView *)self.view) indexLUTColorAndIdentityLUTColorFromCurrentMousePoint];
+    double index = [indexLUTColorAndIdentityLUTColor[0] doubleValue];
+    LUTColor *color = indexLUTColorAndIdentityLUTColor[1];
+    LUTColor *identityColor = indexLUTColorAndIdentityLUTColor[2];
+    self.colorStringAtMousePoint = [NSString stringWithFormat:@"%@ -> %@", identityColor, color];
 }
 
 - (void)setViewWithLUT:(LUT1D *)lut{
@@ -191,7 +199,7 @@
     
 }
 
-- (NSString *)colorStringFromCurrentMousePoint{
+- (NSArray *)indexLUTColorAndIdentityLUTColorFromCurrentMousePoint{
     CGFloat xOrigin = self.bounds.origin.x;
     CGFloat pixelWidth = self.bounds.size.width;
     
@@ -199,8 +207,9 @@
     double xPositionAsInterpolatedIndex = remap(xPosition, xOrigin, pixelWidth - xOrigin, 0, self.lut.size - 1);
     
     LUTColor *colorAtXPosition = [self.lut colorAtInterpolatedR:xPositionAsInterpolatedIndex g:xPositionAsInterpolatedIndex b:xPositionAsInterpolatedIndex];
+    LUTColor *identityColorAtXPosition = [self.lut identityColorAtR:xPositionAsInterpolatedIndex g:xPositionAsInterpolatedIndex b:xPositionAsInterpolatedIndex];
     
-    return [NSString stringWithFormat:@"x = %.6f %@", remap(xPositionAsInterpolatedIndex, 0, self.lut.size - 1, self.lut.inputLowerBound, self.lut.inputUpperBound), [colorAtXPosition description]];
+    return @[@(xPositionAsInterpolatedIndex), colorAtXPosition, identityColorAtXPosition];
 }
 
 - (void)drawGridInContext:(CGContextRef)context
