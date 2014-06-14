@@ -21,7 +21,8 @@
 
 @interface LUTPreviewScene : SCNScene
 
-@property (strong) SCNNode *dotGroup;
+@property (strong, nonatomic) SCNNode *dotGroup;
+@property (strong, nonatomic) SCNNode *gridLines;
 
 - (void)updateNodesToPercentage:(double)percentage;
 
