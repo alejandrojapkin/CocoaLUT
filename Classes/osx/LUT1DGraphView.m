@@ -23,26 +23,30 @@
 
 @implementation LUT1DGraphViewController
 
+-(void)awakeFromNib{
+    [self initialize];
+}
+
 - (void)initialize{
-    [self.graphView addObserver:self forKeyPath:@"mousePoint" options:NSKeyValueObservingOptionNew context:nil];
+    [self.view addObserver:self forKeyPath:@"mousePoint" options:NSKeyValueObservingOptionNew context:nil];
 }
 
 - (void)dealloc{
-    [self.graphView removeObserver:self forKeyPath:@"mousePoint"];
+    [self.view removeObserver:self forKeyPath:@"mousePoint"];
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
     if([keyPath isEqualToString:@"mousePoint"]){
-        self.colorStringAtMousePoint = [self.graphView colorStringFromCurrentMousePoint];
+        self.colorStringAtMousePoint = [((LUT1DGraphView *)self.view) colorStringFromCurrentMousePoint];
     }
 }
 
 - (void)setViewWithLUT:(LUT1D *)lut{
-    self.graphView.lut = lut;
+    ((LUT1DGraphView *)self.view).lut = lut;
 }
 
 - (void)setInterpolation:(LUT1DGraphViewInterpolation)interpolation{
-    self.graphView.interpolation = interpolation;
+    ((LUT1DGraphView *)self.view).interpolation = interpolation;
 }
 
 @end

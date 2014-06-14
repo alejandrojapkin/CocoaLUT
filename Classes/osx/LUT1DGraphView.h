@@ -30,9 +30,8 @@ typedef NS_ENUM(NSInteger, LUT1DGraphViewInterpolation) {
 @end
 
 
-@interface LUT1DGraphViewController : NSObject
+@interface LUT1DGraphViewController : NSViewController
 
-@property (weak) IBOutlet LUT1DGraphView *graphView;
 @property (strong) NSString *colorStringAtMousePoint;
 
 - (void)initialize;
