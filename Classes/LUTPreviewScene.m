@@ -80,6 +80,7 @@
     
     double radius;
     double initialAnimationPercentage;
+    double axisLength;
     
     double minimumOutputValue = lut3D.minimumOutputValue;
     double maximumOutputValue = lut3D.maximumOutputValue;
@@ -87,10 +88,12 @@
     if((maximumOutputValue - minimumOutputValue) > (lut3D.inputUpperBound - lut3D.inputLowerBound)){
         initialAnimationPercentage = 1.0;
         radius = .013 * clampLowerBound(maximumOutputValue - minimumOutputValue, 1);
+        axisLength = clampLowerBound(maximumOutputValue - minimumOutputValue, 1);
     }
     else{
         initialAnimationPercentage = 0.0;
         radius = .013 * clampLowerBound(lut3D.inputUpperBound - lut3D.inputLowerBound, 1);
+        axisLength = clampLowerBound(lut3D.inputUpperBound - lut3D.inputLowerBound, 1);
     }
     
     
@@ -139,7 +142,7 @@
 //    scene.cubeOutline.opacity = .3;
     
     scene.axes = [[self class] axesWithOrigin:SCNVector3Make(0,0,0)
-                                       length:lut3D.inputUpperBound - lut3D.inputLowerBound
+                                       length:axisLength
                                        radius:radius/2.0];
     scene.axes.opacity = .5;
     
