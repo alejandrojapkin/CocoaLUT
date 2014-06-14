@@ -46,13 +46,27 @@
 }
 
 - (void)setDotGroup:(SCNNode *)dotGroup{
+    if(_dotGroup){
+        [_dotGroup removeFromParentNode];
+    }
     _dotGroup = dotGroup;
     [self.rootNode addChildNode:_dotGroup];
 }
 
-- (void)setGridLines:(SCNNode *)gridLines{
-    _gridLines = gridLines;
-    [self.rootNode addChildNode:_gridLines];
+- (void)setCubeOutline:(SCNNode *)cubeOutline{
+    if(_cubeOutline){
+        [_cubeOutline removeFromParentNode];
+    }
+    _cubeOutline = cubeOutline;
+    [self.rootNode addChildNode:_cubeOutline];
+}
+
+- (void)setAxes:(SCNNode *)axes{
+    if(_axes){
+        [_axes removeFromParentNode];
+    }
+    _axes = axes;
+    [self.rootNode addChildNode:_axes];
 }
 
 + (instancetype)sceneForLUT:(LUT *)lut {
@@ -119,15 +133,82 @@
     
     scene.dotGroup = dotGroup;
     
-    scene.gridLines = [[self class] gridLinesWithInputLowerBound:lut3D.inputLowerBound
-                                                 inputUpperBound:lut3D.inputUpperBound
-                                                          radius:radius/2.0];
-    scene.gridLines.opacity = .3;
+//    scene.cubeOutline = [[self class] cubeOutlineWithInputLowerBound:lut3D.inputLowerBound
+//                                                 inputUpperBound:lut3D.inputUpperBound
+//                                                          radius:radius/2.0];
+//    scene.cubeOutline.opacity = .3;
+    
+    scene.axes = [[self class] axesWithOrigin:SCNVector3Make(0,0,0)
+                                       length:lut3D.inputUpperBound - lut3D.inputLowerBound
+                                       radius:radius/2.0];
+    scene.axes.opacity = .5;
     
     return scene;
 }
 
-+ (SCNNode *)gridLinesWithInputLowerBound:(double)inputLowerBound
++ (SCNNode *)axesWithOrigin:(SCNVector3)origin
+                     length:(double)length
+                     radius:(double)radius{
+    SCNNode *axes = [SCNNode node];
+    
+    SCNCylinder *redLineGeometry = [SCNCylinder cylinderWithRadius:radius height:length];
+    redLineGeometry.firstMaterial.diffuse.contents = [NSColor redColor];
+    
+    SCNCylinder *greenLineGeometry = [SCNCylinder cylinderWithRadius:radius height:length];
+    greenLineGeometry.firstMaterial.diffuse.contents = [NSColor greenColor];
+    
+    SCNCylinder *blueLineGeometry = [SCNCylinder cylinderWithRadius:radius height:length];
+    blueLineGeometry.firstMaterial.diffuse.contents = [NSColor blueColor];
+    
+    SCNCone *redAxisPointerGeometry = [SCNCone coneWithTopRadius:radius*4.0 bottomRadius:0 height:radius*4.0];
+    redAxisPointerGeometry.firstMaterial.diffuse.contents = [NSColor redColor];
+    SCNCone *greenAxisPointerGeometry = [SCNCone coneWithTopRadius:radius*4.0 bottomRadius:0 height:radius*4.0];
+    greenAxisPointerGeometry.firstMaterial.diffuse.contents = [NSColor greenColor];
+    SCNCone *blueAxisPointerGeometry = [SCNCone coneWithTopRadius:radius*4.0 bottomRadius:0 height:radius*4.0];
+    blueAxisPointerGeometry.firstMaterial.diffuse.contents = [NSColor blueColor];
+    double axisPointerOffset = redAxisPointerGeometry.height/2.0;
+    
+    SCNNode *xAxis = [SCNNode nodeWithGeometry:redLineGeometry];
+    xAxis.position = SCNVector3Make(origin.x + length/2.0, origin.y, origin.z);
+    xAxis.rotation = SCNVector4Make(0, 0, 1, GLKMathDegreesToRadians(90));
+
+    SCNNode *xAxisPointer = [SCNNode nodeWithGeometry:redAxisPointerGeometry];
+    xAxisPointer.position = SCNVector3Make(origin.x + length + axisPointerOffset, origin.y, origin.z);
+    xAxisPointer.rotation = SCNVector4Make(0, 0, 1, GLKMathDegreesToRadians(90));
+
+    
+    SCNNode *yAxis = [SCNNode nodeWithGeometry:greenLineGeometry];
+    yAxis.position = SCNVector3Make(origin.x, origin.y + length/2.0, origin.z);
+    yAxis.rotation = SCNVector4Make(0, 1, 0, GLKMathDegreesToRadians(90));
+
+    SCNNode *yAxisPointer = [SCNNode nodeWithGeometry:greenAxisPointerGeometry];
+    yAxisPointer.position = SCNVector3Make(origin.x, origin.y + length + axisPointerOffset, origin.z);
+    yAxisPointer.rotation = SCNVector4Make(1, 0, 0, GLKMathDegreesToRadians(180));
+
+    
+    
+    SCNNode *zAxis = [SCNNode nodeWithGeometry:blueLineGeometry];
+    zAxis.position = SCNVector3Make(origin.x, origin.y, origin.z + length/2.0);
+    zAxis.rotation = SCNVector4Make(1, 0, 0, GLKMathDegreesToRadians(90));
+
+    SCNNode *zAxisPointer = [SCNNode nodeWithGeometry:blueAxisPointerGeometry];
+    zAxisPointer.position = SCNVector3Make(origin.x, origin.y, origin.z + length + axisPointerOffset);
+    zAxisPointer.rotation = SCNVector4Make(1, 0, 0, GLKMathDegreesToRadians(-90));
+
+    
+    
+    [axes addChildNode:xAxis];
+    [axes addChildNode:xAxisPointer];
+    [axes addChildNode:yAxis];
+    [axes addChildNode:yAxisPointer];
+    [axes addChildNode:zAxis];
+    [axes addChildNode:zAxisPointer];
+    
+    return axes;
+    
+}
+
++ (SCNNode *)cubeOutlineWithInputLowerBound:(double)inputLowerBound
                           inputUpperBound:(double)inputUpperBound
                                    radius:(double)radius{
     SCNNode *gridLines = [SCNNode node];
