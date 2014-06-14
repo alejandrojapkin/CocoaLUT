@@ -43,7 +43,7 @@
 
 - (void)mouseMoved{
     NSArray *indexLUTColorAndIdentityLUTColor = [((LUT1DGraphView *)self.view) indexLUTColorAndIdentityLUTColorFromCurrentMousePoint];
-    double index = [indexLUTColorAndIdentityLUTColor[0] doubleValue];
+    //double index = [indexLUTColorAndIdentityLUTColor[0] doubleValue];
     LUTColor *color = indexLUTColorAndIdentityLUTColor[1];
     LUTColor *identityColor = indexLUTColorAndIdentityLUTColor[2];
     self.colorStringAtMousePoint = [NSString stringWithFormat:@"%@ -> %@", identityColor, color];
