@@ -6,6 +6,8 @@
 //
 //
 
+#if !TARGET_OS_IPHONE || __IPHONE_OS_VERSION_MIN_REQUIRED >= 80000
+
 #import <Foundation/Foundation.h>
 #import <SceneKit/SceneKit.h>
 #import "CocoaLUT.h"
@@ -33,3 +35,5 @@
 
 
 @end
+
+#endif
