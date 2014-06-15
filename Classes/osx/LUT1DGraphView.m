@@ -46,7 +46,7 @@
     //double index = [indexLUTColorAndIdentityLUTColor[0] doubleValue];
     LUTColor *color = indexLUTColorAndIdentityLUTColor[1];
     LUTColor *identityColor = indexLUTColorAndIdentityLUTColor[2];
-    self.colorStringAtMousePoint = [NSString stringWithFormat:@"%@ -> %@", identityColor, color];
+    self.colorStringAtMousePoint = [NSString stringWithFormat:@"%@ ► %@", identityColor, color];
     self.inputColor = identityColor.systemColor;
     self.outputColor = color.systemColor;
 }
