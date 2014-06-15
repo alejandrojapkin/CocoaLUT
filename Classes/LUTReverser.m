@@ -133,6 +133,7 @@
 - (void)search {
     
     LUT3D *newLUT = [LUT3D LUTOfSize:self.outputSize inputLowerBound:[self.lut inputLowerBound] inputUpperBound:[self.lut inputUpperBound]];
+    [newLUT copyMetaPropertiesFromLUT:self.lut];
     int maxValue = (int)self.outputSize - 1;
     
     int __block completedOps = 0;
