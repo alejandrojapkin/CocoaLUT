@@ -33,11 +33,11 @@
 
 -(LUT *)LUTByUsingActionBlockOnLUT:(LUT *)lut{
     if(self.cachedInLUT != nil && self.cachedInLUT == lut){
-        NSLog(@"cached");
+        //NSLog(@"cached");
         return self.cachedOutLUT;
     }
     else{
-        NSLog(@"not cached");
+        //NSLog(@"not cached");
         self.cachedInLUT = lut;
         self.cachedOutLUT = self.actionBlock(lut);
         return self.cachedOutLUT;
