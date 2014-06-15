@@ -11,7 +11,7 @@
 
 @interface LUTAction : NSObject
 
-@property (strong) LUT* (^actionBlock)(LUT*);
+@property (copy) LUT* (^actionBlock)(LUT*);
 @property (strong) NSString *actionName;
 
 +(instancetype)actionWithBlock:(LUT *(^)(LUT *lut))actionBlock
