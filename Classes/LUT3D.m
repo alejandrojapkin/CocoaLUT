@@ -45,12 +45,14 @@
 
 - (LUT *)LUTByCombiningWithLUT:(LUT *)otherLUT {
     LUT3D *newLUT = [LUT3D LUTOfSize:[self size] inputLowerBound:[self inputLowerBound] inputUpperBound:[self inputUpperBound]];
+    [newLUT copyMetaPropertiesFromLUT:self];
     
     [newLUT LUTLoopWithBlock:^(size_t r, size_t g, size_t b) {
         LUTColor *startColor = [self colorAtR:r g:g b:b];
         LUTColor *newColor = [otherLUT colorAtColor:startColor];
         [newLUT setColor:newColor r:r g:g b:b];
     }];
+    
     
     return newLUT;
 }
@@ -63,6 +65,7 @@
     }
     
     LUT3D *extractedLUT = (LUT3D *)[self LUTByCombiningWithLUT:reversed1D];
+    [extractedLUT copyMetaPropertiesFromLUT:self];
     
     return extractedLUT;
 }
@@ -73,6 +76,7 @@
 
 - (LUT1D *)LUT1D{
     LUT1D *lut1D = [LUT1D LUTOfSize:[self size] inputLowerBound:[self inputLowerBound] inputUpperBound:[self inputUpperBound]];
+    [lut1D copyMetaPropertiesFromLUT:self];
     
     [lut1D LUTLoopWithBlock:^(size_t r, size_t g, size_t b) {
         LUTColor *color = [self colorAtR:r g:g b:b];
@@ -88,12 +92,14 @@
     }
     LUT3D *extractedColorLUT = [self LUT3DByExtractingColorOnly];
     LUT1D *contrastLUT = [[self LUT1D] LUTBySwizzling1DChannelsWithMethod:method];
-    
-    return (LUT3D *)[extractedColorLUT LUTByCombiningWithLUT:contrastLUT];
+    LUT3D *newLUT = (LUT3D *)[extractedColorLUT LUTByCombiningWithLUT:contrastLUT];
+    [newLUT copyMetaPropertiesFromLUT:self];
+    return newLUT;
 }
 
 - (instancetype)LUT3DByConvertingToMonoWithConversionMethod:(LUTMonoConversionMethod)conversionMethod{
     LUT3D *newLUT = [LUT3D LUTOfSize:[self size] inputLowerBound:[self inputLowerBound] inputUpperBound:[self inputUpperBound]];
+    [newLUT copyMetaPropertiesFromLUT:self];
     
     typedef LUTColor* (^converter)(LUTColor *);
     

@@ -83,6 +83,8 @@ typedef NS_ENUM(NSInteger, LUTImageRenderPath) {
                   inputLowerBound:(double)inputLowerBound
                   inputUpperBound:(double)inputUpperBound;
 
+- (void)copyMetaPropertiesFromLUT:(LUT *)lut;
+
 - (void) LUTLoopWithBlock:( void ( ^ )(size_t r, size_t g, size_t b) )block;
 
 /**

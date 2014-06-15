@@ -139,6 +139,13 @@
     return identityLUT;
 }
 
+- (void)copyMetaPropertiesFromLUT:(LUT *)lut{
+    self.title = [lut.title copy];
+    self.descriptionText = [lut.descriptionText copy];
+    self.metadata = [lut.metadata mutableCopy];
+    self.passthroughFileOptions = [lut.passthroughFileOptions copy];
+}
+
 - (void)LUTLoopWithBlock:(void (^)(size_t r, size_t g, size_t b))block{
     @throw [NSException exceptionWithName:@"NotImplemented" reason:[NSString stringWithFormat:@"\"%s\" Not Implemented", __func__] userInfo:nil];
 }
@@ -150,6 +157,7 @@
     }
     LUT *resizedLUT = [[self class] LUTOfSize:newSize inputLowerBound:[self inputLowerBound] inputUpperBound:[self inputUpperBound]];
     
+    [resizedLUT copyMetaPropertiesFromLUT:self];
     
     double ratio = ((double)self.size - 1.0) / ((double)newSize - 1.0);
     
@@ -164,6 +172,7 @@
 - (instancetype)LUTByClampingLowerBound:(double)lowerBound
                              upperBound:(double)upperBound{
     LUT *newLUT = [[self class] LUTOfSize:[self size] inputLowerBound:[self inputLowerBound] inputUpperBound:[self inputUpperBound]];
+    [newLUT copyMetaPropertiesFromLUT:self];
     
     [newLUT LUTLoopWithBlock:^(size_t r, size_t g, size_t b) {
         [newLUT setColor:[[self colorAtR:r g:g b:b] clampedWithLowerBound:lowerBound upperBound:upperBound] r:r g:g b:b];
@@ -178,6 +187,7 @@
                                       outputHigh:(double)outputHigh
                                          bounded:(BOOL)bounded{
     LUT *newLUT = [[self class] LUTOfSize:[self size] inputLowerBound:[self inputLowerBound] inputUpperBound:[self inputUpperBound]];
+    [newLUT copyMetaPropertiesFromLUT:self];
     
     [newLUT LUTLoopWithBlock:^(size_t r, size_t g, size_t b) {
         [newLUT setColor:[[self colorAtR:r g:g b:b] remappedFromInputLow:inputLow
@@ -199,6 +209,7 @@
         return [self copy];
     }
     LUT *newLUT = [[self class] LUTOfSize:[self size] inputLowerBound:[self inputLowerBound] inputUpperBound:[self inputUpperBound]];
+    [newLUT copyMetaPropertiesFromLUT:self];
     
     [newLUT LUTLoopWithBlock:^(size_t r, size_t g, size_t b) {
         [newLUT setColor:[[self identityColorAtR:r g:g b:b] lerpTo:[self colorAtR:r g:g b:b] amount:strength] r:r g:g b:b];
@@ -220,7 +231,9 @@
     if(inputLowerBound == [self inputLowerBound] && inputUpperBound == [self inputUpperBound]){
         return [self copy];
     }
+    
     LUT *newLUT = [[self class] LUTOfSize:[self size] inputLowerBound:inputLowerBound inputUpperBound:inputUpperBound];
+    [newLUT copyMetaPropertiesFromLUT:self];
     
     [newLUT LUTLoopWithBlock:^(size_t r, size_t g, size_t b) {
         LUTColor *identityColor = [newLUT identityColorAtR:r g:g b:b];
@@ -232,6 +245,7 @@
 
 - (instancetype)LUTByInvertingColor{
     LUT *newLUT = [[self class] LUTOfSize:[self size] inputLowerBound:self.inputLowerBound inputUpperBound:self.inputUpperBound];
+    [newLUT copyMetaPropertiesFromLUT:self];
     
     [newLUT LUTLoopWithBlock:^(size_t r, size_t g, size_t b) {
         LUTColor *startColor = [self colorAtR:r g:g b:b];

@@ -82,6 +82,7 @@
     else{
         combinedLUT = [LUT3D LUTOfSize:[otherLUT size] inputLowerBound:[self inputLowerBound] inputUpperBound:[self inputUpperBound]];
     }
+    [combinedLUT copyMetaPropertiesFromLUT:self];
     
     LUT *selfResizedLUT = [self LUTByResizingToSize:[combinedLUT size]];
     
@@ -192,6 +193,7 @@
 
 - (instancetype)LUTBySwizzling1DChannelsWithMethod:(LUT1DSwizzleChannelsMethod)method{
     LUT1D *swizzledLUT = [LUT1D LUTOfSize:[self size] inputLowerBound:[self inputLowerBound] inputUpperBound:[self inputUpperBound]];
+    [swizzledLUT copyMetaPropertiesFromLUT:self];
     
     [swizzledLUT LUTLoopWithBlock:^(size_t r, size_t g, size_t b) {
         if(method == LUT1DSwizzleChannelsMethodAverageRGB){
@@ -275,13 +277,14 @@
 //    }
     
     
+    LUT1D *newLUT = [LUT1D LUT1DWithRedCurve:newRGBCurves[0]
+                                  greenCurve:newRGBCurves[1]
+                                   blueCurve:newRGBCurves[2]
+                                  lowerBound:newLowerBound
+                                  upperBound:newUpperBound];
+    [newLUT copyMetaPropertiesFromLUT:self];
     
-    
-    return [LUT1D LUT1DWithRedCurve:newRGBCurves[0]
-                         greenCurve:newRGBCurves[1]
-                          blueCurve:newRGBCurves[2]
-                         lowerBound:newLowerBound
-                         upperBound:newUpperBound];
+    return newLUT;
 }
 
 - (BOOL)isReversibleWithStrictness:(BOOL)strict{
@@ -329,7 +332,9 @@
     //the size parameter is out of desperation - we can't be making 1024x cubes can we?
     LUT1D *resized1DLUT = [self LUTByResizingToSize:size];
     
+    
     LUT3D *newLUT = [LUT3D LUTOfSize:size inputLowerBound:[self inputLowerBound] inputUpperBound:[self inputUpperBound]];
+    [newLUT copyMetaPropertiesFromLUT:self];
     
     [newLUT LUTLoopWithBlock:^(size_t r, size_t g, size_t b) {
         [newLUT setColor:[resized1DLUT colorAtR:r g:g b:b] r:r g:g b:b];
