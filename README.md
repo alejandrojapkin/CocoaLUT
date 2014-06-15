@@ -3,7 +3,7 @@
 [![Version](http://cocoapod-badges.herokuapp.com/v/CocoaLUT/badge.png)](http://cocoadocs.org/docsets/CocoaLUT)
 [![Platform](http://cocoapod-badges.herokuapp.com/p/CocoaLUT/badge.png)](http://cocoadocs.org/docsets/CocoaLUT)
 
-CocoaLUT is a tool for importing, exporting, and manipulating [3D look up tables](https://en.wikipedia.org/wiki/3D_lookup_table) (LUTs) for colors. LUTs are often used in film and video finishing, graphics, video games, and rendering.
+CocoaLUT is a tool for importing, exporting, and manipulating [3D look up tables](https://en.wikipedia.org/wiki/3D_lookup_table) (3D LUTs) and 1D look up tables (1D LUTs) for colors. LUTs are often used in film and video finishing, graphics, video games, and rendering.
 
 The goal of this project is to have a fast, modern Objective-C (and soon, Swift) library that works on both iOS and OS X.
 
