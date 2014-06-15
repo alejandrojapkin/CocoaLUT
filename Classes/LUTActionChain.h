@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "CocoaLUT.h"
 
-@interface LUTAction : NSObject
+@interface LUTAction : NSObject <NSCopying>
 
 @property (copy) LUT* (^actionBlock)(LUT*);
 @property (strong) NSString *actionName;
@@ -22,7 +22,7 @@
 @end
 
 
-@interface LUTActionChain : NSObject
+@interface LUTActionChain : NSObject <NSCopying>
 
 @property (strong) NSMutableArray *actionChain;
 

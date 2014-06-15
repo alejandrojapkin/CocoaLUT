@@ -33,9 +33,11 @@
 
 -(LUT *)LUTByUsingActionBlockOnLUT:(LUT *)lut{
     if(self.cachedInLUT != nil && self.cachedInLUT == lut){
+        NSLog(@"cached");
         return self.cachedOutLUT;
     }
     else{
+        NSLog(@"not cached");
         self.cachedInLUT = lut;
         self.cachedOutLUT = self.actionBlock(lut);
         return self.cachedOutLUT;
@@ -44,6 +46,13 @@
 
 -(NSString *)description{
     return self.actionName;
+}
+
+-(instancetype)copyWithZone:(NSZone *)zone{
+    LUTAction *copiedAction = [LUTAction actionWithBlock:self.actionBlock actionName:[self.actionName copyWithZone:zone]];
+    copiedAction.cachedInLUT = self.cachedInLUT;
+    copiedAction.cachedOutLUT = self.cachedOutLUT;
+    return copiedAction;
 }
 
 @end
@@ -100,6 +109,12 @@
         [actionNames addObject:action.actionName];
     }
     return actionNames;
+}
+
+-(instancetype)copyWithZone:(NSZone *)zone{
+    LUTActionChain *copiedActionChain = [LUTActionChain actionChain];
+    copiedActionChain.actionChain = [self.actionChain mutableCopyWithZone:zone];
+    return copiedActionChain;
 }
 
 @end
