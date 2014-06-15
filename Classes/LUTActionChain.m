@@ -65,25 +65,25 @@
 
 -(instancetype)init{
     if(self = [super init]){
-        self.actionChain = [NSMutableArray array];
+        self.actionChainArray = [NSMutableArray array];
     }
     return self;
 }
 
 -(void)removeActionAtIndex:(NSUInteger)index{
-    [self.actionChain removeObjectAtIndex:index];
+    [self.actionChainArray removeObjectAtIndex:index];
 }
 
 -(void)insertAction:(LUTAction *)actionBlock atIndex:(NSUInteger)index{
-    [self.actionChain insertObject:actionBlock atIndex:index];
+    [self.actionChainArray insertObject:actionBlock atIndex:index];
 }
 
 -(void)addAction:(LUTAction *)actionBlock{
-    [self.actionChain addObject:actionBlock];
+    [self.actionChainArray addObject:actionBlock];
 }
 
 -(LUTAction *)actionAtIndex:(NSUInteger)index{
-    return [self.actionChain objectAtIndex:index];
+    return [self.actionChainArray objectAtIndex:index];
 }
 
 -(LUT *)lutAtIndex:(NSUInteger)index
@@ -97,7 +97,7 @@
 
 -(LUT *)outputLUTUsingSourceLUT:(LUT *)sourceLUT{
     LUT *lut = sourceLUT;
-    for(LUTAction *action in self.actionChain){
+    for(LUTAction *action in self.actionChainArray){
         lut = [action LUTByUsingActionBlockOnLUT:lut];
     }
     return lut;
@@ -105,7 +105,7 @@
 
 -(NSArray *)actionNames{
     NSMutableArray *actionNames = [NSMutableArray array];
-    for(LUTAction *action in self.actionChain){
+    for(LUTAction *action in self.actionChainArray){
         [actionNames addObject:action.actionName];
     }
     return actionNames;
@@ -113,7 +113,7 @@
 
 -(instancetype)copyWithZone:(NSZone *)zone{
     LUTActionChain *copiedActionChain = [LUTActionChain actionChain];
-    copiedActionChain.actionChain = [self.actionChain mutableCopyWithZone:zone];
+    copiedActionChain.actionChainArray = [self.actionChainArray mutableCopyWithZone:zone];
     return copiedActionChain;
 }
 

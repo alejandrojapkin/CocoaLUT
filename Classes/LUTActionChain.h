@@ -24,7 +24,7 @@
 
 @interface LUTActionChain : NSObject <NSCopying>
 
-@property (strong) NSMutableArray *actionChain;
+@property (strong) NSMutableArray *actionChainArray;
 
 +(instancetype)actionChain;
 
