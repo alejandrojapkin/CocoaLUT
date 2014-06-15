@@ -108,7 +108,7 @@ NSArray* indicesDoubleArray(double startValue, double endValue, int numIndices){
     NSMutableArray *indices = [NSMutableArray array];
     double ratio = remap(1, 0, numIndices - 1, startValue, endValue);
     for (int i = 0; i < numIndices; i++) {
-        [indices addObject:@((double)i * ratio)];
+        [indices addObject:@(clampUpperBound((double)i * ratio, endValue))];
     }
     return indices;
 }
