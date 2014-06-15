@@ -8,14 +8,21 @@
 
 #import "LUTActionChain.h"
 
+@interface LUTAction ()
+
+@property (strong) LUT* cachedInLUT;
+@property (strong) LUT* cachedOutLUT;
+
+@end
+
 @implementation LUTAction
 
-+(instancetype)actionWithBlock:(LUT *(^)(LUT *))actionBlock
++(instancetype)actionWithBlock:(LUT *(^)(LUT *lut))actionBlock
                     actionName:(NSString *)actionName{
     return [[[self class] alloc] initWithBlock:actionBlock actionName:actionName];
 }
 
--(instancetype)initWithBlock:(LUT *(^)(LUT *))actionBlock
+-(instancetype)initWithBlock:(LUT *(^)(LUT *lut))actionBlock
                   actionName:(NSString *)actionName{
     if(self = [super init]){
         self.actionBlock = actionBlock;
@@ -25,14 +32,20 @@
 }
 
 -(LUT *)LUTByUsingActionBlockOnLUT:(LUT *)lut{
-    return self.actionBlock(lut);
+    if(self.cachedInLUT != nil && self.cachedInLUT == lut){
+        NSLog(@"%@ cached", self.actionName);
+        return self.cachedOutLUT;
+    }
+    else{
+        self.cachedInLUT = lut;
+        self.cachedOutLUT = self.actionBlock(lut);
+        return self.cachedOutLUT;
+    }
 }
 
-@end
-
-@interface LUTActionChain ()
-
-@property (strong) NSMutableArray *actionChain;
+-(NSString *)description{
+    return self.actionName;
+}
 
 @end
 
@@ -75,7 +88,11 @@
 }
 
 -(LUT *)outputLUTUsingSourceLUT:(LUT *)sourceLUT{
-    return [self lutAtIndex:self.actionChain.count-1 usingSourceLUT:sourceLUT];
+    LUT *lut = sourceLUT;
+    for(LUTAction *action in self.actionChain){
+        lut = [action LUTByUsingActionBlockOnLUT:lut];
+    }
+    return lut;
 }
 
 -(NSArray *)actionNames{

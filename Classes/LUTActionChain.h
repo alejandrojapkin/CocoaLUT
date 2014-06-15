@@ -14,7 +14,7 @@
 @property (strong) LUT* (^actionBlock)(LUT*);
 @property (strong) NSString *actionName;
 
-+(instancetype)actionWithBlock:(LUT *(^)(LUT *))actionBlock
++(instancetype)actionWithBlock:(LUT *(^)(LUT *lut))actionBlock
                     actionName:(NSString *)actionName;
 
 -(LUT *)LUTByUsingActionBlockOnLUT:(LUT *)lut;
@@ -23,6 +23,8 @@
 
 
 @interface LUTActionChain : NSObject
+
+@property (strong) NSMutableArray *actionChain;
 
 +(instancetype)actionChain;
 
