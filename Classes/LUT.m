@@ -150,13 +150,14 @@
     }
     LUT *resizedLUT = [[self class] LUTOfSize:newSize inputLowerBound:[self inputLowerBound] inputUpperBound:[self inputUpperBound]];
     
-    double ratio = remap(1, 0, [resizedLUT size] - 1, 0, [self size] - 1);
+    
+    double ratio = ((double)self.size - 1.0) / ((double)newSize - 1.0);
     
     [resizedLUT LUTLoopWithBlock:^(size_t r, size_t g, size_t b) {
-        LUTColor *color = [self colorAtInterpolatedR:r * ratio g:g * ratio b:b * ratio];
+        LUTColor *color = [self colorAtInterpolatedR:clampUpperBound(r * ratio, self.size-1.0) g:clampUpperBound(g * ratio, self.size-1.0) b:clampUpperBound(b * ratio, self.size-1.0)];
         [resizedLUT setColor:color r:r g:g b:b];
     }];
-    
+
     return resizedLUT;
 }
 
