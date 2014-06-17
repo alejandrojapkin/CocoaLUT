@@ -52,7 +52,10 @@
 }
 
 - (void)setViewWithLUT:(LUT1D *)lut{
-    ((LUT1DGraphView *)self.view).lut = lut;
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+        ((LUT1DGraphView *)self.view).lut = lut;
+    });
+    
 }
 
 - (void)setInterpolation:(LUT1DGraphViewInterpolation)interpolation{
