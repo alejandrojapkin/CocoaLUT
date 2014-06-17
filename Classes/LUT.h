@@ -111,6 +111,11 @@ typedef NS_ENUM(NSInteger, LUTImageRenderPath) {
 - (instancetype)LUTByClampingLowerBound:(double)lowerBound
                              upperBound:(double)upperBound;
 
+- (instancetype)LUTByClampingLowerBoundOnly:(double)lowerBound;
+
+- (instancetype)LUTByClampingUpperBoundOnly:(double)upperBound;
+
+
 - (instancetype)LUTByRemappingValuesWithInputLow:(double)inputLow
                                        inputHigh:(double)inputHigh
                                        outputLow:(double)outputLow

@@ -80,6 +80,10 @@ typedef double LUTColorValue;
 - (LUTColor *)clampedWithLowerBound:(double)lowerBound
                          upperBound:(double)upperBound;
 
+- (LUTColor *)clampedWithLowerBoundOnly:(double)lowerBound;
+
+- (LUTColor *)clampedWithUpperBoundOnly:(double)upperBound;
+
 - (LUTColor *)remappedFromInputLow:(double)inputLow
                          inputHigh:(double)inputHigh
                          outputLow:(double)outputLow

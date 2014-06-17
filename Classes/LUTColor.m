@@ -37,6 +37,20 @@
                              blue:clamp(self.blue, lowerBound, upperBound)];
 }
 
+- (LUTColor *)clampedWithLowerBoundOnly:(double)lowerBound{
+    return [LUTColor colorWithRed:clampLowerBound(self.red, lowerBound)
+                            green:clampLowerBound(self.green, lowerBound)
+                             blue:clampLowerBound(self.blue, lowerBound)];
+    
+}
+
+- (LUTColor *)clampedWithUpperBoundOnly:(double)upperBound{
+    return [LUTColor colorWithRed:clampUpperBound(self.red, upperBound)
+                            green:clampUpperBound(self.green, upperBound)
+                             blue:clampUpperBound(self.blue, upperBound)];
+    
+}
+
 - (LUTColor *)contrastStretchWithCurrentMin:(double)currentMin
                                  currentMax:(double)currentMax
                                    finalMin:(double)finalMin
