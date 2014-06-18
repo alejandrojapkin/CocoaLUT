@@ -91,6 +91,10 @@
         }
     }
     
+    if(currentCubeIndex < cubeSize*cubeSize*cubeSize){
+        @throw [NSException exceptionWithName:@"LUTParserError" reason:@"Incomplete data lines" userInfo:nil];
+    }
+    
     [lut setMetadata:metadata];
     lut.descriptionText = description;
     [lut setPassthroughFileOptions:@{[LUTFormatter3DL utiString]: passthroughFileOptions}];
