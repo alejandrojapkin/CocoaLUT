@@ -112,11 +112,11 @@ static NSMutableArray *allFormatters;
 }
 
 + (NSArray *)allOptions {
-    @throw [NSException exceptionWithName:@"NotImplemented" reason:[NSString stringWithFormat:@"\"%s\" Not Implemented", __func__] userInfo:nil];
+    return nil;
 }
 
 + (NSDictionary *)defaultOptions{
-    @throw [NSException exceptionWithName:@"NotImplemented" reason:[NSString stringWithFormat:@"\"%s\" Not Implemented", __func__] userInfo:nil];
+    return nil;
 }
 
 + (NSString *)utiString{
