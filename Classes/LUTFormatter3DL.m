@@ -185,6 +185,13 @@
 
 }
 
++ (BOOL)isValidReaderForURL:(NSURL *)fileURL{
+    if([[[self class] fileExtensions] containsObject:[fileURL pathExtension]]){
+        return YES;
+    }
+    return NO;
+}
+
 + (LUTFormatterOutputType)outputType{
     return LUTFormatterOutputType3D;
 }
