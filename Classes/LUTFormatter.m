@@ -55,19 +55,10 @@ static NSMutableArray *allFormatters;
 }
 
 + (BOOL)isValidReaderForURL:(NSURL *)fileURL{
-    if(![[[self class] fileExtensions] containsObject:[fileURL pathExtension]]){
-        return NO;
+    if([[[self class] fileExtensions] containsObject:[fileURL pathExtension]]){
+        return YES;
     }
-    
-    LUT *lut;
-    @try {
-        lut = [[self class] LUTFromURL:fileURL];
-    }
-    @catch (NSException *exception) {
-        NSLog(@"Exception reading file: %@", exception);
-        return NO;
-    }
-    return YES;
+    return NO;
 }
 
 + (BOOL)isValidWriterForLUT:(LUT *)lut{
