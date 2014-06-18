@@ -103,7 +103,7 @@ typedef NS_ENUM(NSInteger, LUTFormatterOutputType) {
  */
 + (NSString *)stringFromLUT:(LUT *)lut withOptions:(NSDictionary *)options;
 
-+ (BOOL)canReadFromURL:(NSURL *)fileURL;
++ (BOOL)isValidReaderForURL:(NSURL *)fileURL;
 
 + (BOOL)canWriteLUTWithoutConversion:(LUT *)lut;
 

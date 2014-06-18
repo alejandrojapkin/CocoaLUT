@@ -47,14 +47,14 @@ static NSMutableArray *allFormatters;
 + (LUTFormatter *)LUTFormatterForURL:(NSURL *)fileURL{
     NSArray *formatters = [[self class] LUTFormattersForFileExtension:[fileURL pathExtension]];
     for(LUTFormatter* formatter in formatters){
-        if([[formatter class] canReadFromURL:fileURL]){
+        if([[formatter class] isValidReaderForURL:fileURL]){
             return formatter;
         }
     }
     return nil;
 }
 
-+ (BOOL)canReadFromURL:(NSURL *)fileURL{
++ (BOOL)isValidReaderForURL:(NSURL *)fileURL{
     if(![[[self class] fileExtensions] containsObject:[fileURL pathExtension]]){
         return NO;
     }
