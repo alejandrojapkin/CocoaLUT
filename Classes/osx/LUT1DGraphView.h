@@ -6,11 +6,9 @@
 //
 //
 #import "CocoaLUT.h"
-#import <SAMCubicSpline/SAMCubicSpline.h>
 
 typedef NS_ENUM(NSInteger, LUT1DGraphViewInterpolation) {
-    LUT1DGraphViewInterpolationLinear,
-    LUT1DGraphViewInterpolationCubic
+    LUT1DGraphViewInterpolationLinear
 };
 
 

@@ -159,31 +159,6 @@
 
 }
 
-- (NSArray *)SAMCubicSplineRGBArrayWithNormalized01XAxis{
-    NSMutableArray *redArray = [NSMutableArray array];
-    NSMutableArray *greenArray = [NSMutableArray array];
-    NSMutableArray *blueArray = [NSMutableArray array];
-    
-    [self LUTLoopWithBlock:^(size_t r, size_t g, size_t b) {
-        double normalizedRIndex = remap(r, 0, [self size]-1, 0, 1);
-        double normalizedGIndex = remap(g, 0, [self size]-1, 0, 1);
-        double normalizedBIndex = remap(b, 0, [self size]-1, 0, 1);
-        LUTColor *color = [self colorAtR:r g:g b:b];
-        
-        #if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR
-        redArray[r] = [NSValue valueWithCGPoint: CGPointMake(normalizedRIndex, color.red)];
-        greenArray[g] = [NSValue valueWithCGPoint: CGPointMake(normalizedGIndex, color.green)];
-        blueArray[b] = [NSValue valueWithCGPoint: CGPointMake(normalizedBIndex, color.blue)];
-        #else
-        redArray[r] = [NSValue valueWithPoint: CGPointMake(normalizedRIndex, color.red)];
-        greenArray[g] = [NSValue valueWithPoint: CGPointMake(normalizedGIndex, color.green)];
-        blueArray[b] =  [NSValue valueWithPoint: CGPointMake(normalizedBIndex, color.blue)];
-        #endif
-    }];
-    
-    return @[[[SAMCubicSpline alloc] initWithPoints:redArray], [[SAMCubicSpline alloc] initWithPoints:greenArray], [[SAMCubicSpline alloc] initWithPoints:blueArray]];
-}
-
 + (M13OrderedDictionary *)LUT1DSwizzleChannelsMethods{
     return M13OrderedDictionaryFromOrderedArrayWithDictionaries(@[@{@"Averaged RGB":@(LUT1DSwizzleChannelsMethodAverageRGB)},
                                                                   @{@"Copy Red Channel":@(LUT1DSwizzleChannelsMethodRedCopiedToRGB)},

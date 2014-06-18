@@ -10,7 +10,6 @@
 
 @interface LUT1DGraphView ()
 
-@property (strong) NSArray *cubicSplinesRGBArray;
 @property (strong) NSArray *lerpRGBArray;
 
 @property (assign) double minimumOutputValue;
@@ -132,7 +131,6 @@
     if(self.lut){
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
             
-            self.cubicSplinesRGBArray = [self.lut SAMCubicSplineRGBArrayWithNormalized01XAxis];
             self.lerpRGBArray = [self.lut rgbCurveArray];
             
             self.minimumOutputValue = [self.lut minimumOutputValue];
@@ -163,14 +161,6 @@
     
     if(self.interpolation == LUT1DGraphViewInterpolationLinear){
         [self drawLUT1D:self.lut inContext:context inRect:drawingRect thickness:2.0];
-    }
-    else if(self.interpolation == LUT1DGraphViewInterpolationCubic){
-        CGContextSetRGBStrokeColor(context, 1, 0, 0, 1);
-        [self drawSpline:self.cubicSplinesRGBArray[0] inContext:context inRect:drawingRect];
-        CGContextSetRGBStrokeColor(context, 0, 1, 0, 1);
-        [self drawSpline:self.cubicSplinesRGBArray[1] inContext:context inRect:drawingRect];
-        CGContextSetRGBStrokeColor(context, 0, 0, 1, 1);
-        [self drawSpline:self.cubicSplinesRGBArray[2] inContext:context inRect:drawingRect];
     }
     
     if(self.mouseIsIn){
@@ -361,50 +351,8 @@
     
 }
 
-
-- (void)drawSpline:(SAMCubicSpline *)spline inContext:(CGContextRef)context inRect:(NSRect)rect{
-    CGFloat xOrigin = rect.origin.x;
-    CGFloat yOrigin = rect.origin.y;
-    CGFloat pixelWidth = rect.size.width;
-    CGFloat pixelHeight = rect.size.height;
-    
-    //NSLog(@"Drawing in %f %f", pixelWidth, pixelHeight);
-    
-    CGContextSetLineWidth(context, 2.0);
-    CGContextBeginPath(context);
-    for (CGFloat x = 0.0f; x <= pixelWidth; x++) {
-        // Get the Y value of our point
-        CGFloat interpolatedY = [spline interpolate:x / (pixelWidth)];
-        
-        CGFloat xMapped = remap(x, 0, pixelWidth, xOrigin, xOrigin + pixelWidth);
-        CGFloat yMapped = remapNoError(interpolatedY, clampUpperBound(self.minimumOutputValue, 0), clampLowerBound(self.maximumOutputValue, 1), yOrigin, yOrigin + pixelHeight);
-        
-        //NSLog(@"%f %f -> %f %f", x/pixelWidth, interpolatedY, x, y);
-        // Add the point to the context's path
-        
-        if (x == xOrigin) {
-            CGContextMoveToPoint(context, xMapped, yMapped);
-        } else {
-            CGContextAddLineToPoint(context, xMapped, yMapped);
-        }
-        
-    }
-    CGContextStrokePath(context);
-    
-    if([self.lut size] < pixelWidth/2.0){
-        CGContextSetRGBFillColor(context, 0, 0, 0, 1);
-        for (int x = 0; x < [self.lut size]; x++){
-            CGFloat xMapped = remap(x, 0, [self.lut size]-1, xOrigin, xOrigin + pixelWidth);
-            CGFloat yMapped = remapNoError([spline interpolate:(double)x/((double)[self.lut size]-1.0)], clampUpperBound(self.minimumOutputValue, 0), clampLowerBound(self.maximumOutputValue, 1), yOrigin, yOrigin + pixelHeight);
-            CGContextFillEllipseInRect(context, CGRectMake(xMapped-3, yMapped-3, 6, 6));
-        }
-    }
-    
-}
-
 + (M13OrderedDictionary *)interpolationMethods{
-    return M13OrderedDictionaryFromOrderedArrayWithDictionaries(@[@{@"Linear": @(LUT1DGraphViewInterpolationLinear)},
-                                                                  @{@"Cubic": @(LUT1DGraphViewInterpolationCubic)}]);
+    return M13OrderedDictionaryFromOrderedArrayWithDictionaries(@[@{@"Linear": @(LUT1DGraphViewInterpolationLinear)}]);
 }
 
 

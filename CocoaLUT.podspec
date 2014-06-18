@@ -14,7 +14,6 @@ Pod::Spec.new do |s|
 
   s.dependency 'RegExCategories'
   s.dependency 'M13OrderedDictionary'
-  s.dependency 'SAMCubicSpline'
   s.dependency 'XMLDictionary'
 
   # iOS

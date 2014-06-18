@@ -10,7 +10,6 @@
 #import "CocoaLUT.h"
 #import "LUT.h"
 #import <M13OrderedDictionary/M13OrderedDictionary.h>
-#import <SAMCubicSpline/SAMCubicSpline.h>
 
 @class LUTColor;
 @class LUT3D;
@@ -79,8 +78,6 @@
 - (double)valueAtG:(NSUInteger)g;
 - (double)valueAtB:(NSUInteger)b;
 
-//for helping make the 1D graph view
-- (NSArray *)SAMCubicSplineRGBArrayWithNormalized01XAxis;
 
 
 
