@@ -109,7 +109,7 @@ typedef NS_ENUM(NSInteger, LUTFormatterOutputType) {
 
 + (LUTFormatterOutputType)outputType;
 
-+ (NSDictionary *)allOptions;
++ (NSArray *)allOptions;
 
 + (NSDictionary *)defaultOptions;
 

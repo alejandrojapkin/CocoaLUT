@@ -120,13 +120,14 @@
     return LUTFormatterOutputType1D;
 }
 
-+ (NSDictionary *)allOptions{
++ (NSArray *)allOptions{
     
     NSDictionary *discreetOptions =
-    @{@"integerMaxOutput": M13OrderedDictionaryFromOrderedArrayWithDictionaries(@[@{@"12-bit": @(pow(2, 12) - 1)},
+    @{@"fileTypeVariant":@"Discreet",
+      @"integerMaxOutput": M13OrderedDictionaryFromOrderedArrayWithDictionaries(@[@{@"12-bit": @(pow(2, 12) - 1)},
                                                                                   @{@"16-bit": @(pow(2, 16) - 1)}])};
     
-    return @{@"Discreet": discreetOptions};
+    return @[discreetOptions];
 }
 
 + (NSDictionary *)defaultOptions{

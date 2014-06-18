@@ -199,23 +199,24 @@
     return @[@"3dl"];
 }
 
-+ (NSDictionary *)allOptions{
++ (NSArray *)allOptions{
     
     NSDictionary *lustreOptions =
-                @{@"integerMaxOutput": M13OrderedDictionaryFromOrderedArrayWithDictionaries(@[@{@"12-bit": @(pow(2, 12) - 1)},
+                @{@"fileTypeVariant":@"Lustre",
+                  @"integerMaxOutput": M13OrderedDictionaryFromOrderedArrayWithDictionaries(@[@{@"12-bit": @(pow(2, 12) - 1)},
                                                                                               @{@"16-bit": @(pow(2, 16) - 1)}]),
                   @"lutSize": M13OrderedDictionaryFromOrderedArrayWithDictionaries(@[@{@"17": @(17)},
                                                                                      @{@"33": @(33)},
                                                                                      @{@"65": @(65)}])};
     
     NSDictionary *nukeOptions =
-                @{@"integerMaxOutput": M13OrderedDictionaryFromOrderedArrayWithDictionaries(@[@{@"12-bit": @(pow(2, 12) - 1)},
+                @{@"fileTypeVariant":@"Nuke",
+                  @"integerMaxOutput": M13OrderedDictionaryFromOrderedArrayWithDictionaries(@[@{@"12-bit": @(pow(2, 12) - 1)},
                                                                                               @{@"16-bit": @(pow(2, 16) - 1)}]),
                   @"lutSize": M13OrderedDictionaryFromOrderedArrayWithDictionaries(@[@{@"32": @(17)},
                                                                                      @{@"64": @(33)}])};
     
-    return @{@"Nuke": nukeOptions,
-             @"Lustre": lustreOptions};
+    return @[lustreOptions, nukeOptions];
 }
 
 + (NSDictionary *)defaultOptions{

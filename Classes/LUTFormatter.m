@@ -108,7 +108,7 @@ static NSMutableArray *allFormatters;
     @throw [NSException exceptionWithName:@"NotImplemented" reason:[NSString stringWithFormat:@"\"%s\" Not Implemented", __func__] userInfo:nil];
 }
 
-+ (NSDictionary *)allOptions {
++ (NSArray *)allOptions {
     @throw [NSException exceptionWithName:@"NotImplemented" reason:[NSString stringWithFormat:@"\"%s\" Not Implemented", __func__] userInfo:nil];
 }
 
