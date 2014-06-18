@@ -9,7 +9,7 @@
 #if !TARGET_OS_IPHONE || __IPHONE_OS_VERSION_MIN_REQUIRED >= 80000
 #import "LUTPreviewScene.h"
 
-#define LATTICE_SIZE 18
+#define LATTICE_MAX_SIZE 18
 
 @interface LUTColorNode: SCNNode
 @property LUTColor *identityColor;
@@ -31,7 +31,6 @@
 - (void)setSceneWithLUT:(LUT *)lut{
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         LUTPreviewScene *scene = [LUTPreviewScene sceneForLUT:lut];
-        
         
         dispatch_async(dispatch_get_main_queue(), ^{
             ((SCNView *)self.view).scene = scene;
@@ -82,9 +81,7 @@
 }
 
 + (instancetype)sceneForLUT:(LUT *)lut {
-    
-    
-    LUT3D *lut3D = LUTAsLUT3D(lut, MIN(LATTICE_SIZE, lut.size));
+    LUT3D *lut3D = LUTAsLUT3D(lut, MIN(LATTICE_MAX_SIZE, lut.size));
     
     LUTPreviewScene *scene = [self scene];
     
