@@ -11,6 +11,10 @@
 
 @implementation LUTFormatterUnwrappedTexture
 
++ (void)load{
+    [super load];
+}
+
 + (NSData *)dataFromLUT:(LUT *)lut withOptions:(NSDictionary *)options {
 #if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR
     return UIImagePNGRepresentation([self imageFromLUT:lut]);
@@ -92,6 +96,10 @@
     return lut3D;
 }
 #endif
+
++ (LUTFormatterOutputType)outputType{
+    return LUTFormatterOutputType3D;
+}
 
 + (NSString *)utiString{
     return @"public.unwrapped-cube-lut";

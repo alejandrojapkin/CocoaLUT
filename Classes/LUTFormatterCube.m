@@ -12,6 +12,10 @@
 
 @implementation LUTFormatterCube
 
++ (void)load{
+    [super load];
+}
+
 + (LUT *)LUTFromLines:(NSArray *)lines {
     NSMutableString __block *title = [NSMutableString stringWithString:@""];
     NSString *description;
@@ -206,6 +210,10 @@
     
     return string;
 
+}
+
++ (LUTFormatterOutputType)outputType{
+    return LUTFormatterOutputTypeEither;
 }
 
 + (NSString *)utiString{

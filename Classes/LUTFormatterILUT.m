@@ -9,34 +9,39 @@
 #import "LUTFormatterILUT.h"
 
 @implementation LUTFormatterILUT
-    + (LUT *)LUTFromLines:(NSArray *)lines {
-        
-        NSMutableArray *redCurve = [NSMutableArray array];
-        NSMutableArray *greenCurve = [NSMutableArray array];
-        NSMutableArray *blueCurve = [NSMutableArray array];
-        
-        
-        
-        NSMutableArray *trimmedLines = [NSMutableArray array];
-        
-        for (NSString *line in lines) {
-            NSString *trimmedLine = [line stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-            if(trimmedLine.length > 0){
-                [trimmedLines addObject:trimmedLine];
-            }
+
++ (void)load{
+    [super load];
+}
+
++ (LUT *)LUTFromLines:(NSArray *)lines {
+    
+    NSMutableArray *redCurve = [NSMutableArray array];
+    NSMutableArray *greenCurve = [NSMutableArray array];
+    NSMutableArray *blueCurve = [NSMutableArray array];
+    
+    
+    
+    NSMutableArray *trimmedLines = [NSMutableArray array];
+    
+    for (NSString *line in lines) {
+        NSString *trimmedLine = [line stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+        if(trimmedLine.length > 0){
+            [trimmedLines addObject:trimmedLine];
         }
-        
-        NSUInteger maxCodeValue = pow(2,14) - 1;
-        
-        for (NSString *line in trimmedLines) {
-            NSArray *splitLine = [line componentsSeparatedByString:@","];
-            [redCurve addObject:@(nsremapint01([splitLine[0] integerValue], maxCodeValue))];
-            [greenCurve addObject:@(nsremapint01([splitLine[1] integerValue], maxCodeValue))];
-            [blueCurve addObject:@(nsremapint01([splitLine[2] integerValue], maxCodeValue))];
-        }
-        
-        return [LUT1D LUT1DWithRedCurve:redCurve greenCurve:greenCurve blueCurve:blueCurve lowerBound:0 upperBound:1];
     }
+    
+    NSUInteger maxCodeValue = pow(2,14) - 1;
+    
+    for (NSString *line in trimmedLines) {
+        NSArray *splitLine = [line componentsSeparatedByString:@","];
+        [redCurve addObject:@(nsremapint01([splitLine[0] integerValue], maxCodeValue))];
+        [greenCurve addObject:@(nsremapint01([splitLine[1] integerValue], maxCodeValue))];
+        [blueCurve addObject:@(nsremapint01([splitLine[2] integerValue], maxCodeValue))];
+    }
+    
+    return [LUT1D LUT1DWithRedCurve:redCurve greenCurve:greenCurve blueCurve:blueCurve lowerBound:0 upperBound:1];
+}
 
 + (NSString *)stringFromLUT:(LUT *)lut withOptions:(NSDictionary *)options {
     
@@ -53,6 +58,10 @@
     
     return string;
     
+}
+
++ (LUTFormatterOutputType)outputType{
+    return LUTFormatterOutputType1D;
 }
 
 + (NSString *)utiString{

@@ -10,6 +10,10 @@
 
 @implementation LUTFormatterICCProfile
 
++ (void)load{
+    [super load];
+}
+
 + (LUT *)LUTFromData:(NSData *)data{
     LUT3D *lut = [LUT3D LUTIdentityOfSize:33 inputLowerBound:0 inputUpperBound:1];
     
@@ -21,6 +25,10 @@
     }];
     
     return lut;
+}
+
++ (LUTFormatterOutputType)outputType{
+    return LUTFormatterOutputTypeNone;
 }
 
 + (NSString *)utiString{

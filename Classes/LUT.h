@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 
 @class LUTColor;
-@class LUTFormatter;
+
 
 typedef NS_ENUM(NSInteger, LUT1DSwizzleChannelsMethod) {
     LUT1DSwizzleChannelsMethodAverageRGB,
@@ -61,7 +61,8 @@ typedef NS_ENUM(NSInteger, LUTImageRenderPath) {
  */
 + (instancetype)LUTFromURL:(NSURL *)url;
 
-+ (LUTFormatter *)LUTFormatterForUTI:(NSString *)utiString;
+- (NSData *)dataFromLUTWithUTIString:(NSString *)utiString
+                             options:(NSDictionary *)options;
 
 - (instancetype)initWithSize:(NSUInteger)size
              inputLowerBound:(double)inputLowerBound

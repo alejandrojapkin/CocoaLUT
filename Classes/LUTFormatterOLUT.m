@@ -11,6 +11,10 @@
 
 @implementation LUTFormatterOLUT
 
++ (void)load{
+    [super load];
+}
+
 + (LUT *)LUTFromLines:(NSArray *)lines {
     
     NSMutableArray *redCurve = [NSMutableArray array];
@@ -56,6 +60,10 @@
     
     return string;
     
+}
+
++ (LUTFormatterOutputType)outputType{
+    return LUTFormatterOutputType1D;
 }
 
 + (NSString *)utiString{

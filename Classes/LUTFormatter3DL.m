@@ -9,6 +9,10 @@
 #import "LUTFormatter3DL.h"
 @implementation LUTFormatter3DL
 
++ (void)load{
+    [super load];
+}
+
 + (LUT *)LUTFromLines:(NSArray *)lines {
     
     NSString *description;
@@ -119,11 +123,10 @@
     lutSize = [options[@"lutSize"] integerValue];
     //----------------
     
-    lut = LUTAsLUT3D(lut, lutSize);
+    //lut = LUTAsLUT3D(lut, lutSize);
     
     [string appendString: [LUTMetadataFormatter stringFromMetadata:lut.metadata description:lut.descriptionText]];
     [string appendString:@"\n"];
-    
     
     //write header
     if([fileTypeVariant isEqualToString:@"Nuke"]){
@@ -178,9 +181,12 @@
         
     }
     
-    
     return string;
 
+}
+
++ (LUTFormatterOutputType)outputType{
+    return LUTFormatterOutputType3D;
 }
 
 + (NSString *)utiString{

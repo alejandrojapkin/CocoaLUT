@@ -12,9 +12,79 @@
 #import "NSImage+OIIO.h"
 #endif
 
+static NSMutableArray *allFormatters;
+
 @implementation LUTFormatter
 
-+ (LUT *)LUTFromFile:(NSURL *)fileURL {
++ (void)load{
+    if ([self class] == [LUTFormatter class]) {
+        allFormatters = [[NSMutableArray alloc] init];
+    }
+    else{
+        [allFormatters addObject:[self class]];
+    }
+}
+
++ (LUTFormatter *)LUTFormatterForUTIString:(NSString *)utiString{
+    for(LUTFormatter *formatter in allFormatters){
+        if([[[formatter class] utiString] isEqualToString:utiString])
+            return formatter;
+    }
+    return nil;
+}
+
++ (NSArray *)LUTFormattersForFileExtension:(NSString *)fileExtension{
+    NSMutableArray *formatters = [NSMutableArray array];
+    for(LUTFormatter *formatter in allFormatters){
+        if([[[formatter class] fileExtensions] indexOfObject:fileExtension] != NSNotFound){
+            [formatters addObject:formatter];
+        }
+    
+    }
+    return [NSArray arrayWithArray:formatters];
+}
+
++ (LUTFormatter *)LUTFormatterForURL:(NSURL *)fileURL{
+    NSArray *formatters = [[self class] LUTFormattersForFileExtension:[fileURL pathExtension]];
+    NSLog(@"%@", formatters);
+    for(LUTFormatter* formatter in formatters){
+        if([[formatter class] canReadFromURL:fileURL]){
+            return formatter;
+        }
+    }
+    return nil;
+}
+
++ (BOOL)canReadFromURL:(NSURL *)fileURL{
+    if(![[[self class] fileExtensions] containsObject:[fileURL pathExtension]]){
+        return NO;
+    }
+    
+    LUT *lut;
+    @try {
+        lut = [[self class] LUTFromURL:fileURL];
+    }
+    @catch (NSException *exception) {
+        NSLog(@"Exception reading file: %@", exception);
+        return NO;
+    }
+    return YES;
+}
+
++ (BOOL)canWriteLUTWithoutConversion:(LUT *)lut{
+    if([[self class] outputType] == LUTFormatterOutputTypeEither){
+        return YES;
+    }
+    else if(isLUT1D(lut) && [[self class] outputType] == LUTFormatterOutputType1D){
+        return YES;
+    }
+    else if(isLUT3D(lut) && [[self class] outputType] == LUTFormatterOutputType3D){
+        return YES;
+    }
+    return NO;
+}
+
++ (LUT *)LUTFromURL:(NSURL *)fileURL {
     #if defined(COCOAPODS_POD_AVAILABLE_oiiococoa)
     if([@[@"dpx"] containsObject:fileURL.pathExtension.lowercaseString]){
         return [self LUTFromData:[[NSImage oiio_forceImageWithContentsOfURL:fileURL] TIFFRepresentation]];
@@ -41,6 +111,10 @@
 }
 
 + (NSString *)stringFromLUT:(LUT *)lut withOptions:(NSDictionary *)options {
+    @throw [NSException exceptionWithName:@"NotImplemented" reason:[NSString stringWithFormat:@"\"%s\" Not Implemented", __func__] userInfo:nil];
+}
+
++ (LUTFormatterOutputType)outputType{
     @throw [NSException exceptionWithName:@"NotImplemented" reason:[NSString stringWithFormat:@"\"%s\" Not Implemented", __func__] userInfo:nil];
 }
 

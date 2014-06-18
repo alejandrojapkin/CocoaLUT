@@ -9,7 +9,13 @@
 #import "LUTFormatterArriLook.h"
 #import <XMLDictionary/XMLDictionary.h>
 
+
+
 @implementation LUTFormatterArriLook
+
++ (void)load{
+    [super load];
+}
 
 + (LUT *)LUTFromData:(NSData *)data{
     NSDictionary *xml = [NSDictionary dictionaryWithXMLData:data];
@@ -86,6 +92,10 @@
     }];
     
     return lut3D;
+}
+
++ (LUTFormatterOutputType)outputType{
+    return LUTFormatterOutputTypeNone;
 }
 
 + (NSString *)utiString{

@@ -16,10 +16,25 @@
 @class LUT1D;
 @class LUT3D;
 
+typedef NS_ENUM(NSInteger, LUTFormatterOutputType) {
+    LUTFormatterOutputType3D,
+    LUTFormatterOutputType1D,
+    LUTFormatterOutputTypeEither,
+    LUTFormatterOutputTypeNone
+};
+
 /**
  *  An abstract superclass for an object that is responsible for converting between a `LUT` object in-memory and a file-based format.
  */
 @interface LUTFormatter : NSObject
+
++ (LUTFormatter *)LUTFormatterForUTIString:(NSString *)utiString;
+
++ (NSArray *)LUTFormattersForFileExtension:(NSString *)fileExtension;
+
++ (LUTFormatter *)LUTFormatterForURL:(NSURL *)fileURL;
+
+
 
 /**
  *  Returns a new LUT from a file in the formatter's file type..
@@ -30,7 +45,7 @@
  *
  *  @return A new `LUT`.
  */
-+ (LUT *)LUTFromFile:(NSURL *)fileURL;
++ (LUT *)LUTFromURL:(NSURL *)fileURL;
 
 /**
  *  Returns a new LUT from a data blob in the formatter's file type..
@@ -87,6 +102,12 @@
  *  @return A string containing the contents of the LUT.
  */
 + (NSString *)stringFromLUT:(LUT *)lut withOptions:(NSDictionary *)options;
+
++ (BOOL)canReadFromURL:(NSURL *)fileURL;
+
++ (BOOL)canWriteLUTWithoutConversion:(LUT *)lut;
+
++ (LUTFormatterOutputType)outputType;
 
 + (NSDictionary *)allOptions;
 

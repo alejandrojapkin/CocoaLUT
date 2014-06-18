@@ -10,6 +10,10 @@
 
 @implementation LUTFormatterDiscreet1DLUT
 
++ (void)load{
+    [super load];
+}
+
 + (LUT *)LUTFromLines:(NSArray *)lines {
     
     NSString *description;
@@ -110,6 +114,10 @@
     
 }
 
++ (LUTFormatterOutputType)outputType{
+    return LUTFormatterOutputType1D;
+}
+
 + (NSDictionary *)allOptions{
     
     NSDictionary *discreetOptions =
@@ -120,7 +128,8 @@
 }
 
 + (NSDictionary *)defaultOptions{
-    NSDictionary *dictionary = @{@"integerMaxOutput": @((int)(pow(2, 12) - 1))};
+    NSDictionary *dictionary = @{@"fileTypeVariant": @"Discreet",
+                                 @"integerMaxOutput": @((int)(pow(2, 12) - 1))};
     return @{[LUTFormatterDiscreet1DLUT utiString]:dictionary};
 }
 

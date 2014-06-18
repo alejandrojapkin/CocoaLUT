@@ -8,21 +8,7 @@
 
 #import "LUT.h"
 #import "CocoaLUT.h"
-#import "LUTFormatterCube.h"
-#import "LUTFormatter3DL.h"
-#import "LUTFormatterOLUT.h"
-#import "LUTFormatterILUT.h"
-#import "LUTFormatterDiscreet1DLUT.h"
-#import "LUTFormatterUnwrappedTexture.h"
-#import "LUTFormatterCMSTestPattern.h"
-#import "LUTFormatterArriLook.h"
-
-#if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR
-// iOS-only formatters
-#elif TARGET_OS_MAC
-// Mac-only formatters
-#import "LUTFormatterICCProfile.h"
-#endif
+#import "LUTFormatter.h"
 
 @interface LUT ()
 @end
@@ -53,71 +39,21 @@
 }
 
 + (instancetype)LUTFromURL:(NSURL *)url {
-//    NSString *filePath = [url path];
-//    CFStringRef fileExtension = (__bridge CFStringRef) [filePath pathExtension];
-//    NSString *fileUTI = (__bridge NSString *)UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, fileExtension, NULL);
-    
-    if ([url.pathExtension.lowercaseString isEqualToString:@"cube"]){
-        return [LUTFormatterCube LUTFromFile:url];
-    }
-    else if ([url.pathExtension.lowercaseString isEqualToString:@"3dl"]) {
-        return [LUTFormatter3DL LUTFromFile:url];
-    }
-    else if ([url.pathExtension.lowercaseString isEqualToString:@"olut"]) {
-        return [LUTFormatterOLUT LUTFromFile:url];
-    }
-    else if ([url.pathExtension.lowercaseString isEqualToString:@"ilut"]) {
-        return [LUTFormatterILUT LUTFromFile:url];
-    }
-    else if ([url.pathExtension.lowercaseString isEqualToString:@"lut"]) {
-        return [LUTFormatterDiscreet1DLUT LUTFromFile:url];
-    }
-    else if ([url.pathExtension.lowercaseString isEqualToString:@"xml"]) {
-        return [LUTFormatterArriLook LUTFromFile:url];
-    }
-#if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR
-#elif TARGET_OS_MAC
-    else if ([@[@"icc", @"icm", @"pf", @"prof"] containsObject:url.pathExtension.lowercaseString]) {
-        return [LUTFormatterICCProfile LUTFromFile:url];
-    }
-#endif
-    else if ([@[@"tif", @"tiff", @"png", @"dpx"] containsObject:url.pathExtension.lowercaseString]) {
-        @try{
-            return [LUTFormatterUnwrappedTexture LUTFromFile:url];
-        }
-        @catch (NSException *e) {
-            NSLog(@"%@", e);
-        }
-        
-        @try{
-            return [LUTFormatterCMSTestPattern LUTFromFile:url];
-        }
-        @catch (NSException *e) {
-            NSLog(@"%@", e);
-        }
-        
-        NSException *exception = [NSException exceptionWithName:@"LUTParseError"
-                                                         reason:@"Image dimensions don't conform to LUTFormatterCMSTestPattern or LUTFormatterUnwrappedTexture" userInfo:nil];
-        @throw exception;
-    }
-    return nil;
+    LUTFormatter *formatter = [LUTFormatter LUTFormatterForURL:url];
+    NSLog(@"%@ %@", formatter, url);
+    return [[formatter class] LUTFromURL:url];
 }
 
-+ (LUTFormatter *)LUTFormatterForUTI:(NSString *)utiString{
-    NSDictionary *dictionary = @{[LUTFormatterCube utiString]: [LUTFormatterCube class],
-                                 [LUTFormatter3DL utiString]: [LUTFormatter3DL class],
-                                 [LUTFormatterDiscreet1DLUT utiString]: [LUTFormatterDiscreet1DLUT class],
-                                 [LUTFormatterOLUT utiString]: [LUTFormatterOLUT class],
-                                 [LUTFormatterILUT utiString]: [LUTFormatterILUT class],
-                                 [LUTFormatterUnwrappedTexture utiString]: [LUTFormatterUnwrappedTexture class],
-                                 [LUTFormatterCMSTestPattern utiString]: [LUTFormatterCMSTestPattern class],
-                                 [LUTFormatterArriLook utiString]: [LUTFormatterArriLook class],
-#if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR
-#elif TARGET_OS_MAC
-                                 [LUTFormatterICCProfile utiString]: [LUTFormatterICCProfile class]
-#endif
-                                 };
-    return dictionary[utiString];
+- (NSData *)dataFromLUTWithUTIString:(NSString *)utiString
+                             options:(NSDictionary *)options{
+    LUTFormatter *formatter = [LUTFormatter LUTFormatterForUTIString:utiString];
+    NSLog(@"%@", formatter);
+    if(formatter == nil){
+        return nil;
+    }
+    else{
+        return [[formatter class] dataFromLUT:self withOptions:options];
+    }
     
 }
 
