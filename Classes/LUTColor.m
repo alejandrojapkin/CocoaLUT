@@ -15,9 +15,9 @@
 
 + (instancetype)colorWithRed:(LUTColorValue)r green:(LUTColorValue)g blue:(LUTColorValue)b {
     LUTColor *color = [[LUTColor alloc] init];
-    color.red = r == NAN ? 0 : r;
-    color.green = g == NAN ? 0 : g;
-    color.blue = b == NAN ? 0 : b;
+    color.red = isnan(r) ? 0 : r;
+    color.green = isnan(g) ? 0 : g;
+    color.blue = isnan(b) ? 0 : b;
     return color;
 }
 
