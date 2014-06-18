@@ -32,7 +32,7 @@ typedef NS_ENUM(NSInteger, LUT1DGraphViewInterpolation) {
 
 @interface LUT1DGraphViewController : NSViewController
 
-@property (strong) NSString *colorStringAtMousePoint;
+@property (strong) NSAttributedString *colorizedColorStringAtMousePoint;
 @property (strong) NSColor *inputColor;
 @property (strong) NSColor *outputColor;
 

@@ -45,7 +45,8 @@
     //double index = [indexLUTColorAndIdentityLUTColor[0] doubleValue];
     LUTColor *color = indexLUTColorAndIdentityLUTColor[1];
     LUTColor *identityColor = indexLUTColorAndIdentityLUTColor[2];
-    self.colorStringAtMousePoint = [NSString stringWithFormat:@"%@ ► %@", identityColor, color];
+    self.colorizedColorStringAtMousePoint = [[self class] colorizedColorTransformationStringFromStartColor:identityColor endColor:color];
+    [NSString stringWithFormat:@"%@ ► %@", identityColor, color];
     self.inputColor = identityColor.systemColor;
     self.outputColor = color.systemColor;
 }
@@ -55,6 +56,18 @@
         ((LUT1DGraphView *)self.view).lut = lut;
     });
     
+}
+
++ (NSAttributedString *)colorizedColorTransformationStringFromStartColor:(LUTColor *)startColor
+                                                  endColor:(LUTColor *)endColor{
+    
+    
+    NSMutableAttributedString *outString = [[NSMutableAttributedString alloc] initWithAttributedString:[startColor colorizedAttributedStringWithFormat:@"%.6f"]];
+    [outString appendAttributedString:[[NSAttributedString alloc] initWithString:@" ► "]];
+    [outString appendAttributedString:[endColor colorizedAttributedStringWithFormat:@"%.6f"]];
+    
+    [outString addAttribute:NSFontAttributeName value:[NSFont boldSystemFontOfSize:[NSFont systemFontSize]] range:NSMakeRange(0, outString.length)];
+    return outString;
 }
 
 - (void)setInterpolation:(LUT1DGraphViewInterpolation)interpolation{

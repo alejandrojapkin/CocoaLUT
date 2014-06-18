@@ -160,6 +160,28 @@
     return [NSString stringWithFormat:@"(%.6f, %.6f, %.6f)", self.red, self.green, self.blue];
 }
 
+- (NSAttributedString *)colorizedAttributedStringWithFormat:(NSString *)formatString{
+    NSString *redString = [NSString stringWithFormat:[NSString stringWithFormat:@"%@", formatString], self.red];
+    NSString *greenString = [NSString stringWithFormat:[NSString stringWithFormat:@"%@", formatString], self.green];
+    NSString *blueString = [NSString stringWithFormat:[NSString stringWithFormat:@"%@", formatString], self.blue];
+    
+    NSAttributedString *redColoredString = [[NSAttributedString alloc] initWithString:redString attributes:@{NSForegroundColorAttributeName: [NSColor redColor]}];
+    
+    NSAttributedString *greenColoredString = [[NSAttributedString alloc] initWithString:greenString attributes:@{NSForegroundColorAttributeName: [NSColor colorWithDeviceRed:0 green:.8 blue:0 alpha:1]}];//custom green color because pure green is really hard to read.
+    
+    NSAttributedString *blueColoredString = [[NSAttributedString alloc] initWithString:blueString attributes:@{NSForegroundColorAttributeName: [NSColor blueColor]}];
+    
+    NSMutableAttributedString *outString = [[NSMutableAttributedString alloc] initWithString:@"("];
+    [outString appendAttributedString:redColoredString];
+    [outString appendAttributedString:[[NSAttributedString alloc] initWithString:@", "]];
+    [outString appendAttributedString:greenColoredString];
+    [outString appendAttributedString:[[NSAttributedString alloc] initWithString:@", "]];
+    [outString appendAttributedString:blueColoredString];
+    [outString appendAttributedString:[[NSAttributedString alloc] initWithString:@")"]];
+    
+    return outString;
+}
+
 - (BOOL)isEqualToLUTColor:(LUTColor *)otherColor{
     if (!otherColor){
         return NO;
