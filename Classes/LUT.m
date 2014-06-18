@@ -40,7 +40,6 @@
 
 + (instancetype)LUTFromURL:(NSURL *)url {
     LUTFormatter *formatter = [LUTFormatter LUTFormatterForURL:url];
-    NSLog(@"%@ %@", formatter, url);
     return [[formatter class] LUTFromURL:url];
 }
 
