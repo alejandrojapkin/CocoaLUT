@@ -207,6 +207,19 @@ M13OrderedDictionary* M13OrderedDictionaryFromOrderedArrayWithDictionaries(NSArr
     return [[M13OrderedDictionary alloc] initWithObjects:values pairedWithKeys:keys];
 }
 
+NSNumberFormatter* sharedNumberFormatter(){
+    static NSNumberFormatter *numberFormatter = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        numberFormatter = [NSNumberFormatter new];
+    });
+    return numberFormatter;
+}
+
+BOOL stringIsValidNumber(NSString *string){
+    return [sharedNumberFormatter() numberFromString:string] != nil;
+}
+
 NSUInteger findFirstLUTLineInLines(NSArray *lines, NSString *seperator, int numValues, int startLine){
     NSNumberFormatter *formatter = [NSNumberFormatter new];
     for (int i = startLine; i < lines.count; i++){

@@ -41,6 +41,9 @@ NSArray* arrayWithEmptyElementsRemoved(NSArray *array);
 NSArray* arrayWithComponentsSeperatedByNewlineAndWhitespaceWithEmptyElementsRemoved(NSString *string);
 NSUInteger findFirstLUTLineInLines(NSArray *lines, NSString *seperator, int numValues, int startLine);
 
+NSNumberFormatter* sharedNumberFormatter();
+BOOL stringIsValidNumber(NSString *string);
+
 BOOL isLUT1D(LUT* lut);
 BOOL isLUT3D(LUT* lut);
 LUT1D* LUTAsLUT1D(LUT* lut, NSUInteger size);
