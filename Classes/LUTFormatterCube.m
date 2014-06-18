@@ -78,6 +78,8 @@
     
     LUT *lut;
     
+    NSNumberFormatter *formatter = [NSNumberFormatter new];
+    
     if(isLUT3D){
         if(data[@"inputLowerBound"] != nil){
             lut = [LUT3D LUTOfSize:cubeSize inputLowerBound:[data[@"inputLowerBound"] doubleValue] inputUpperBound:[data[@"inputUpperBound"] doubleValue]];
@@ -93,6 +95,11 @@
             if (line.length > 0 && [line rangeOfString:@"#"].location == NSNotFound) {
                 NSArray *splitLine = [line componentsSeparatedByString:@" "];
                 if (splitLine.count == 3) {
+                    for(NSString *line in splitLine){
+                        if([formatter numberFromString:line] == nil){
+                            @throw [NSException exceptionWithName:@"LUTParserError" reason:[NSString stringWithFormat:@"NaN detected at line %i", (int)currentCubeIndex+(int)cubeLinesStartIndex] userInfo:nil];
+                        }
+                    }
                     
                     // Valid cube line
                     LUTColorValue redValue = ((NSString *)splitLine[0]).doubleValue;
@@ -131,6 +138,12 @@
             if (line.length > 0 && [line rangeOfString:@"#"].location == NSNotFound) {
                 NSArray *splitLine = [line componentsSeparatedByString:@" "];
                 if (splitLine.count == 3) {
+                    
+                    for(NSString *line in splitLine){
+                        if([formatter numberFromString:line] == nil){
+                            @throw [NSException exceptionWithName:@"LUTParserError" reason:[NSString stringWithFormat:@"NaN detected at line %i", (int)currentLineIndex+(int)cubeLinesStartIndex] userInfo:nil];
+                        }
+                    }
                     
                     // Valid cube line
                     LUTColorValue redValue = ((NSString *)splitLine[0]).doubleValue;
