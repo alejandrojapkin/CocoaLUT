@@ -107,7 +107,7 @@
     int height = round(sqrt(cubeSize)*(double)cubeSize);
     int width  = ceil(((double)pow(cubeSize,3))/(double)height);
     
-    NSLog(@"CMS Cube Size: %i", cubeSize);
+    //NSLog(@"CMS Cube Size: %i", cubeSize);
     
     if (image.size.width != width*7 || image.size.height != height*7) {
         NSException *exception = [NSException exceptionWithName:@"LUTParseError"
