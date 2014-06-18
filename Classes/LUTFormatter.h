@@ -32,7 +32,7 @@ typedef NS_ENUM(NSInteger, LUTFormatterOutputType) {
 
 + (NSArray *)LUTFormattersForFileExtension:(NSString *)fileExtension;
 
-+ (LUTFormatter *)LUTFormatterForURL:(NSURL *)fileURL;
++ (LUTFormatter *)LUTFormatterValidForURL:(NSURL *)fileURL;
 
 
 
