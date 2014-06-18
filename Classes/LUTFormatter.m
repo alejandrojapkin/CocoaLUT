@@ -55,6 +55,9 @@ static NSMutableArray *allFormatters;
 }
 
 + (BOOL)isValidReaderForURL:(NSURL *)fileURL{
+    if([fileURL checkResourceIsReachableAndReturnError:nil] == NO){
+        return NO;
+    }
     if([[[self class] fileExtensions] containsObject:[fileURL pathExtension]]){
         return YES;
     }
