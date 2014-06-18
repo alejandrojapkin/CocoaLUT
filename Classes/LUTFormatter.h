@@ -105,7 +105,7 @@ typedef NS_ENUM(NSInteger, LUTFormatterOutputType) {
 
 + (BOOL)isValidReaderForURL:(NSURL *)fileURL;
 
-+ (BOOL)canWriteLUTWithoutConversion:(LUT *)lut;
++ (BOOL)isValidWriterForLUT:(LUT *)lut;
 
 + (LUTFormatterOutputType)outputType;
 

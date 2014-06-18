@@ -70,7 +70,7 @@ static NSMutableArray *allFormatters;
     return YES;
 }
 
-+ (BOOL)canWriteLUTWithoutConversion:(LUT *)lut{
++ (BOOL)isValidWriterForLUT:(LUT *)lut{
     if([[self class] outputType] == LUTFormatterOutputTypeEither){
         return YES;
     }
