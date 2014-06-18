@@ -47,7 +47,6 @@
 - (NSData *)dataFromLUTWithUTIString:(NSString *)utiString
                              options:(NSDictionary *)options{
     LUTFormatter *formatter = [LUTFormatter LUTFormatterForUTIString:utiString];
-    NSLog(@"%@", formatter);
     if(formatter == nil){
         return nil;
     }
