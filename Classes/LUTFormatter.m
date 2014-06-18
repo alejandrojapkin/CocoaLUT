@@ -46,7 +46,6 @@ static NSMutableArray *allFormatters;
 
 + (LUTFormatter *)LUTFormatterForURL:(NSURL *)fileURL{
     NSArray *formatters = [[self class] LUTFormattersForFileExtension:[fileURL pathExtension]];
-    NSLog(@"%@", formatters);
     for(LUTFormatter* formatter in formatters){
         if([[formatter class] canReadFromURL:fileURL]){
             return formatter;
