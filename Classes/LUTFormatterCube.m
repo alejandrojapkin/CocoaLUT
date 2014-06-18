@@ -111,6 +111,9 @@
                 }
             }
         }
+        if(currentCubeIndex < cubeSize*cubeSize*cubeSize){
+            @throw [NSException exceptionWithName:@"LUTParserError" reason:@"Incomplete data lines" userInfo:nil];
+        }
     }
     else{
         //1D LUT
@@ -141,6 +144,9 @@
                     currentLineIndex++;
                 }
             }
+        }
+        if(currentLineIndex < cubeSize){
+            @throw [NSException exceptionWithName:@"LUTParserError" reason:@"Incomplete data lines" userInfo:nil];
         }
     }
 
