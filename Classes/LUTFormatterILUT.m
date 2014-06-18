@@ -33,8 +33,16 @@
     
     NSUInteger maxCodeValue = pow(2,14) - 1;
     
+    
     for (NSString *line in trimmedLines) {
         NSArray *splitLine = [line componentsSeparatedByString:@","];
+        
+        for(NSString *checkLine in splitLine){
+            if(stringIsValidNumber(checkLine) == NO){
+                @throw [NSException exceptionWithName:@"LUTParserError" reason:[NSString stringWithFormat:@"NaN detected in LUT"] userInfo:nil];
+            }
+        }
+        
         [redCurve addObject:@(nsremapint01([splitLine[0] integerValue], maxCodeValue))];
         [greenCurve addObject:@(nsremapint01([splitLine[1] integerValue], maxCodeValue))];
         [blueCurve addObject:@(nsremapint01([splitLine[2] integerValue], maxCodeValue))];

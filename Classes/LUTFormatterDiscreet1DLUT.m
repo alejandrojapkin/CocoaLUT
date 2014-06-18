@@ -57,6 +57,11 @@
         }
     }
     
+    for(NSString *checkLine in trimmedLines){
+        if(stringIsValidNumber(checkLine) == NO){
+            @throw [NSException exceptionWithName:@"LUTParserError" reason:[NSString stringWithFormat:@"NaN detected in LUT"] userInfo:nil];
+        }
+    }
     
     //get red values
     for (int i = 0; i < lutSize; i++) {
