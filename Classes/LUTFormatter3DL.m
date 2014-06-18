@@ -72,6 +72,12 @@
             NSArray *splitLine = [line componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
             splitLine = [splitLine filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"SELF != ''"]];
             if (splitLine.count == 3) {
+                
+                for(NSString *checkLine in splitLine){
+                    if(stringIsValidNumber(checkLine) == NO){
+                        @throw [NSException exceptionWithName:@"LUTParserError" reason:[NSString stringWithFormat:@"NaN detected at line %i", (int)currentCubeIndex+(int)cubeLinesStartIndex] userInfo:nil];
+                    }
+                }
 
                 // Valid cube line
                 LUTColorValue redValue      = ((NSString *)splitLine[0]).doubleValue;
