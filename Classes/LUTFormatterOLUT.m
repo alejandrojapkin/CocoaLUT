@@ -82,7 +82,7 @@
 }
 
 + (NSString *)formatterName{
-    return @"Blackmagic Design";
+    return @"Blackmagic Design 1D LUT";
 }
 
 + (BOOL)canRead{

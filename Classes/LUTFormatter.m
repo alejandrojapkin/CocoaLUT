@@ -147,6 +147,20 @@ static NSMutableArray *allFormatters;
     @throw [NSException exceptionWithName:@"NotImplemented" reason:[NSString stringWithFormat:@"\"%s\" Not Implemented", __func__] userInfo:nil];
 }
 
++ (NSString *)fullName{
+    NSMutableString *extensionsString = [[NSMutableString alloc] initWithString:@"("];
+    NSArray *fileExtensions = [[self class] fileExtensions];
+    
+    for(int i = 0; i < fileExtensions.count; i++){
+        [extensionsString appendString:[@"." stringByAppendingString:fileExtensions[i]]];
+        if(i + 1 < fileExtensions.count){
+            [extensionsString appendString:@", "];
+        }
+    }
+    [extensionsString appendString:@")"];
+    return [NSString stringWithFormat:@"%@ %@", [[self class] formatterName], extensionsString];
+}
+
 + (LUTFormatterRole)formatterRole{
     if([[self class] canRead] == YES && [[self class] canWrite] == YES){
         return LUTFormatterRoleReadAndWrite;

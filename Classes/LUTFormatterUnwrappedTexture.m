@@ -126,7 +126,7 @@
 }
 
 + (NSString *)formatterName{
-    return @"Unwrapped Cube Image";
+    return @"Unwrapped Cube Image 3D LUT";
 }
 
 + (BOOL)canRead{

@@ -210,7 +210,7 @@
 }
 
 + (NSString *)formatterName{
-    return @"Nuke/Lustre";
+    return @"Nuke/Lustre 3D LUT";
 }
 
 + (BOOL)canRead{

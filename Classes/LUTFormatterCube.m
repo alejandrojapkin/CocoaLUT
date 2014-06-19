@@ -244,7 +244,7 @@
 }
 
 + (NSString *)formatterName{
-    return @"DaVinci Resolve";
+    return @"DaVinci Resolve Cube LUT";
 }
 
 + (BOOL)canRead{

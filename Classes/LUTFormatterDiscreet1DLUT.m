@@ -154,7 +154,7 @@
 }
 
 + (NSString *)formatterName{
-    return @"Discreet";
+    return @"Discreet 1D LUT";
 }
 
 + (BOOL)canRead{

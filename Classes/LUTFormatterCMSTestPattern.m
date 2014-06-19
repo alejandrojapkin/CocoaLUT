@@ -167,7 +167,7 @@
 }
 
 + (NSString *)formatterName{
-    return @"CMS Test Pattern Image";
+    return @"CMS Test Pattern Image 3D LUT";
 }
 
 + (BOOL)canRead{

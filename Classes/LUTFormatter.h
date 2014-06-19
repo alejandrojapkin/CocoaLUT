@@ -126,6 +126,8 @@ typedef NS_ENUM(NSInteger, LUTFormatterRole) {
 
 + (NSString *)formatterName;
 
++ (NSString *)fullName;
+
 + (LUTFormatterRole)formatterRole;
 
 + (BOOL)canRead;
