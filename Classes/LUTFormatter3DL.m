@@ -46,7 +46,7 @@
         }
         if ([line rangeOfString:@"#"].location == NSNotFound && [line rangeOfString:@"0"].location != NSNotFound) {
             NSArray *components = [line componentsSeparatedByString:@" "];
-            components = [components filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"SELF != ''"]];
+            components = arrayWithEmptyElementsRemoved(components);
             integerMaxOutput = [components[components.count - 1] intValue];
             cubeSize = components.count;
             passthroughFileOptions[@"fileTypeVariant"] = @"Nuke";
@@ -60,6 +60,7 @@
         @throw exception;
     }
     
+    passthroughFileOptions[@"lutSize"] = @(cubeSize);
     passthroughFileOptions[@"integerMaxOutput"] = @(integerMaxOutput);
     
     
@@ -70,7 +71,7 @@
 
         if (line.length > 0 && [line rangeOfString:@"#"].location == NSNotFound) {
             NSArray *splitLine = [line componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-            splitLine = [splitLine filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"SELF != ''"]];
+            splitLine = arrayWithEmptyElementsRemoved(splitLine);
             if (splitLine.count == 3) {
                 
                 for(NSString *checkLine in splitLine){
