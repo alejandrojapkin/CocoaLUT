@@ -133,6 +133,8 @@
     lutSize = [options[@"lutSize"] integerValue];
     //----------------
     
+    lut = [lut LUTByResizingToSize:lutSize];
+    
     //lut = LUTAsLUT3D(lut, lutSize);
     
     [string appendString: [LUTMetadataFormatter stringFromMetadata:lut.metadata description:lut.descriptionText]];
@@ -140,7 +142,7 @@
     
     //write header
     if([fileTypeVariant isEqualToString:@"Nuke"]){
-        [string appendString:[indicesIntegerArray(0, (int)integerMaxOutput, (int)[lut size]) componentsJoinedByString:@" "]];
+        [string appendString:[indicesIntegerArray(0, (int)integerMaxOutput, (int)lutSize) componentsJoinedByString:@" "]];
         [string appendString:@"\n"];
     }
     else if([fileTypeVariant isEqualToString:@"Lustre"]){
@@ -152,7 +154,7 @@
         }
         [string appendString:@"3DMESH\n"];
         [string appendString:[NSString stringWithFormat:@"Mesh %d %d\n", (int)sizeToDepth, (int)log2(integerMaxOutput+1)]];
-        [string appendString:[indicesIntegerArray(0, 1023, (int) [lut size]) componentsJoinedByString:@" "]];
+        [string appendString:[indicesIntegerArray(0, 1023, (int) lutSize) componentsJoinedByString:@" "]];
         [string appendString:@"\n"];
         
     }
@@ -160,6 +162,8 @@
     [string appendString:@"\n"];
     
    
+    
+    
     NSUInteger arrayLength = lutSize * lutSize * lutSize;
     
     NSNumberFormatter * numberFormatter = [[NSNumberFormatter alloc] init];
@@ -235,8 +239,8 @@
                 @{@"fileTypeVariant":@"Nuke",
                   @"integerMaxOutput": M13OrderedDictionaryFromOrderedArrayWithDictionaries(@[@{@"12-bit": @(pow(2, 12) - 1)},
                                                                                               @{@"16-bit": @(pow(2, 16) - 1)}]),
-                  @"lutSize": M13OrderedDictionaryFromOrderedArrayWithDictionaries(@[@{@"32": @(17)},
-                                                                                     @{@"64": @(33)}])};
+                  @"lutSize": M13OrderedDictionaryFromOrderedArrayWithDictionaries(@[@{@"32": @(32)},
+                                                                                     @{@"64": @(64)}])};
     
     return @[lustreOptions, nukeOptions];
 }
