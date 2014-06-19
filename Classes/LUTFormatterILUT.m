@@ -86,11 +86,11 @@
     return @"Blackmagic Design";
 }
 
-+ (BOOL)readSupport{
++ (BOOL)canRead{
     return YES;
 }
 
-+ (BOOL)writeSupport{
++ (BOOL)canWrite{
     return YES;
 }
 

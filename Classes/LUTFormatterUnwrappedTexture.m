@@ -129,11 +129,11 @@
     return @"Unwrapped Cube Image";
 }
 
-+ (BOOL)readSupport{
++ (BOOL)canRead{
     return YES;
 }
 
-+ (BOOL)writeSupport{
++ (BOOL)canWrite{
     return YES;
 }
 

@@ -46,7 +46,7 @@
 - (NSData *)dataFromLUTWithUTIString:(NSString *)utiString
                              options:(NSDictionary *)options{
     LUTFormatter *formatter = [LUTFormatter LUTFormatterForUTIString:utiString];
-    if(formatter == nil || [[formatter class] writeSupport] == NO){
+    if(formatter == nil || [[formatter class] canWrite] == NO){
         return nil;
     }
     else{

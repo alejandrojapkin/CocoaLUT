@@ -247,11 +247,11 @@
     return @"DaVinci Resolve";
 }
 
-+ (BOOL)readSupport{
++ (BOOL)canRead{
     return YES;
 }
 
-+ (BOOL)writeSupport{
++ (BOOL)canWrite{
     return YES;
 }
 

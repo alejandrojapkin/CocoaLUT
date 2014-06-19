@@ -45,11 +45,11 @@
     return @"ICC Profile";
 }
 
-+ (BOOL)readSupport{
++ (BOOL)canRead{
     return YES;
 }
 
-+ (BOOL)writeSupport{
++ (BOOL)canWrite{
     return NO;
 }
 

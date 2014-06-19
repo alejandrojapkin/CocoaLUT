@@ -128,8 +128,8 @@ typedef NS_ENUM(NSInteger, LUTFormatterRole) {
 
 + (LUTFormatterRole)formatterRole;
 
-+ (BOOL)readSupport;
++ (BOOL)canRead;
 
-+ (BOOL)writeSupport;
++ (BOOL)canWrite;
 
 @end
