@@ -23,6 +23,13 @@ typedef NS_ENUM(NSInteger, LUTFormatterOutputType) {
     LUTFormatterOutputTypeNone
 };
 
+typedef NS_ENUM(NSInteger, LUTFormatterRole) {
+    LUTFormatterRoleReadOnly,
+    LUTFormatterRoleWriteOnly,
+    LUTFormatterRoleReadAndWrite,
+    LUTFormatterRoleNone
+};
+
 /**
  *  An abstract superclass for an object that is responsible for converting between a `LUT` object in-memory and a file-based format.
  */
@@ -34,7 +41,7 @@ typedef NS_ENUM(NSInteger, LUTFormatterOutputType) {
 
 + (LUTFormatter *)LUTFormatterValidForURL:(NSURL *)fileURL;
 
-
++ (NSArray *)LUTFormattersValidForWritingLUT:(LUT *)lut;
 
 /**
  *  Returns a new LUT from a file in the formatter's file type..
@@ -116,5 +123,13 @@ typedef NS_ENUM(NSInteger, LUTFormatterOutputType) {
 + (NSString *)utiString;
 
 + (NSArray *)fileExtensions;
+
++ (NSString *)formatterName;
+
++ (LUTFormatterRole)formatterRole;
+
++ (BOOL)readSupport;
+
++ (BOOL)writeSupport;
 
 @end

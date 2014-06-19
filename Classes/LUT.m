@@ -39,14 +39,14 @@
 }
 
 + (instancetype)LUTFromURL:(NSURL *)url {
-    LUTFormatter *formatter = [LUTFormatter LUTFormatterForURL:url];
+    LUTFormatter *formatter = [LUTFormatter LUTFormatterValidForURL:url];
     return [[formatter class] LUTFromURL:url];
 }
 
 - (NSData *)dataFromLUTWithUTIString:(NSString *)utiString
                              options:(NSDictionary *)options{
     LUTFormatter *formatter = [LUTFormatter LUTFormatterForUTIString:utiString];
-    if(formatter == nil){
+    if(formatter == nil || [[formatter class] writeSupport] == NO){
         return nil;
     }
     else{

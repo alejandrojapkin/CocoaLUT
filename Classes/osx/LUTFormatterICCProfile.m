@@ -41,4 +41,16 @@
     return @[@"icc", @"icm", @"pf", @"prof"];
 }
 
++ (NSString *)formatterName{
+    return @"ICC Profile";
+}
+
++ (BOOL)readSupport{
+    return YES;
+}
+
++ (BOOL)writeSupport{
+    return NO;
+}
+
 @end

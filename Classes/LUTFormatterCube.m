@@ -243,4 +243,16 @@
     return @[@"cube"];
 }
 
++ (NSString *)formatterName{
+    return @"DaVinci Resolve";
+}
+
++ (BOOL)readSupport{
+    return YES;
+}
+
++ (BOOL)writeSupport{
+    return YES;
+}
+
 @end

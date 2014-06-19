@@ -81,4 +81,16 @@
     return @[@"olut"];
 }
 
++ (NSString *)formatterName{
+    return @"Blackmagic Design";
+}
+
++ (BOOL)readSupport{
+    return YES;
+}
+
++ (BOOL)writeSupport{
+    return YES;
+}
+
 @end

@@ -44,7 +44,7 @@ static NSMutableArray *allFormatters;
     return [NSArray arrayWithArray:formatters];
 }
 
-+ (LUTFormatter *)LUTFormatterValidForURL:(NSURL *)fileURL{
++ (LUTFormatter *)LUTFormatterValidForReadingURL:(NSURL *)fileURL{
     NSArray *formatters = [[self class] LUTFormattersForFileExtension:[fileURL pathExtension]];
     for(LUTFormatter* formatter in formatters){
         if([[formatter class] isValidReaderForURL:fileURL]){
@@ -54,7 +54,20 @@ static NSMutableArray *allFormatters;
     return nil;
 }
 
++ (NSArray *)LUTFormattersValidForWritingLUT:(LUT *)lut{
+    NSMutableArray *array = [NSMutableArray array];
+    for(LUTFormatter* formatter in allFormatters){
+        if([[formatter class] isValidWriterForLUT:lut]){
+            [array addObject:formatter];
+        }
+    }
+    return array;
+}
+
 + (BOOL)isValidReaderForURL:(NSURL *)fileURL{
+    if ([[self class] readSupport] == NO) {
+        return NO;
+    }
     if([fileURL checkResourceIsReachableAndReturnError:nil] == NO){
         return NO;
     }
@@ -65,6 +78,9 @@ static NSMutableArray *allFormatters;
 }
 
 + (BOOL)isValidWriterForLUT:(LUT *)lut{
+    if([[self class] writeSupport] == NO){
+        return NO;
+    }
     if([[self class] outputType] == LUTFormatterOutputTypeEither){
         return YES;
     }
@@ -125,6 +141,31 @@ static NSMutableArray *allFormatters;
 
 + (NSArray *)fileExtensions{
     @throw [NSException exceptionWithName:@"NotImplemented" reason:[NSString stringWithFormat:@"\"%s\" Not Implemented", __func__] userInfo:nil];
+}
+
++ (NSString *)formatterName{
+    @throw [NSException exceptionWithName:@"NotImplemented" reason:[NSString stringWithFormat:@"\"%s\" Not Implemented", __func__] userInfo:nil];
+}
+
++ (LUTFormatterRole)formatterRole{
+    if([[self class] readSupport] == YES && [[self class] writeSupport] == YES){
+        return LUTFormatterRoleReadAndWrite;
+    }
+    else if([[self class] readSupport] == YES && [[self class] writeSupport] == NO){
+        return LUTFormatterRoleReadOnly;
+    }
+    else if([[self class] readSupport] == NO && [[self class] writeSupport] == YES){
+        return LUTFormatterRoleWriteOnly;
+    }
+    return LUTFormatterRoleNone;
+}
+
++ (BOOL)readSupport{
+    @throw [NSException exceptionWithName:@"NotImplemented" reason:[NSString stringWithFormat:@"\"%s\" Not Implemented", __func__] userInfo:nil];
+}
+
++ (BOOL)writeSupport{
+     @throw [NSException exceptionWithName:@"NotImplemented" reason:[NSString stringWithFormat:@"\"%s\" Not Implemented", __func__] userInfo:nil];
 }
 
 @end

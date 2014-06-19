@@ -105,6 +105,18 @@
     return LUTFormatterOutputTypeNone;
 }
 
++ (NSString *)formatterName{
+    return @"Arri Look";
+}
+
++ (BOOL)readSupport{
+    return YES;
+}
+
++ (BOOL)writeSupport{
+    return NO;
+}
+
 + (NSString *)utiString{
     return @"public.xml";
 }

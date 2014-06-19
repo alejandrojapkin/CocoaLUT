@@ -153,5 +153,17 @@
     return @[@"lut"];
 }
 
++ (NSString *)formatterName{
+    return @"Discreet";
+}
+
++ (BOOL)readSupport{
+    return YES;
+}
+
++ (BOOL)writeSupport{
+    return YES;
+}
+
 
 @end

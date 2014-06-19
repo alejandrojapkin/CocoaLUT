@@ -209,6 +209,18 @@
     return @[@"3dl"];
 }
 
++ (NSString *)formatterName{
+    return @"Nuke/Lustre";
+}
+
++ (BOOL)readSupport{
+    return YES;
+}
+
++ (BOOL)writeSupport{
+    return YES;
+}
+
 + (NSArray *)allOptions{
     
     NSDictionary *lustreOptions =
@@ -236,5 +248,7 @@
     
     return @{[LUTFormatter3DL utiString]: dictionary};
 }
+
+
 
 @end

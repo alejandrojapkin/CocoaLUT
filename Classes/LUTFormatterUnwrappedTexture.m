@@ -125,4 +125,16 @@
     return @[@"tiff", @"tif", @"dpx", @"png"];
 }
 
++ (NSString *)formatterName{
+    return @"Unwrapped Cube Image";
+}
+
++ (BOOL)readSupport{
+    return YES;
+}
+
++ (BOOL)writeSupport{
+    return YES;
+}
+
 @end

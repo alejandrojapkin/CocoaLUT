@@ -166,5 +166,17 @@
     return @[@"tiff", @"tif", @"dpx", @"png"];
 }
 
++ (NSString *)formatterName{
+    return @"CMS Test Pattern Image";
+}
+
++ (BOOL)readSupport{
+    return YES;
+}
+
++ (BOOL)writeSupport{
+    return YES;
+}
+
 
 @end
