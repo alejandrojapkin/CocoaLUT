@@ -23,6 +23,7 @@
 @implementation LUT1DGraphViewController
 
 -(void)awakeFromNib{
+    [super awakeFromNib];
     [self initialize];
 }
 
