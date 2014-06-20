@@ -134,4 +134,7 @@ typedef NS_ENUM(NSInteger, LUTFormatterRole) {
 
 + (BOOL)canWrite;
 
++ (NSDictionary *)constantConstraints;
+
+
 @end

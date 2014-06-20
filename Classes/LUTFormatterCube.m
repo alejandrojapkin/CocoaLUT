@@ -255,4 +255,9 @@
     return YES;
 }
 
++ (NSDictionary *)constantConstraints{
+    return @{@"inputBounds":@[[NSNull null], [NSNull null]],
+             @"outputBounds":@[[NSNull null], [NSNull null]]};
+}
+
 @end

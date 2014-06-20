@@ -182,4 +182,9 @@ static NSMutableArray *allFormatters;
      @throw [NSException exceptionWithName:@"NotImplemented" reason:[NSString stringWithFormat:@"\"%s\" Not Implemented", __func__] userInfo:nil];
 }
 
++ (NSDictionary *)constantConstraints{
+    return @{@"inputBounds":@[@0, @1],
+             @"outputBounds":@[[NSNull null], [NSNull null]]};
+}
+
 @end
