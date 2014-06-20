@@ -8,15 +8,12 @@
 
 #import "LUT1DGraphView.h"
 
-@interface LUT1DGraphView ()
+#define MAX_GRID_POINTS 64
 
-@property (strong) NSArray *lerpRGBArray;
+@interface LUT1DGraphView ()
 
 @property (assign) double minimumOutputValue;
 @property (assign) double maximumOutputValue;
-
-
-
 
 @end
 
@@ -61,8 +58,6 @@
 
 + (NSAttributedString *)colorizedColorTransformationStringFromStartColor:(LUTColor *)startColor
                                                   endColor:(LUTColor *)endColor{
-    
-    
     NSMutableAttributedString *outString = [[NSMutableAttributedString alloc] initWithAttributedString:[startColor colorizedAttributedStringWithFormat:@"%.6f"]];
     [outString appendAttributedString:[[NSAttributedString alloc] initWithString:@" ► "]];
     [outString appendAttributedString:[endColor colorizedAttributedStringWithFormat:@"%.6f"]];
@@ -97,11 +92,8 @@
     return self;
 }
 
-
-
 -(void)initialize{
     self.interpolation = LUT1DGraphViewInterpolationLinear;
-    [self lutDidChange];
     self.currentTrackingArea = [[NSTrackingArea alloc] initWithRect:self.bounds
                                                 options: (NSTrackingMouseEnteredAndExited | NSTrackingMouseMoved | NSTrackingActiveInKeyWindow | NSTrackingInVisibleRect )
                                                   owner:self userInfo:nil];
@@ -144,9 +136,6 @@
 -(void)lutDidChange{
     if(self.lut){
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            
-            self.lerpRGBArray = [self.lut rgbCurveArray];
-            
             self.minimumOutputValue = [self.lut minimumOutputValue];
             self.maximumOutputValue = [self.lut maximumOutputValue];
 
@@ -164,7 +153,7 @@
     
     NSRect drawingRect = self.bounds;
     
-    if(!self.lerpRGBArray){
+    if(!self.lut){
         return;
     }
     
@@ -188,7 +177,6 @@
                    withPoint:(NSPoint)point
                    thickness:(double)thickness
                      opacity:(double)opacity{
-    
     
     CGFloat xOrigin = rect.origin.x;
     CGFloat yOrigin = rect.origin.y;
@@ -343,7 +331,7 @@
     CGPathRelease(greenPath);
     CGPathRelease(bluePath);
     
-    if(self.lut.size < pixelWidth/2.0){
+    if(self.lut.size <= MAX_GRID_POINTS){
         
         [self.lut LUTLoopWithBlock:^(size_t r, size_t g, size_t b) {
             double indexAsXPixel = remap(r, 0, self.lut.size - 1, xOrigin, pixelWidth - xOrigin);
