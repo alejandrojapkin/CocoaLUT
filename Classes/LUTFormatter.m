@@ -17,11 +17,11 @@ static NSMutableArray *allFormatters;
 @implementation LUTFormatter
 
 + (void)load{
-    if ([self class] == [LUTFormatter class]) {
+    if (self == [LUTFormatter class]) {
         allFormatters = [[NSMutableArray alloc] init];
     }
     else{
-        [allFormatters addObject:[self class]];
+        [allFormatters addObject:self];
     }
 }
 
@@ -45,7 +45,7 @@ static NSMutableArray *allFormatters;
 }
 
 + (LUTFormatter *)LUTFormatterValidForReadingURL:(NSURL *)fileURL{
-    NSArray *formatters = [[self class] LUTFormattersForFileExtension:[fileURL pathExtension]];
+    NSArray *formatters = [self LUTFormattersForFileExtension:[fileURL pathExtension]];
     for(LUTFormatter* formatter in formatters){
         if([[formatter class] isValidReaderForURL:fileURL]){
             return formatter;
@@ -65,29 +65,29 @@ static NSMutableArray *allFormatters;
 }
 
 + (BOOL)isValidReaderForURL:(NSURL *)fileURL{
-    if ([[self class] canRead] == NO) {
+    if ([self canRead] == NO) {
         return NO;
     }
     if([fileURL checkResourceIsReachableAndReturnError:nil] == NO){
         return NO;
     }
-    if([[[self class] fileExtensions] containsObject:[fileURL pathExtension]]){
+    if([[self fileExtensions] containsObject:[fileURL pathExtension]]){
         return YES;
     }
     return NO;
 }
 
 + (BOOL)isValidWriterForLUT:(LUT *)lut{
-    if([[self class] canWrite] == NO){
+    if([self canWrite] == NO){
         return NO;
     }
-    if([[self class] outputType] == LUTFormatterOutputTypeEither){
+    if([self outputType] == LUTFormatterOutputTypeEither){
         return YES;
     }
-    else if(isLUT1D(lut) && [[self class] outputType] == LUTFormatterOutputType1D){
+    else if(isLUT1D(lut) && [self outputType] == LUTFormatterOutputType1D){
         return YES;
     }
-    else if(isLUT3D(lut) && [[self class] outputType] == LUTFormatterOutputType3D){
+    else if(isLUT3D(lut) && [self outputType] == LUTFormatterOutputType3D){
         return YES;
     }
     return NO;
@@ -149,7 +149,7 @@ static NSMutableArray *allFormatters;
 
 + (NSString *)fullName{
     NSMutableString *extensionsString = [[NSMutableString alloc] initWithString:@"("];
-    NSArray *fileExtensions = [[self class] fileExtensions];
+    NSArray *fileExtensions = [self fileExtensions];
     
     for(int i = 0; i < fileExtensions.count; i++){
         [extensionsString appendString:[@"." stringByAppendingString:fileExtensions[i]]];
@@ -158,17 +158,17 @@ static NSMutableArray *allFormatters;
         }
     }
     [extensionsString appendString:@")"];
-    return [NSString stringWithFormat:@"%@ %@", [[self class] formatterName], extensionsString];
+    return [NSString stringWithFormat:@"%@ %@", [self formatterName], extensionsString];
 }
 
 + (LUTFormatterRole)formatterRole{
-    if([[self class] canRead] == YES && [[self class] canWrite] == YES){
+    if([self canRead] == YES && [self canWrite] == YES){
         return LUTFormatterRoleReadAndWrite;
     }
-    else if([[self class] canRead] == YES && [[self class] canWrite] == NO){
+    else if([self canRead] == YES && [self canWrite] == NO){
         return LUTFormatterRoleReadOnly;
     }
-    else if([[self class] canRead] == NO && [[self class] canWrite] == YES){
+    else if([self canRead] == NO && [self canWrite] == YES){
         return LUTFormatterRoleWriteOnly;
     }
     return LUTFormatterRoleNone;

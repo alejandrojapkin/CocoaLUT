@@ -104,7 +104,7 @@
     
     LUT *lut;
     @try {
-        lut = [[self class] LUTFromURL:fileURL];
+        lut = [self LUTFromURL:fileURL];
     }
     @catch (NSException *exception) {
         NSLog(@"Exception reading file: %@", exception);

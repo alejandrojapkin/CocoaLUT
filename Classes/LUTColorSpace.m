@@ -22,7 +22,7 @@
                                  greenChromaticityY:(double)greenChromaticityY
                                   blueChromaticityX:(double)blueChromaticityX
                                   blueChromaticityY:(double)blueChromaticityY{
-    return [[[self class] alloc] initWithWhiteChromaticityX:whiteChromaticityX
+    return [[self alloc] initWithWhiteChromaticityX:whiteChromaticityX
                                          whiteChromaticityY:whiteChromaticityY
                                            redChromaticityX:redChromaticityX
                                            redChromaticityY:redChromaticityY
@@ -33,7 +33,7 @@
 }
 
 + (instancetype)LUTColorSpaceWithNPM:(GLKMatrix3)npm{
-    return [[[self class] alloc] initWithNPM:npm];
+    return [[self alloc] initWithNPM:npm];
 }
 
 - (instancetype)initWithNPM:(GLKMatrix3)npm{

@@ -27,7 +27,7 @@
 + (instancetype)LUTOfSize:(NSUInteger)size
           inputLowerBound:(double)inputLowerBound
           inputUpperBound:(double)inputUpperBound{
-    return [[[self class] alloc] initWithSize:size
+    return [[self alloc] initWithSize:size
                               inputLowerBound:inputLowerBound
                               inputUpperBound:inputUpperBound
                                  latticeArray:[LUT3D blankLatticeArrayOfSize:size]];

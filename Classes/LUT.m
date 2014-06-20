@@ -64,7 +64,7 @@
 + (instancetype)LUTIdentityOfSize:(NSUInteger)size
                   inputLowerBound:(double)inputLowerBound
                   inputUpperBound:(double)inputUpperBound{
-    LUT *identityLUT = [[self class] LUTOfSize:size inputLowerBound:inputLowerBound inputUpperBound:inputUpperBound];
+    LUT *identityLUT = [self LUTOfSize:size inputLowerBound:inputLowerBound inputUpperBound:inputUpperBound];
     
     [identityLUT LUTLoopWithBlock:^(size_t r, size_t g, size_t b) {
         [identityLUT setColor:[identityLUT identityColorAtR:r g:g b:b] r:r g:g b:b];

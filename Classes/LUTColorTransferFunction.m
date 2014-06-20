@@ -37,7 +37,7 @@
 
 +(instancetype)LUTColorTransferFunctionWithTransformedToLinearBlock:( LUTColor* ( ^ )(double red, double green, double blue) )transformedToLinearBlock
                                            linearToTransformedBlock:( LUTColor* ( ^ )(double red, double green, double blue) )linearToTransformedBlock{
-    return [[[self class] alloc] initWithTransformedToLinearBlock:transformedToLinearBlock
+    return [[self alloc] initWithTransformedToLinearBlock:transformedToLinearBlock
                                          linearToTransformedBlock:linearToTransformedBlock];
 }
 

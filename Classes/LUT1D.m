@@ -23,7 +23,7 @@
                         blueCurve:(NSMutableArray *)blueCurve
                        lowerBound:(double)lowerBound
                        upperBound:(double)upperBound {
-    return [[[self class] alloc] initWithRedCurve:redCurve
+    return [[self alloc] initWithRedCurve:redCurve
                                        greenCurve:greenCurve
                                         blueCurve:blueCurve
                                        lowerBound:lowerBound
@@ -33,7 +33,7 @@
 + (instancetype)LUT1DWith1DCurve:(NSMutableArray *)curve1D
                       lowerBound:(double)lowerBound
                       upperBound:(double)upperBound {
-    return [[[self class] alloc] initWithRedCurve:[curve1D mutableCopy]
+    return [[self alloc] initWithRedCurve:[curve1D mutableCopy]
                                        greenCurve:[curve1D mutableCopy]
                                         blueCurve:[curve1D mutableCopy]
                                        lowerBound:lowerBound
