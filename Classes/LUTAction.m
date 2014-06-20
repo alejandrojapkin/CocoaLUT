@@ -113,6 +113,20 @@
                        actionMetadata:actionMetadata];
 }
 
++(instancetype)actionWithLUTByResizingToSize:(NSUInteger)size{
+    M13OrderedDictionary *actionMetadata =
+    M13OrderedDictionaryFromOrderedArrayWithDictionaries(@[@{@"id":@"Resize"},
+                                                           @{@"size": @(size)}]);
+    
+    return [LUTAction actionWithBlock:^LUT *(LUT *lut) {
+        return [lut LUTByResizingToSize:size];
+    }
+                                              actionName:[NSString stringWithFormat:@"Resize to %i", (int)size]
+                                          actionMetadata:actionMetadata];
+}
+
+
+
 
 
 @end

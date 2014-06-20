@@ -32,4 +32,6 @@
 +(instancetype)actionWithLUTByClampingLowerBound:(double)lowerBound
                                       upperBound:(double)upperBound;
 
++(instancetype)actionWithLUTByResizingToSize:(NSUInteger)size;
+
 @end
