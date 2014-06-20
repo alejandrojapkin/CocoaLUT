@@ -128,6 +128,7 @@ static NSMutableArray *allFormatters;
     @throw [NSException exceptionWithName:@"NotImplemented" reason:[NSString stringWithFormat:@"\"%s\" Not Implemented", __func__] userInfo:nil];
 }
 
+//structure is NSArray(of the variants)->NSDictionaries(of the variants options)->Strings or NSDictionaries with the option name or dicts of names:value
 + (NSArray *)allOptions {
     return nil;
 }
