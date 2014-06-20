@@ -20,6 +20,7 @@
     NSMutableString __block *title = [NSMutableString stringWithString:@""];
     NSString *description;
     NSMutableDictionary *metadata;
+    NSMutableDictionary *passthroughFileOptions = [NSMutableDictionary dictionary];
 
     NSUInteger __block cubeSize = 0;
     
@@ -81,9 +82,12 @@
     if(isLUT3D){
         if(data[@"inputLowerBound"] != nil){
             lut = [LUT3D LUTOfSize:cubeSize inputLowerBound:[data[@"inputLowerBound"] doubleValue] inputUpperBound:[data[@"inputUpperBound"] doubleValue]];
+            passthroughFileOptions[@"fileTypeVariant"] = @"Nuke";
+
         }
         else{
             //assume 0-1 input
+            passthroughFileOptions[@"fileTypeVariant"] = @"Resolve";
             lut = [LUT3D LUTOfSize:cubeSize inputLowerBound:0.0 inputUpperBound:1.0];
         }
         
@@ -229,6 +233,34 @@
 
 }
 
++ (NSArray *)allOptions{
+    
+    NSDictionary *nukeOptions = @{@"fileTypeVariant":@"Nuke"};
+    
+    NSDictionary *resolveOptions = @{@"fileTypeVariant":@"Resolve"};
+    
+    return @[resolveOptions, nukeOptions];
+}
+
++ (NSArray *)LUTActionsForLUT:(LUT *)lut options:(NSDictionary *)options{
+    NSMutableArray *array = [NSMutableArray arrayWithArray:[super LUTActionsForLUT:lut options:options]];
+    //options are validated by superclass, no need to do that here.
+    
+    NSDictionary *exposedOptions = options[[self utiString]];
+    if ([exposedOptions[@"fileTypeVariant"] isEqualToString:@"Nuke"]) {
+        if(lut.inputLowerBound != 0 || lut.inputUpperBound != 1){
+            [array addObject:[LUTAction actionWithLUTByChangingInputLowerBound:0 inputUpperBound:1]];
+        }
+    }
+    
+    return array.count == 0 ? nil : array;
+}
+
++ (NSDictionary *)defaultOptions{
+    NSDictionary *dictionary = @{@"fileTypeVariant": @"Resolve"};
+    return @{[self utiString]:dictionary};
+}
+
 
 
 + (LUTFormatterOutputType)outputType{
@@ -256,8 +288,7 @@
 }
 
 + (NSDictionary *)constantConstraints{
-    return @{@"inputBounds":@[[NSNull null], [NSNull null]],
-             @"outputBounds":@[[NSNull null], [NSNull null]]};
+    return @{@"outputBounds":@[[NSNull null], [NSNull null]]};
 }
 
 @end

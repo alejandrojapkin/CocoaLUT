@@ -11,6 +11,7 @@
 #import "LUT1D.h"
 #import "LUT3D.h"
 #import "LUTMetadataFormatter.h"
+#import "LUTAction.h"
 
 @class LUT;
 @class LUT1D;
@@ -41,7 +42,7 @@ typedef NS_ENUM(NSInteger, LUTFormatterRole) {
 
 + (LUTFormatter *)LUTFormatterValidForReadingURL:(NSURL *)fileURL;
 
-+ (NSArray *)LUTFormattersValidForWritingLUT:(LUT *)lut;
++ (NSArray *)LUTFormattersValidForWritingLUTType:(LUT *)lut;
 
 /**
  *  Returns a new LUT from a file in the formatter's file type..
@@ -112,13 +113,15 @@ typedef NS_ENUM(NSInteger, LUTFormatterRole) {
 
 + (BOOL)isValidReaderForURL:(NSURL *)fileURL;
 
-+ (BOOL)isValidWriterForLUT:(LUT *)lut;
++ (BOOL)isValidWriterForLUTType:(LUT *)lut;
 
 + (LUTFormatterOutputType)outputType;
 
 + (NSArray *)allOptions;
 
 + (NSDictionary *)defaultOptions;
+
++ (BOOL)optionsAreValid:(NSDictionary *)options;
 
 + (NSString *)utiString;
 
@@ -135,6 +138,8 @@ typedef NS_ENUM(NSInteger, LUTFormatterRole) {
 + (BOOL)canWrite;
 
 + (NSDictionary *)constantConstraints;
+
++ (NSArray *)LUTActionsForLUT:(LUT *)lut options:(NSDictionary *)options;
 
 
 @end

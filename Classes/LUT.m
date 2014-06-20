@@ -46,7 +46,12 @@
 - (NSData *)dataFromLUTWithUTIString:(NSString *)utiString
                              options:(NSDictionary *)options{
     LUTFormatter *formatter = [LUTFormatter LUTFormatterForUTIString:utiString];
-    if(formatter == nil || [[formatter class] canWrite] == NO || ![[formatter class] isValidWriterForLUT:self]){
+    if(formatter == nil){
+        NSLog(@"Formatter for UTI %@ not found.", utiString);
+        return nil;
+    }
+    else if([[formatter class] isValidWriterForLUTType:self] == NO){
+        NSLog(@"%@ is not a valid writer for LUT (%@) with options: %@.", [[formatter class] formatterName], self, options);
         return nil;
     }
     else{

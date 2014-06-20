@@ -83,22 +83,23 @@
     LUT1D *lut = [LUT1D LUT1DWithRedCurve:redCurve greenCurve:greenCurve blueCurve:blueCurve lowerBound:0.0 upperBound:1.0];
     [lut setMetadata:metadata];
     lut.descriptionText = description;
-    [lut setPassthroughFileOptions:@{[LUTFormatterDiscreet1DLUT utiString]: passthroughFileOptions}];
+    [lut setPassthroughFileOptions:@{[self utiString]: passthroughFileOptions}];
     return lut;
 }
 
 + (NSString *)stringFromLUT:(LUT *)lut withOptions:(NSDictionary *)options {
-    options = options[[LUTFormatterDiscreet1DLUT utiString]];
+    
+    if(![self optionsAreValid:options]){
+        @throw [NSException exceptionWithName:@"Discreet1DLUTWriteError" reason:[NSString stringWithFormat:@"Options don't pass the spec: %@", options] userInfo:nil];
+    }
+    else{
+        options = options[[self utiString]];
+    }
 
     NSMutableString *string = [NSMutableString stringWithString:@""];
     
     NSUInteger integerMaxOutput;
     
-    //validate options
-    if(options == nil || options[@"integerMaxOutput"] == nil){
-        //set to default if missing options
-        options = [LUTFormatterDiscreet1DLUT defaultOptions][[LUTFormatterDiscreet1DLUT utiString]];
-    }
     
     integerMaxOutput = [options[@"integerMaxOutput"] integerValue];
 
@@ -142,7 +143,7 @@
 + (NSDictionary *)defaultOptions{
     NSDictionary *dictionary = @{@"fileTypeVariant": @"Discreet",
                                  @"integerMaxOutput": @((int)(pow(2, 12) - 1))};
-    return @{[LUTFormatterDiscreet1DLUT utiString]:dictionary};
+    return @{[self utiString]:dictionary};
 }
 
 + (NSString *)utiString{

@@ -104,7 +104,7 @@
     
     [lut setMetadata:metadata];
     lut.descriptionText = description;
-    [lut setPassthroughFileOptions:@{[LUTFormatter3DL utiString]: passthroughFileOptions}];
+    [lut setPassthroughFileOptions:@{[self utiString]: passthroughFileOptions}];
 
     return lut;
 
@@ -113,21 +113,22 @@
 + (NSString *)stringFromLUT:(LUT *)lut withOptions:(NSDictionary *)options {
     NSMutableString *string = [NSMutableString stringWithString:@""];
     
-    options = options[[LUTFormatter3DL utiString]];
-    if(options == nil){
-        options = [LUTFormatter3DL defaultOptions][[LUTFormatter3DL utiString]];
+    if(![self optionsAreValid:options]){
+        @throw [NSException exceptionWithName:@"3DLWriteError" reason:[NSString stringWithFormat:@"Options don't pass the spec: %@", options] userInfo:nil];
     }
+    else{
+        options = options[[self utiString]];
+    }
+    
+    
+    
+    //validate options
+    
     
     NSUInteger integerMaxOutput;
     NSString *fileTypeVariant;
     NSUInteger lutSize;
     
-    
-    //validate options
-    if(options == nil || options[@"fileTypeVariant"] == nil || options[@"integerMaxOutput"] == nil || options[@"lutSize"] == nil){
-        //set to default if the options aren't valid.
-        options = [LUTFormatter3DL defaultOptions][[LUTFormatter3DL utiString]];
-    }
     
     fileTypeVariant = options[@"fileTypeVariant"];
     integerMaxOutput = [options[@"integerMaxOutput"] integerValue];
@@ -174,8 +175,6 @@
     [numberFormatter setFormatWidth: [NSString stringWithFormat:@"%d", (int)integerMaxOutput].length];
     [numberFormatter setPaddingCharacter:@""];
     for (int i = 0; i < arrayLength; i++) {
-        
-        
         int redIndex = i / (lutSize * lutSize);
         int greenIndex = ((i % (lutSize * lutSize)) / (lutSize) );
         int blueIndex = i % lutSize;
@@ -251,7 +250,7 @@
                                  @"integerMaxOutput": @((int)(pow(2, 16) - 1)),
                                  @"lutSize": @(32)};
     
-    return @{[LUTFormatter3DL utiString]: dictionary};
+    return @{[self utiString]: dictionary};
 }
 
 

@@ -8,6 +8,7 @@
 
 #import "LUTFormatter.h"
 
+
 #if defined(COCOAPODS_POD_AVAILABLE_oiiococoa)
 #import "NSImage+OIIO.h"
 #endif
@@ -54,10 +55,10 @@ static NSMutableArray *allFormatters;
     return nil;
 }
 
-+ (NSArray *)LUTFormattersValidForWritingLUT:(LUT *)lut{
++ (NSArray *)LUTFormattersValidForWritingLUTType:(LUT *)lut{
     NSMutableArray *array = [NSMutableArray array];
     for(LUTFormatter* formatter in allFormatters){
-        if([[formatter class] isValidWriterForLUT:lut]){
+        if([[formatter class] isValidWriterForLUTType:lut]){
             [array addObject:formatter];
         }
     }
@@ -77,7 +78,7 @@ static NSMutableArray *allFormatters;
     return NO;
 }
 
-+ (BOOL)isValidWriterForLUT:(LUT *)lut{
++ (BOOL)isValidWriterForLUTType:(LUT *)lut{
     if([self canWrite] == NO){
         return NO;
     }
@@ -135,6 +136,47 @@ static NSMutableArray *allFormatters;
     return nil;
 }
 
++ (BOOL)optionsAreValid:(NSDictionary *)options{
+    NSDictionary *defaultOptionsExposed = [self defaultOptions][[self utiString]];
+    NSDictionary *optionsExposed = options[[self utiString]];
+    if(optionsExposed == nil && defaultOptionsExposed == nil){
+        return YES;
+    }
+    else if(optionsExposed != nil && defaultOptionsExposed == nil){
+        return NO;
+    }
+    else if(optionsExposed == nil && defaultOptionsExposed != nil){
+        return NO;
+    }
+    else if(optionsExposed != nil && defaultOptionsExposed != nil){
+        
+        NSArray *allOptions = [self allOptions];
+        
+        NSDictionary *allOptionsOfSameFileTypeVariant;
+        
+        for(NSDictionary *optionDict in allOptions){
+            if ([optionDict[@"fileTypeVariant"] isEqualToString:optionsExposed[@"fileTypeVariant"]]) {
+                allOptionsOfSameFileTypeVariant = optionDict;
+            }
+        }
+        
+        if(allOptionsOfSameFileTypeVariant == nil){
+            return NO;
+        }
+        
+        for(NSString *key in [optionsExposed allKeys]){
+            //NSLog(@"%@", allOptionsOfSameFileTypeVariant[key]);
+            if(allOptionsOfSameFileTypeVariant[key] == nil && [[(M13OrderedDictionary *)allOptionsOfSameFileTypeVariant[key] allObjects] indexOfObject:optionsExposed[key]] == NSNotFound){
+                    return NO;
+            }
+
+        }
+        return YES;
+        
+    }
+    return NO;
+}
+
 + (NSString *)utiString{
     @throw [NSException exceptionWithName:@"NotImplemented" reason:[NSString stringWithFormat:@"\"%s\" Not Implemented", __func__] userInfo:nil];
 }
@@ -185,6 +227,76 @@ static NSMutableArray *allFormatters;
 + (NSDictionary *)constantConstraints{
     return @{@"inputBounds":@[@0, @1],
              @"outputBounds":@[[NSNull null], [NSNull null]]};
+}
+
++ (NSArray *)LUTActionsForLUT:(LUT *)lut options:(NSDictionary *)options{
+    NSMutableArray *arrayOfActions = [NSMutableArray array];
+    
+    if(![self optionsAreValid:options]){
+       @throw [NSException exceptionWithName:@"LUTActionsForLUTError" reason:[NSString stringWithFormat:@"Provided options don't pass the spec: %@", options] userInfo:nil];
+    }
+    
+    NSDictionary *exposedOptions = options == nil ? nil : options[[self utiString]];
+    NSDictionary *formatterConstantConstraints = [self constantConstraints];
+    
+    if(formatterConstantConstraints != nil){
+        if(formatterConstantConstraints[@"inputBounds"] != nil){
+            NSArray *array = formatterConstantConstraints[@"inputBounds"];
+            if(array[0] != [NSNull null] && array[1] != [NSNull null]){
+                if(lut.inputLowerBound != [array[0] doubleValue] || lut.inputUpperBound != [array[1] doubleValue]){
+                    [arrayOfActions addObject:[LUTAction actionWithLUTByChangingInputLowerBound:[array[0] doubleValue] inputUpperBound:[array[1] doubleValue]]];
+                }
+            }
+            else if(array[0] == [NSNull null] && array[1] != [NSNull null]){
+                //strange setup, bro
+                if(lut.inputUpperBound != [array[1] doubleValue]){
+                    [arrayOfActions addObject:[LUTAction actionWithLUTByChangingInputLowerBound:lut.inputLowerBound inputUpperBound:[array[1] doubleValue]]];
+                }
+            }
+            else if(array[0] != [NSNull null] && array[1] == [NSNull null]){
+                //strange setup, bro
+                if(lut.inputLowerBound != [array[0] doubleValue]){
+                    [arrayOfActions addObject:[LUTAction actionWithLUTByChangingInputLowerBound:[array[0] doubleValue] inputUpperBound:lut.inputUpperBound]];
+                }
+            }
+        }
+        if(formatterConstantConstraints[@"outputBounds"] != nil){
+            NSArray *array = formatterConstantConstraints[@"outputBounds"];
+            if(array[0] != [NSNull null] && array[1] != [NSNull null]){
+                if(lut.minimumOutputValue != [array[0] doubleValue] || lut.maximumOutputValue != [array[1] doubleValue]){
+                    [arrayOfActions addObject:[LUTAction actionWithLUTByClampingLowerBound:[array[0] doubleValue] upperBound:[array[1] doubleValue]]];
+                }
+            }
+            else if(array[0] == [NSNull null] && array[1] != [NSNull null]){
+                //strange setup, bro
+                if(lut.maximumOutputValue != [array[1] doubleValue]){
+                    [arrayOfActions addObject:[LUTAction actionWithLUTByClampingLowerBound:lut.minimumOutputValue upperBound:[array[1] doubleValue]]];
+                }
+            }
+            else if(array[0] != [NSNull null] && array[1] == [NSNull null]){
+                //strange setup, bro
+                if(lut.minimumOutputValue != [array[0] doubleValue]){
+                    [arrayOfActions addObject:[LUTAction actionWithLUTByClampingLowerBound:[array[0] doubleValue] upperBound:lut.maximumOutputValue]];
+                }
+            }
+        }
+    }
+    
+    if(exposedOptions != nil){
+        if(exposedOptions[@"lutSize"] != nil){
+            NSInteger resizeSize = [exposedOptions[@"lutSize"] integerValue];
+            if(resizeSize != lut.size){
+                [arrayOfActions addObject:[LUTAction actionWithLUTByResizingToSize:resizeSize]];
+            }
+        }
+    }
+
+    if(arrayOfActions.count == 0){
+        return nil;
+    }
+    else{
+        return arrayOfActions;
+    }
 }
 
 @end
