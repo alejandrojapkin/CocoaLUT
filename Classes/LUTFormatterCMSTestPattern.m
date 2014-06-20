@@ -54,7 +54,7 @@
     int height = round(sqrt(cubeSize)*(double)cubeSize);
     int width  = ceil(((double)pow(cubeSize,3))/(double)height);
     
-    NSLog(@"w:%i h:%i", width*7, height*7);
+    //NSLog(@"w:%i h:%i", width*7, height*7);
     
 //    CGColorSpaceRef cgColorSpace = CGColorSpaceCreateWithName(kCGColorSpaceGenericRGBLinear);
 //    NSColorSpace *linearRGBColorSpace = [[NSColorSpace alloc] initWithCGColorSpace:cgColorSpace];
