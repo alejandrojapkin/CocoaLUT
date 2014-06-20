@@ -93,7 +93,6 @@
 - (void)setPreviewImage:(NSImage *)previewImage {
     _previewImage = previewImage;
     dispatch_async(dispatch_get_current_queue(), ^{
-//        NSLog(@"recommendedLayerContentsScale:0 %f", [previewImage recommendedLayerContentsScale:2]);
         [self updateImageViews];
         [self setupPlaybackLayers];
     });
@@ -140,8 +139,8 @@
     self.lutImageLayer.contentsGravity = kCAGravityResizeAspect;
     self.layerUsesCoreImageFilters = YES;
     
-    [self.layer addSublayer:self.normalImageLayer];
     [self.layer addSublayer:self.lutImageLayer];
+    [self.layer addSublayer:self.normalImageLayer];
     
     _maskLayer = [CALayer layer];
     _maskLayer.backgroundColor = NSColor.whiteColor.CGColor;
@@ -172,7 +171,7 @@
     else {
         [_avPlayerLayer removeFromSuperlayer];
         _avPlayerLayer = nil;
-        self.lutImageLayer.mask = _maskLayer;
+        self.normalImageLayer.mask = _maskLayer;
     }
 
 }
