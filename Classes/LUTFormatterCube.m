@@ -82,12 +82,12 @@
     if(isLUT3D){
         if(data[@"inputLowerBound"] != nil){
             lut = [LUT3D LUTOfSize:cubeSize inputLowerBound:[data[@"inputLowerBound"] doubleValue] inputUpperBound:[data[@"inputUpperBound"] doubleValue]];
-            passthroughFileOptions[@"fileTypeVariant"] = @"Nuke";
+            passthroughFileOptions[@"fileTypeVariant"] = @"Resolve";
 
         }
         else{
             //assume 0-1 input
-            passthroughFileOptions[@"fileTypeVariant"] = @"Resolve";
+            passthroughFileOptions[@"fileTypeVariant"] = @"Nuke";
             lut = [LUT3D LUTOfSize:cubeSize inputLowerBound:0.0 inputUpperBound:1.0];
         }
         
@@ -127,10 +127,12 @@
     else{
         //1D LUT
         if(data[@"inputLowerBound"] != nil){
+            passthroughFileOptions[@"fileTypeVariant"] = @"Resolve";
             lut = [LUT1D LUTOfSize:cubeSize inputLowerBound:[data[@"inputLowerBound"] doubleValue] inputUpperBound:[data[@"inputUpperBound"] doubleValue]];
         }
         else{
             //assume 0-1 input
+            passthroughFileOptions[@"fileTypeVariant"] = @"Nuke";
             lut = [LUT1D LUTOfSize:cubeSize inputLowerBound:0.0 inputUpperBound:1.0];
         }
         
@@ -168,11 +170,18 @@
     [lut setTitle:title];
     lut.descriptionText = description;
     [lut setMetadata:metadata];
+    lut.passthroughFileOptions = @{[self utiString]:passthroughFileOptions};
 
     return lut;
 }
 
 + (NSString *)stringFromLUT:(LUT *)lut withOptions:(NSDictionary *)options{
+    if(![self optionsAreValid:options]){
+        @throw [NSException exceptionWithName:@"CubeWriteError" reason:[NSString stringWithFormat:@"Options don't pass the spec: %@", options] userInfo:nil];
+    }
+    else{
+        options = options[[self utiString]];
+    }
     
     NSMutableString *string = [NSMutableString stringWithString:@""];
     
@@ -191,7 +200,10 @@
         //maybe implement writing a CUBE as 1D here?
         [string appendString:[NSString stringWithFormat:@"LUT_1D_SIZE %i\n", (int)lutSize]];
         
-        [string appendString:[NSString stringWithFormat:@"LUT_1D_INPUT_RANGE %.10f %.10f\n", [lut inputLowerBound], [lut inputUpperBound]]];
+        if (![options[@"fileTypeVariant"] isEqualToString:@"Nuke"]) {
+            [string appendString:[NSString stringWithFormat:@"LUT_1D_INPUT_RANGE %.10f %.10f\n", [lut inputLowerBound], [lut inputUpperBound]]];
+        }
+        
         
         [string appendString:@"\n"];
         
@@ -207,7 +219,9 @@
     else if(isLUT3D(lut)){
         [string appendString:[NSString stringWithFormat:@"LUT_3D_SIZE %i\n", (int)lutSize]];
         
+        if (![options[@"fileTypeVariant"] isEqualToString:@"Nuke"]) {
         [string appendString:[NSString stringWithFormat:@"LUT_3D_INPUT_RANGE %.6f %.6f\n", [lut inputLowerBound], [lut inputUpperBound]]];
+        }
         
         [string appendString:@"\n"];
         
