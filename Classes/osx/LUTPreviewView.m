@@ -16,6 +16,7 @@
 @property (strong) CALayer *avPlayerLayer;
 @property (strong) CALayer *maskLayer;
 @property (strong) NSView  *borderView;
+@property (strong) NSTextField *captionField;
 @end
 
 @implementation LUTPreviewView
@@ -47,6 +48,8 @@
     self.lutImageLayer.frame = self.bounds;
     
     _borderView.frame = CGRectMake(self.bounds.size.width * self.maskAmount, 0, 1, self.bounds.size.height);
+    
+    self.captionField.frame = CGRectMake(self.bounds.size.width * self.maskAmount - 61, 10, 100, 20);
     
     _avPlayerLayer.bounds = self.bounds;
 
@@ -132,6 +135,23 @@
     self.wantsLayer = YES;
     self.layer.backgroundColor = NSColor.blackColor.CGColor;
     
+    self.captionField = [[NSTextField alloc] initWithFrame:CGRectZero];
+    self.captionField.textColor = [NSColor whiteColor];
+    self.captionField.alignment = NSCenterTextAlignment;
+    self.captionField.stringValue = @"Original   LUT";
+    [self.captionField setBezeled:NO];
+    [self.captionField setDrawsBackground:NO];
+    [self.captionField setEditable:NO];
+    [self.captionField setSelectable:NO];
+    [self.captionField setWantsLayer:YES];
+    self.captionField.font = [NSFont systemFontOfSize:[NSFont systemFontSizeForControlSize:NSSmallControlSize]];
+    self.captionField.layer.shadowColor = [NSColor blackColor].CGColor;
+    self.captionField.layer.shadowOpacity = 1;
+    self.captionField.layer.shadowOffset = CGSizeMake(0, 1);
+    self.captionField.layer.shadowRadius = 0;
+    self.captionField.layer.masksToBounds = YES;
+    self.captionField.layer.opacity = 0.7;
+    [self addSubview:self.captionField];
     
     self.normalImageLayer = [[CALayer alloc] init];
     self.normalImageLayer.contentsGravity = kCAGravityResizeAspect;
