@@ -171,13 +171,13 @@
     
     NSAttributedString *blueColoredString = [[NSAttributedString alloc] initWithString:blueString attributes:@{NSForegroundColorAttributeName: [NSColor blueColor]}];
     
-    NSMutableAttributedString *outString = [[NSMutableAttributedString alloc] initWithString:@"("];
+    NSMutableAttributedString *outString = [[NSMutableAttributedString alloc] initWithString:@""];
     [outString appendAttributedString:redColoredString];
     [outString appendAttributedString:[[NSAttributedString alloc] initWithString:@", "]];
     [outString appendAttributedString:greenColoredString];
     [outString appendAttributedString:[[NSAttributedString alloc] initWithString:@", "]];
     [outString appendAttributedString:blueColoredString];
-    [outString appendAttributedString:[[NSAttributedString alloc] initWithString:@")"]];
+    [outString appendAttributedString:[[NSAttributedString alloc] initWithString:@""]];
     
     return outString;
 }

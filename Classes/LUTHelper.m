@@ -54,7 +54,7 @@ double remap(double value, double inputLow, double inputHigh, double outputLow, 
                                        reason:[NSString stringWithFormat:@"Outputs low:%f high:%f. low must be less than or equal to high", outputLow, outputHigh]
                                      userInfo:nil];
     }
-    return outputLow + ((value - inputLow)*(outputHigh - outputLow))/(inputHigh - inputLow);
+    return remapNoError(value, inputLow, inputHigh, outputLow, outputHigh);
 }
 
 double remapNoError(double value, double inputLow, double inputHigh, double outputLow, double outputHigh){

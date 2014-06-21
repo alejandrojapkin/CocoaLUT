@@ -44,7 +44,6 @@
     LUTColor *color = indexLUTColorAndIdentityLUTColor[1];
     LUTColor *identityColor = indexLUTColorAndIdentityLUTColor[2];
     self.colorizedColorStringAtMousePoint = [[self class] colorizedColorTransformationStringFromStartColor:identityColor endColor:color];
-    [NSString stringWithFormat:@"%@ ► %@", identityColor, color];
     self.inputColor = identityColor.systemColor;
     self.outputColor = color.systemColor;
 }
@@ -59,10 +58,10 @@
 + (NSAttributedString *)colorizedColorTransformationStringFromStartColor:(LUTColor *)startColor
                                                   endColor:(LUTColor *)endColor{
     NSMutableAttributedString *outString = [[NSMutableAttributedString alloc] initWithAttributedString:[startColor colorizedAttributedStringWithFormat:@"%.6f"]];
-    [outString appendAttributedString:[[NSAttributedString alloc] initWithString:@" ► "]];
+    [outString appendAttributedString:[[NSAttributedString alloc] initWithString:@" ‣ "]];
     [outString appendAttributedString:[endColor colorizedAttributedStringWithFormat:@"%.6f"]];
     
-    [outString addAttribute:NSFontAttributeName value:[NSFont boldSystemFontOfSize:[NSFont systemFontSize]] range:NSMakeRange(0, outString.length)];
+    [outString addAttribute:NSFontAttributeName value:[NSFont systemFontOfSize:[NSFont systemFontSize]] range:NSMakeRange(0, outString.length)];
     return outString;
 }
 
@@ -183,7 +182,7 @@
     CGFloat pixelWidth = rect.size.width;
     CGFloat pixelHeight = rect.size.height;
     
-    double xPosition = point.x;
+    double xPosition = round(point.x);
     
     if(outOfBounds(xPosition, xOrigin, xOrigin+pixelWidth, YES)){
         return;
@@ -193,9 +192,21 @@
     
     LUTColor *colorAtXPosition = [self.lut colorAtInterpolatedR:xPositionAsInterpolatedIndex g:xPositionAsInterpolatedIndex b:xPositionAsInterpolatedIndex];
     
-    double redYPosition = remap(colorAtXPosition.red, clampUpperBound(self.minimumOutputValue, 0), clampLowerBound(self.maximumOutputValue, 1), yOrigin, yOrigin + pixelHeight);
-    double greenYPosition = remap(colorAtXPosition.green, clampUpperBound(self.minimumOutputValue, 0), clampLowerBound(self.maximumOutputValue, 1), yOrigin, yOrigin + pixelHeight);
-    double blueYPosition = remap(colorAtXPosition.blue, clampUpperBound(self.minimumOutputValue, 0), clampLowerBound(self.maximumOutputValue, 1), yOrigin, yOrigin + pixelHeight);
+    double redYPosition = round(remap(colorAtXPosition.red,
+                                      clampUpperBound(self.minimumOutputValue, 0),
+                                      clampLowerBound(self.maximumOutputValue, 1),
+                                      yOrigin,
+                                      yOrigin + pixelHeight));
+    double greenYPosition = round(remap(colorAtXPosition.green,
+                                        clampUpperBound(self.minimumOutputValue, 0),
+                                        clampLowerBound(self.maximumOutputValue, 1),
+                                        yOrigin,
+                                        yOrigin + pixelHeight));
+    double blueYPosition = round(remap(colorAtXPosition.blue,
+                                       clampUpperBound(self.minimumOutputValue, 0),
+                                       clampLowerBound(self.maximumOutputValue, 1),
+                                       yOrigin,
+                                       yOrigin + pixelHeight));
     
 //    CGContextSetRGBFillColor(context, 1, 0, 0, 1);
 //    CGContextFillEllipseInRect(context, CGRectMake(xPosition-(1.0/2.0)*thickness, redYPosition-(1.0/2.0)*thickness, thickness, thickness));
@@ -238,11 +249,16 @@
     CGFloat xOrigin = self.bounds.origin.x;
     CGFloat pixelWidth = self.bounds.size.width;
     
-    double xPosition = self.mousePoint.x;
+    double xPosition = clamp(self.mousePoint.x, 0, pixelWidth);
     double xPositionAsInterpolatedIndex = remapNoError(xPosition, xOrigin, pixelWidth - xOrigin, 0, self.lut.size - 1);
     
-    LUTColor *colorAtXPosition = [self.lut colorAtInterpolatedR:xPositionAsInterpolatedIndex g:xPositionAsInterpolatedIndex b:xPositionAsInterpolatedIndex];
-    LUTColor *identityColorAtXPosition = [self.lut identityColorAtR:xPositionAsInterpolatedIndex g:xPositionAsInterpolatedIndex b:xPositionAsInterpolatedIndex];
+    LUTColor *colorAtXPosition = [self.lut colorAtInterpolatedR:xPositionAsInterpolatedIndex
+                                                              g:xPositionAsInterpolatedIndex
+                                                              b:xPositionAsInterpolatedIndex];
+    
+    LUTColor *identityColorAtXPosition = [self.lut identityColorAtR:xPositionAsInterpolatedIndex
+                                                                  g:xPositionAsInterpolatedIndex
+                                                                  b:xPositionAsInterpolatedIndex];
     
     return @[@(xPositionAsInterpolatedIndex), colorAtXPosition, identityColorAtXPosition];
 }
@@ -259,7 +275,7 @@
     NSArray *xIndices = indicesDoubleArray(xOrigin, xOrigin + pixelWidth, numDivs);
     
     CGContextSetRGBStrokeColor(context, 1.0-transparency, 1.0-transparency, 1.0-transparency, 1);
-    CGFloat strokeWidth = [[self window] backingScaleFactor] > 1 ? 0.5 : 1;
+    CGFloat strokeWidth =  1.0 / [[self window] backingScaleFactor];
     CGContextSetLineWidth(context, strokeWidth);
     
     for (NSNumber *index in xIndices){
