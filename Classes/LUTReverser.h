@@ -7,7 +7,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "KDTree.h"
 #import "LUTProcessor.h"
 
 @interface LUTReverser : LUTProcessor

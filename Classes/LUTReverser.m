@@ -9,6 +9,8 @@
 #import "LUTReverser.h"
 #import "LUTHelper.h"
 
+#if false
+
 @interface LUTReverser ()
 @property (strong) KDTree *kdTree;
 @property (strong) NSArray *inputArray;
@@ -179,5 +181,6 @@
     return subArray[3];
 }
 
-
 @end
+
+#endif
