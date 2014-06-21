@@ -96,7 +96,7 @@ static NSMutableArray *allFormatters;
 
 + (LUT *)LUTFromURL:(NSURL *)fileURL {
     #if defined(COCOAPODS_POD_AVAILABLE_oiiococoa)
-    if([@[@"dpx"] containsObject:fileURL.pathExtension.lowercaseString]){
+    if([[NSImage oiio_imageFileTypes] containsObject:fileURL.pathExtension.lowercaseString]){
         return [self LUTFromData:[[NSImage oiio_forceImageWithContentsOfURL:fileURL] TIFFRepresentation]];
     }
     #endif
