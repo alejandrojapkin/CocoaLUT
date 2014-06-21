@@ -46,7 +46,7 @@ static NSMutableArray *allFormatters;
 }
 
 + (LUTFormatter *)LUTFormatterValidForReadingURL:(NSURL *)fileURL{
-    NSArray *formatters = [self LUTFormattersForFileExtension:[fileURL pathExtension]];
+    NSArray *formatters = [self LUTFormattersForFileExtension:[fileURL pathExtension].lowercaseString];
     for(LUTFormatter* formatter in formatters){
         if([[formatter class] isValidReaderForURL:fileURL]){
             return formatter;
