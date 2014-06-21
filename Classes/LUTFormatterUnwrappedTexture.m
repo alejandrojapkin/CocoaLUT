@@ -78,7 +78,7 @@
 
 + (LUT *)LUTFromImage:(NSImage *)image {
     if (image.size.width != image.size.height * image.size.height) {
-        NSException *exception = [NSException exceptionWithName:@"LUTParseError"
+        NSException *exception = [NSException exceptionWithName:@"UnwrappedTextureReadError"
                                                          reason:@"Image width must be the square of the image height." userInfo:nil];
         @throw exception;
     }
@@ -107,7 +107,7 @@
         lut = [self LUTFromURL:fileURL];
     }
     @catch (NSException *exception) {
-        NSLog(@"Exception reading file: %@", exception);
+        NSLog(@"Exception reading file: %@: %@", exception.name, exception);
         return NO;
     }
     return YES;

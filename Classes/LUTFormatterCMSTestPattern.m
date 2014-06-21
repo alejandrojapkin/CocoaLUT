@@ -110,8 +110,8 @@
     //NSLog(@"CMS Cube Size: %i", cubeSize);
     
     if (image.size.width != width*7 || image.size.height != height*7) {
-        NSException *exception = [NSException exceptionWithName:@"LUTParseError"
-                                                         reason:@"Image dimensions don't conform to LUTFormatterCMSTestPattern." userInfo:nil];
+        NSException *exception = [NSException exceptionWithName:@"CMSTestPatternReadError"
+                                                         reason:@"Image dimensions don't conform to spec." userInfo:nil];
         @throw exception;
     }
     
@@ -148,7 +148,7 @@
         lut = [self LUTFromURL:fileURL];
     }
     @catch (NSException *exception) {
-        NSLog(@"Exception reading file: %@", exception);
+        NSLog(@"Exception reading file: %@: %@", exception.name, exception);
         return NO;
     }
     return YES;
