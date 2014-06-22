@@ -119,7 +119,7 @@
         lut = [self LUTFromURL:fileURL];
     }
     @catch (NSException *exception) {
-        NSLog(@"Exception reading file: %@: %@", exception.name, exception);
+        //NSLog(@"Exception reading file: %@: %@", exception.name, exception);
         return NO;
     }
     return YES;
