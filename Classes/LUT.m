@@ -229,9 +229,9 @@
     double greenRemappedInterpolatedIndex = remap(color.green, [self inputLowerBound], [self inputUpperBound], 0, [self size]-1);
     double blueRemappedInterpolatedIndex = remap(color.blue, [self inputLowerBound], [self inputUpperBound], 0, [self size]-1);
     
-    return [self colorAtInterpolatedR:redRemappedInterpolatedIndex
-                                    g:greenRemappedInterpolatedIndex
-                                    b:blueRemappedInterpolatedIndex];
+    return [self colorAtInterpolatedR:clamp(redRemappedInterpolatedIndex, 0, self.size-1)
+                                    g:clamp(greenRemappedInterpolatedIndex, 0, self.size-1)
+                                    b:clamp(blueRemappedInterpolatedIndex, 0, self.size-1)];
 }
 
 - (LUTColor *)colorAtR:(NSUInteger)r g:(NSUInteger)g b:(NSUInteger)b{
