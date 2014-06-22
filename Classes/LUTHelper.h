@@ -36,6 +36,7 @@ void timer(NSString* name, void (^block)());
 NSArray* indicesDoubleArray(double startValue, double endValue, int numIndices);
 NSArray* indicesIntegerArray(int startValue, int endValue, int numIndices);
 BOOL stringIsNumeric(NSString* str);
+double roundValueToNearest(double value, double nearestValue);
 
 NSArray* arrayWithEmptyElementsRemoved(NSArray *array);
 NSArray* arrayWithComponentsSeperatedByNewlineAndWhitespaceWithEmptyElementsRemoved(NSString *string);

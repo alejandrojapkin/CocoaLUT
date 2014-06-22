@@ -162,6 +162,11 @@ BOOL stringIsNumeric(NSString* str){
     return !!number; // If the string is not numeric, number will be nil
 }
 
+double roundValueToNearest(double value, double nearestValue) {
+    NSInteger multiplier = floor(value / nearestValue);
+    return (double)multiplier * nearestValue;
+}
+
 void LUTConcurrentRectLoop(NSUInteger width, NSUInteger height, void (^block)(NSUInteger x, NSUInteger y)) {
     dispatch_apply(width, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0) , ^(size_t x){
         for (int y = 0; y < height; y++) {
