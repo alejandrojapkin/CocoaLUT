@@ -16,10 +16,6 @@
     [super load];
 }
 
-+ (LUT *)LUTFromURL:(NSURL *)fileURL {
-    return [self LUTFromImageURL:fileURL];
-}
-
 + (NSData *)dataFromLUT:(LUT *)lut withOptions:(NSDictionary *)options {
 #if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR
     return UIImagePNGRepresentation([self imageFromLUT:lut]);
@@ -100,12 +96,12 @@
     return image;
 }
 
-+ (LUT *)LUTFromImageURL:(NSURL *)fileURL {
-    if(![[self fileExtensions] containsObject:[fileURL pathExtension]]){
-        [NSException exceptionWithName:@"UnwrappedTextureReadError"
++ (LUT *)LUTFromURL:(NSURL *)fileURL {
+    if(![[self fileExtensions] containsObject:[fileURL pathExtension].lowercaseString]){
+        [NSException exceptionWithName:@"CMSTestPatternReadError"
                                 reason:@"Invalid file extension." userInfo:nil];
     }
-    NSMutableDictionary *passthroughFileOptions;
+    NSMutableDictionary *passthroughFileOptions = [NSMutableDictionary dictionary];
     NSImage *image;
     #if defined(COCOAPODS_POD_AVAILABLE_oiiococoa)
     image = [NSImage oiio_imageWithContentsOfURL:fileURL];
@@ -114,10 +110,10 @@
     #endif
     passthroughFileOptions[@"fileTypeVariant"] = [fileURL pathExtension].uppercaseString;
     if([image oiio_findOIIOImageRep] != nil){
-        passthroughFileOptions[@"bit-Depth"] = @([image oiio_findOIIOImageRep].encodingType);
+        passthroughFileOptions[@"bitDepth"] = @([image oiio_findOIIOImageRep].encodingType);
     }
     else{
-        passthroughFileOptions[@"bit-Depth"] = @([(NSImageRep*)image.representations[0] bitsPerSample]);
+        passthroughFileOptions[@"bitDepth"] = @([(NSImageRep*)image.representations[0] bitsPerSample]);
     }
     
     int cubeSize = (int)(round(pow((image.size.height/7)*(image.size.height/7), 1.0/3.0)));
@@ -146,7 +142,8 @@
             [lut setColor:[LUTColor colorWithSystemColor:[imageRep colorAtX:x*7 y:(height - (y+1))*7]] r:redIndex g:greenIndex b:blueIndex];
         }
     });
-    lut.passthroughFileOptions = passthroughFileOptions;
+    lut.passthroughFileOptions = @{[self.class utiString]:passthroughFileOptions};
+    
     return lut;
 }
 #endif

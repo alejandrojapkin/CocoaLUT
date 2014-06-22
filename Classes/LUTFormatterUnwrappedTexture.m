@@ -70,11 +70,11 @@
 }
 
 + (LUT *)LUTFromURL:(NSURL *)fileURL {
-    if(![[self fileExtensions] containsObject:[fileURL pathExtension]]){
+    if(![[self fileExtensions] containsObject:[fileURL pathExtension].lowercaseString]){
         [NSException exceptionWithName:@"UnwrappedTextureReadError"
                                 reason:@"Invalid file extension." userInfo:nil];
     }
-    NSMutableDictionary *passthroughFileOptions;
+    NSMutableDictionary *passthroughFileOptions = [NSMutableDictionary dictionary];
     NSImage *image;
     #if defined(COCOAPODS_POD_AVAILABLE_oiiococoa)
     image = [NSImage oiio_imageWithContentsOfURL:fileURL];
@@ -83,10 +83,10 @@
     #endif
     passthroughFileOptions[@"fileTypeVariant"] = [fileURL pathExtension].uppercaseString;
     if([image oiio_findOIIOImageRep] != nil){
-        passthroughFileOptions[@"bit-Depth"] = @([image oiio_findOIIOImageRep].encodingType);
+        passthroughFileOptions[@"bitDepth"] = @([image oiio_findOIIOImageRep].encodingType);
     }
     else{
-        passthroughFileOptions[@"bit-Depth"] = @([(NSImageRep*)image.representations[0] bitsPerSample]);
+        passthroughFileOptions[@"bitDepth"] = @([(NSImageRep*)image.representations[0] bitsPerSample]);
     }
     
     if (image.size.width != image.size.height * image.size.height) {
@@ -103,7 +103,8 @@
         NSUInteger y = g;
         [lut3D setColor:[LUTColor colorWithSystemColor:[imageRep colorAtX:x y:y]] r:r g:g b:b];
     }];
-    lut3D.passthroughFileOptions = passthroughFileOptions;
+    lut3D.passthroughFileOptions = @{[self.class utiString]:passthroughFileOptions};
+    
     return lut3D;
 }
 #endif
@@ -118,7 +119,7 @@
         lut = [self LUTFromURL:fileURL];
     }
     @catch (NSException *exception) {
-        //NSLog(@"Exception reading file: %@: %@", exception.name, exception);
+        NSLog(@"Exception reading file: %@: %@", exception.name, exception);
         return NO;
     }
     return YES;
