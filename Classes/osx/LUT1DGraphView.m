@@ -159,7 +159,12 @@
     CGContextRef context = [[NSGraphicsContext
                                currentContext] graphicsPort];
 
-    [self drawGridInContext:context inRect:drawingRect numXDivs:clamp(self.lut.size, 0, 64) transparency:.2];
+    [self drawGridInContext:context inRect:drawingRect numXDivs: MIN((int)self.lut.size, MAX_GRID_POINTS) transparency:.2];
+    
+    if(![self.lut equalsIdentityLUT]){
+        [self drawIdentityLineInContext:context inRect:drawingRect thickness:2.0 transparency:.4];
+    }
+    
     
     if(self.interpolation == LUT1DGraphViewInterpolationLinear){
         [self drawLUT1D:self.lut inContext:context inRect:drawingRect thickness:2.0];
@@ -261,6 +266,25 @@
                                                                   b:xPositionAsInterpolatedIndex];
     
     return @[@(xPositionAsInterpolatedIndex), colorAtXPosition, identityColorAtXPosition];
+}
+
+- (void)drawIdentityLineInContext:(CGContextRef)context
+                           inRect:(NSRect)rect
+                        thickness:(double)thickness
+                     transparency:(double)transparency{
+    CGFloat xOrigin = rect.origin.x;
+    CGFloat yOrigin = rect.origin.y;
+    CGFloat pixelWidth = rect.size.width;
+    CGFloat pixelHeight = rect.size.height;
+    
+    CGContextSetRGBStrokeColor(context, 1.0-transparency, 1.0-transparency, 1.0-transparency, 1);
+    CGFloat strokeWidth =  1.0;
+    CGContextSetLineWidth(context, strokeWidth);
+    
+    CGContextBeginPath(context);
+    CGContextMoveToPoint(context, xOrigin, yOrigin);
+    CGContextAddLineToPoint(context, xOrigin+pixelWidth, yOrigin + pixelHeight);
+    CGContextStrokePath(context);
 }
 
 - (void)drawGridInContext:(CGContextRef)context
