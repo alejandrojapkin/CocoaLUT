@@ -226,15 +226,15 @@ BOOL stringIsValidNumber(NSString *string){
 }
 
 NSUInteger findFirstLUTLineInLines(NSArray *lines, NSString *seperator, int numValues, int startLine){
-    NSNumberFormatter *formatter = [NSNumberFormatter new];
+
     for (int i = startLine; i < lines.count; i++){
         NSArray *splitLine = [lines[i] componentsSeparatedByString:seperator];
         splitLine = arrayWithEmptyElementsRemoved(splitLine);
-
+        
         if(splitLine.count == numValues){
             BOOL isLine = YES;
             for (int j = 0; j < numValues; j++){
-                if([formatter numberFromString:splitLine[j]] == nil){
+                if(!stringIsValidNumber(splitLine[j])){
                     isLine = NO;
                 }
             }
