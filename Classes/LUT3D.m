@@ -57,8 +57,14 @@
     return newLUT;
 }
 
-- (instancetype)LUT3DByExtractingColorOnly{
-    LUT1D *reversed1D = [[[self LUT1D] LUTByResizingToSize:2048] LUT1DByReversing];
+- (instancetype)LUT3DByExtractingColorOnlyWith1DReverseStrictness:(BOOL)strictness{
+    LUT1D *selfLUT1D = [self LUT1D];
+    
+    if([selfLUT1D isReversibleWithStrictness:strictness] == NO){
+        return nil;
+    }
+    
+    LUT1D *reversed1D = [[selfLUT1D LUTByResizingToSize:2048] LUT1DByReversing];
     
     if(reversed1D == nil){
         return nil;
