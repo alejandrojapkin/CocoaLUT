@@ -25,7 +25,7 @@
     NSUInteger cubeLinesStartIndex = findFirstLUTLineInLines(lines, @" ", 3, 0);
     
     if(cubeLinesStartIndex == -1){
-        @throw [NSException exceptionWithName:@"LUTParserError" reason:@"Couldn't find start of LUT data lines." userInfo:nil];
+        @throw [NSException exceptionWithName:@"3DLReadError" reason:@"Couldn't find start of LUT data lines." userInfo:nil];
     }
     
     NSArray *headerLines = [lines subarrayWithRange:NSMakeRange(0, cubeLinesStartIndex)];
@@ -56,7 +56,7 @@
     }
 
     if (cubeSize == 0 || integerMaxOutput == 0) {
-        NSException *exception = [NSException exceptionWithName:@"LUTParseError" reason:@"Couldn't find LUT size or output depth in file" userInfo:nil];
+        NSException *exception = [NSException exceptionWithName:@"3DLReadError" reason:@"LUT Size" userInfo:nil];
         @throw exception;
     }
     
@@ -76,7 +76,7 @@
                 
                 for(NSString *checkLine in splitLine){
                     if(stringIsValidNumber(checkLine) == NO){
-                        @throw [NSException exceptionWithName:@"LUTParserError" reason:[NSString stringWithFormat:@"NaN detected at line %i", (int)currentCubeIndex+(int)cubeLinesStartIndex] userInfo:nil];
+                        @throw [NSException exceptionWithName:@"3DLReadError" reason:[NSString stringWithFormat:@"NaN detected at line %i", (int)currentCubeIndex+(int)cubeLinesStartIndex] userInfo:nil];
                     }
                 }
 
@@ -99,7 +99,7 @@
     }
     
     if(currentCubeIndex < cubeSize*cubeSize*cubeSize){
-        @throw [NSException exceptionWithName:@"LUTParserError" reason:@"Incomplete data lines" userInfo:nil];
+        @throw [NSException exceptionWithName:@"3DLReadError" reason:@"Incomplete data lines" userInfo:nil];
     }
     
     [lut setMetadata:metadata];
