@@ -55,8 +55,8 @@
             
     }
 
-    if (cubeSize == 0 || integerMaxOutput == 0) {
-        NSException *exception = [NSException exceptionWithName:@"3DLReadError" reason:@"LUT Size" userInfo:nil];
+    if (cubeSize <= 0 || integerMaxOutput <= 0) {
+        NSException *exception = [NSException exceptionWithName:@"3DLReadError" reason:@"Size or Max Output invalid." userInfo:nil];
         @throw exception;
     }
     
@@ -199,6 +199,17 @@
 
 }
 
++ (BOOL)optionsAreValid:(NSDictionary *)options{
+    if(options[[self utiString]] == nil){
+        return NO;
+    }
+    NSMutableDictionary *exposedOptions = [options[[self utiString]] mutableCopy];
+    if(options[@"integerMaxOutput"] == nil || [options[@"integerMaxOutput"] integerValue] <= 0){
+        return NO;
+    }
+    [exposedOptions removeObjectForKey:@"integerMaxOutput"];
+    return [super optionsAreValid:@{[self utiString] : exposedOptions}];
+}
 
 
 + (LUTFormatterOutputType)outputType{
