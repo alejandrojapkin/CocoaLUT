@@ -37,7 +37,7 @@ static NSMutableArray *allFormatters;
 + (NSArray *)LUTFormattersForFileExtension:(NSString *)fileExtension{
     NSMutableArray *formatters = [NSMutableArray array];
     for(LUTFormatter *formatter in allFormatters){
-        if([[[formatter class] fileExtensions] indexOfObject:fileExtension] != NSNotFound){
+        if([[[formatter class] fileExtensions] containsObject:fileExtension.lowercaseString]){
             [formatters addObject:formatter];
         }
     
@@ -46,7 +46,7 @@ static NSMutableArray *allFormatters;
 }
 
 + (LUTFormatter *)LUTFormatterValidForReadingURL:(NSURL *)fileURL{
-    NSArray *formatters = [self LUTFormattersForFileExtension:[fileURL pathExtension].lowercaseString];
+    NSArray *formatters = [self LUTFormattersForFileExtension:fileURL.pathExtension.lowercaseString];
     for(LUTFormatter* formatter in formatters){
         if([[formatter class] isValidReaderForURL:fileURL]){
             return formatter;
@@ -72,7 +72,7 @@ static NSMutableArray *allFormatters;
     if([fileURL checkResourceIsReachableAndReturnError:nil] == NO){
         return NO;
     }
-    if([[self fileExtensions] containsObject:[fileURL pathExtension]]){
+    if([[self fileExtensions] containsObject:fileURL.pathExtension.lowercaseString]){
         return YES;
     }
     return NO;
