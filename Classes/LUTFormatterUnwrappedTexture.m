@@ -8,6 +8,7 @@
 
 #import "LUTFormatterUnwrappedTexture.h"
 #import "CocoaLUT.h"
+#import "NSImage+OIIO.h"
 
 @implementation LUTFormatterUnwrappedTexture
 
@@ -16,19 +17,11 @@
 }
 
 + (NSData *)dataFromLUT:(LUT *)lut withOptions:(NSDictionary *)options {
-#if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR
+    #if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR
     return UIImagePNGRepresentation([self imageFromLUT:lut]);
-# elif TARGET_OS_MAC
+    # elif TARGET_OS_MAC
     return [[self imageFromLUT:lut] TIFFRepresentation];
-# endif
-}
-
-+ (LUT *)LUTFromData:(NSData *)data {
-#if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR
-    return [self LUTFromImage:[[UIImage alloc] initWithData:data]];
-# elif TARGET_OS_MAC
-    return [self LUTFromImage:[[NSImage alloc] initWithData:data]];
-# endif
+    # endif
 }
 
 #if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR
@@ -76,11 +69,29 @@
     return image;
 }
 
-+ (LUT *)LUTFromImage:(NSImage *)image {
++ (LUT *)LUTFromURL:(NSURL *)fileURL {
+    if(![[self fileExtensions] containsObject:[fileURL pathExtension]]){
+        [NSException exceptionWithName:@"UnwrappedTextureReadError"
+                                reason:@"Invalid file extension." userInfo:nil];
+    }
+    NSMutableDictionary *passthroughFileOptions;
+    NSImage *image;
+    #if defined(COCOAPODS_POD_AVAILABLE_oiiococoa)
+    image = [NSImage oiio_imageWithContentsOfURL:fileURL];
+    #else
+    image = [[NSImage alloc] initWithContentsOfURL:fileURL];
+    #endif
+    passthroughFileOptions[@"fileTypeVariant"] = [fileURL pathExtension].uppercaseString;
+    if([image oiio_findOIIOImageRep] != nil){
+        passthroughFileOptions[@"bit-Depth"] = @([image oiio_findOIIOImageRep].encodingType);
+    }
+    else{
+        passthroughFileOptions[@"bit-Depth"] = @([(NSImageRep*)image.representations[0] bitsPerSample]);
+    }
+    
     if (image.size.width != image.size.height * image.size.height) {
-        NSException *exception = [NSException exceptionWithName:@"UnwrappedTextureReadError"
+        @throw [NSException exceptionWithName:@"UnwrappedTextureReadError"
                                                          reason:@"Image width must be the square of the image height." userInfo:nil];
-        @throw exception;
     }
     
     LUT3D *lut3D = [LUT3D LUTOfSize:image.size.height inputLowerBound:0.0 inputUpperBound:1.0];
@@ -92,7 +103,7 @@
         NSUInteger y = g;
         [lut3D setColor:[LUTColor colorWithSystemColor:[imageRep colorAtX:x y:y]] r:r g:g b:b];
     }];
-
+    lut3D.passthroughFileOptions = passthroughFileOptions;
     return lut3D;
 }
 #endif
@@ -122,7 +133,11 @@
 }
 
 + (NSArray *)fileExtensions{
-    return @[@"tiff", @"tif", @"dpx", @"png"];
+    #if defined(COCOAPODS_POD_AVAILABLE_oiiococoa)
+    return @[@"tiff", @"tif", @"dpx"];
+    #else
+    return @[@"tiff", @"tif"];
+    #endif
 }
 
 + (NSString *)formatterName{
@@ -135,6 +150,39 @@
 
 + (BOOL)canWrite{
     return YES;
+}
+
++ (NSArray *)allOptions{
+    M13OrderedDictionary *tiffBitDepthOrderedDict = [[M13OrderedDictionary alloc] initWithObjects:@[@"8-bit", @"16-bit"] pairedWithKeys:@[@(OIIOImageEncodingTypeUINT8), @(16)]];
+    
+    NSDictionary *tiffOptions =
+    @{@"fileTypeVariant":@"TIFF",
+      @"bit-Depth":tiffBitDepthOrderedDict};
+    
+    
+    M13OrderedDictionary *dpxBitDepthOrderedDict = [[M13OrderedDictionary alloc] initWithObjects:@[@"10-bit", @"12-bit", @"16-bit"] pairedWithKeys:@[@(OIIOImageEncodingTypeUINT10), @(OIIOImageEncodingTypeUINT12), @(OIIOImageEncodingTypeUINT16)]];
+    
+    NSDictionary *dpxOptions =
+    @{@"fileTypeVariant":@"DPX",
+      @"bit-Depth":dpxBitDepthOrderedDict};
+    
+    #if defined(COCOAPODS_POD_AVAILABLE_oiiococoa)
+    return @[dpxOptions, tiffOptions];
+    #else
+    return @[tiffOptions];
+    #endif
+}
+
++ (NSDictionary *)defaultOptions{
+    NSDictionary *dictionary;
+    #if defined(COCOAPODS_POD_AVAILABLE_oiiococoa)
+    dictionary = @{@"fileTypeVariant": @"DPX",
+                   @"bit-Depth": @(OIIOImageEncodingTypeUINT10)};
+    #else
+    dictionary = @{@"fileTypeVariant": @"TIFF",
+                   @"bit-Depth": @(16)};
+    #endif
+    return @{[self utiString]: dictionary};
 }
 
 @end

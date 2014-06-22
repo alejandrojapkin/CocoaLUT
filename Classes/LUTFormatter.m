@@ -9,9 +9,7 @@
 #import "LUTFormatter.h"
 
 
-#if defined(COCOAPODS_POD_AVAILABLE_oiiococoa)
-#import "NSImage+OIIO.h"
-#endif
+
 
 static NSMutableArray *allFormatters;
 
@@ -95,13 +93,7 @@ static NSMutableArray *allFormatters;
 }
 
 + (LUT *)LUTFromURL:(NSURL *)fileURL {
-    #if defined(COCOAPODS_POD_AVAILABLE_oiiococoa)
-    if([[NSImage oiio_imageFileTypes] containsObject:fileURL.pathExtension.lowercaseString]){
-        return [self LUTFromData:[[NSImage oiio_forceImageWithContentsOfURL:fileURL] TIFFRepresentation]];
-    }
-    #endif
     return [self LUTFromData:[NSData dataWithContentsOfURL:fileURL]];
-    
 }
 
 + (LUT *)LUTFromData:(NSData *)data {
