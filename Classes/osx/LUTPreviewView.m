@@ -74,15 +74,16 @@
     _lut = lut;
     dispatch_async(dispatch_get_current_queue(), ^{
         [self updateImageViews];
-//        if (_lut) {
-//            CIFilter *filter = _lut.coreImageFilterWithCurrentColorSpace;
-//            if (filter) {
-//                self.lutImageLayer.filters = @[filter];
-//                return;
-//            }
-//        }
-//        [self.lutImageLayer setFilters:@[]];
     });
+}
+
+- (void)updateFilters {
+    if (self.lut) {
+        CIFilter *filter = self.lut.coreImageFilterWithCurrentColorSpace;
+        if (filter) {
+            self.lutVideoLayer.filters = @[filter];
+        }
+    }
 }
 
 - (void)updateImageViews {
@@ -96,6 +97,7 @@
 
 - (void)setPreviewImage:(NSImage *)previewImage {
     _previewImage = previewImage;
+    _avPlayer = nil;
     dispatch_async(dispatch_get_current_queue(), ^{
         [self updateImageViews];
         [self setupPlaybackLayers];
@@ -104,6 +106,7 @@
 
 - (void)setAvPlayer:(AVPlayer *)avPlayer {
     _avPlayer = avPlayer;
+    _previewImage = nil;
     [self setupPlaybackLayers];
 }
 
@@ -152,6 +155,7 @@
     self.captionField.layer.shadowRadius = 0;
     self.captionField.layer.masksToBounds = YES;
     self.captionField.layer.opacity = 0.7;
+    self.captionField.layer.zPosition = 1;
     [self addSubview:self.captionField];
     
     self.normalImageLayer = [[CALayer alloc] init];
@@ -174,12 +178,8 @@
     [self setupPlaybackLayers];
 }
 
-- (BOOL)isVideo {
-    return !!self.avPlayer;
-}
-
 - (void)setupPlaybackLayers {
-    if (self.isVideo) {
+    if (self.avPlayer) {
         // remove plyers before reassigning
         [self.lutVideoLayer removeFromSuperlayer];
         [self.normalVideoLayer removeFromSuperlayer];
@@ -189,16 +189,12 @@
         self.lutVideoLayer = [AVPlayerLayer playerLayerWithPlayer:self.avPlayer];
         self.normalVideoLayer = [AVPlayerLayer playerLayerWithPlayer:self.avPlayer];
         
-        self.lutVideoLayer.backgroundColor = NSColor.yellowColor.CGColor;
-        self.normalVideoLayer.backgroundColor = NSColor.blueColor.CGColor;
-        
         [self.layer addSublayer:self.lutVideoLayer];
         [self.layer addSublayer:self.normalVideoLayer];
         
         self.normalVideoLayer.mask = self.maskLayer;
     }
     else {
-        
         [self.lutVideoLayer removeFromSuperlayer];
         [self.normalVideoLayer removeFromSuperlayer];
 
@@ -207,7 +203,7 @@
         
         self.normalImageLayer.mask = self.maskLayer;
     }
-
+    [self updateFilters];
 }
 
 @end
