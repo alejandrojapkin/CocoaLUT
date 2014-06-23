@@ -169,6 +169,7 @@
     _borderView.wantsLayer = YES;
     _borderView.layer.backgroundColor = [NSColor colorWithWhite:1 alpha:0.5].CGColor;
     _borderView.frame = CGRectMake(self.bounds.size.width * self.maskAmount, 0, 1, self.bounds.size.height);
+    _borderView.layer.zPosition = 1;
     [self addSubview:_borderView];
 
     [self setupPlaybackLayers];
@@ -183,6 +184,8 @@
         // remove plyers before reassigning
         [self.lutVideoLayer removeFromSuperlayer];
         [self.normalVideoLayer removeFromSuperlayer];
+        [self.lutImageLayer removeFromSuperlayer];
+        [self.normalImageLayer removeFromSuperlayer];
         
         self.lutVideoLayer = [AVPlayerLayer playerLayerWithPlayer:self.avPlayer];
         self.normalVideoLayer = [AVPlayerLayer playerLayerWithPlayer:self.avPlayer];
@@ -193,17 +196,15 @@
         [self.layer addSublayer:self.lutVideoLayer];
         [self.layer addSublayer:self.normalVideoLayer];
         
-        [self.lutImageLayer removeFromSuperlayer];
-        [self.normalImageLayer removeFromSuperlayer];
-        
         self.normalVideoLayer.mask = self.maskLayer;
     }
     else {
-        [self.layer addSublayer:self.lutImageLayer];
-        [self.layer addSublayer:self.normalImageLayer];
         
         [self.lutVideoLayer removeFromSuperlayer];
         [self.normalVideoLayer removeFromSuperlayer];
+
+        [self.layer addSublayer:self.lutImageLayer];
+        [self.layer addSublayer:self.normalImageLayer];
         
         self.normalImageLayer.mask = self.maskLayer;
     }
