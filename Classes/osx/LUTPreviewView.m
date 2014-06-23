@@ -47,13 +47,12 @@
     _maskLayer.frame = CGRectMake(0, 0, self.bounds.size.width * self.maskAmount, self.bounds.size.height);
     self.normalImageLayer.frame = self.bounds;
     self.lutImageLayer.frame = self.bounds;
-    
+    self.normalVideoLayer.frame = self.bounds;
+    self.lutVideoLayer.frame = self.bounds;
+
     _borderView.frame = CGRectMake(self.bounds.size.width * self.maskAmount, 0, 1, self.bounds.size.height);
     
     self.captionField.frame = CGRectMake(self.bounds.size.width * self.maskAmount - 61, 10, 100, 20);
-    
-    self.normalVideoLayer.bounds = self.bounds;
-    self.lutVideoLayer.bounds = self.bounds;
 
     [CATransaction commit];
 
