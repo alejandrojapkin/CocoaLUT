@@ -204,7 +204,7 @@
         return NO;
     }
     NSMutableDictionary *exposedOptions = [options[[self utiString]] mutableCopy];
-    if(options[@"integerMaxOutput"] == nil || [options[@"integerMaxOutput"] integerValue] <= 0){
+    if(exposedOptions[@"integerMaxOutput"] == nil || [exposedOptions[@"integerMaxOutput"] integerValue] <= 0){
         return NO;
     }
     [exposedOptions removeObjectForKey:@"integerMaxOutput"];
