@@ -13,7 +13,8 @@
 }
 @property (strong) CALayer *normalImageLayer;
 @property (strong) CALayer *lutImageLayer;
-@property (strong) CALayer *avPlayerLayer;
+@property (strong) AVPlayerLayer *lutVideoLayer;
+@property (strong) AVPlayerLayer *normalVideoLayer;
 @property (strong) CALayer *maskLayer;
 @property (strong) NSView  *borderView;
 @property (strong) NSTextField *captionField;
@@ -51,7 +52,8 @@
     
     self.captionField.frame = CGRectMake(self.bounds.size.width * self.maskAmount - 61, 10, 100, 20);
     
-    _avPlayerLayer.bounds = self.bounds;
+    self.normalVideoLayer.bounds = self.bounds;
+    self.lutVideoLayer.bounds = self.bounds;
 
     [CATransaction commit];
 
@@ -159,9 +161,6 @@
     self.lutImageLayer.contentsGravity = kCAGravityResizeAspect;
     self.layerUsesCoreImageFilters = YES;
     
-    [self.layer addSublayer:self.lutImageLayer];
-    [self.layer addSublayer:self.normalImageLayer];
-    
     _maskLayer = [CALayer layer];
     _maskLayer.backgroundColor = NSColor.whiteColor.CGColor;
     _maskLayer.frame = CGRectMake(0, 0, self.bounds.size.width * self.maskAmount, self.bounds.size.height);
@@ -181,17 +180,32 @@
 
 - (void)setupPlaybackLayers {
     if (self.isVideo) {
-        if (!_avPlayerLayer) {
-            _avPlayerLayer = [AVPlayerLayer playerLayerWithPlayer:self.avPlayer];
-            _avPlayerLayer.bounds = self.bounds;
-            _avPlayerLayer.backgroundColor = NSColor.redColor.CGColor;
-        }
-        [self.layer addSublayer:_avPlayerLayer];
+        // remove plyers before reassigning
+        [self.lutVideoLayer removeFromSuperlayer];
+        [self.normalVideoLayer removeFromSuperlayer];
+        
+        self.lutVideoLayer = [AVPlayerLayer playerLayerWithPlayer:self.avPlayer];
+        self.normalVideoLayer = [AVPlayerLayer playerLayerWithPlayer:self.avPlayer];
+        
+        self.lutVideoLayer.backgroundColor = NSColor.yellowColor.CGColor;
+        self.normalVideoLayer.backgroundColor = NSColor.blueColor.CGColor;
+        
+        [self.layer addSublayer:self.lutVideoLayer];
+        [self.layer addSublayer:self.normalVideoLayer];
+        
+        [self.lutImageLayer removeFromSuperlayer];
+        [self.normalImageLayer removeFromSuperlayer];
+        
+        self.normalVideoLayer.mask = self.maskLayer;
     }
     else {
-        [_avPlayerLayer removeFromSuperlayer];
-        _avPlayerLayer = nil;
-        self.normalImageLayer.mask = _maskLayer;
+        [self.layer addSublayer:self.lutImageLayer];
+        [self.layer addSublayer:self.normalImageLayer];
+        
+        [self.lutVideoLayer removeFromSuperlayer];
+        [self.normalVideoLayer removeFromSuperlayer];
+        
+        self.normalImageLayer.mask = self.maskLayer;
     }
 
 }
