@@ -103,18 +103,21 @@
     }
     NSMutableDictionary *passthroughFileOptions = [NSMutableDictionary dictionary];
     NSImage *image;
-    #if defined(COCOAPODS_POD_AVAILABLE_oiiococoa)
+    
+#if defined(COCOAPODS_POD_AVAILABLE_oiiococoa)
     image = [NSImage oiio_imageWithContentsOfURL:fileURL];
-    #else
-    image = [[NSImage alloc] initWithContentsOfURL:fileURL];
-    #endif
-    passthroughFileOptions[@"fileTypeVariant"] = [fileURL pathExtension].uppercaseString;
     if([image oiio_findOIIOImageRep] != nil){
         passthroughFileOptions[@"bitDepth"] = @([image oiio_findOIIOImageRep].encodingType);
     }
     else{
         passthroughFileOptions[@"bitDepth"] = @([(NSImageRep*)image.representations[0] bitsPerSample]);
     }
+#else
+    image = [[NSImage alloc] initWithContentsOfURL:fileURL];
+    passthroughFileOptions[@"bitDepth"] = @([(NSImageRep*)image.representations[0] bitsPerSample]);
+#endif
+    
+    passthroughFileOptions[@"fileTypeVariant"] = [fileURL pathExtension].uppercaseString;
     
     int cubeSize = (int)(round(pow((image.size.height/7)*(image.size.height/7), 1.0/3.0)));
     
@@ -199,14 +202,12 @@
     @{@"fileTypeVariant":@"TIFF",
       @"bitDepth":tiffBitDepthOrderedDict};
     
-    
+    #if defined(COCOAPODS_POD_AVAILABLE_oiiococoa)
     M13OrderedDictionary *dpxBitDepthOrderedDict = [[M13OrderedDictionary alloc] initWithObjects:@[@(OIIOImageEncodingTypeUINT10), @(OIIOImageEncodingTypeUINT12), @(OIIOImageEncodingTypeUINT16)] pairedWithKeys:@[@"10-bit", @"12-bit", @"16-bit"]];
     
     NSDictionary *dpxOptions =
     @{@"fileTypeVariant":@"DPX",
       @"bitDepth":dpxBitDepthOrderedDict};
-    
-    #if defined(COCOAPODS_POD_AVAILABLE_oiiococoa)
     return @[dpxOptions, tiffOptions];
     #else
     return @[tiffOptions];

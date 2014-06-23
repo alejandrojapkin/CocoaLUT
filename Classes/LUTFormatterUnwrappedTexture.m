@@ -8,7 +8,9 @@
 
 #import "LUTFormatterUnwrappedTexture.h"
 #import "CocoaLUT.h"
+#if defined(COCOAPODS_POD_AVAILABLE_oiiococoa)
 #import "NSImage+OIIO.h"
+#endif
 
 @implementation LUTFormatterUnwrappedTexture
 
@@ -78,16 +80,17 @@
     NSImage *image;
     #if defined(COCOAPODS_POD_AVAILABLE_oiiococoa)
     image = [NSImage oiio_imageWithContentsOfURL:fileURL];
-    #else
-    image = [[NSImage alloc] initWithContentsOfURL:fileURL];
-    #endif
-    passthroughFileOptions[@"fileTypeVariant"] = [fileURL pathExtension].uppercaseString;
     if([image oiio_findOIIOImageRep] != nil){
         passthroughFileOptions[@"bitDepth"] = @([image oiio_findOIIOImageRep].encodingType);
     }
     else{
         passthroughFileOptions[@"bitDepth"] = @([(NSImageRep*)image.representations[0] bitsPerSample]);
     }
+    #else
+    image = [[NSImage alloc] initWithContentsOfURL:fileURL];
+    passthroughFileOptions[@"bitDepth"] = @([(NSImageRep*)image.representations[0] bitsPerSample]);
+    #endif
+    passthroughFileOptions[@"fileTypeVariant"] = [fileURL pathExtension].uppercaseString;
     
     if (image.size.width != image.size.height * image.size.height) {
         @throw [NSException exceptionWithName:@"UnwrappedTextureReadError"
@@ -160,14 +163,13 @@
     @{@"fileTypeVariant":@"TIFF",
       @"bitDepth":tiffBitDepthOrderedDict};
     
-    
+#if defined(COCOAPODS_POD_AVAILABLE_oiiococoa)
     M13OrderedDictionary *dpxBitDepthOrderedDict = [[M13OrderedDictionary alloc] initWithObjects:@[@(OIIOImageEncodingTypeUINT10), @(OIIOImageEncodingTypeUINT12), @(OIIOImageEncodingTypeUINT16)] pairedWithKeys:@[@"10-bit", @"12-bit", @"16-bit"]];
     
     NSDictionary *dpxOptions =
     @{@"fileTypeVariant":@"DPX",
       @"bitDepth":dpxBitDepthOrderedDict};
     
-#if defined(COCOAPODS_POD_AVAILABLE_oiiococoa)
     return @[dpxOptions, tiffOptions];
 #else
     return @[tiffOptions];

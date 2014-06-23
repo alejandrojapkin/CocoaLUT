@@ -165,11 +165,17 @@
     NSString *greenString = [NSString stringWithFormat:[NSString stringWithFormat:@"%@", formatString], self.green];
     NSString *blueString = [NSString stringWithFormat:[NSString stringWithFormat:@"%@", formatString], self.blue];
     
-    NSAttributedString *redColoredString = [[NSAttributedString alloc] initWithString:redString attributes:@{NSForegroundColorAttributeName: [NSColor redColor]}];
+    NSAttributedString *redColoredString = [[NSAttributedString alloc] initWithString:redString attributes:@{NSForegroundColorAttributeName: [SystemColor redColor]}];
     
-    NSAttributedString *greenColoredString = [[NSAttributedString alloc] initWithString:greenString attributes:@{NSForegroundColorAttributeName: [NSColor colorWithDeviceRed:0 green:.8 blue:0 alpha:1]}];//custom green color because pure green is really hard to read.
+#if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR
+    SystemColor *green = SystemColor.greenColor;
+#elif TARGET_OS_MAC
+    SystemColor *green = [SystemColor colorWithDeviceRed:0 green:.8 blue:0 alpha:1];
+#endif
+
+    NSAttributedString *greenColoredString = [[NSAttributedString alloc] initWithString:greenString attributes:@{NSForegroundColorAttributeName: green}];//custom green color because pure green is really hard to read.
     
-    NSAttributedString *blueColoredString = [[NSAttributedString alloc] initWithString:blueString attributes:@{NSForegroundColorAttributeName: [NSColor blueColor]}];
+    NSAttributedString *blueColoredString = [[NSAttributedString alloc] initWithString:blueString attributes:@{NSForegroundColorAttributeName: [SystemColor blueColor]}];
     
     NSMutableAttributedString *outString = [[NSMutableAttributedString alloc] initWithString:@""];
     [outString appendAttributedString:redColoredString];
