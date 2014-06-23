@@ -207,7 +207,7 @@
     if(exposedOptions[@"integerMaxOutput"] == nil || [exposedOptions[@"integerMaxOutput"] integerValue] <= 0){
         return NO;
     }
-    [exposedOptions removeObjectForKey:@"integerMaxOutput"];
+    [exposedOptions removeObjectForKey:@"integerMaxOutput"];//don't let the superclass compare integerMaxOutput value to available options (good for reading in a weird lut and writing it out the same way again
     return [super optionsAreValid:@{[self utiString] : exposedOptions}];
 }
 
