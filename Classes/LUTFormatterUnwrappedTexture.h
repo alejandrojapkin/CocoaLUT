@@ -6,15 +6,10 @@
 //
 //
 
-#import "LUTFormatter.h"
+#import "LUTFormatterImageBased.h"
 
-@interface LUTFormatterUnwrappedTexture : LUTFormatter
+@interface LUTFormatterUnwrappedTexture : LUTFormatterImageBased
 
-#if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR
-+ (UIImage *)imageFromLUT:(LUT *)lut;
-+ (LUT *)LUTFromImage:(UIImage *)image;
-#elif TARGET_OS_MAC
-+ (NSImage *)imageFromLUT:(LUT *)lut;
-#endif
+
 
 @end

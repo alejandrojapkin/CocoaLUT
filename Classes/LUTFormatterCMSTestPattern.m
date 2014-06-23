@@ -16,30 +16,7 @@
     [super load];
 }
 
-+ (NSData *)dataFromLUT:(LUT *)lut withOptions:(NSDictionary *)options {
-#if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR
-    return UIImagePNGRepresentation([self imageFromLUT:lut]);
-# elif TARGET_OS_MAC
-    return [[self imageFromLUT:lut] TIFFRepresentation];
-# endif
-}
-
-
-
-#if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR
-+ (UIImage *)imageFromLUT:(LUT *)lut {
-    NSException *exception = [NSException exceptionWithName:@"Unsupported Platform"
-                                                     reason:@"LUTFormatterCMSTestPattern doesn't currently support iOS." userInfo:nil];
-    @throw exception;
-    return nil;
-}
-+ (LUT *)LUTFromImage:(UIImage *)image {
-    NSException *exception = [NSException exceptionWithName:@"Unsupported Platform"
-                                                     reason:@"LUTFormatterCMSTestPattern doesn't currently support iOS." userInfo:nil];
-    @throw exception;
-    return nil;
-}
-#elif TARGET_OS_MAC
+#if TARGET_OS_MAC
 
 + (NSImage *)imageFromLUT:(LUT *)lut {
     
@@ -96,29 +73,7 @@
     return image;
 }
 
-+ (LUT *)LUTFromURL:(NSURL *)fileURL {
-    if(![[self fileExtensions] containsObject:[fileURL pathExtension].lowercaseString]){
-        [NSException exceptionWithName:@"CMSTestPatternReadError"
-                                reason:@"Invalid file extension." userInfo:nil];
-    }
-    NSMutableDictionary *passthroughFileOptions = [NSMutableDictionary dictionary];
-    NSImage *image;
-    
-#if defined(COCOAPODS_POD_AVAILABLE_oiiococoa)
-    image = [NSImage oiio_imageWithContentsOfURL:fileURL];
-    if([image oiio_findOIIOImageRep] != nil){
-        passthroughFileOptions[@"bitDepth"] = @([image oiio_findOIIOImageRep].encodingType);
-    }
-    else{
-        passthroughFileOptions[@"bitDepth"] = @([(NSImageRep*)image.representations[0] bitsPerSample]);
-    }
-#else
-    image = [[NSImage alloc] initWithContentsOfURL:fileURL];
-    passthroughFileOptions[@"bitDepth"] = @([(NSImageRep*)image.representations[0] bitsPerSample]);
-#endif
-    
-    passthroughFileOptions[@"fileTypeVariant"] = [fileURL pathExtension].uppercaseString;
-    
++ (LUT *)LUTFromImage:(NSImage *)image {
     int cubeSize = (int)(round(pow((image.size.height/7)*(image.size.height/7), 1.0/3.0)));
     
     int height = round(sqrt(cubeSize)*(double)cubeSize);
@@ -145,86 +100,22 @@
             [lut setColor:[LUTColor colorWithSystemColor:[imageRep colorAtX:x*7 y:(height - (y+1))*7]] r:redIndex g:greenIndex b:blueIndex];
         }
     });
-    lut.passthroughFileOptions = @{[self.class utiString]:passthroughFileOptions};
     
     return lut;
 }
+
 #endif
 
-+(BOOL)isValidReaderForURL:(NSURL *)fileURL{
-    if([super isValidReaderForURL:fileURL] == NO){
-        return NO;
-    }
-    
-    LUT *lut;
-    @try {
-        lut = [self LUTFromURL:fileURL];
-    }
-    @catch (NSException *exception) {
-        //NSLog(@"Exception reading file: %@: %@", exception.name, exception);
-        return NO;
-    }
-    return YES;
-}
-
-+ (LUTFormatterOutputType)outputType{
-    return LUTFormatterOutputType3D;
-}
 
 + (NSString *)utiString{
     return @"public.cms-test-pattern-lut";
-}
-
-+ (NSArray *)fileExtensions{
-    #if defined(COCOAPODS_POD_AVAILABLE_oiiococoa)
-    return @[@"tiff", @"tif", @"dpx"];
-    #else
-    return @[@"tiff", @"tif"];
-    #endif
 }
 
 + (NSString *)formatterName{
     return @"CMS Test Pattern Image 3D LUT";
 }
 
-+ (BOOL)canRead{
-    return YES;
-}
 
-+ (BOOL)canWrite{
-    return YES;
-}
-
-+ (NSArray *)allOptions{
-    M13OrderedDictionary *tiffBitDepthOrderedDict = [[M13OrderedDictionary alloc] initWithObjects:@[@(8), @(16)] pairedWithKeys:@[@"8-bit", @"16-bit"]];
-    
-    NSDictionary *tiffOptions =
-    @{@"fileTypeVariant":@"TIFF",
-      @"bitDepth":tiffBitDepthOrderedDict};
-    
-    #if defined(COCOAPODS_POD_AVAILABLE_oiiococoa)
-    M13OrderedDictionary *dpxBitDepthOrderedDict = [[M13OrderedDictionary alloc] initWithObjects:@[@(OIIOImageEncodingTypeUINT10), @(OIIOImageEncodingTypeUINT12), @(OIIOImageEncodingTypeUINT16)] pairedWithKeys:@[@"10-bit", @"12-bit", @"16-bit"]];
-    
-    NSDictionary *dpxOptions =
-    @{@"fileTypeVariant":@"DPX",
-      @"bitDepth":dpxBitDepthOrderedDict};
-    return @[dpxOptions, tiffOptions];
-    #else
-    return @[tiffOptions];
-    #endif
-}
-
-+ (NSDictionary *)defaultOptions{
-    NSDictionary *dictionary;
-    #if defined(COCOAPODS_POD_AVAILABLE_oiiococoa)
-    dictionary = @{@"fileTypeVariant": @"DPX",
-                   @"bitDepth": @(OIIOImageEncodingTypeUINT10)};
-    #else
-    dictionary = @{@"fileTypeVariant": @"TIFF",
-                   @"bitDepth": @(16)};
-    #endif
-    return @{[self utiString]: dictionary};
-}
 
 
 @end

@@ -13,9 +13,7 @@
 #import "LUTMetadataFormatter.h"
 #import "LUTAction.h"
 
-#if defined(COCOAPODS_POD_AVAILABLE_oiiococoa)
-#import "NSImage+OIIO.h"
-#endif
+
 
 @class LUT;
 @class LUT1D;
