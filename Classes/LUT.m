@@ -364,7 +364,13 @@
                  renderPath:(LUTImageRenderPath)renderPath {
         
     if (renderPath == LUTImageRenderPathCoreImage || renderPath == LUTImageRenderPathCoreImageSoftware) {
-        CIImage *inputCIImage = [[CIImage alloc] initWithBitmapImageRep:[image.representations firstObject]];;
+        NSImageRep *firstRep = [image.representations firstObject];
+        
+        if (![firstRep isKindOfClass:[NSBitmapImageRep class]]) {
+            return nil;
+        }
+        
+        CIImage *inputCIImage = [[CIImage alloc] initWithBitmapImageRep:(NSBitmapImageRep *)firstRep];;
         CIImage *outputCIImage = [self processCIImage:inputCIImage];
         return LUTNSImageFromCIImage(outputCIImage, renderPath == LUTImageRenderPathCoreImageSoftware);
     }
