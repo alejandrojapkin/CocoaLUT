@@ -67,7 +67,7 @@
 +(LUT *)LUTFromURL:(NSURL *)fileURL{
     if(![[self fileExtensions] containsObject:[fileURL pathExtension].lowercaseString]){
         @throw [NSException exceptionWithName:@"ImageBasedReadError"
-                                reason:@"Invalid file extension." userInfo:nil];
+                                       reason:@"Invalid file extension." userInfo:nil];
         
     }
     NSMutableDictionary *passthroughFileOptions = [NSMutableDictionary dictionary];
@@ -131,17 +131,17 @@
 }
 
 + (BOOL)canRead{
-    #if TARGET_OS_MAC
-    return YES;
-    #else
+    #if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR
     return NO;
+    #elif TARGET_OS_MAC
+    return YES;
     #endif
 }
 
 + (BOOL)canWrite{
-    #if TARGET_OS_MAC
+    #if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR
     return YES;
-    #else
+    #elif TARGET_OS_MAC
     return NO;
     #endif
 }

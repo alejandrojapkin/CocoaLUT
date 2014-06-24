@@ -16,7 +16,9 @@
     [super load];
 }
 
-#if TARGET_OS_MAC
+#if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR
+
+#elif TARGET_OS_MAC
 
 + (NSImage *)imageFromLUT:(LUT *)lut {
     
