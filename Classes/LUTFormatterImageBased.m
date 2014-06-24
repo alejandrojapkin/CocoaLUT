@@ -153,27 +153,27 @@
     @{@"fileTypeVariant":@"TIFF",
       @"bitDepth":tiffBitDepthOrderedDict};
     
-    #if defined(COCOAPODS_POD_AVAILABLE_oiiococoa)
-    M13OrderedDictionary *dpxBitDepthOrderedDict = [[M13OrderedDictionary alloc] initWithObjects:@[@(OIIOImageEncodingTypeUINT10), @(OIIOImageEncodingTypeUINT12), @(OIIOImageEncodingTypeUINT16)] pairedWithKeys:@[@"10-bit", @"12-bit", @"16-bit"]];
-    
-    NSDictionary *dpxOptions =
-    @{@"fileTypeVariant":@"DPX",
-      @"bitDepth":dpxBitDepthOrderedDict};
-    return @[dpxOptions, tiffOptions];
-    #else
+//    #if defined(COCOAPODS_POD_AVAILABLE_oiiococoa)
+//    M13OrderedDictionary *dpxBitDepthOrderedDict = [[M13OrderedDictionary alloc] initWithObjects:@[@(OIIOImageEncodingTypeUINT10), @(OIIOImageEncodingTypeUINT12), @(OIIOImageEncodingTypeUINT16)] pairedWithKeys:@[@"10-bit", @"12-bit", @"16-bit"]];
+//    
+//    NSDictionary *dpxOptions =
+//    @{@"fileTypeVariant":@"DPX",
+//      @"bitDepth":dpxBitDepthOrderedDict};
+//    return @[dpxOptions, tiffOptions];
+//    #else
     return @[tiffOptions];
-    #endif
+//    #endif
 }
 
 + (NSDictionary *)defaultOptions{
     NSDictionary *dictionary;
-    #if defined(COCOAPODS_POD_AVAILABLE_oiiococoa)
-    dictionary = @{@"fileTypeVariant": @"DPX",
-                   @"bitDepth": @(OIIOImageEncodingTypeUINT10)};
-    #else
+//    #if defined(COCOAPODS_POD_AVAILABLE_oiiococoa)
+//    dictionary = @{@"fileTypeVariant": @"DPX",
+//                   @"bitDepth": @(OIIOImageEncodingTypeUINT10)};
+//    #else
     dictionary = @{@"fileTypeVariant": @"TIFF",
                    @"bitDepth": @(16)};
-#endif
+//#endif
     return @{[self utiString]: dictionary};
 }
 
