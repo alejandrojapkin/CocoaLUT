@@ -113,6 +113,28 @@
                        actionMetadata:actionMetadata];
 }
 
++(instancetype)actionWithLUTByRemappingValuesWithInputLow:(double)inputLow
+                                                inputHigh:(double)inputHigh
+                                                outputLow:(double)outputLow
+                                               outputHigh:(double)outputHigh{
+    M13OrderedDictionary *actionMetadata =
+    M13OrderedDictionaryFromOrderedArrayWithDictionaries(@[@{@"id":@"ScaleOutput"},
+                                                           @{@"inputLow": @(inputLow)},
+                                                           @{@"inputHigh": @(inputHigh)},
+                                                           @{@"outputLow": @(outputLow)},
+                                                           @{@"outputHigh": @(outputHigh)}]);
+    
+    return [LUTAction actionWithBlock:^LUT *(LUT *lut) {
+        return [lut LUTByRemappingValuesWithInputLow:inputLow
+                                           inputHigh:inputHigh
+                                           outputLow:outputLow
+                                          outputHigh:outputHigh
+                                             bounded:NO];
+    }
+                                                actionName:[NSString stringWithFormat:@"Scale Output"]
+                                            actionMetadata:actionMetadata];
+}
+
 +(instancetype)actionWithLUTByResizingToSize:(NSUInteger)size{
     M13OrderedDictionary *actionMetadata =
     M13OrderedDictionaryFromOrderedArrayWithDictionaries(@[@{@"id":@"Resize"},
@@ -124,6 +146,8 @@
                                               actionName:[NSString stringWithFormat:@"Resize to %i", (int)size]
                                           actionMetadata:actionMetadata];
 }
+
+
 
 
 
