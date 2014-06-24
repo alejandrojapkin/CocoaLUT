@@ -24,6 +24,16 @@ static NSMutableArray *allFormatters;
     }
 }
 
++ (NSArray *)allFormattersFileExtensions{
+    NSMutableArray *array = [NSMutableArray array];
+    for(LUTFormatter *formatter in allFormatters){
+        for(NSString *fileExtension in [formatter.class fileExtensions]){
+            [array addObject:fileExtension];
+        }
+    }
+    return array;
+}
+
 + (LUTFormatter *)LUTFormatterForUTIString:(NSString *)utiString{
     for(LUTFormatter *formatter in allFormatters){
         if([[[formatter class] utiString] isEqualToString:utiString])
