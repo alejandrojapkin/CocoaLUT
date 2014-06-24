@@ -135,6 +135,51 @@
                                             actionMetadata:actionMetadata];
 }
 
++(instancetype)actionWithLUTByScalingLegalToExtended{
+    M13OrderedDictionary *actionMetadata =
+    M13OrderedDictionaryFromOrderedArrayWithDictionaries(@[@{@"id":@"ScaleLegalToExtended"}]);
+    
+    return [LUTAction actionWithBlock:^LUT *(LUT *lut) {
+        return [lut LUTByRemappingValuesWithInputLow:LEGAL_LEVELS_MIN
+                                           inputHigh:LEGAL_LEVELS_MAX
+                                           outputLow:EXTENDED_LEVELS_MIN
+                                          outputHigh:EXTENDED_LEVELS_MAX
+                                             bounded:NO];
+    }
+                                                actionName:[NSString stringWithFormat:@"Legal to Extended"]
+                                            actionMetadata:actionMetadata];
+}
+
++(instancetype)actionWithLUTByScalingExtendedToLegal{
+    M13OrderedDictionary *actionMetadata =
+    M13OrderedDictionaryFromOrderedArrayWithDictionaries(@[@{@"id":@"ScaleExtendedToLegal"}]);
+    
+    return [LUTAction actionWithBlock:^LUT *(LUT *lut) {
+        return [lut LUTByRemappingValuesWithInputLow:EXTENDED_LEVELS_MIN
+                                           inputHigh:EXTENDED_LEVELS_MAX
+                                           outputLow:LEGAL_LEVELS_MIN
+                                          outputHigh:LEGAL_LEVELS_MAX
+                                             bounded:NO];
+    }
+                           actionName:[NSString stringWithFormat:@"Extended to Legal"]
+                       actionMetadata:actionMetadata];
+}
+
++(instancetype)actionWithLUTByScalingTo01{
+    M13OrderedDictionary *actionMetadata =
+    M13OrderedDictionaryFromOrderedArrayWithDictionaries(@[@{@"id":@"ScaleTo01"}]);
+    
+    return [LUTAction actionWithBlock:^LUT *(LUT *lut) {
+        return [lut LUTByRemappingValuesWithInputLow:lut.minimumOutputValue
+                                           inputHigh:lut.maximumOutputValue
+                                           outputLow:0
+                                          outputHigh:1
+                                             bounded:NO];
+    }
+                           actionName:[NSString stringWithFormat:@"Scale 0 to 1"]
+                       actionMetadata:actionMetadata];
+}
+
 +(instancetype)actionWithLUTByResizingToSize:(NSUInteger)size{
     M13OrderedDictionary *actionMetadata =
     M13OrderedDictionaryFromOrderedArrayWithDictionaries(@[@{@"id":@"Resize"},

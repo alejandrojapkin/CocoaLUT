@@ -37,6 +37,12 @@
                                                 outputLow:(double)outputLow
                                                outputHigh:(double)outputHigh;
 
++(instancetype)actionWithLUTByScalingLegalToExtended;
+
++(instancetype)actionWithLUTByScalingExtendedToLegal;
+
++(instancetype)actionWithLUTByScalingTo01;
+
 +(instancetype)actionWithLUTByResizingToSize:(NSUInteger)size;
 
 @end
