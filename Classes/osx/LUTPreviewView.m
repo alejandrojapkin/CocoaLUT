@@ -106,7 +106,9 @@
 
 - (void)setAvPlayer:(AVPlayer *)avPlayer {
     _avPlayer = avPlayer;
-    _previewImage = nil;
+    if (_avPlayer) {
+        _previewImage = nil;
+    }
     [self setupPlaybackLayers];
 }
 
