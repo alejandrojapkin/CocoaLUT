@@ -34,8 +34,7 @@
                                   [self d60WhitePoint],
                                   [self d55WhitePoint],
                                   [self p3WhitePoint],
-                                  [self alexaWideGamutWhitePoint],
-                                  [self xyzWhitePoint]];
+                                  [self alexaWideGamutWhitePoint]];
     
     return allKnownWhitePoints;
 }
@@ -74,12 +73,6 @@
     return [self whitePointWithWhiteChromaticityX:0.31271
                                whiteChromaticityY:0.32902
                                              name:@"Alexa Wide Gamut"];
-}
-
-+ (instancetype)xyzWhitePoint{
-    return [self whitePointWithWhiteChromaticityX:1.0/3.0
-                               whiteChromaticityY:1.0/3.0
-                                             name:@"XYZ"];
 }
 
 
