@@ -9,32 +9,54 @@
 #import <Foundation/Foundation.h>
 #import <GLKit/GLKit.h>
 #import "CocoaLUT.h"
-#import <M13OrderedDictionary/M13OrderedDictionary.h>
+#import "LUTColorSpaceWhitePoint.h"
 
-@interface LUTColorSpace : NSObject
+@interface LUTColorSpace : NSObject <NSCopying>
+
+@property (strong) LUTColorSpaceWhitePoint *defaultWhitePoint;
+@property (assign) double redChromaticityX;
+@property (assign) double redChromaticityY;
+@property (assign) double greenChromaticityX;
+@property (assign) double greenChromaticityY;
+@property (assign) double blueChromaticityX;
+@property (assign) double blueChromaticityY;
+
+@property (assign) BOOL forcesNPM;
+
+@property (assign) GLKMatrix3 npm;
+
+@property (strong) NSString *name;
 
 
-+ (instancetype)LUTColorSpaceWithWhiteChromaticityX:(double)whiteChromaticityX
-                                 whiteChromaticityY:(double)whiteChromaticityY
-                                   redChromaticityX:(double)redChromaticityX
-                                   redChromaticityY:(double)redChromaticityY
-                                 greenChromaticityX:(double)greenChromaticityX
-                                 greenChromaticityY:(double)greenChromaticityY
-                                  blueChromaticityX:(double)blueChromaticityX
-                                  blueChromaticityY:(double)blueChromaticityY;
++ (instancetype)LUTColorSpaceWithDefaultWhitePoint:(LUTColorSpaceWhitePoint *)whitePoint
+                                  redChromaticityX:(double)redChromaticityX
+                                  redChromaticityY:(double)redChromaticityY
+                                greenChromaticityX:(double)greenChromaticityX
+                                greenChromaticityY:(double)greenChromaticityY
+                                 blueChromaticityX:(double)blueChromaticityX
+                                 blueChromaticityY:(double)blueChromaticityY
+                                              name:(NSString *)name;
 
-+ (instancetype)LUTColorSpaceWithNPM:(GLKMatrix3)npm;
++ (instancetype)LUTColorSpaceWithNPM:(GLKMatrix3)npm
+                                name:(NSString *)name;
 
-+ (LUT3D *)convertLUT3D:(LUT3D *)lut fromColorSpace:(LUTColorSpace *)sourceColorSpace toColorSpace:(LUTColorSpace *)destinationColorSpace;
++ (LUT3D *)convertLUT3D:(LUT3D *)lut fromColorSpace:(LUTColorSpace *)sourceColorSpace
+             whitePoint:(LUTColorSpaceWhitePoint *)sourceWhitePoint
+           toColorSpace:(LUTColorSpace *)destinationColorSpace
+             whitePoint:(LUTColorSpaceWhitePoint *)destinationWhitePoint;
 
-+ (GLKMatrix3)transformationMatrixFromColorSpace:(LUTColorSpace *)sourceColorSpace ToColorSpace:(LUTColorSpace *)destinationColorSpace;
++ (GLKMatrix3)transformationMatrixFromColorSpace:(LUTColorSpace *)sourceColorSpace
+                                      whitePoint:(LUTColorSpaceWhitePoint *)sourceWhitePoint
+                                    toColorSpace:(LUTColorSpace *)destinationColorSpace
+                                      whitePoint:(LUTColorSpaceWhitePoint *)destinationWhitePoint;
 
-+ (M13OrderedDictionary *)knownColorSpaces;
++ (GLKMatrix3)npmFromColorSpace:(LUTColorSpace *)colorSpace
+                     whitePoint:(LUTColorSpaceWhitePoint *)whitePoint;
+
++ (NSArray *)knownColorSpaces;
 
 + (instancetype)rec709ColorSpace;
 + (instancetype)dciP3ColorSpace;
-+ (instancetype)p3D60ColorSpace;
-+ (instancetype)p3D65ColorSpace;
 + (instancetype)rec2020ColorSpace;
 + (instancetype)alexaWideGamutColorSpace;
 + (instancetype)sGamut3CineColorSpace;

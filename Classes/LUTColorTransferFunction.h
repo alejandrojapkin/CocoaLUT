@@ -8,24 +8,30 @@
 
 #import <Foundation/Foundation.h>
 #import "CocoaLUT.h"
-#import <M13OrderedDictionary/M13OrderedDictionary.h>
 
 @class LUTColor;
 
-@interface LUTColorTransferFunction : NSObject
+@interface LUTColorTransferFunction : NSObject <NSCopying>
+
+@property (strong) NSString *name;
+
 +(instancetype)LUTColorTransferFunctionWithRedLinearToTransformedExpressionString:(NSString *)redLinearToTransformedExpressionString
                                          greenLinearToTransformedExpressionString:(NSString *)greenLinearToTransformedExpressionString
                                           blueLinearToTransformedExpressionString:(NSString *)blueLinearToTransformedExpressionString
                                            redTransformedToLinearExpressionString:(NSString *)redTransformedToLinearExpressionStrin
                                          greenTransformedToLinearExpressionString:(NSString *)greenTransformedToLinearExpressionString
-                                          blueTransformedToLinearExpressionString:(NSString *)blueTransformedToLinearExpressionString;
+                                          blueTransformedToLinearExpressionString:(NSString *)blueTransformedToLinearExpressionString
+                                                                             name:(NSString *)name;
 
 +(instancetype)LUTColorTransferFunctionWithTransformedToLinearBlock:( LUTColor* ( ^ )(double red, double green, double blue) )transformedToLinearBlock
-                                           linearToTransformedBlock:( LUTColor* ( ^ )(double red, double green, double blue) )linearToTransformedBlock;
+                                           linearToTransformedBlock:( LUTColor* ( ^ )(double red, double green, double blue) )linearToTransformedBlock
+                                                               name:(NSString *)name;
 
-+(M13OrderedDictionary *)knownColorTransferFunctions;
++(NSArray *)knownColorTransferFunctions;
 
-+(instancetype)LUTColorTransferFunctionWithGamma:(double)gamma;
++(instancetype)linearTransferFunction;
+
++(instancetype)gammaTransferFunctionWithGamma:(double)gamma;
 
 +(LUT *)transformedLUTFromLUT:(LUT *)sourceLUT
           fromColorTransferFunction:(LUTColorTransferFunction *)sourceColorTransferFunction
