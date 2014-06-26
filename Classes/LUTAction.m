@@ -180,6 +180,35 @@
                        actionMetadata:actionMetadata];
 }
 
++(instancetype)actionWithLUTByScalingCurvesTo01{
+    M13OrderedDictionary *actionMetadata =
+    M13OrderedDictionaryFromOrderedArrayWithDictionaries(@[@{@"id":@"ScaleCurvesTo01"}]);
+    
+    return [LUTAction actionWithBlock:^LUT *(LUT *lut) {
+        
+        if(isLUT1D(lut)){
+            return [lut LUTByRemappingValuesWithInputLow:lut.minimumOutputValue
+                                               inputHigh:lut.maximumOutputValue
+                                               outputLow:0
+                                              outputHigh:1
+                                                 bounded:NO];
+        }
+        else{
+            //is lut 3D
+            LUT1D *lut1D = LUTAsLUT1D(lut, lut.size);
+            return [lut LUTByRemappingValuesWithInputLow:lut1D.minimumOutputValue
+                                               inputHigh:lut1D.maximumOutputValue
+                                               outputLow:0
+                                              outputHigh:1
+                                                 bounded:NO];
+        }
+        
+        
+    }
+                           actionName:[NSString stringWithFormat:@"Scale 0 to 1"]
+                       actionMetadata:actionMetadata];
+}
+
 +(instancetype)actionWithLUTByResizingToSize:(NSUInteger)size{
     M13OrderedDictionary *actionMetadata =
     M13OrderedDictionaryFromOrderedArrayWithDictionaries(@[@{@"id":@"Resize"},

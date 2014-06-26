@@ -43,6 +43,8 @@
 
 +(instancetype)actionWithLUTByScalingTo01;
 
++(instancetype)actionWithLUTByScalingCurvesTo01;
+
 +(instancetype)actionWithLUTByResizingToSize:(NSUInteger)size;
 
 @end
