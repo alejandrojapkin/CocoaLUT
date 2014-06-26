@@ -7,63 +7,33 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3B44B680195BDF4E00EE1E1E /* ParserTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3B44B67F195BDF4E00EE1E1E /* ParserTests.m */; };
 		3B9F1695195BD396000D7F18 /* crosstalk.3dl in Resources */ = {isa = PBXBuildFile; fileRef = 3B9F168E195BD396000D7F18 /* crosstalk.3dl */; };
 		3B9F1696195BD396000D7F18 /* halfred_truelight.3dl in Resources */ = {isa = PBXBuildFile; fileRef = 3B9F168F195BD396000D7F18 /* halfred_truelight.3dl */; };
 		3B9F1697195BD396000D7F18 /* halfred_truelight_log.3dl in Resources */ = {isa = PBXBuildFile; fileRef = 3B9F1690195BD396000D7F18 /* halfred_truelight_log.3dl */; };
 		3B9F1698195BD396000D7F18 /* crosstalk.cube in Resources */ = {isa = PBXBuildFile; fileRef = 3B9F1692195BD396000D7F18 /* crosstalk.cube */; };
 		3B9F1699195BD396000D7F18 /* halfred_iridas.cube in Resources */ = {isa = PBXBuildFile; fileRef = 3B9F1693195BD396000D7F18 /* halfred_iridas.cube */; };
 		3B9F169A195BD396000D7F18 /* iridas.cube in Resources */ = {isa = PBXBuildFile; fileRef = 3B9F1694195BD396000D7F18 /* iridas.cube */; };
-		3BC455F9195BCF670030435D /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BC455F8195BCF670030435D /* main.swift */; };
-		3BC455FB195BCF670030435D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BC455FA195BCF670030435D /* AppDelegate.swift */; };
-		3BC455FD195BCF670030435D /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3BC455FC195BCF670030435D /* Images.xcassets */; };
-		3BC45600195BCF670030435D /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3BC455FE195BCF670030435D /* MainMenu.xib */; };
-		3BC4560C195BCF670030435D /* ParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BC4560B195BCF670030435D /* ParserTests.swift */; };
-		82C4465C3FBA4BD6896012CE /* libPods-CocoaLUT.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 136DB71339AF4635AAB96137 /* libPods-CocoaLUT.a */; };
 		DCEE1B518BFF4DA0A3DB7DA0 /* libPods-CocoaLUTTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 51A1D4F5F4C445BB8B8E7353 /* libPods-CocoaLUTTests.a */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXContainerItemProxy section */
-		3BC45606195BCF670030435D /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 3BC455EB195BCF670030435D /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 3BC455F2195BCF670030435D;
-			remoteInfo = CocoaLUT;
-		};
-/* End PBXContainerItemProxy section */
-
 /* Begin PBXFileReference section */
 		136DB71339AF4635AAB96137 /* libPods-CocoaLUT.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-CocoaLUT.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		3B9F168A195BD18F000D7F18 /* CocoaLUTTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "CocoaLUTTests-Bridging-Header.h"; sourceTree = "<group>"; };
+		3B44B67F195BDF4E00EE1E1E /* ParserTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ParserTests.m; sourceTree = "<group>"; };
+		3B9F168A195BD18F000D7F18 /* CocoaLUTTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "CocoaLUTTests-Bridging-Header.h"; path = "CocoaLUTTests/CocoaLUTTests-Bridging-Header.h"; sourceTree = "<group>"; };
 		3B9F168E195BD396000D7F18 /* crosstalk.3dl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = crosstalk.3dl; sourceTree = "<group>"; };
 		3B9F168F195BD396000D7F18 /* halfred_truelight.3dl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = halfred_truelight.3dl; sourceTree = "<group>"; };
 		3B9F1690195BD396000D7F18 /* halfred_truelight_log.3dl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = halfred_truelight_log.3dl; sourceTree = "<group>"; };
 		3B9F1692195BD396000D7F18 /* crosstalk.cube */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = crosstalk.cube; sourceTree = "<group>"; };
 		3B9F1693195BD396000D7F18 /* halfred_iridas.cube */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = halfred_iridas.cube; sourceTree = "<group>"; };
 		3B9F1694195BD396000D7F18 /* iridas.cube */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = iridas.cube; sourceTree = "<group>"; };
-		3BC455F3195BCF670030435D /* CocoaLUT.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CocoaLUT.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		3BC455F7195BCF670030435D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		3BC455F8195BCF670030435D /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
-		3BC455FA195BCF670030435D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		3BC455FC195BCF670030435D /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		3BC455FF195BCF670030435D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		3BC45605195BCF670030435D /* CocoaLUTTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CocoaLUTTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3BC4560A195BCF670030435D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		3BC4560B195BCF670030435D /* ParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParserTests.swift; sourceTree = "<group>"; };
 		51A1D4F5F4C445BB8B8E7353 /* libPods-CocoaLUTTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-CocoaLUTTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		59337BF21AD44C4B8CB2A997 /* Pods-CocoaLUT.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CocoaLUT.xcconfig"; path = "Pods/Pods-CocoaLUT.xcconfig"; sourceTree = "<group>"; };
 		F14D50DF822D4C6093067A10 /* Pods-CocoaLUTTests.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CocoaLUTTests.xcconfig"; path = "Pods/Pods-CocoaLUTTests.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		3BC455F0195BCF670030435D /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				82C4465C3FBA4BD6896012CE /* libPods-CocoaLUT.a in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		3BC45602195BCF670030435D /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -100,53 +70,22 @@
 		3BC455EA195BCF670030435D = {
 			isa = PBXGroup;
 			children = (
-				3BC45608195BCF670030435D /* CocoaLUTTests */,
-				3BC455F5195BCF670030435D /* CocoaLUT */,
-				3BC455F4195BCF670030435D /* Products */,
-				59337BF21AD44C4B8CB2A997 /* Pods-CocoaLUT.xcconfig */,
-				AF022F42F5794E30A2700010 /* Frameworks */,
+				3B44B67F195BDF4E00EE1E1E /* ParserTests.m */,
+				3B9F168A195BD18F000D7F18 /* CocoaLUTTests-Bridging-Header.h */,
 				F14D50DF822D4C6093067A10 /* Pods-CocoaLUTTests.xcconfig */,
+				3BC45615195BCFDA0030435D /* Test LUTs */,
+				3BC45609195BCF670030435D /* Supporting Files */,
+				3BC455F4195BCF670030435D /* Products */,
+				AF022F42F5794E30A2700010 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
 		3BC455F4195BCF670030435D /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				3BC455F3195BCF670030435D /* CocoaLUT.app */,
 				3BC45605195BCF670030435D /* CocoaLUTTests.xctest */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		3BC455F5195BCF670030435D /* CocoaLUT */ = {
-			isa = PBXGroup;
-			children = (
-				3BC455FA195BCF670030435D /* AppDelegate.swift */,
-				3BC455FC195BCF670030435D /* Images.xcassets */,
-				3BC455FE195BCF670030435D /* MainMenu.xib */,
-				3BC455F6195BCF670030435D /* Supporting Files */,
-			);
-			path = CocoaLUT;
-			sourceTree = "<group>";
-		};
-		3BC455F6195BCF670030435D /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				3BC455F7195BCF670030435D /* Info.plist */,
-				3BC455F8195BCF670030435D /* main.swift */,
-			);
-			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		3BC45608195BCF670030435D /* CocoaLUTTests */ = {
-			isa = PBXGroup;
-			children = (
-				3BC4560B195BCF670030435D /* ParserTests.swift */,
-				3B9F168A195BD18F000D7F18 /* CocoaLUTTests-Bridging-Header.h */,
-				3BC45615195BCFDA0030435D /* Test LUTs */,
-				3BC45609195BCF670030435D /* Supporting Files */,
-			);
-			path = CocoaLUTTests;
 			sourceTree = "<group>";
 		};
 		3BC45609195BCF670030435D /* Supporting Files */ = {
@@ -155,6 +94,7 @@
 				3BC4560A195BCF670030435D /* Info.plist */,
 			);
 			name = "Supporting Files";
+			path = CocoaLUTTests;
 			sourceTree = "<group>";
 		};
 		3BC45615195BCFDA0030435D /* Test LUTs */ = {
@@ -163,7 +103,8 @@
 				3B9F168D195BD396000D7F18 /* 3dl */,
 				3B9F1691195BD396000D7F18 /* cube */,
 			);
-			path = "Test LUTs";
+			name = "Test LUTs";
+			path = "CocoaLUTTests/Test LUTs";
 			sourceTree = "<group>";
 		};
 		AF022F42F5794E30A2700010 /* Frameworks */ = {
@@ -178,25 +119,6 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		3BC455F2195BCF670030435D /* CocoaLUT */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 3BC4560F195BCF670030435D /* Build configuration list for PBXNativeTarget "CocoaLUT" */;
-			buildPhases = (
-				4E0B3085BBDE4E65BB67063E /* Check Pods Manifest.lock */,
-				3BC455EF195BCF670030435D /* Sources */,
-				3BC455F0195BCF670030435D /* Frameworks */,
-				3BC455F1195BCF670030435D /* Resources */,
-				07054C010D144A58BB1DB4F1 /* Copy Pods Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = CocoaLUT;
-			productName = CocoaLUT;
-			productReference = 3BC455F3195BCF670030435D /* CocoaLUT.app */;
-			productType = "com.apple.product-type.application";
-		};
 		3BC45604195BCF670030435D /* CocoaLUTTests */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 3BC45612195BCF670030435D /* Build configuration list for PBXNativeTarget "CocoaLUTTests" */;
@@ -210,7 +132,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				3BC45607195BCF670030435D /* PBXTargetDependency */,
 			);
 			name = CocoaLUTTests;
 			productName = CocoaLUTTests;
@@ -226,9 +147,6 @@
 				LastUpgradeCheck = 0600;
 				ORGANIZATIONNAME = "Wil Gieseler";
 				TargetAttributes = {
-					3BC455F2195BCF670030435D = {
-						CreatedOnToolsVersion = 6.0;
-					};
 					3BC45604195BCF670030435D = {
 						CreatedOnToolsVersion = 6.0;
 						TestTargetID = 3BC455F2195BCF670030435D;
@@ -248,22 +166,12 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				3BC455F2195BCF670030435D /* CocoaLUT */,
 				3BC45604195BCF670030435D /* CocoaLUTTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		3BC455F1195BCF670030435D /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				3BC455FD195BCF670030435D /* Images.xcassets in Resources */,
-				3BC45600195BCF670030435D /* MainMenu.xib in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		3BC45603195BCF670030435D /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -280,36 +188,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		07054C010D144A58BB1DB4F1 /* Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Pods-CocoaLUT-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		4E0B3085BBDE4E65BB67063E /* Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Check Pods Manifest.lock";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
-			showEnvVarsInLog = 0;
-		};
 		D1CE0FF71595420EB26BBEF4 /* Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -343,43 +221,15 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		3BC455EF195BCF670030435D /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				3BC455FB195BCF670030435D /* AppDelegate.swift in Sources */,
-				3BC455F9195BCF670030435D /* main.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		3BC45601195BCF670030435D /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3BC4560C195BCF670030435D /* ParserTests.swift in Sources */,
+				3B44B680195BDF4E00EE1E1E /* ParserTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		3BC45607195BCF670030435D /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 3BC455F2195BCF670030435D /* CocoaLUT */;
-			targetProxy = 3BC45606195BCF670030435D /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
-
-/* Begin PBXVariantGroup section */
-		3BC455FE195BCF670030435D /* MainMenu.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				3BC455FF195BCF670030435D /* Base */,
-			);
-			name = MainMenu.xib;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		3BC4560D195BCF670030435D /* Debug */ = {
@@ -459,30 +309,6 @@
 			};
 			name = Release;
 		};
-		3BC45610195BCF670030435D /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 59337BF21AD44C4B8CB2A997 /* Pods-CocoaLUT.xcconfig */;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				COMBINE_HIDPI_IMAGES = YES;
-				INFOPLIST_FILE = CocoaLUT/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Debug;
-		};
-		3BC45611195BCF670030435D /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 59337BF21AD44C4B8CB2A997 /* Pods-CocoaLUT.xcconfig */;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				COMBINE_HIDPI_IMAGES = YES;
-				INFOPLIST_FILE = CocoaLUT/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Release;
-		};
 		3BC45613195BCF670030435D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = F14D50DF822D4C6093067A10 /* Pods-CocoaLUTTests.xcconfig */;
@@ -536,15 +362,6 @@
 			buildConfigurations = (
 				3BC4560D195BCF670030435D /* Debug */,
 				3BC4560E195BCF670030435D /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		3BC4560F195BCF670030435D /* Build configuration list for PBXNativeTarget "CocoaLUT" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				3BC45610195BCF670030435D /* Debug */,
-				3BC45611195BCF670030435D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
