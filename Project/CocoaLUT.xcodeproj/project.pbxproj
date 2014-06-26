@@ -19,23 +19,17 @@
 
 /* Begin PBXFileReference section */
 		136DB71339AF4635AAB96137 /* libPods-CocoaLUT.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-CocoaLUT.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		3B9F168A195BD18F000D7F18 /* CocoaLUTTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "CocoaLUTTests-Bridging-Header.h"; sourceTree = "<group>"; };
+		3B9F168A195BD18F000D7F18 /* CocoaLUTTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "CocoaLUTTests-Bridging-Header.h"; path = "CocoaLUTTests/CocoaLUTTests-Bridging-Header.h"; sourceTree = "<group>"; };
 		3B9F168E195BD396000D7F18 /* crosstalk.3dl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = crosstalk.3dl; sourceTree = "<group>"; };
 		3B9F168F195BD396000D7F18 /* halfred_truelight.3dl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = halfred_truelight.3dl; sourceTree = "<group>"; };
 		3B9F1690195BD396000D7F18 /* halfred_truelight_log.3dl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = halfred_truelight_log.3dl; sourceTree = "<group>"; };
 		3B9F1692195BD396000D7F18 /* crosstalk.cube */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = crosstalk.cube; sourceTree = "<group>"; };
 		3B9F1693195BD396000D7F18 /* halfred_iridas.cube */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = halfred_iridas.cube; sourceTree = "<group>"; };
 		3B9F1694195BD396000D7F18 /* iridas.cube */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = iridas.cube; sourceTree = "<group>"; };
-		3BC455F7195BCF670030435D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		3BC455F8195BCF670030435D /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
-		3BC455FA195BCF670030435D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		3BC455FC195BCF670030435D /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		3BC455FF195BCF670030435D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		3BC45605195BCF670030435D /* CocoaLUTTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CocoaLUTTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3BC4560A195BCF670030435D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		3BC4560B195BCF670030435D /* ParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParserTests.swift; sourceTree = "<group>"; };
+		3BC4560B195BCF670030435D /* ParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ParserTests.swift; path = CocoaLUTTests/ParserTests.swift; sourceTree = "<group>"; };
 		51A1D4F5F4C445BB8B8E7353 /* libPods-CocoaLUTTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-CocoaLUTTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		59337BF21AD44C4B8CB2A997 /* Pods-CocoaLUT.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CocoaLUT.xcconfig"; path = "Pods/Pods-CocoaLUT.xcconfig"; sourceTree = "<group>"; };
 		F14D50DF822D4C6093067A10 /* Pods-CocoaLUTTests.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CocoaLUTTests.xcconfig"; path = "Pods/Pods-CocoaLUTTests.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -76,12 +70,13 @@
 		3BC455EA195BCF670030435D = {
 			isa = PBXGroup;
 			children = (
-				3BC45608195BCF670030435D /* CocoaLUTTests */,
-				3BC455F5195BCF670030435D /* CocoaLUT */,
-				3BC455F4195BCF670030435D /* Products */,
-				59337BF21AD44C4B8CB2A997 /* Pods-CocoaLUT.xcconfig */,
-				AF022F42F5794E30A2700010 /* Frameworks */,
+				3BC4560B195BCF670030435D /* ParserTests.swift */,
+				3B9F168A195BD18F000D7F18 /* CocoaLUTTests-Bridging-Header.h */,
 				F14D50DF822D4C6093067A10 /* Pods-CocoaLUTTests.xcconfig */,
+				3BC45615195BCFDA0030435D /* Test LUTs */,
+				3BC45609195BCF670030435D /* Supporting Files */,
+				3BC455F4195BCF670030435D /* Products */,
+				AF022F42F5794E30A2700010 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -93,43 +88,13 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		3BC455F5195BCF670030435D /* CocoaLUT */ = {
-			isa = PBXGroup;
-			children = (
-				3BC455FA195BCF670030435D /* AppDelegate.swift */,
-				3BC455FC195BCF670030435D /* Images.xcassets */,
-				3BC455FE195BCF670030435D /* MainMenu.xib */,
-				3BC455F6195BCF670030435D /* Supporting Files */,
-			);
-			path = CocoaLUT;
-			sourceTree = "<group>";
-		};
-		3BC455F6195BCF670030435D /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				3BC455F7195BCF670030435D /* Info.plist */,
-				3BC455F8195BCF670030435D /* main.swift */,
-			);
-			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		3BC45608195BCF670030435D /* CocoaLUTTests */ = {
-			isa = PBXGroup;
-			children = (
-				3BC4560B195BCF670030435D /* ParserTests.swift */,
-				3B9F168A195BD18F000D7F18 /* CocoaLUTTests-Bridging-Header.h */,
-				3BC45615195BCFDA0030435D /* Test LUTs */,
-				3BC45609195BCF670030435D /* Supporting Files */,
-			);
-			path = CocoaLUTTests;
-			sourceTree = "<group>";
-		};
 		3BC45609195BCF670030435D /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
 				3BC4560A195BCF670030435D /* Info.plist */,
 			);
 			name = "Supporting Files";
+			path = CocoaLUTTests;
 			sourceTree = "<group>";
 		};
 		3BC45615195BCFDA0030435D /* Test LUTs */ = {
@@ -138,7 +103,8 @@
 				3B9F168D195BD396000D7F18 /* 3dl */,
 				3B9F1691195BD396000D7F18 /* cube */,
 			);
-			path = "Test LUTs";
+			name = "Test LUTs";
+			path = "CocoaLUTTests/Test LUTs";
 			sourceTree = "<group>";
 		};
 		AF022F42F5794E30A2700010 /* Frameworks */ = {
@@ -264,17 +230,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXVariantGroup section */
-		3BC455FE195BCF670030435D /* MainMenu.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				3BC455FF195BCF670030435D /* Base */,
-			);
-			name = MainMenu.xib;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		3BC4560D195BCF670030435D /* Debug */ = {
