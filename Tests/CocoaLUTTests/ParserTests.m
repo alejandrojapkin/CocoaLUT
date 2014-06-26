@@ -27,9 +27,9 @@
     XCTAssertEqual([self loadLUT:@"halfred_iridas" extension:@"cube"].size, 17);
 }
 
-//- (void)testParseCubeIridas {
-//    XCTAssertEqual([self loadLUT:@"iridas" extension:@"cube"].size, 17);
-//}
+- (void)testParseCubeIridas {
+    XCTAssertEqual([self loadLUT:@"iridas" extension:@"cube"].size, 2);
+}
 
 - (void)testParse3DLCrosstalk {
     XCTAssertEqual([self loadLUT:@"crosstalk" extension:@"3dl"].size, 17);
