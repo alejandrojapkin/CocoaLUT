@@ -1,6 +1,8 @@
 language: objective-c
 xcode_workspace: Tests/CocoaLUTTests.xcworkspace
 xcode_scheme: CocoaLUTTests
+before_script:
+  - sudo easy_install cpp-coveralls
 before_install:
   - gem install cocoapods -v '0.32.1' --no-rdoc --no-ri
   - pod repo remove master
@@ -9,3 +11,5 @@ install:
   - cd Tests
   - pod install
   - cd ..
+after_success:
+  - ./Tests/coveralls.rb --extension m --exclude-folder Demo --exclude-folder Test --exclude-folder Externals
