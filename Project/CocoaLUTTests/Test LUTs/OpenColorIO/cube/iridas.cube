@@ -1,0 +1,40 @@
+# http://doc.iridas.com/index.php/LUT_Formats
+
+#comments start with '#'
+#title is currently ignored, but it's not an error to enter one
+TITLE "title"
+
+#LUT_1D_SIZE M or
+#LUT_3D_SIZE M
+#where M is the size of the texture
+#a 3D texture has the size M x M x M
+#e.g. LUT_3D_SIZE 16 creates a 16 x 16 x 16 3D texture
+LUT_3D_SIZE 2 
+
+#Default input value range (domain) is 0.0 (black) to 1.0 (white)
+#Specify other min/max values to map the cube to any custom input
+#range you wish to use, for example if you're working with HDR data
+DOMAIN_MIN 0.0 0.0 0.0
+DOMAIN_MAX 1.0 1.0 1.0
+
+#for 1D textures, the data is simply a list of floating point values,
+#three per line, in RGB order
+#for 3D textures, the data is also RGB, and ordered in such a way
+#that the red coordinate changes fastest, then the green coordinate,
+#and finally, the blue coordinate changes slowest:
+0.0 0.0 0.0
+1.0 0.0 0.0
+0.0 1.0 0.0
+1.0 1.0 0.0
+0.0 0.0 1.0
+1.0 0.0 1.0
+0.0 1.0 1.0
+1.0 1.0 1.0
+
+#Note that the LUT data is not limited to any particular range
+#and can contain values under 0.0 and over 1.0
+#The processing application might however still clip the
+#output values to the 0.0 - 1.0 range, depending on the internal
+#precision of that application's pipeline
+#IRIDAS applications generally use a floating point pipeline
+#with little or no clipping

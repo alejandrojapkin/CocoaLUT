@@ -1,7 +1,8 @@
-pod "CocoaLUT", :path => "../"
 
-target "Demo" do
+target "CocoaLUT" do
+  pod "CocoaLUT", :path => "../"
 end
 
-target "DemoTests" do
+target "CocoaLUTTests" do
+  pod "CocoaLUT", :path => "../"
 end
