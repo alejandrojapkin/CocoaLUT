@@ -39,128 +39,131 @@
     metadata = metadataAndDescription[@"metadata"];
     description = metadataAndDescription[@"description"];
     
-    for(NSString *line in headerLines){
+    for(NSString *untrimmedLine in headerLines){
         NSString *titleMatch;
-        if ([line rangeOfString:@"LUT_3D_SIZE"].location != NSNotFound) {
-            isLUT3D = YES;
-            
-            if (data[@"cubeSize"] != nil){
-                @throw [NSException exceptionWithName:@"CubeLUTParseError"
-                                               reason:@"Size parameter already once."
-                                             userInfo:nil];
+        NSString *line = [untrimmedLine stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+        if([line rangeOfString:@"#"].location == NSNotFound){
+            if ([line rangeOfString:@"LUT_3D_SIZE"].location != NSNotFound) {
+                isLUT3D = YES;
+                
+                if (data[@"cubeSize"] != nil){
+                    @throw [NSException exceptionWithName:@"CubeLUTParseError"
+                                                   reason:@"Size parameter already once."
+                                                 userInfo:nil];
+                }
+                
+                NSArray *splitLine = [line componentsSeparatedByString:@" "];
+                if(splitLine.count == 2 && stringIsValidNumber(splitLine[1])){
+                    data[@"cubeSize"] = @([splitLine[1] integerValue]);
+                    
+                }
+                else{
+                    @throw [NSException exceptionWithName:@"CubeLUTParseError"
+                                                   reason:@"Size parameter is invalid."
+                                                 userInfo:nil];
+                }
             }
-            
-            NSArray *splitLine = [line componentsSeparatedByString:@" "];
-            if(splitLine.count == 2 && stringIsValidNumber(splitLine[1])){
-                data[@"cubeSize"] = @([splitLine[1] integerValue]);
+            else if ([line rangeOfString:@"LUT_1D_SIZE"].location != NSNotFound) {
+                isLUT1D = YES;
+                
+                if (data[@"cubeSize"] != nil){
+                    @throw [NSException exceptionWithName:@"CubeLUTParseError"
+                                                   reason:@"Size parameter already once."
+                                                 userInfo:nil];
+                }
+                
+                NSArray *splitLine = [line componentsSeparatedByString:@" "];
+                
+                if(splitLine.count == 2 && stringIsValidNumber(splitLine[1])){
+                    data[@"cubeSize"] = @([splitLine[1] integerValue]);
+
+                }
+                else{
+                    @throw [NSException exceptionWithName:@"CubeLUTParseError"
+                                                   reason:@"Size parameter is invalid."
+                                                 userInfo:nil];
+                }
+            }
+            else if ([line rangeOfString:@"LUT_3D_INPUT_RANGE"].location != NSNotFound) {
+                passthroughFileOptions[@"fileTypeVariant"] = @"Resolve";
+                if (data[@"inputLowerBound"] != nil || data[@"inputUpperBound"] != nil){
+                    @throw [NSException exceptionWithName:@"CubeLUTParseError"
+                                                   reason:@"Input Bounds already defined."
+                                                 userInfo:nil];
+                }
+                NSArray *splitLine = [line componentsSeparatedByString:@" "];
+                
+                if(splitLine.count == 3 && stringIsValidNumber(splitLine[1]) && stringIsValidNumber(splitLine[2])){
+                    data[@"inputLowerBound"] = @([splitLine[1] doubleValue]);
+                    data[@"inputUpperBound"] = @([splitLine[2] doubleValue]);
+                }
+                else{
+                    @throw [NSException exceptionWithName:@"CubeLUTParseError"
+                                                   reason:@"INPUT_RANGE invalid."
+                                                 userInfo:nil];
+                }
+            }
+            else if ([line rangeOfString:@"LUT_1D_INPUT_RANGE"].location != NSNotFound) {
+                passthroughFileOptions[@"fileTypeVariant"] = @"Resolve";
+                if (data[@"inputLowerBound"] != nil || data[@"inputUpperBound"] != nil){
+                    @throw [NSException exceptionWithName:@"CubeLUTParseError"
+                                                   reason:@"Input Bounds already defined."
+                                                 userInfo:nil];
+                }
+                NSArray *splitLine = [line componentsSeparatedByString:@" "];
+                
+                if(splitLine.count == 3 && stringIsValidNumber(splitLine[1]) && stringIsValidNumber(splitLine[2])){
+                    data[@"inputLowerBound"] = @([splitLine[1] doubleValue]);
+                    data[@"inputUpperBound"] = @([splitLine[2] doubleValue]);
+                }
+                else{
+                    @throw [NSException exceptionWithName:@"CubeLUTParseError"
+                                                   reason:@"INPUT_RANGE invalid."
+                                                 userInfo:nil];
+                }
+                
                 
             }
-            else{
-                @throw [NSException exceptionWithName:@"CubeLUTParseError"
-                                               reason:@"Size parameter is invalid."
-                                             userInfo:nil];
+            else if ([line rangeOfString:@"DOMAIN_MIN"].location != NSNotFound) {
+                passthroughFileOptions[@"fileTypeVariant"] = @"Adobe";
+                if (data[@"inputLowerBound"] != nil){
+                    @throw [NSException exceptionWithName:@"CubeLUTParseError"
+                                                   reason:@"Input Bound already defined."
+                                                 userInfo:nil];
+                }
+                NSArray *splitLine = [line componentsSeparatedByString:@" "];
+                if(splitLine.count == 4 && [splitLine[1] doubleValue] == [splitLine[2] doubleValue] && [splitLine[1] doubleValue] == [splitLine[3] doubleValue] && stringIsValidNumber(splitLine[1])){
+                    data[@"inputLowerBound"] = @([splitLine[1] doubleValue]);
+                }
+                else{
+                    @throw [NSException exceptionWithName:@"CubeLUTParseError"
+                                                   reason:@"DOMAIN_MIN invalid."
+                                                 userInfo:nil];
+                }
+                
+                
             }
-        }
-        else if ([line rangeOfString:@"LUT_1D_SIZE"].location != NSNotFound) {
-            isLUT1D = YES;
-            
-            if (data[@"cubeSize"] != nil){
-                @throw [NSException exceptionWithName:@"CubeLUTParseError"
-                                               reason:@"Size parameter already once."
-                                             userInfo:nil];
+            else if ([line rangeOfString:@"DOMAIN_MAX"].location != NSNotFound) {
+                passthroughFileOptions[@"fileTypeVariant"] = @"Adobe";
+                if (data[@"inputUpperBound"] != nil){
+                    @throw [NSException exceptionWithName:@"CubeLUTParseError"
+                                                   reason:@"Input Bound already defined."
+                                                 userInfo:nil];
+                }
+                NSArray *splitLine = [line componentsSeparatedByString:@" "];
+                if(splitLine.count == 4 && [splitLine[1] doubleValue] == [splitLine[2] doubleValue] && [splitLine[1] doubleValue] == [splitLine[3] doubleValue] && stringIsValidNumber(splitLine[1])){
+                    data[@"inputUpperBound"] = @([splitLine[1] doubleValue]);
+                }
+                else{
+                    @throw [NSException exceptionWithName:@"CubeLUTParseError"
+                                                   reason:@"DOMAIN_MAX invalid."
+                                                 userInfo:nil];
+                }
+                
             }
-            
-            NSArray *splitLine = [line componentsSeparatedByString:@" "];
-            
-            if(splitLine.count == 2 && stringIsValidNumber(splitLine[1])){
-                data[@"cubeSize"] = @([splitLine[1] integerValue]);
-
+            else if ((titleMatch = [line firstMatch:RX(@"(?<=TITLE \")[^\"]*(?=\")")])) {
+                [title appendString:titleMatch];
             }
-            else{
-                @throw [NSException exceptionWithName:@"CubeLUTParseError"
-                                               reason:@"Size parameter is invalid."
-                                             userInfo:nil];
-            }
-        }
-        else if ([line rangeOfString:@"LUT_3D_INPUT_RANGE"].location != NSNotFound) {
-            passthroughFileOptions[@"fileTypeVariant"] = @"Resolve";
-            if (data[@"inputLowerBound"] != nil || data[@"inputUpperBound"] != nil){
-                @throw [NSException exceptionWithName:@"CubeLUTParseError"
-                                               reason:@"Input Bounds already defined."
-                                             userInfo:nil];
-            }
-            NSArray *splitLine = [line componentsSeparatedByString:@" "];
-            
-            if(splitLine.count == 3 && stringIsValidNumber(splitLine[1]) && stringIsValidNumber(splitLine[2])){
-                data[@"inputLowerBound"] = @([splitLine[1] doubleValue]);
-                data[@"inputUpperBound"] = @([splitLine[2] doubleValue]);
-            }
-            else{
-                @throw [NSException exceptionWithName:@"CubeLUTParseError"
-                                               reason:@"INPUT_RANGE invalid."
-                                             userInfo:nil];
-            }
-        }
-        else if ([line rangeOfString:@"LUT_1D_INPUT_RANGE"].location != NSNotFound) {
-            passthroughFileOptions[@"fileTypeVariant"] = @"Resolve";
-            if (data[@"inputLowerBound"] != nil || data[@"inputUpperBound"] != nil){
-                @throw [NSException exceptionWithName:@"CubeLUTParseError"
-                                               reason:@"Input Bounds already defined."
-                                             userInfo:nil];
-            }
-            NSArray *splitLine = [line componentsSeparatedByString:@" "];
-            
-            if(splitLine.count == 3 && stringIsValidNumber(splitLine[1]) && stringIsValidNumber(splitLine[2])){
-                data[@"inputLowerBound"] = @([splitLine[1] doubleValue]);
-                data[@"inputUpperBound"] = @([splitLine[2] doubleValue]);
-            }
-            else{
-                @throw [NSException exceptionWithName:@"CubeLUTParseError"
-                                               reason:@"INPUT_RANGE invalid."
-                                             userInfo:nil];
-            }
-            
-            
-        }
-        else if ([line rangeOfString:@"DOMAIN_MIN"].location != NSNotFound) {
-            passthroughFileOptions[@"fileTypeVariant"] = @"Adobe";
-            if (data[@"inputLowerBound"] != nil){
-                @throw [NSException exceptionWithName:@"CubeLUTParseError"
-                                               reason:@"Input Bound already defined."
-                                             userInfo:nil];
-            }
-            NSArray *splitLine = [line componentsSeparatedByString:@" "];
-            if(splitLine.count == 4 && [splitLine[1] doubleValue] == [splitLine[2] doubleValue] && [splitLine[1] doubleValue] == [splitLine[3] doubleValue] && stringIsValidNumber(splitLine[1])){
-                data[@"inputLowerBound"] = @([splitLine[1] doubleValue]);
-            }
-            else{
-                @throw [NSException exceptionWithName:@"CubeLUTParseError"
-                                               reason:@"DOMAIN_MIN invalid."
-                                             userInfo:nil];
-            }
-            
-            
-        }
-        else if ([line rangeOfString:@"DOMAIN_MAX"].location != NSNotFound) {
-            passthroughFileOptions[@"fileTypeVariant"] = @"Adobe";
-            if (data[@"inputUpperBound"] != nil){
-                @throw [NSException exceptionWithName:@"CubeLUTParseError"
-                                               reason:@"Input Bound already defined."
-                                             userInfo:nil];
-            }
-            NSArray *splitLine = [line componentsSeparatedByString:@" "];
-            if(splitLine.count == 4 && [splitLine[1] doubleValue] == [splitLine[2] doubleValue] && [splitLine[1] doubleValue] == [splitLine[3] doubleValue] && stringIsValidNumber(splitLine[1])){
-                data[@"inputUpperBound"] = @([splitLine[1] doubleValue]);
-            }
-            else{
-                @throw [NSException exceptionWithName:@"CubeLUTParseError"
-                                               reason:@"DOMAIN_MAX invalid."
-                                             userInfo:nil];
-            }
-            
-        }
-        else if ((titleMatch = [line firstMatch:RX(@"(?<=TITLE \")[^\"]*(?=\")")])) {
-            [title appendString:titleMatch];
         }
     }
     
