@@ -7,18 +7,19 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3B44B680195BDF4E00EE1E1E /* ParserTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3B44B67F195BDF4E00EE1E1E /* ParserTests.m */; };
 		3B9F1695195BD396000D7F18 /* crosstalk.3dl in Resources */ = {isa = PBXBuildFile; fileRef = 3B9F168E195BD396000D7F18 /* crosstalk.3dl */; };
 		3B9F1696195BD396000D7F18 /* halfred_truelight.3dl in Resources */ = {isa = PBXBuildFile; fileRef = 3B9F168F195BD396000D7F18 /* halfred_truelight.3dl */; };
 		3B9F1697195BD396000D7F18 /* halfred_truelight_log.3dl in Resources */ = {isa = PBXBuildFile; fileRef = 3B9F1690195BD396000D7F18 /* halfred_truelight_log.3dl */; };
 		3B9F1698195BD396000D7F18 /* crosstalk.cube in Resources */ = {isa = PBXBuildFile; fileRef = 3B9F1692195BD396000D7F18 /* crosstalk.cube */; };
 		3B9F1699195BD396000D7F18 /* halfred_iridas.cube in Resources */ = {isa = PBXBuildFile; fileRef = 3B9F1693195BD396000D7F18 /* halfred_iridas.cube */; };
 		3B9F169A195BD396000D7F18 /* iridas.cube in Resources */ = {isa = PBXBuildFile; fileRef = 3B9F1694195BD396000D7F18 /* iridas.cube */; };
-		3BC4560C195BCF670030435D /* ParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BC4560B195BCF670030435D /* ParserTests.swift */; };
 		DCEE1B518BFF4DA0A3DB7DA0 /* libPods-CocoaLUTTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 51A1D4F5F4C445BB8B8E7353 /* libPods-CocoaLUTTests.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		136DB71339AF4635AAB96137 /* libPods-CocoaLUT.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-CocoaLUT.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		3B44B67F195BDF4E00EE1E1E /* ParserTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ParserTests.m; sourceTree = "<group>"; };
 		3B9F168A195BD18F000D7F18 /* CocoaLUTTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "CocoaLUTTests-Bridging-Header.h"; path = "CocoaLUTTests/CocoaLUTTests-Bridging-Header.h"; sourceTree = "<group>"; };
 		3B9F168E195BD396000D7F18 /* crosstalk.3dl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = crosstalk.3dl; sourceTree = "<group>"; };
 		3B9F168F195BD396000D7F18 /* halfred_truelight.3dl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = halfred_truelight.3dl; sourceTree = "<group>"; };
@@ -28,7 +29,6 @@
 		3B9F1694195BD396000D7F18 /* iridas.cube */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = iridas.cube; sourceTree = "<group>"; };
 		3BC45605195BCF670030435D /* CocoaLUTTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CocoaLUTTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3BC4560A195BCF670030435D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		3BC4560B195BCF670030435D /* ParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ParserTests.swift; path = CocoaLUTTests/ParserTests.swift; sourceTree = "<group>"; };
 		51A1D4F5F4C445BB8B8E7353 /* libPods-CocoaLUTTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-CocoaLUTTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F14D50DF822D4C6093067A10 /* Pods-CocoaLUTTests.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CocoaLUTTests.xcconfig"; path = "Pods/Pods-CocoaLUTTests.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -70,7 +70,7 @@
 		3BC455EA195BCF670030435D = {
 			isa = PBXGroup;
 			children = (
-				3BC4560B195BCF670030435D /* ParserTests.swift */,
+				3B44B67F195BDF4E00EE1E1E /* ParserTests.m */,
 				3B9F168A195BD18F000D7F18 /* CocoaLUTTests-Bridging-Header.h */,
 				F14D50DF822D4C6093067A10 /* Pods-CocoaLUTTests.xcconfig */,
 				3BC45615195BCFDA0030435D /* Test LUTs */,
@@ -225,7 +225,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3BC4560C195BCF670030435D /* ParserTests.swift in Sources */,
+				3B44B680195BDF4E00EE1E1E /* ParserTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
