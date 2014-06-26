@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3B44B682195BE29200EE1E1E /* ParserTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3B44B681195BE29200EE1E1E /* ParserTests.m */; };
 		3B9F1695195BD396000D7F18 /* crosstalk.3dl in Resources */ = {isa = PBXBuildFile; fileRef = 3B9F168E195BD396000D7F18 /* crosstalk.3dl */; };
 		3B9F1696195BD396000D7F18 /* halfred_truelight.3dl in Resources */ = {isa = PBXBuildFile; fileRef = 3B9F168F195BD396000D7F18 /* halfred_truelight.3dl */; };
 		3B9F1697195BD396000D7F18 /* halfred_truelight_log.3dl in Resources */ = {isa = PBXBuildFile; fileRef = 3B9F1690195BD396000D7F18 /* halfred_truelight_log.3dl */; };
@@ -17,7 +18,6 @@
 		3BC455FB195BCF670030435D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BC455FA195BCF670030435D /* AppDelegate.swift */; };
 		3BC455FD195BCF670030435D /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3BC455FC195BCF670030435D /* Images.xcassets */; };
 		3BC45600195BCF670030435D /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3BC455FE195BCF670030435D /* MainMenu.xib */; };
-		3BC4560C195BCF670030435D /* ParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BC4560B195BCF670030435D /* ParserTests.swift */; };
 		82C4465C3FBA4BD6896012CE /* libPods-CocoaLUT.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 136DB71339AF4635AAB96137 /* libPods-CocoaLUT.a */; };
 		DCEE1B518BFF4DA0A3DB7DA0 /* libPods-CocoaLUTTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 51A1D4F5F4C445BB8B8E7353 /* libPods-CocoaLUTTests.a */; };
 /* End PBXBuildFile section */
@@ -34,6 +34,7 @@
 
 /* Begin PBXFileReference section */
 		136DB71339AF4635AAB96137 /* libPods-CocoaLUT.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-CocoaLUT.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		3B44B681195BE29200EE1E1E /* ParserTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ParserTests.m; sourceTree = "<group>"; };
 		3B9F168A195BD18F000D7F18 /* CocoaLUTTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "CocoaLUTTests-Bridging-Header.h"; sourceTree = "<group>"; };
 		3B9F168E195BD396000D7F18 /* crosstalk.3dl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = crosstalk.3dl; sourceTree = "<group>"; };
 		3B9F168F195BD396000D7F18 /* halfred_truelight.3dl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = halfred_truelight.3dl; sourceTree = "<group>"; };
@@ -49,7 +50,6 @@
 		3BC455FF195BCF670030435D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		3BC45605195BCF670030435D /* CocoaLUTTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CocoaLUTTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3BC4560A195BCF670030435D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		3BC4560B195BCF670030435D /* ParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParserTests.swift; sourceTree = "<group>"; };
 		51A1D4F5F4C445BB8B8E7353 /* libPods-CocoaLUTTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-CocoaLUTTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		59337BF21AD44C4B8CB2A997 /* Pods-CocoaLUT.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CocoaLUT.xcconfig"; path = "Pods/Pods-CocoaLUT.xcconfig"; sourceTree = "<group>"; };
 		F14D50DF822D4C6093067A10 /* Pods-CocoaLUTTests.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CocoaLUTTests.xcconfig"; path = "Pods/Pods-CocoaLUTTests.xcconfig"; sourceTree = "<group>"; };
@@ -141,7 +141,7 @@
 		3BC45608195BCF670030435D /* CocoaLUTTests */ = {
 			isa = PBXGroup;
 			children = (
-				3BC4560B195BCF670030435D /* ParserTests.swift */,
+				3B44B681195BE29200EE1E1E /* ParserTests.m */,
 				3B9F168A195BD18F000D7F18 /* CocoaLUTTests-Bridging-Header.h */,
 				3BC45615195BCFDA0030435D /* Test LUTs */,
 				3BC45609195BCF670030435D /* Supporting Files */,
@@ -356,7 +356,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3BC4560C195BCF670030435D /* ParserTests.swift in Sources */,
+				3B44B682195BE29200EE1E1E /* ParserTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
