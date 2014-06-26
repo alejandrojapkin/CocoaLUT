@@ -1,6 +1,6 @@
 desc "Runs the specs [EMPTY]"
 task :spec do
-  # Provide your own implementation
+  sh "xcodebuild test -workspace Tests/CocoaLUTTests.xcworkspace -scheme CocoaLUTTests"
 end
 
 task :version do
