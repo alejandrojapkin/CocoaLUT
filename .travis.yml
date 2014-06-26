@@ -12,4 +12,4 @@ install:
   - pod install
   - cd ..
 after_success:
-  - ./Tests/coveralls.rb --extension m --exclude-folder Demo --exclude-folder Test --exclude-folder Externals
+  - sudo ./coveralls.rb --extension m
