@@ -1,8 +1,0 @@
-
-target "CocoaLUT" do
-  pod "CocoaLUT", :path => "../"
-end
-
-target "CocoaLUTTests" do
-  pod "CocoaLUT", :path => "../"
-end
