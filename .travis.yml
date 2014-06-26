@@ -1,3 +1,4 @@
 language: objective-c
 xcode_workspace: Tests/CocoaLUTTests.xcworkspace
 xcode_scheme: CocoaLUTTests
+install: cd Tests; pod install
