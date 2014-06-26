@@ -47,7 +47,9 @@
 
 
 - (BOOL)isReversibleWithStrictness:(BOOL)strict;
-- (instancetype)LUT1DByReversing;
+- (instancetype)LUT1DByReversingWithStrictness:(BOOL)strictness;
+
+- (instancetype)LUT1DBySwizzling1DChannelsWithMethod:(LUT1DSwizzleChannelsMethod)method;
 
 + (M13OrderedDictionary *)LUT1DSwizzleChannelsMethods;
 + (M13OrderedDictionary *)LUT1DDefaultSizes;

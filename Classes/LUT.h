@@ -107,7 +107,7 @@ typedef NS_ENUM(NSInteger, LUTImageRenderPath) {
  */
 - (LUT *)LUTByCombiningWithLUT:(LUT *)otherLUT;
 
-- (instancetype)LUTBySwizzling1DChannelsWithMethod:(LUT1DSwizzleChannelsMethod)method;
+
 
 - (instancetype)LUTByClampingLowerBound:(double)lowerBound
                              upperBound:(double)upperBound;

@@ -166,7 +166,7 @@
                                                                   @{@"Copy Blue Channel":@(LUT1DSwizzleChannelsMethodBlueCopiedToRGB)}]);
 }
 
-- (instancetype)LUTBySwizzling1DChannelsWithMethod:(LUT1DSwizzleChannelsMethod)method{
+- (instancetype)LUT1DBySwizzling1DChannelsWithMethod:(LUT1DSwizzleChannelsMethod)method{
     LUT1D *swizzledLUT = [LUT1D LUTOfSize:[self size] inputLowerBound:[self inputLowerBound] inputUpperBound:[self inputUpperBound]];
     [swizzledLUT copyMetaPropertiesFromLUT:self];
     
@@ -193,8 +193,8 @@
     return swizzledLUT;
 }
 
-- (instancetype)LUT1DByReversing{
-    if(![self isReversibleWithStrictness:NO]){
+- (instancetype)LUT1DByReversingWithStrictness:(BOOL)strictness{
+    if(![self isReversibleWithStrictness:strictness]){
         return nil;
     }
     NSArray *rgbCurves = @[self.redCurve, self.greenCurve, self.blueCurve];
