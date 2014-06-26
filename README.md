@@ -2,8 +2,8 @@
 
 [![Build Status](https://travis-ci.org/wilg/CocoaLUT.svg?branch=master)](https://travis-ci.org/wilg/CocoaLUT)
 [![Coverage Status](https://img.shields.io/coveralls/wilg/CocoaLUT.svg)](https://coveralls.io/r/wilg/CocoaLUT?branch=master)
-[![Version](http://cocoapod-badges.herokuapp.com/v/CocoaLUT/badge.png)](http://cocoadocs.org/docsets/CocoaLUT)
-[![Platform](http://cocoapod-badges.herokuapp.com/p/CocoaLUT/badge.png)](http://cocoadocs.org/docsets/CocoaLUT)
+[![Version](https://betabadges.herokuapp.com/v/CocoaLUT/badge.svg)](http://cocoadocs.org/docsets/CocoaLUT)
+[![Platform](https://betabadges.herokuapp.com/p/CocoaLUT/badge.svg)](http://cocoadocs.org/docsets/CocoaLUT)
 
 CocoaLUT is a tool for importing, exporting, and manipulating [3D look up tables](https://en.wikipedia.org/wiki/3D_lookup_table) (3D LUTs) and 1D look up tables (1D LUTs) for colors. LUTs are often used in film and video finishing, graphics, video games, and rendering.
 
