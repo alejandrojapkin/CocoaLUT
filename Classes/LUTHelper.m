@@ -156,12 +156,6 @@ LUT1D* LUTAsLUT1D(LUT* lut, NSUInteger size){
     }
 }
 
-BOOL stringIsNumeric(NSString* str){
-    NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
-    NSNumber *number = [formatter numberFromString:str];
-    return !!number; // If the string is not numeric, number will be nil
-}
-
 double roundValueToNearest(double value, double nearestValue) {
     NSInteger multiplier = floor(value / nearestValue);
     return (double)multiplier * nearestValue;
@@ -221,8 +215,17 @@ NSNumberFormatter* sharedNumberFormatter(){
     return numberFormatter;
 }
 
+NSCharacterSet* sharedInvertedNumericCharacterSet(){
+    static NSCharacterSet *invertedNumericCharacterSet = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        invertedNumericCharacterSet = [[NSCharacterSet characterSetWithCharactersInString:@"-.0123456789"] invertedSet];
+    });
+    return invertedNumericCharacterSet;
+}
+
 BOOL stringIsValidNumber(NSString *string){
-    return [sharedNumberFormatter() numberFromString:string] != nil;
+    return [string rangeOfCharacterFromSet:sharedInvertedNumericCharacterSet()].location == NSNotFound;
 }
 
 NSUInteger findFirstLUTLineInLines(NSArray *lines, NSString *seperator, int numValues, int startLine){
