@@ -125,7 +125,7 @@
                 
             }
             else if ([line rangeOfString:@"DOMAIN_MIN"].location != NSNotFound) {
-                passthroughFileOptions[@"fileTypeVariant"] = @"Adobe";
+                passthroughFileOptions[@"fileTypeVariant"] = @"Iridas/Adobe";
                 if (data[@"inputLowerBound"] != nil){
                     @throw [NSException exceptionWithName:@"CubeLUTParseError"
                                                    reason:@"Input Bound already defined."
@@ -144,7 +144,7 @@
                 
             }
             else if ([line rangeOfString:@"DOMAIN_MAX"].location != NSNotFound) {
-                passthroughFileOptions[@"fileTypeVariant"] = @"Adobe";
+                passthroughFileOptions[@"fileTypeVariant"] = @"Iridas/Adobe";
                 if (data[@"inputUpperBound"] != nil){
                     @throw [NSException exceptionWithName:@"CubeLUTParseError"
                                                    reason:@"Input Bound already defined."
@@ -304,7 +304,7 @@
         if ([options[@"fileTypeVariant"] isEqualToString:@"Resolve"]) {
             [string appendString:[NSString stringWithFormat:@"LUT_1D_INPUT_RANGE %.6f %.6f\n", [lut inputLowerBound], [lut inputUpperBound]]];
         }
-        else if ([options[@"fileTypeVariant"] isEqualToString:@"Adobe"]) {
+        else if ([options[@"fileTypeVariant"] isEqualToString:@"Iridas/Adobe"]) {
             [string appendString:[NSString stringWithFormat:@"DOMAIN_MIN %f %f %f\n", [lut inputLowerBound], [lut inputLowerBound], [lut inputLowerBound]]];
             [string appendString:[NSString stringWithFormat:@"DOMAIN_MAX %f %f %f\n", [lut inputUpperBound], [lut inputUpperBound], [lut inputUpperBound]]];
         }
@@ -327,7 +327,7 @@
         if ([options[@"fileTypeVariant"] isEqualToString:@"Resolve"]) {
         [string appendString:[NSString stringWithFormat:@"LUT_3D_INPUT_RANGE %.6f %.6f\n", [lut inputLowerBound], [lut inputUpperBound]]];
         }
-        else if ([options[@"fileTypeVariant"] isEqualToString:@"Adobe"]) {
+        else if ([options[@"fileTypeVariant"] isEqualToString:@"Iridas/Adobe"]) {
             [string appendString:[NSString stringWithFormat:@"DOMAIN_MIN %.6f %.6f %.6f\n", [lut inputLowerBound], [lut inputLowerBound], [lut inputLowerBound]]];
             [string appendString:[NSString stringWithFormat:@"DOMAIN_MAX %.6f %.6f %.6f\n", [lut inputUpperBound], [lut inputUpperBound], [lut inputUpperBound]]];
         }
@@ -362,9 +362,9 @@
     
     NSDictionary *resolveOptions = @{@"fileTypeVariant":@"Resolve"};
     
-    NSDictionary *adobeOptions = @{@"fileTypeVariant":@"Adobe"};
+    NSDictionary *iridasAdobeOptions = @{@"fileTypeVariant":@"Iridas/Adobe"};
     
-    return @[resolveOptions, nukeOptions, adobeOptions];
+    return @[resolveOptions, nukeOptions, iridasAdobeOptions];
 }
 
 + (NSArray *)LUTActionsForLUT:(LUT *)lut options:(NSDictionary *)options{
