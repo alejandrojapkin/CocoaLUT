@@ -1,6 +1,7 @@
 # CocoaLUT
 
 [![Build Status](https://travis-ci.org/wilg/CocoaLUT.svg?branch=master)](https://travis-ci.org/wilg/CocoaLUT)
+[![Coverage Status](https://img.shields.io/coveralls/wilg/CocoaLUT.svg)](https://coveralls.io/r/wilg/CocoaLUT?branch=master)
 [![Version](http://cocoapod-badges.herokuapp.com/v/CocoaLUT/badge.png)](http://cocoadocs.org/docsets/CocoaLUT)
 [![Platform](http://cocoapod-badges.herokuapp.com/p/CocoaLUT/badge.png)](http://cocoadocs.org/docsets/CocoaLUT)
 
