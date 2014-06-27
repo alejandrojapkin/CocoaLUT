@@ -94,12 +94,21 @@
 }
 
 - (void)updateImageViews {
-    NSImage *lutImage = self.previewImage;
-    if (self.lut) {
-        lutImage = [self.lut processNSImage:self.previewImage renderPath:LUTImageRenderPathCoreImage];
-    }
-    self.lutImageLayer.contents = lutImage;
-    self.normalImageLayer.contents = self.previewImage;
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        NSImage *lutImage = self.previewImage;
+        if (self.lut) {
+            lutImage = [self.lut processNSImage:self.previewImage renderPath:LUTImageRenderPathCoreImage];
+        }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            self.lutImageLayer.contents = lutImage;
+            self.normalImageLayer.contents = self.previewImage;
+        });
+        
+        
+    });
+    
+    
+    
 }
 
 - (void)setPreviewImage:(NSImage *)previewImage {
