@@ -180,6 +180,18 @@
                        actionMetadata:actionMetadata];
 }
 
++(instancetype)actionWithLUTByCombiningWithLUT:(LUT *)lutToCombine
+                                        lutURL:(NSURL *)lutURL{
+    M13OrderedDictionary *actionMetadata =
+    M13OrderedDictionaryFromOrderedArrayWithDictionaries(@[@{@"id":@"Combine"},
+                                                           @{@"lutURL": [lutURL copy]}]);
+    return [LUTAction actionWithBlock:^LUT *(LUT *lut) {
+        return [lut LUTByCombiningWithLUT:lutToCombine];
+    }
+                                                actionName:[NSString stringWithFormat:@"Combine with LUT"]
+                                            actionMetadata:actionMetadata];
+}
+
 +(instancetype)actionWithLUTByScalingCurvesTo01{
     M13OrderedDictionary *actionMetadata =
     M13OrderedDictionaryFromOrderedArrayWithDictionaries(@[@{@"id":@"ScaleCurvesTo01"}]);

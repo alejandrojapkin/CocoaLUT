@@ -37,6 +37,9 @@
                                                 outputLow:(double)outputLow
                                                outputHigh:(double)outputHigh;
 
++(instancetype)actionWithLUTByCombiningWithLUT:(LUT *)lutToCombine
+                                        lutURL:(NSURL *)lutURL;
+
 +(instancetype)actionWithLUTByScalingLegalToExtended;
 
 +(instancetype)actionWithLUTByScalingExtendedToLegal;
