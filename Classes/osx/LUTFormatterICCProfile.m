@@ -19,13 +19,24 @@
     
     NSColorSpace *iccProfile = [[NSColorSpace alloc] initWithICCProfileData:data];
     
+    
+    
+    if(!iccProfile || iccProfile.numberOfColorComponents == 0){
+        @throw [NSException exceptionWithName:@"ICCParseError" reason:@"ICC Profile couldn't be read." userInfo:nil];
+    }
+    
+    CGFloat *componentArray = malloc(sizeof(CGFloat)*3);
     [lut LUTLoopWithBlock:^(size_t r, size_t g, size_t b) {
         NSColor *transformedColor = [[lut colorAtR:r g:g b:b].systemColor colorUsingColorSpace:iccProfile];
-        [lut setColor:[LUTColor colorWithSystemColor:transformedColor] r:r g:g b:b];
+        
+        [transformedColor getComponents:componentArray];
+        [lut setColor:[LUTColor colorWithRed:componentArray[0] green:componentArray[1] blue:componentArray[2]] r:r g:g b:b];
     }];
     
     return lut;
 }
+
+
 
 
 
