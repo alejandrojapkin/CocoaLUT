@@ -9,9 +9,7 @@ CocoaLUT is a tool for importing, exporting, and manipulating [3D look up tables
 
 The goal of this project is to have a fast, modern Objective-C (and soon, Swift) library that works on both iOS and OS X.
 
-This project uses [LUTSpec](http://github.com/wilg/LUTSpec) for UTI standardization.
-
-Do you need something like this in Python? Try [pylut](http://github.com/gregcotten/pylut).
+[![Lattice](lattice.png)](http://lut.biz)
 
 ## Features
 
@@ -42,6 +40,13 @@ CocoaLUT is available through [CocoaPods](http://cocoapods.org), to install
 it simply add the following line to your Podfile:
 
     pod 'CocoaLUT'
+
+## Related
+
+This project uses [LUTSpec](http://github.com/wilg/LUTSpec) for UTI standardization.
+
+Do you need something like this in Python? Try [pylut](http://github.com/gregcotten/pylut).
+
 
 ## Authors
 
