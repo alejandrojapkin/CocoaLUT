@@ -112,7 +112,9 @@
              [self rec709TransferFunction],
              [self sRGBTransferFunction],
              [self alexaLogCV3TransferFunctionWithEI:800],
+             [self sLogTransferFunction],
              [self sLog2TransferFunction],
+             [self sLog3TransferFunction],
              [self canonLogTransferFunction]];
 }
 
@@ -145,7 +147,6 @@
                                                                                             value = clamp(value, 0.0, 1.0);
                                                                                             return (value <= .081) ? value/4.5 : pow((value+.099)/1.099, 2.2);}
                                                                  linearToTransformedBlock1D:^double(double value){
-                                                                                            value = clampLowerBound(value, 0.0);
                                                                                             double output = (value <= .018) ? 4.5*value : 1.099*pow(value, 1.0/2.2) - .099;
                                                                                             return clamp(output, 0.0, 1.0);}
                                                                                        name:@"Rec. 709"];
@@ -268,21 +269,78 @@
                                                                                        name:@"CanonLog"];
 }
 
-//4096
-+ (instancetype)sLog2TransferFunction {
-    double b = 256.0;
-    double ab = 360.0;
-    double w = 3760.0;
++ (instancetype)sLogTransferFunction{
     return [LUTColorTransferFunction LUTColorTransferFunctionWithTransformedToLinearBlock1D:^double(double value){
-                                                                                            value = clampLowerBound(value, 0.0);
-                                                                                            double valueAsInt = (4095.0*value);
-                                                                                            return (valueAsInt >= ab) ? (219. * (pow(10., (((valueAsInt - b) / (w - b) - 0.616596 - 0.03) / 0.432699)) - 0.037584) / 155.) : ((( valueAsInt - b) / (w - b) - 0.030001222851889303) / 3.53881278538813) * 0.9;}
+        value = clamp(value, 0.0, 1.0);
+        if(value >= 90.0/1023.0){
+            return (pow(10.0, (((value*1023.0-64.0)/(940.0-64.0)-0.616596-0.03)/0.432699))-0.037584)*0.9;
+        }
+        else{
+            return ((value*1023.0-64.0)/(940.0-64.0)-0.030001222851889303)/5.0*0.9;
+        }
+    }
                                                                  linearToTransformedBlock1D:^double(double value){
-                                                                                            value = clampLowerBound(value, 0.0);
-                                                                                            double valueAsInt = (int)(4095.0*value);
-                                                                                            double transitionValue = (219. * (pow(10., (((ab - b) / (w - b) - 0.616596 - 0.03) / 0.432699)) - 0.037584) / 155.)*4095.;
-                                                                                            return (valueAsInt >= transitionValue) ? b*(1.0 + (.0187919*w - .0187919*b)*log(22.0912*valueAsInt + 1.1731)) : b*(0.969999 - 3.93201*valueAsInt) + w*(3.93201*valueAsInt + .0300012);}
+                                                                     double output;
+                                                                     if(value >= 0.0000577055){
+                                                                         output = .160916 * log(51.1606*value + 1.73054);
+                                                                     }
+                                                                     else{
+                                                                         output = 0.0882513 + 4.75725*value;
+                                                                     }
+                                                                     return clamp(output, 0, 1);
+                                                                 }
+            
+                                                                                       name:@"S-Log"];
+}
+
+
++ (instancetype)sLog2TransferFunction {
+    return [LUTColorTransferFunction LUTColorTransferFunctionWithTransformedToLinearBlock1D:^double(double value){
+        value = clamp(value, 0.0, 1.0);
+        double valueAsInt = (4095.0*value);
+        if (valueAsInt < 360.0){
+            return ((( valueAsInt - 256.0) / (3760.0 - 256.0) - 0.030001222851889303) / 3.53881278538813) * 0.9;
+        }
+        else{
+            return (219. * (pow(10., (((valueAsInt - 256.0) / (3760.0 - 256.0) - 0.616596 - 0.03) / 0.432699)) - 0.037584) / 155.0);
+        }
+}
+                                                                 linearToTransformedBlock1D:^double(double value){
+         double output;
+         if(value < -0.0000816013){
+             output = (13777.8*value + 361.124)/4096.0;
+         }
+         else{
+             output = (658.467 * log(32.5886*value + 1.73054))/4096.0;
+         }
+         return clamp(output, 0, 1);
+                                                                 }
+        
                                                                                        name:@"S-Log2"];
+}
+
++ (instancetype)sLog3TransferFunction {
+    return [LUTColorTransferFunction LUTColorTransferFunctionWithTransformedToLinearBlock1D:^double(double value){
+        value = clamp(value, 0.0, 1.0);
+        if(value >= 171.2102946929 / 1023.0){
+            return pow(10, ((value * 1023.0 - 420.0) / 261.5)) * (0.18 + 0.01) - .01;
+        }
+        else{
+            return (value * 1023.0 - 95.0)*0.01125000 / (171.2102946929 - 95.0);
+        }
+    }
+                                                                 linearToTransformedBlock1D:^double(double value){
+                                                                     double output;
+                                                                     if(value >= 0.01125000){
+                                                                         output = (420.0 + log10((value + 0.01) / (0.18 + 0.01)) * 261.5) / 1023.0;
+                                                                     }
+                                                                     else{
+                                                                         output = (value * (171.2102946929 - 95.0)/0.01125000 + 95.0) / 1023.0;
+                                                                     }
+                                                                     return clamp(output, 0, 1);
+                                                                 }
+            
+                                                                                       name:@"S-Log3"];
 }
 
 @end
