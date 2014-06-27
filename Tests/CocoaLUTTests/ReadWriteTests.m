@@ -40,6 +40,8 @@
     LUT *readLUT = [LUT LUTFromURL:lutURL];
     
     XCTAssert([readLUT equalsLUT:identityLUT]);
+    
+    [[NSFileManager defaultManager] removeItemAtURL:lutURL error:nil];
 }
 
 
