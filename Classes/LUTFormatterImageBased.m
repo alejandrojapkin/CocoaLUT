@@ -140,9 +140,9 @@
 
 + (BOOL)canWrite{
     #if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR
-    return YES;
-    #elif TARGET_OS_MAC
     return NO;
+    #elif TARGET_OS_MAC
+    return YES;
     #endif
 }
 
