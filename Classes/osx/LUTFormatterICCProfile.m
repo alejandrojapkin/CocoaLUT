@@ -21,8 +21,8 @@
     
     
     
-    if(!iccProfile || iccProfile.numberOfColorComponents == 0){
-        @throw [NSException exceptionWithName:@"ICCParseError" reason:@"ICC Profile couldn't be read." userInfo:nil];
+    if(!iccProfile || iccProfile.numberOfColorComponents != 3){
+        @throw [NSException exceptionWithName:@"ICCReadError" reason:@"ICC Profile couldn't be read." userInfo:nil];
     }
     
     CGFloat *componentArray = malloc(sizeof(CGFloat)*3);
