@@ -314,19 +314,16 @@ NSImage* LUTNSImageFromCIImage(CIImage *ciImage, BOOL useSoftwareRenderer) {
     
     CIContext* ciContext = [CIContext contextWithCGContext:context options:contextOptions];
     
-    [ciContext drawImage:ciImage
-                  inRect:CGRectMake(0, 0, ciImage.extent.size.width, ciImage.extent.size.height)
-                fromRect:ciImage.extent];
+    
+    CGImageRef cgImage = [ciContext createCGImage:ciImage fromRect:ciImage.extent];
+    NSImage *nsImage = [[NSImage alloc] initWithCGImage:cgImage size:ciImage.extent.size];
     
 	CGContextRelease(context);
 	CGColorSpaceRelease(colorSpace);
     
     [NSGraphicsContext restoreGraphicsState];
     
-    NSImage *nsImage = [[NSImage alloc] initWithSize:rep.size];
-    [nsImage addRepresentation:rep];
 	return nsImage;
-    
 }
 
 #endif
