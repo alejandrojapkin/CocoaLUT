@@ -39,27 +39,27 @@
         @throw [NSException exceptionWithName:@"ImageBasedWriteError" reason:[NSString stringWithFormat:@"Options don't pass the spec: %@", options] userInfo:nil];
     }
     
-    NSDictionary *exposedOptions = options[[self utiString]];
-    
-    #if defined(COCOAPODS_POD_AVAILABLE_oiiococoa)
-    if([exposedOptions[@"fileTypeVariant"] isEqualToString:@"DPX"]){
-        NSString *tempFileName = [NSString stringWithFormat:@"%@_%@", [[NSProcessInfo processInfo] globallyUniqueString], @"file.dpx"];
-        NSURL *tempFileURL = [NSURL fileURLWithPath:[NSTemporaryDirectory() stringByAppendingPathComponent:tempFileName]];
-        
-        OIIOImageEncodingType oiioEncodingType = [exposedOptions[@"bitDepth"] integerValue];
-        
-        BOOL writeSuccess = [[self imageFromLUT:lut] oiio_forceWriteToURL:tempFileURL encodingType:oiioEncodingType];
-        if(!writeSuccess){
-            @throw [NSException exceptionWithName:@"ImageBasedReadError"
-                                           reason:[NSString stringWithFormat:@"OIIO failed to write the file with options: %@.", options] userInfo:nil];
-        }
-        else{
-            NSData *data = [NSData dataWithContentsOfURL:tempFileURL];
-            [[NSFileManager defaultManager] removeItemAtURL:tempFileURL error:nil];
-            return data;
-        }
-    }
-    #endif
+//    NSDictionary *exposedOptions = options[[self utiString]];
+//    
+//    #if defined(COCOAPODS_POD_AVAILABLE_oiiococoa)
+//    if([exposedOptions[@"fileTypeVariant"] isEqualToString:@"DPX"]){
+//        NSString *tempFileName = [NSString stringWithFormat:@"%@_%@", [[NSProcessInfo processInfo] globallyUniqueString], @"file.dpx"];
+//        NSURL *tempFileURL = [NSURL fileURLWithPath:[NSTemporaryDirectory() stringByAppendingPathComponent:tempFileName]];
+//        
+//        OIIOImageEncodingType oiioEncodingType = [exposedOptions[@"bitDepth"] integerValue];
+//        
+//        BOOL writeSuccess = [[self imageFromLUT:lut] oiio_forceWriteToURL:tempFileURL encodingType:oiioEncodingType];
+//        if(!writeSuccess){
+//            @throw [NSException exceptionWithName:@"ImageBasedReadError"
+//                                           reason:[NSString stringWithFormat:@"OIIO failed to write the file with options: %@.", options] userInfo:nil];
+//        }
+//        else{
+//            NSData *data = [NSData dataWithContentsOfURL:tempFileURL];
+//            [[NSFileManager defaultManager] removeItemAtURL:tempFileURL error:nil];
+//            return data;
+//        }
+//    }
+//    #endif
     
     return [[self imageFromLUT:lut] TIFFRepresentation];
 }
@@ -72,20 +72,26 @@
     }
     NSMutableDictionary *passthroughFileOptions = [NSMutableDictionary dictionary];
     NSImage *image;
-    #if defined(COCOAPODS_POD_AVAILABLE_oiiococoa)
-    image = [NSImage oiio_imageWithContentsOfURL:fileURL];
-    if([image oiio_findOIIOImageRep] != nil){
-        passthroughFileOptions[@"bitDepth"] = @([image oiio_findOIIOImageRep].encodingType);
-    }
-    else{
-        passthroughFileOptions[@"bitDepth"] = @([(NSImageRep*)image.representations[0] bitsPerSample]);
-    }
-    #else
+//    #if defined(COCOAPODS_POD_AVAILABLE_oiiococoa)
+//    image = [NSImage oiio_imageWithContentsOfURL:fileURL];
+//    if([image oiio_findOIIOImageRep] != nil){
+//        passthroughFileOptions[@"bitDepth"] = @([image oiio_findOIIOImageRep].encodingType);
+//    }
+//    else{
+//        passthroughFileOptions[@"bitDepth"] = @([(NSImageRep*)image.representations[0] bitsPerSample]);
+//    }
+//    #else
     image = [[NSImage alloc] initWithContentsOfURL:fileURL];
     passthroughFileOptions[@"bitDepth"] = @([(NSImageRep*)image.representations[0] bitsPerSample]);
-    #endif
+  //  #endif
     
-    passthroughFileOptions[@"fileTypeVariant"] = [fileURL pathExtension].uppercaseString;
+    NSString *fileTypeVariant = [fileURL pathExtension].uppercaseString;
+    
+    if([fileTypeVariant isEqualToString:@"TIF"]){
+        fileTypeVariant = @"TIFF";
+    }
+    
+    passthroughFileOptions[@"fileTypeVariant"] = fileTypeVariant;
     
     
     LUT *lut = [self LUTFromImage:image];
@@ -124,11 +130,11 @@
 }
 
 + (NSArray *)fileExtensions{
-    #if defined(COCOAPODS_POD_AVAILABLE_oiiococoa)
-    return @[@"tiff", @"tif", @"dpx"];
-    #else
+ //   #if defined(COCOAPODS_POD_AVAILABLE_oiiococoa)
+  //  return @[@"tiff", @"tif", @"dpx"];
+  //  #else
     return @[@"tiff", @"tif"];
-    #endif
+  //  #endif
 }
 
 + (BOOL)canRead{
