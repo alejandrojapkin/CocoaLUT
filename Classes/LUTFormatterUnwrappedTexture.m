@@ -55,7 +55,11 @@
 }
 
 + (LUT *)LUTFromImage:(NSImage *)image {
-    if (image.size.width != image.size.height * image.size.height) {
+
+    NSBitmapImageRep *imageRep = [NSBitmapImageRep imageRepWithData:[image TIFFRepresentation]];
+
+    
+    if (imageRep.pixelsWide != imageRep.pixelsHigh * imageRep.pixelsHigh) {
         @throw [NSException exceptionWithName:@"UnwrappedTextureReadError"
                                                          reason:@"Image width must be the square of the image height." userInfo:nil];
     }
@@ -63,13 +67,7 @@
     LUT3D *lut3D = [LUT3D LUTOfSize:image.size.height inputLowerBound:0.0 inputUpperBound:1.0];
     
 
-    NSBitmapImageRep *imageRep;
-    #if defined(COCOAPODS_POD_AVAILABLE_oiiococoa)
-        imageRep = [image oiio_findOIIOImageRep];
-    #endif
-    if(imageRep == nil){
-        imageRep = [NSBitmapImageRep imageRepWithData:[image TIFFRepresentation]];
-    }
+    
     
     [lut3D LUTLoopWithBlock:^(size_t r, size_t g, size_t b) {
         NSUInteger x = b * [lut3D size] + r;

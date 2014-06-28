@@ -76,20 +76,23 @@
 }
 
 + (LUT *)LUTFromImage:(NSImage *)image {
-    int cubeSize = (int)(round(pow((image.size.height/7)*(image.size.height/7), 1.0/3.0)));
+    
+    NSBitmapImageRep* imageRep = [NSBitmapImageRep imageRepWithData:[image TIFFRepresentation]];
+    
+    int cubeSize = (int)(round(pow((imageRep.pixelsHigh/7)*(imageRep.pixelsHigh/7), 1.0/3.0)));
     
     int height = round(sqrt(cubeSize)*(double)cubeSize);
     int width  = ceil(((double)pow(cubeSize,3))/(double)height);
     
-    if (image.size.width != width*7 || image.size.height != height*7) {
+    if (imageRep.pixelsWide != width*7 || imageRep.pixelsHigh != height*7) {
         NSException *exception = [NSException exceptionWithName:@"CMSTestPatternReadError"
                                                          reason:@"Image dimensions don't conform to spec." userInfo:nil];
         @throw exception;
     }
-    
+
     LUT3D *lut = [LUT3D LUTOfSize:cubeSize inputLowerBound:0.0 inputUpperBound:1.0];
     
-    NSBitmapImageRep* imageRep = [NSBitmapImageRep imageRepWithData:[image TIFFRepresentation]];
+    
     
     LUTConcurrentRectLoop(width, height, ^(NSUInteger x, NSUInteger y) {
         NSUInteger currentCubeIndex = y*width + x;
