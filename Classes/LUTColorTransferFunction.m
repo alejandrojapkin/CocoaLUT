@@ -354,47 +354,50 @@
 }
 
 + (instancetype)bmdFilmTransferFunction{
+    static LUT1D *bmdFilmToLinear = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        NSURL *lutURL = [self lutFromBundleWithName:@"BMDFilm_to_Linear" extension:@"cube"];
+        bmdFilmToLinear = (LUT1D *)[LUT LUTFromURL:lutURL];
+    });
+    
+    static LUT1D *linearToBMDFilm = nil;
+    static dispatch_once_t onceToken2;
+    dispatch_once(&onceToken2, ^{
+        NSURL *lutURL = [self lutFromBundleWithName:@"Linear_to_BMDFilm" extension:@"cube"];
+        linearToBMDFilm = (LUT1D *)[LUT LUTFromURL:lutURL];
+    });
+    
     return [LUTColorTransferFunction LUTColorTransferFunctionWithTransformedToLinearBlock1D:^double(double value){
-        static LUT1D *bmdFilmToLinear = nil;
-        static dispatch_once_t onceToken;
-        dispatch_once(&onceToken, ^{
-            NSURL *lutURL = [self lutFromBundleWithName:@"BMDFilm_to_Linear" extension:@"cube"];
-            bmdFilmToLinear = (LUT1D *)[LUT LUTFromURL:lutURL];
-        });
-        
         return [bmdFilmToLinear colorAtColor:[LUTColor colorWithRed:value green:value blue:value]].red;
     }
                                                                  linearToTransformedBlock1D:^double(double value){
-                                                                     static LUT1D *linearToBMDFilm = nil;
-                                                                     static dispatch_once_t onceToken;
-                                                                     dispatch_once(&onceToken, ^{
-                                                                         NSURL *lutURL = [self lutFromBundleWithName:@"Linear_to_BMDFilm" extension:@"cube"];
-                                                                         linearToBMDFilm = (LUT1D *)[LUT LUTFromURL:lutURL];
-                                                                     });
-                                                                     
-                                                                     return [linearToBMDFilm colorAtColor:[LUTColor colorWithRed:value green:value blue:value]].red;}
+     return [linearToBMDFilm colorAtColor:[LUTColor colorWithRed:value green:value blue:value]].red;}
             
                                                                                        name:@"BMDFilm"];
 }
 
 + (instancetype)bmdFilm4KTransferFunction{
+    static LUT1D *bmdFilm4KToLinear = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        NSURL *lutURL = [self lutFromBundleWithName:@"BMDFilm4K_to_Linear" extension:@"cube"];
+        bmdFilm4KToLinear = (LUT1D *)[LUT LUTFromURL:lutURL];
+    });
+    
+    static LUT1D *linearToBMDFilm4K = nil;
+    static dispatch_once_t onceToken2;
+    dispatch_once(&onceToken2, ^{
+        NSURL *lutURL = [self lutFromBundleWithName:@"Linear_to_BMDFilm4K" extension:@"cube"];
+        linearToBMDFilm4K = (LUT1D *)[LUT LUTFromURL:lutURL];
+    });
+    
+    
     return [LUTColorTransferFunction LUTColorTransferFunctionWithTransformedToLinearBlock1D:^double(double value){
-        static LUT1D *bmdFilm4KToLinear = nil;
-        static dispatch_once_t onceToken;
-        dispatch_once(&onceToken, ^{
-            NSURL *lutURL = [self lutFromBundleWithName:@"BMDFilm4K_to_Linear" extension:@"cube"];
-            bmdFilm4KToLinear = (LUT1D *)[LUT LUTFromURL:lutURL];
-        });
-        
         return [bmdFilm4KToLinear colorAtColor:[LUTColor colorWithRed:value green:value blue:value]].red;
     }
                                                                  linearToTransformedBlock1D:^double(double value){
-                                                                     static LUT1D *linearToBMDFilm4K = nil;
-                                                                     static dispatch_once_t onceToken;
-                                                                     dispatch_once(&onceToken, ^{
-                                                                         NSURL *lutURL = [self lutFromBundleWithName:@"Linear_to_BMDFilm4K" extension:@"cube"];
-                                                                         linearToBMDFilm4K = (LUT1D *)[LUT LUTFromURL:lutURL];
-                                                                     });
+                                                                     
                                                                      
                                                                      return [linearToBMDFilm4K colorAtColor:[LUTColor colorWithRed:value green:value blue:value]].red;}
             
