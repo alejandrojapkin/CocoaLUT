@@ -249,7 +249,7 @@
                                                                                             return (value > e * cut + f) ? (pow(10.0, (value - d) / c) - b) / a: (value - f) / e;}
         
                                                                  linearToTransformedBlock1D:^double(double value){
-                                                                                            
+                                                                     
                                                                                             double output = (value > cut) ? c * log10(a * value + b) + d: e * value + f;
                                                                                             return clamp(output, 0.0, 1.0);}
                                                                                        name:[NSString stringWithFormat:@"AlexaV3LogC EI %i", (int)EI]];
@@ -264,7 +264,6 @@
                                                                                             return (pow(10,(valueAsIRE-0.0730597)/0.529136)-1)/10.1596;}
             
                                                                  linearToTransformedBlock1D:^double(double value){
-                                                                                            value = clampLowerBound(value, 0.0);
                                                                                             double valueAsIRE = .529136*log10(10.1596*value+1)+.0730597;
                                                                                             double output = (876.0*valueAsIRE + 64.0)/1023.0;
                                                                                             return clamp(output, 0.0, 1.0);}
