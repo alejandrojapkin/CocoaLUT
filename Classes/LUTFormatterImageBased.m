@@ -36,7 +36,7 @@
 
 + (NSData *)dataFromLUT:(LUT *)lut withOptions:(NSDictionary *)options {
     if(![self optionsAreValid:options]){
-        @throw [NSException exceptionWithName:@"3DLWriteError" reason:[NSString stringWithFormat:@"Options don't pass the spec: %@", options] userInfo:nil];
+        @throw [NSException exceptionWithName:@"ImageBasedWriteError" reason:[NSString stringWithFormat:@"Options don't pass the spec: %@", options] userInfo:nil];
     }
     
     NSDictionary *exposedOptions = options[[self utiString]];
@@ -86,6 +86,7 @@
     #endif
     
     passthroughFileOptions[@"fileTypeVariant"] = [fileURL pathExtension].uppercaseString;
+    
     
     LUT *lut = [self LUTFromImage:image];
     lut.passthroughFileOptions = @{[self utiString] : passthroughFileOptions};
