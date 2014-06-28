@@ -72,9 +72,7 @@
 
 - (void)setLut:(LUT *)lut {
     _lut = lut;
-    dispatch_async(dispatch_get_current_queue(), ^{
-        [self updateImageViews];
-    });
+    [self updateImageViews];
 }
 
 - (void)updateFilters {
