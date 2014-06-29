@@ -155,7 +155,7 @@
 }
 
 + (NSArray *)allOptions{
-    M13OrderedDictionary *tiffBitDepthOrderedDict = [[M13OrderedDictionary alloc] initWithObjects:@[@(16)] pairedWithKeys:@[@"16-bit"]];
+    M13OrderedDictionary *tiffBitDepthOrderedDict = [[M13OrderedDictionary alloc] initWithObjects:@[@(16),@(8)] pairedWithKeys:@[@"16-bit", @"8-bit"]];
     
     NSDictionary *tiffOptions =
     @{@"fileTypeVariant":@"TIFF",
