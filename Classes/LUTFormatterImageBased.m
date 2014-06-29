@@ -19,7 +19,8 @@
     return nil;
 }
 
-+ (UIImage *)imageFromLUT:(LUT *)lut {
++ (UIImage *)imageFromLUT:(LUT *)lut
+                 bitdepth:(NSUInteger)bitdepth {
     NSException *exception = [NSException exceptionWithName:@"Unsupported Platform"
                                                      reason:@"LUTFormatterCMSTestPattern doesn't currently support iOS." userInfo:nil];
     @throw exception;
@@ -39,7 +40,7 @@
         @throw [NSException exceptionWithName:@"ImageBasedWriteError" reason:[NSString stringWithFormat:@"Options don't pass the spec: %@", options] userInfo:nil];
     }
     
-//    NSDictionary *exposedOptions = options[[self utiString]];
+    NSDictionary *exposedOptions = options[[self utiString]];
 //    
 //    #if defined(COCOAPODS_POD_AVAILABLE_oiiococoa)
 //    if([exposedOptions[@"fileTypeVariant"] isEqualToString:@"DPX"]){
@@ -61,7 +62,7 @@
 //    }
 //    #endif
     
-    return [[self imageFromLUT:lut] TIFFRepresentation];
+    return [[self imageFromLUT:lut bitdepth:[exposedOptions[@"bitDepth"] integerValue]] TIFFRepresentation];
 }
 
 +(LUT *)LUTFromURL:(NSURL *)fileURL{
@@ -99,7 +100,7 @@
     return lut;
 }
 
-+ (NSImage *)imageFromLUT:(LUT *)lut{
++ (NSImage *)imageFromLUT:(LUT *)lut bitdepth:(NSUInteger)bitdepth{
     @throw [NSException exceptionWithName:@"NotImplemented" reason:[NSString stringWithFormat:@"\"%s\" Not Implemented", __func__] userInfo:nil];
 }
 
