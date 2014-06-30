@@ -154,6 +154,10 @@
     #endif
 }
 
++ (NSDictionary *)constantConstraints{
+    return @{@"outputBounds":@[@0, @1]};
+}
+
 + (NSArray *)allOptions{
     M13OrderedDictionary *tiffBitDepthOrderedDict = [[M13OrderedDictionary alloc] initWithObjects:@[@(16),@(8)] pairedWithKeys:@[@"16-bit", @"8-bit"]];
     
