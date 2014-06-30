@@ -33,7 +33,7 @@
     NSArray *allKnownWhitePoints = @[[self d65WhitePoint],
                                   [self d60WhitePoint],
                                   [self d55WhitePoint],
-                                  [self p3WhitePoint],
+                                  [self dciP3WhitePoint],
                                   [self alexaWideGamutWhitePoint]];
     
     return allKnownWhitePoints;
@@ -63,10 +63,10 @@
                                              name:@"D55"];
 }
 
-+ (instancetype)p3WhitePoint{
++ (instancetype)dciP3WhitePoint{
     return [self whitePointWithWhiteChromaticityX:.314
                                whiteChromaticityY:.351
-                                             name:@"P3"];
+                                             name:@"DCI-P3"];
 }
 
 + (instancetype)alexaWideGamutWhitePoint{

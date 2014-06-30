@@ -24,7 +24,7 @@
 + (instancetype)d65WhitePoint;
 + (instancetype)d60WhitePoint;
 + (instancetype)d55WhitePoint;
-+ (instancetype)p3WhitePoint;
++ (instancetype)dciP3WhitePoint;
 + (instancetype)alexaWideGamutWhitePoint;
 
 

@@ -178,7 +178,7 @@
 }
 
 + (instancetype)dciP3ColorSpace{
-    return [self LUTColorSpaceWithDefaultWhitePoint:[LUTColorSpaceWhitePoint p3WhitePoint]
+    return [self LUTColorSpaceWithDefaultWhitePoint:[LUTColorSpaceWhitePoint dciP3WhitePoint]
                                    redChromaticityX:0.680
                                    redChromaticityY:0.320
                                  greenChromaticityX:0.265
