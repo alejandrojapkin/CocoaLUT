@@ -366,7 +366,7 @@
             return nil;
         }
         
-        CIImage *inputCIImage = [[CIImage alloc] initWithBitmapImageRep:(NSBitmapImageRep *)firstRep];;
+        CIImage *inputCIImage = [[CIImage alloc] initWithBitmapImageRep:(NSBitmapImageRep *)firstRep];
         CIImage *outputCIImage = [self processCIImage:inputCIImage];
         return LUTNSImageFromCIImage(outputCIImage, renderPath == LUTImageRenderPathCoreImageSoftware);
     }
