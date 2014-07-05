@@ -4,6 +4,7 @@
 [![Coverage Status](https://img.shields.io/coveralls/videovillage/CocoaLUT.svg?style=flat)](https://coveralls.io/r/videovillage/CocoaLUT?branch=master)
 [![Version](https://img.shields.io/cocoapods/v/CocoaLUT.svg?style=flat)](http://cocoadocs.org/docsets/CocoaLUT)
 [![Platform](https://img.shields.io/cocoapods/p/CocoaLUT.svg?style=flat)](http://cocoadocs.org/docsets/CocoaLUT)
+[![License](https://img.shields.io/cocoapods/l/CocoaLUT.svg?style=flat)](http://cocoadocs.org/docsets/VVLUT1DFilter)
 
 CocoaLUT is a tool for importing, exporting, and manipulating [3D look up tables](https://en.wikipedia.org/wiki/3D_lookup_table) (3D LUTs) and 1D look up tables (1D LUTs) for colors. LUTs are often used in film and video finishing, graphics, video games, and rendering.
 
