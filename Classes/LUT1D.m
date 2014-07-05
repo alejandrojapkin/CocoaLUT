@@ -276,12 +276,12 @@
         for(int i = 1; i < [curve count]; i++){
             double currentValue = [curve[i] doubleValue];
             if(currentValue <= lastValue){//make <= to be very strict
-                if(strict && currentValue == lastValue){
+                if(strict || currentValue != lastValue){
                     isIncreasing = NO;
                 }
             }
             if(currentValue >= lastValue){//make <= to be very strict
-                if(strict && currentValue == lastValue){
+                if(strict || currentValue != lastValue){
                     isDecreasing = NO;
                 }
             }
