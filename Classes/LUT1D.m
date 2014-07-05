@@ -7,6 +7,9 @@
 //
 
 #import "LUT1D.h"
+#if defined(COCOAPODS_POD_AVAILABLE_VVLUT1DFilter)
+#import <VVLUT1DFilter/VVLUT1DFilter.h>
+#endif
 
 @interface LUT1D ()
 
@@ -316,6 +319,38 @@
     }];
     
     return newLUT;
+}
+
+- (CIFilter *)coreImageFilterWithColorSpace:(CGColorSpaceRef)colorSpace{
+    #if defined(COCOAPODS_POD_AVAILABLE_VVLUT1DFilter)
+    LUT1D *usedLUT = [self LUTByResizingToSize:COCOALUT_VVLUT1DFILTER_SIZE];
+    
+    if (usedLUT.inputLowerBound != 0.0 || usedLUT.inputUpperBound != 1.0) {
+        usedLUT = [usedLUT LUTByChangingInputLowerBound:0 inputUpperBound:1];
+    }
+
+    size_t dataSize = sizeof(float)*4*usedLUT.size;
+    float* lutArray = (float *)malloc(dataSize);
+    for (int i = 0; i < usedLUT.size; i++) {
+        LUTColor *color = [usedLUT colorAtR:i g:i b:i];
+        lutArray[i*4] = clamp(color.red, 0, 1);
+        lutArray[i*4+1] = clamp(color.green, 0, 1);
+        lutArray[i*4+2] = clamp(color.blue, 0, 1);
+        lutArray[i*4+3] = 1.0;
+    }
+    
+    NSData *inputData = [NSData dataWithBytes:lutArray length:dataSize];
+    
+    CIFilter *lutFilter = [CIFilter filterWithName:@"VVLUT1DFilter"];
+    
+    [lutFilter setValue:inputData forKey:@"inputData"];
+    [lutFilter setValue:@(COCOALUT_VVLUT1DFILTER_SIZE) forKey:@"inputSize"];
+    
+    return lutFilter;
+    
+    #else
+    return [super coreImageFilterWithColorSpace:colorSpace];
+    #endif
 }
 
 + (M13OrderedDictionary *)LUT1DDefaultSizes{
