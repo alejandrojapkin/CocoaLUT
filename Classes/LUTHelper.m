@@ -219,7 +219,7 @@ NSCharacterSet* sharedInvertedNumericCharacterSet(){
     static NSCharacterSet *invertedNumericCharacterSet = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        invertedNumericCharacterSet = [[NSCharacterSet characterSetWithCharactersInString:@"-.0123456789"] invertedSet];
+        invertedNumericCharacterSet = [[NSCharacterSet characterSetWithCharactersInString:@"e-.0123456789"] invertedSet];
     });
     return invertedNumericCharacterSet;
 }
