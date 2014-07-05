@@ -9,15 +9,23 @@
 #import "LUTPreviewView.h"
 #import <QuartzCore/QuartzCore.h>
 
-@interface LUTPreviewView () {
-}
+@interface LUTPreviewView () {}
+
+// Images
 @property (strong) CALayer *normalImageLayer;
 @property (strong) CALayer *lutImageLayer;
+
+// Video
+@property (strong) AVPlayer *lutVideoPlayer;
+@property (strong) AVPlayer *normalVideoPlayer;
 @property (strong) AVPlayerLayer *lutVideoLayer;
 @property (strong) AVPlayerLayer *normalVideoLayer;
+
 @property (strong) CALayer *maskLayer;
+
 @property (strong) NSView  *borderView;
 @property (strong) NSTextField *captionField;
+
 @end
 
 @implementation LUTPreviewView
@@ -73,6 +81,7 @@
 - (void)setLut:(LUT *)lut {
     _lut = lut;
     [self updateImageViews];
+    [self updateFilters];
 }
 
 - (void)updateFilters {
@@ -84,45 +93,59 @@
                     self.lutVideoLayer.filters = @[filter];
                 });
             }
-            
-            
         });
-        
     }
 }
 
 - (void)updateImageViews {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         NSImage *lutImage = self.previewImage;
-        if (self.lut) {
+        if (self.lut && lutImage) {
             lutImage = [self.lut processNSImage:self.previewImage renderPath:LUTImageRenderPathCoreImage];
         }
         dispatch_async(dispatch_get_main_queue(), ^{
             self.lutImageLayer.contents = lutImage;
             self.normalImageLayer.contents = self.previewImage;
         });
-        
-        
     });
-    
-    
-    
 }
 
 - (void)setPreviewImage:(NSImage *)previewImage {
     _previewImage = previewImage;
-    _avPlayer = nil;
+    if (_previewImage) {
+        self.videoURL = nil;
+    }
     dispatch_async(dispatch_get_current_queue(), ^{
         [self updateImageViews];
         [self setupPlaybackLayers];
     });
 }
 
-- (void)setAvPlayer:(AVPlayer *)avPlayer {
-    _avPlayer = avPlayer;
-    if (_avPlayer) {
-        _previewImage = nil;
+- (void)setVideoURL:(NSURL *)videoURL {
+    _videoURL = videoURL;
+    
+ 
+    if (videoURL) {
+        
+        self.lutVideoPlayer = nil;
+        
+        self.lutVideoPlayer = [AVPlayer playerWithURL:videoURL];
+        self.lutVideoPlayer.muted = YES;
+        self.lutVideoPlayer.actionAtItemEnd = AVPlayerActionAtItemEndNone;
+        [self.lutVideoPlayer play];
+//        
+//        self.normalVideoPlayer = [AVPlayer playerWithURL:videoURL];
+//        self.normalVideoPlayer.muted = YES;
+//        self.normalVideoPlayer.actionAtItemEnd = AVPlayerActionAtItemEndNone;
+//        [self.normalVideoPlayer play];
+
+        self.previewImage = nil;
     }
+    else {
+        self.lutVideoPlayer = nil;
+        self.normalVideoPlayer = nil;
+    }
+
     [self setupPlaybackLayers];
 }
 
@@ -195,31 +218,41 @@
 }
 
 - (void)setupPlaybackLayers {
-    if (self.avPlayer) {
-        // remove plyers before reassigning
-        [self.lutVideoLayer removeFromSuperlayer];
-        [self.normalVideoLayer removeFromSuperlayer];
-        [self.lutImageLayer removeFromSuperlayer];
-        [self.normalImageLayer removeFromSuperlayer];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (self.videoURL) {
+            // remove players before reassigning
+            [self.lutVideoLayer removeFromSuperlayer];
+            [self.normalVideoLayer removeFromSuperlayer];
+            [self.lutImageLayer removeFromSuperlayer];
+            [self.normalImageLayer removeFromSuperlayer];
+            
+            self.lutVideoLayer = nil;
+            self.normalVideoLayer = nil;
+            
+            self.lutVideoLayer = [AVPlayerLayer playerLayerWithPlayer:self.lutVideoPlayer];
+            self.normalVideoLayer = [AVPlayerLayer playerLayerWithPlayer:self.lutVideoPlayer];
+            
+            [self.layer addSublayer:self.lutVideoLayer];
+            [self.layer addSublayer:self.normalVideoLayer];
+            
+            self.normalVideoLayer.mask = self.maskLayer;
+            
+        }
+        else {
+            [self.lutVideoLayer removeFromSuperlayer];
+            [self.normalVideoLayer removeFromSuperlayer];
+            
+            [self.layer addSublayer:self.lutImageLayer];
+            [self.layer addSublayer:self.normalImageLayer];
+            
+            self.normalImageLayer.mask = self.maskLayer;
+        }
+        [self updateFilters];
         
-        self.lutVideoLayer = [AVPlayerLayer playerLayerWithPlayer:self.avPlayer];
-        self.normalVideoLayer = [AVPlayerLayer playerLayerWithPlayer:self.avPlayer];
-        
-        [self.layer addSublayer:self.lutVideoLayer];
-        [self.layer addSublayer:self.normalVideoLayer];
-        
-        self.normalVideoLayer.mask = self.maskLayer;
-    }
-    else {
-        [self.lutVideoLayer removeFromSuperlayer];
-        [self.normalVideoLayer removeFromSuperlayer];
-
-        [self.layer addSublayer:self.lutImageLayer];
-        [self.layer addSublayer:self.normalImageLayer];
-        
-        self.normalImageLayer.mask = self.maskLayer;
-    }
-    [self updateFilters];
+        [self setNeedsDisplay:YES];
+        [self.layer setNeedsDisplay];
+        [self.layer setNeedsLayout];
+    });
 }
 
 @end

@@ -15,6 +15,6 @@
 @property (assign, nonatomic) float maskAmount;
 @property (strong, nonatomic) LUT *lut;
 @property (strong, nonatomic) NSImage *previewImage;
-@property (strong, nonatomic) AVPlayer *avPlayer;
+@property (strong, nonatomic) NSURL *videoURL;
 
 @end
