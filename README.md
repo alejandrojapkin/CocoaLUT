@@ -1,6 +1,6 @@
 # CocoaLUT
 
-[![Build Status](http://img.shields.io/travis/videovillage/CocoaLUT/VVLUT1DFilter.svg?style=flat)](https://travis-ci.org/videovillage/CocoaLUT)
+[![Build Status](http://img.shields.io/travis/videovillage/CocoaLUT.svg?style=flat)](https://travis-ci.org/videovillage/CocoaLUT)
 [![Coverage Status](https://img.shields.io/coveralls/videovillage/CocoaLUT.svg?style=flat)](https://coveralls.io/r/videovillage/CocoaLUT?branch=master)
 [![Version](https://img.shields.io/cocoapods/v/CocoaLUT.svg?style=flat)](http://cocoadocs.org/docsets/CocoaLUT)
 [![Platform](https://img.shields.io/cocoapods/p/CocoaLUT.svg?style=flat)](http://cocoadocs.org/docsets/CocoaLUT)
