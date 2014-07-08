@@ -32,12 +32,42 @@
                                 greenChromaticityY:greenChromaticityY
                                  blueChromaticityX:blueChromaticityX
                                  blueChromaticityY:blueChromaticityY
+                    forwardFootlambertCompensation:1.0
+                                              name:name];
+}
+
++ (instancetype)LUTColorSpaceWithDefaultWhitePoint:(LUTColorSpaceWhitePoint *)whitePoint
+                                  redChromaticityX:(double)redChromaticityX
+                                  redChromaticityY:(double)redChromaticityY
+                                greenChromaticityX:(double)greenChromaticityX
+                                greenChromaticityY:(double)greenChromaticityY
+                                 blueChromaticityX:(double)blueChromaticityX
+                                 blueChromaticityY:(double)blueChromaticityY
+                    forwardFootlambertCompensation:(double)flCompensation
+                                              name:(NSString *)name{
+    return [[self alloc] initWithDefaultWhitePoint:whitePoint
+                                  redChromaticityX:redChromaticityX
+                                  redChromaticityY:redChromaticityY
+                                greenChromaticityX:greenChromaticityX
+                                greenChromaticityY:greenChromaticityY
+                                 blueChromaticityX:blueChromaticityX
+                                 blueChromaticityY:blueChromaticityY
+                    forwardFootlambertCompensation:flCompensation
                                               name:name];
 }
 
 + (instancetype)LUTColorSpaceWithNPM:(GLKMatrix3)npm
                                 name:(NSString *)name{
     return [[self alloc] initWithNPM:npm
+      forwardFootlambertCompensation:1.0
+                                name:name];
+}
+
++ (instancetype)LUTColorSpaceWithNPM:(GLKMatrix3)npm
+      forwardFootlambertCompensation:(double)flCompensation
+                                name:(NSString *)name{
+    return [[self alloc] initWithNPM:npm
+      forwardFootlambertCompensation:flCompensation
                                 name:name];
 }
 
@@ -48,6 +78,7 @@
                        greenChromaticityY:(double)greenChromaticityY
                         blueChromaticityX:(double)blueChromaticityX
                         blueChromaticityY:(double)blueChromaticityY
+           forwardFootlambertCompensation:(double)flCompensation
                                      name:(NSString *)name{
     if (self = [super init]) {
         self.redChromaticityX = redChromaticityX;
@@ -57,16 +88,19 @@
         self.blueChromaticityX = blueChromaticityX;
         self.blueChromaticityY = blueChromaticityY;
         self.forcesNPM = NO;
+        self.forwardFootlambertCompensation = flCompensation;
         self.name = name;
     }
     return self;
 }
 
 - (instancetype)initWithNPM:(GLKMatrix3)npm
+forwardFootlambertCompensation:(double)flCompensation
                        name:(NSString *)name{
     if (self = [super init]) {
         self.npm = npm;
         self.forcesNPM = YES;
+        self.forwardFootlambertCompensation = flCompensation;
         self.name = name;
     }
     return self;
@@ -75,6 +109,7 @@
 - (instancetype)copyWithZone:(NSZone *)zone{
     if(self.forcesNPM){
         return [self.class LUTColorSpaceWithNPM:self.npm
+                 forwardFootlambertCompensation:self.forwardFootlambertCompensation
                                            name:[self.name copyWithZone:zone]];
     }
     else{
@@ -85,6 +120,7 @@
                                            greenChromaticityY:self.greenChromaticityY
                                             blueChromaticityX:self.blueChromaticityX
                                             blueChromaticityY:self.blueChromaticityY
+                               forwardFootlambertCompensation:self.forwardFootlambertCompensation
                                                          name:[self.name copyWithZone:zone]];
     }
 }
@@ -132,10 +168,26 @@
     
     [transformedLUT copyMetaPropertiesFromLUT:lut];
     
+    double sourceFLCompensation = 1.0/sourceColorSpace.forwardFootlambertCompensation;
+    double destinationFLCompensation = destinationColorSpace.forwardFootlambertCompensation;
+    
+    BOOL useFLCompensation = sourceFLCompensation != 1.0/destinationFLCompensation;
+    
     [transformedLUT LUTLoopWithBlock:^(size_t r, size_t g, size_t b) {
         LUTColor *sourceColor = [lut colorAtR:r g:g b:b];
+        if (useFLCompensation && sourceFLCompensation != 1.0) {
+            sourceColor = [sourceColor colorByMultiplyingByNumber:sourceFLCompensation];
+        }
+        
         GLKVector3 transformedColor = GLKMatrix3MultiplyVector3(transformationMatrix, GLKVector3Make(sourceColor.red, sourceColor.green, sourceColor.blue));
-        [transformedLUT setColor:[LUTColor colorWithRed:transformedColor.x green:transformedColor.y blue:transformedColor.z] r:r g:g b:b];
+        
+        LUTColor *destinationColor = [LUTColor colorWithRed:transformedColor.x green:transformedColor.y blue:transformedColor.z];
+        
+        if (useFLCompensation && destinationFLCompensation != 1.0) {
+            destinationColor = [destinationColor colorByMultiplyingByNumber:destinationFLCompensation];
+        }
+        
+        [transformedLUT setColor:destinationColor r:r g:g b:b];
     }];
     
     return transformedLUT;
@@ -244,10 +296,14 @@
                                                         name:@"ACES Gamut"];
 }
 + (instancetype)xyzColorSpace{
-    return [LUTColorSpace LUTColorSpaceWithNPM:GLKMatrix3MakeWithRows(GLKVector3Make(1.0, 0.0, 0.0),
+    LUTColorSpace *xyz = [LUTColorSpace LUTColorSpaceWithNPM:GLKMatrix3MakeWithRows(GLKVector3Make(1.0, 0.0, 0.0),
                                                                       GLKVector3Make(0.0, 1.0, 0.0),
                                                                       GLKVector3Make(0.0, 0.0, 1.0))
-                                          name:@"XYZ Gamut"];
+                                          name:@"DCI-XYZ"];
+    
+    xyz.forwardFootlambertCompensation = 0.916555;
+    
+    return xyz;
 }
 
 @end
