@@ -130,7 +130,6 @@
 }
 
 +(instancetype)gammaTransferFunctionWithGamma:(double)gamma{
-    
     return [LUTColorTransferFunction LUTColorTransferFunctionWithTransformedToLinearBlock1D:^double(double value) {
                                                                                             if(gamma == 1.0){
                                                                                                 return value;
@@ -141,7 +140,7 @@
                                                                                                 return value;
                                                                                              }
                                                                                             return pow(value, 1.0/gamma);}
-            name:[NSString stringWithFormat:@"Gamma %.1f", gamma]];
+            name:[NSString stringWithFormat:@"Gamma %g", gamma]];
 }
 
 + (instancetype)rec709TransferFunction{
