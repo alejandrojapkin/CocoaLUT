@@ -296,15 +296,11 @@ forwardFootlambertCompensation:(double)flCompensation
                                                         name:@"ACES Gamut"];
 }
 + (instancetype)xyzColorSpace{
-    return [LUTColorSpace LUTColorSpaceWithDefaultWhitePoint:[LUTColorSpaceWhitePoint dciWhitePoint]
-                                     redChromaticityX:1
-                                     redChromaticityY:0
-                                   greenChromaticityX:0
-                                   greenChromaticityY:1
-                                    blueChromaticityX:0
-                                    blueChromaticityY:0
-                       forwardFootlambertCompensation:0.916555
-                                                 name:@"DCI-XYZ"];
+    return [LUTColorSpace LUTColorSpaceWithNPM:GLKMatrix3MakeWithRows(GLKVector3Make(1.0, 0.0, 0.0),
+                                                                      GLKVector3Make(0.0, 1.0, 0.0),
+                                                                      GLKVector3Make(0.0, 0.0, 1.0))
+            forwardFootlambertCompensation:0.916555
+                                          name:@"DCI-XYZ"];
 }
 
 @end
