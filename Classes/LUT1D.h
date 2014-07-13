@@ -14,8 +14,6 @@
 @class LUTColor;
 @class LUT3D;
 
-
-
 /**
  *  A one-dimensional color lookup table that is represented by three channel curves.
  */

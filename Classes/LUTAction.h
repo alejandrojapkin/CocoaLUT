@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "CocoaLUT.h"
 
-@interface LUTAction : NSObject <NSCopying>
+__deprecated @interface LUTAction : NSObject <NSCopying>
 
 @property (copy) LUT* (^actionBlock)(LUT*);
 @property (strong) NSString *actionName;

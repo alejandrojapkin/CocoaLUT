@@ -8,6 +8,11 @@
 
 #import <Foundation/Foundation.h>
 
+@protocol LUTRecipeConvertible <NSObject>
++ (instancetype)fromRecipeDictionary:(NSDictionary *)dictionary;
+- (NSDictionary *)recipeDictionary;
+@end
+
 @interface LUTRecipe : NSObject
 
 + (instancetype)recipeWithActions:(NSDictionary *)actions;

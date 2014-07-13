@@ -17,7 +17,13 @@
     #define COCOALUT_MAX_CICOLORCUBE_SIZE 64
     #define COCOALUT_VVLUT1DFILTER_SIZE 1024
 
+
+    // Transformers. More than meets the eye.
+    #import "LUTTransformer.h"
+    #import "LUTSizeTransformer.h"
+
     #import "LUTHelper.h"
+    #import "LUTRecipe.h"
     #import "LUT.h"
     #import "LUT1D.h"
     #import "LUT3D.h"

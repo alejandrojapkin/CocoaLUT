@@ -21,16 +21,16 @@
     return recipe;
 }
 
-- (NSArray *)serializableArray {
+- (NSDictionary *)serializableObject {
     NSMutableArray *formattedArray = [NSMutableArray array];
-    for (LUTAction *action in self.actions) {
-        [formattedArray addObject:NSDictionaryFromM13OrderedDictionary(action.actionMetadata)];
+    for (LUTTransformer *transformer in self.actions) {
+        [formattedArray addObject:[transformer recipeDictionary]];
     }
-    return formattedArray;
+    return @{@"transformations" : formattedArray};
 }
 
 - (NSData *)serializedRecipeWithError:(NSError **)error {
-    return [NSJSONSerialization dataWithJSONObject:self.serializableArray
+    return [NSJSONSerialization dataWithJSONObject:self.serializableObject
                                            options:NSJSONWritingPrettyPrinted
                                              error:error];
 }
