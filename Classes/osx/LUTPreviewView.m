@@ -223,14 +223,22 @@
     // Image Layers
     self.normalImageLayer = [[CALayer alloc] init];
     self.normalImageLayer.contentsGravity = kCAGravityResizeAspect;
+    self.normalImageLayer.backgroundColor = NSColor.blackColor.CGColor;
+    self.normalImageLayer.opaque = YES;
     self.lutImageLayer = [[CALayer alloc] init];
     self.lutImageLayer.contentsGravity = kCAGravityResizeAspect;
+    self.lutImageLayer.backgroundColor = NSColor.blackColor.CGColor;
+    self.lutImageLayer.opaque = YES;
     [self.layer addSublayer:self.lutImageLayer];
     [self.layer addSublayer:self.normalImageLayer];
 
     // Video Layers
     self.lutVideoLayer = [AVPlayerLayer playerLayerWithPlayer:self.videoPlayer];
+    self.lutVideoLayer.backgroundColor = NSColor.blackColor.CGColor;
+    self.lutVideoLayer.opaque = YES;
     self.normalVideoLayer = [AVPlayerLayer playerLayerWithPlayer:self.videoPlayer];
+    self.normalVideoLayer.backgroundColor = NSColor.blackColor.CGColor;
+    self.normalVideoLayer.opaque = YES;
     [self.layer addSublayer:self.lutVideoLayer];
     [self.layer addSublayer:self.normalVideoLayer];
 
