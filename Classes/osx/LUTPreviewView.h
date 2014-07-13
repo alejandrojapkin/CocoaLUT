@@ -38,4 +38,9 @@
  */
 @property (readonly) AVPlayer *videoPlayer;
 
+/**
+ *  Is the view currently previewing a video.
+ */
+@property (readonly) BOOL isVideo;
+
 @end

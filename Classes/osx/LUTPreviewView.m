@@ -11,8 +11,9 @@
 
 @interface LUTPreviewView () {}
 
-// Redefinition of videoPlayer to make it writable
+// Redefinitions to make it writable
 @property (strong) AVPlayer *videoPlayer;
+@property (assign) BOOL isVideo;
 
 // Images
 @property (strong) CALayer *normalImageLayer;
@@ -140,9 +141,11 @@
         [self.videoPlayer play];
 
         self.previewImage = nil;
+        self.isVideo = YES;
     }
     else {
         [self.videoPlayer pause];
+        self.isVideo = NO;
     }
 
     [self setupPlaybackLayers];
@@ -236,16 +239,15 @@
 }
 
 - (void)setupPlaybackLayers {
-    BOOL isVideo = !!self.videoURL;
 
-    self.lutVideoLayer.hidden = !isVideo;
-    self.normalVideoLayer.hidden = !isVideo;
+    self.lutVideoLayer.hidden = !self.isVideo;
+    self.normalVideoLayer.hidden = !self.isVideo;
 
-    self.normalImageLayer.hidden = isVideo;
-    self.lutImageLayer.hidden = isVideo;
+    self.normalImageLayer.hidden = self.isVideo;
+    self.lutImageLayer.hidden = self.isVideo;
 
 
-    if (isVideo) {
+    if (self.isVideo) {
         self.normalVideoLayer.mask = self.maskLayer;
     }
     else {
