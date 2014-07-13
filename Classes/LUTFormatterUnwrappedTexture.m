@@ -26,12 +26,12 @@
 
 + (NSImage *)imageFromLUT:(LUT *)lut
                  bitdepth:(NSUInteger)bitdepth {
-    
+
     LUT3D *lut3D = LUTAsLUT3D(lut, clampUpperBound([lut size], 64));
-    
+
     CGFloat width  = [lut3D size] * [lut3D size];
     CGFloat height = [lut3D size];
-    
+
     NSBitmapImageRep *imageRep = [[NSBitmapImageRep alloc] initWithBitmapDataPlanes:NULL
                                                                    pixelsWide:width
                                                                    pixelsHigh:height
@@ -42,14 +42,14 @@
                                                                colorSpaceName:NSDeviceRGBColorSpace
                                                                   bytesPerRow:(width * (bitdepth * 3)) / 8
                                                                  bitsPerPixel:bitdepth * 3];
-    
+
     [lut3D LUTLoopWithBlock:^(size_t r, size_t g, size_t b) {
         NSUInteger x = b * [lut3D size] + r;
         NSUInteger y = g;
         NSColor *color = [[lut3D colorAtR:r g:g b:b].systemColor colorUsingColorSpaceName:NSDeviceRGBColorSpace];
         [imageRep setColor:color atX:x y:y];
     }];
-    
+
     NSImage* image = [[NSImage alloc] initWithSize:NSMakeSize(width, height)];
     [image addRepresentation:imageRep];
     return image;
@@ -59,23 +59,23 @@
 
     NSBitmapImageRep *imageRep = [NSBitmapImageRep imageRepWithData:[image TIFFRepresentation]];
 
-    
+
     if (imageRep.pixelsWide != imageRep.pixelsHigh * imageRep.pixelsHigh) {
         @throw [NSException exceptionWithName:@"UnwrappedTextureReadError"
                                                          reason:@"Image width must be the square of the image height." userInfo:nil];
     }
-    
-    LUT3D *lut3D = [LUT3D LUTOfSize:image.size.height inputLowerBound:0.0 inputUpperBound:1.0];
-    
 
-    
-    
+    LUT3D *lut3D = [LUT3D LUTOfSize:image.size.height inputLowerBound:0.0 inputUpperBound:1.0];
+
+
+
+
     [lut3D LUTLoopWithBlock:^(size_t r, size_t g, size_t b) {
         NSUInteger x = b * [lut3D size] + r;
         NSUInteger y = g;
         [lut3D setColor:[LUTColor colorWithSystemColor:[imageRep colorAtX:x y:y]] r:r g:g b:b];
     }];
-    
+
     return lut3D;
 }
 #endif

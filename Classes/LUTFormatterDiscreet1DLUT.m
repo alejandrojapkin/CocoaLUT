@@ -15,33 +15,33 @@
 }
 
 + (LUT *)LUTFromLines:(NSArray *)lines {
-    
+
     NSString *description;
     NSMutableDictionary *metadata;
     NSMutableDictionary *passthroughFileOptions = [NSMutableDictionary dictionary];
-    
+
     NSMutableArray *redCurve = [NSMutableArray array];
     NSMutableArray *greenCurve = [NSMutableArray array];
     NSMutableArray *blueCurve = [NSMutableArray array];
-    
-    
-    
+
+
+
     NSMutableArray *trimmedLines = [NSMutableArray array];
     int integerMaxOutput = -1;
     int lutSize = -1;
-    
+
     NSUInteger lutLinesStartIndex = findFirstLUTLineInLines(lines, @"", 1, 0);
-    
+
     if(lutLinesStartIndex == -1){
         @throw [NSException exceptionWithName:@"LUTParserError" reason:@"Couldn't find start of LUT data lines." userInfo:nil];
     }
-    
+
     NSArray *headerLines = [lines subarrayWithRange:NSMakeRange(0, lutLinesStartIndex)];
-    
+
     NSDictionary *metadataAndDescription = [LUTMetadataFormatter metadataAndDescriptionFromLines:headerLines];
     metadata = metadataAndDescription[@"metadata"];
     description = metadataAndDescription[@"description"];
-    
+
     //trim for lut values only and grab the max code value
     for (NSString *line in lines) {
         NSString *trimmedLine = [line stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
@@ -56,17 +56,17 @@
             lutSize = [[trimmedLine componentsSeparatedByString:@" "][2] intValue];
         }
     }
-    
+
     if(trimmedLines.count < lutSize*3){
         @throw [NSException exceptionWithName:@"LUTParserError" reason:@"Incomplete data lines." userInfo:nil];
     }
-    
+
     for(NSString *checkLine in trimmedLines){
         if(stringIsValidNumber(checkLine) == NO){
             @throw [NSException exceptionWithName:@"LUTParserError" reason:[NSString stringWithFormat:@"NaN detected in LUT"] userInfo:nil];
         }
     }
-    
+
     //get red values
     for (int i = 0; i < lutSize; i++) {
         [redCurve addObject:@(nsremapint01([trimmedLines[i] integerValue], integerMaxOutput))];
@@ -79,7 +79,7 @@
     for (int i = 2*lutSize; i < 3*lutSize; i++) {
         [blueCurve addObject:@(nsremapint01([trimmedLines[i] integerValue], integerMaxOutput))];
     }
-    
+
     LUT1D *lut = [LUT1D LUT1DWithRedCurve:redCurve greenCurve:greenCurve blueCurve:blueCurve lowerBound:0.0 upperBound:1.0];
     [lut setMetadata:metadata];
     lut.descriptionText = description;
@@ -88,7 +88,7 @@
 }
 
 + (NSString *)stringFromLUT:(LUT *)lut withOptions:(NSDictionary *)options {
-    
+
     if(![self optionsAreValid:options]){
         @throw [NSException exceptionWithName:@"Discreet1DLUTWriteError" reason:[NSString stringWithFormat:@"Options don't pass the spec: %@", options] userInfo:nil];
     }
@@ -97,16 +97,16 @@
     }
 
     NSMutableString *string = [NSMutableString stringWithString:@""];
-    
+
     NSUInteger integerMaxOutput;
-    
-    
+
+
     integerMaxOutput = [options[@"integerMaxOutput"] integerValue];
 
     [string appendString:[NSString stringWithFormat:@"#\n# Discreet LUT file\n#\tChannels: 3\n# Input Samples: %d\n# Ouput Scale: %d\n#\n# Exported from CocoaLUT\n#\nLUT: 3 %d\n", (int)[lut size], (int)integerMaxOutput, (int)[lut size]]];
-    
+
     LUT1D *lut1D = LUTAsLUT1D(lut, [lut size]);
-    
+
     //write red
     for (int i = 0; i < [lut size]; i++) {
         [string appendString:[NSString stringWithFormat:@"%d\n", (int)([lut1D valueAtR:i]*(double)integerMaxOutput) ]];
@@ -119,9 +119,9 @@
     for (int i = 0; i < [lut size]; i++) {
         [string appendString:[NSString stringWithFormat:@"%d\n", (int)([lut1D valueAtB:i]*(double)integerMaxOutput) ]];
     }
-    
+
     return string;
-    
+
 }
 
 
@@ -131,12 +131,12 @@
 }
 
 + (NSArray *)allOptions{
-    
+
     NSDictionary *discreetOptions =
     @{@"fileTypeVariant":@"Discreet",
       @"integerMaxOutput": M13OrderedDictionaryFromOrderedArrayWithDictionaries(@[@{@"12-bit": @(pow(2, 12) - 1)},
                                                                                   @{@"16-bit": @(pow(2, 16) - 1)}])};
-    
+
     return @[discreetOptions];
 }
 

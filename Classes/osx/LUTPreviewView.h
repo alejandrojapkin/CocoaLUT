@@ -1,6 +1,6 @@
 //
 //  LUTPreviewView.h
-//  
+//
 //
 //  Created by Wil Gieseler on 12/15/13.
 //

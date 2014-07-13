@@ -41,14 +41,14 @@
     return [LUTColor colorWithRed:clampLowerBound(self.red, lowerBound)
                             green:clampLowerBound(self.green, lowerBound)
                              blue:clampLowerBound(self.blue, lowerBound)];
-    
+
 }
 
 - (LUTColor *)clampedWithUpperBoundOnly:(double)upperBound{
     return [LUTColor colorWithRed:clampUpperBound(self.red, upperBound)
                             green:clampUpperBound(self.green, upperBound)
                              blue:clampUpperBound(self.blue, upperBound)];
-    
+
 }
 
 - (LUTColor *)contrastStretchWithCurrentMin:(double)currentMin
@@ -97,13 +97,13 @@
                              usingLumaR:(double)lumaR
                                   lumaG:(double)lumaG
                                   lumaB:(double)lumaB{
-    
+
     double luma = (self.red)*lumaR + (self.green)*lumaG + (self.blue)*lumaB;
-    
+
     return [LUTColor colorWithRed:luma + saturation * (self.red - luma)
                             green:luma + saturation * (self.green - luma)
                              blue:luma + saturation * (self.blue - luma)];
-    
+
 }
 
 
@@ -117,21 +117,21 @@
                              blueSlope:(double)blueSlope
                             blueOffset:(double)blueOffset
                              bluePower:(double)bluePower {
-    
+
     redSlope = clampLowerBound(redSlope, 0);
     redPower = clampLowerBound(redPower, 0);
     greenSlope = clampLowerBound(greenSlope, 0);
     greenPower = clampLowerBound(greenPower, 0);
     blueSlope = clampLowerBound(blueSlope, 0);
     bluePower = clampLowerBound(bluePower, 0);
-    
-    
+
+
     double newRed = pow(self.red*redSlope + redOffset, redPower);
     double newGreen = pow(self.green*greenSlope + greenOffset, greenPower);
     double newBlue = pow(self.blue*blueSlope + blueOffset, bluePower);
-    
+
     return [LUTColor colorWithRed:newRed green:newGreen blue:newBlue];
-    
+
 }
 
 
@@ -154,14 +154,14 @@
         return [LUTColor colorWithRed:remapNoError(self.red, inputLow, inputHigh, outputLow, outputHigh)
                                 green:remapNoError(self.green, inputLow, inputHigh, outputLow, outputHigh)
                                  blue:remapNoError(self.blue, inputLow, inputHigh, outputLow, outputHigh)];
-        
+
     }
     else{
         return [LUTColor colorWithRed:remap(self.red, inputLow, inputHigh, outputLow, outputHigh)
                                 green:remap(self.green, inputLow, inputHigh, outputLow, outputHigh)
                                  blue:remap(self.blue, inputLow, inputHigh, outputLow, outputHigh)];
     }
-    
+
 }
 
 - (NSString *)description{
@@ -172,9 +172,9 @@
     NSString *redString = [NSString stringWithFormat:[NSString stringWithFormat:@"%@", formatString], self.red];
     NSString *greenString = [NSString stringWithFormat:[NSString stringWithFormat:@"%@", formatString], self.green];
     NSString *blueString = [NSString stringWithFormat:[NSString stringWithFormat:@"%@", formatString], self.blue];
-    
+
     NSAttributedString *redColoredString = [[NSAttributedString alloc] initWithString:redString attributes:@{NSForegroundColorAttributeName: [SystemColor redColor]}];
-    
+
 #if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR
     SystemColor *green = SystemColor.greenColor;
 #elif TARGET_OS_MAC
@@ -182,9 +182,9 @@
 #endif
 
     NSAttributedString *greenColoredString = [[NSAttributedString alloc] initWithString:greenString attributes:@{NSForegroundColorAttributeName: green}];//custom green color because pure green is really hard to read.
-    
+
     NSAttributedString *blueColoredString = [[NSAttributedString alloc] initWithString:blueString attributes:@{NSForegroundColorAttributeName: [SystemColor blueColor]}];
-    
+
     NSMutableAttributedString *outString = [[NSMutableAttributedString alloc] initWithString:@""];
     [outString appendAttributedString:redColoredString];
     [outString appendAttributedString:[[NSAttributedString alloc] initWithString:@", "]];
@@ -192,7 +192,7 @@
     [outString appendAttributedString:[[NSAttributedString alloc] initWithString:@", "]];
     [outString appendAttributedString:blueColoredString];
     [outString appendAttributedString:[[NSAttributedString alloc] initWithString:@""]];
-    
+
     return outString;
 }
 
@@ -201,18 +201,18 @@
         return NO;
     }
     return fabs(self.red - otherColor.red) <= LUT_COLOR_EQUALITY_ERROR_MARGIN && fabs(self.green - otherColor.green) <= LUT_COLOR_EQUALITY_ERROR_MARGIN && fabs(self.blue - otherColor.blue) <= LUT_COLOR_EQUALITY_ERROR_MARGIN;
-    
+
 }
 
 - (BOOL)isEqual:(id)object {
     if (self == object) {
         return YES;
     }
-    
+
     if (![object isKindOfClass:[LUTColor class]]) {
         return NO;
     }
-    
+
     return [self isEqualToLUTColor:(LUTColor *)object];
 }
 

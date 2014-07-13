@@ -23,12 +23,12 @@
 
 - (void)process {
     [super process];
-    
+
     if([self.lut equalsIdentityLUT]){
         [self completedWithLUT:[self.lut copy]];
         return;
     }
-    
+
     if(isLUT1D(self.lut)){
         LUT1D *reversedLUT1D = [(LUT1D *)self.lut LUT1DByReversingWithStrictness:NO];
         if(reversedLUT1D != nil){
@@ -41,13 +41,13 @@
         return;
     }
 
-    
+
     self.queue = [[NSOperationQueue alloc] init];
 
     self.useTree = YES;
-    
+
     self.outputSize = [self.lut size];
-    
+
     // RESIZE LUT
     NSBlockOperation *resizeOperation = [NSBlockOperation blockOperationWithBlock:^{
         timer(@"Enlarging", ^{
@@ -64,7 +64,7 @@
         });
     }];
     [buildOperation addDependency:resizeOperation];
-    
+
     // FIND OUTPUTS
     NSBlockOperation *findOperation = [NSBlockOperation blockOperationWithBlock:^{
         timer(@"Searching Tree", ^{
@@ -87,11 +87,11 @@
         [findOperation addDependency:buildTreeOperation];
         [self.queue addOperation:buildTreeOperation];
     }
-    
+
     [self.queue addOperation:resizeOperation];
     [self.queue addOperation:findOperation];
     [self.queue addOperation:buildOperation];
-    
+
 }
 
 - (void) didCancel {
@@ -100,15 +100,15 @@
 }
 
 - (void)buildInputArray:(NSUInteger)newSize {
-    
+
     NSUInteger maxValue = newSize - 1;
 
     NSMutableArray *array = [NSMutableArray arrayWithCapacity:newSize * newSize * newSize];
-    
+
     NSLock *arrayLock = [[NSLock alloc] init];
-    
+
     int __block completedRs = 0;
-    
+
     dispatch_apply(newSize, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0) , ^(size_t r){
         NSMutableArray *thisArray = [NSMutableArray array];
         for (int g = 0; g < newSize; g++) {
@@ -127,22 +127,22 @@
         completedRs++;
         [self setProgress:(float)completedRs / (float)newSize section:2 of:4];
     });
-    
+
     self.inputArray = array;
-    
+
 }
 
 - (void)search {
-    
+
     LUT3D *newLUT = [LUT3D LUTOfSize:self.outputSize inputLowerBound:[self.lut inputLowerBound] inputUpperBound:[self.lut inputUpperBound]];
     [newLUT copyMetaPropertiesFromLUT:self.lut];
     int maxValue = (int)self.outputSize - 1;
-    
+
     int __block completedOps = 0;
     NSUInteger totalOps = self.outputSize * self.outputSize * self.outputSize;
-    
+
     NSLock *progressLock = [[NSLock alloc] init];
-    
+
     [self.lut LUTLoopWithBlock:^(size_t r, size_t g, size_t b) {
         if ([self checkCancellation]) return;
         if (self.useTree) {
@@ -162,9 +162,9 @@
         [self setProgress:(float)completedOps / (float)totalOps section:4 of:4];
         [progressLock unlock];
     }];
-    
+
     [self completedWithLUT:newLUT];
-    
+
 }
 
 - (LUTColor *)colorNearestToR:(int)r g:(int)g b:(int)b {

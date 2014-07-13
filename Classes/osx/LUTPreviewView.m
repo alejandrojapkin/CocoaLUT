@@ -1,6 +1,6 @@
 //
 //  LUTPreviewView.m
-//  
+//
 //
 //  Created by Wil Gieseler on 12/15/13.
 //
@@ -51,7 +51,7 @@
     self.lutVideoLayer.frame = self.bounds;
 
     _borderView.frame = CGRectMake(self.bounds.size.width * self.maskAmount, 0, 1, self.bounds.size.height);
-    
+
     self.captionField.frame = CGRectMake(self.bounds.size.width * self.maskAmount - 61, 10, 100, 20);
 
     [CATransaction commit];
@@ -84,10 +84,10 @@
                     self.lutVideoLayer.filters = @[filter];
                 });
             }
-            
-            
+
+
         });
-        
+
     }
 }
 
@@ -101,12 +101,12 @@
             self.lutImageLayer.contents = lutImage;
             self.normalImageLayer.contents = self.previewImage;
         });
-        
-        
+
+
     });
-    
-    
-    
+
+
+
 }
 
 - (void)setPreviewImage:(NSImage *)previewImage {
@@ -149,12 +149,12 @@
 }
 
 - (void)initialize {
-    
+
     self.maskAmount = 0.5;
-    
+
     self.wantsLayer = YES;
     self.layer.backgroundColor = NSColor.blackColor.CGColor;
-    
+
     self.captionField = [[NSTextField alloc] initWithFrame:CGRectZero];
     self.captionField.textColor = [NSColor whiteColor];
     self.captionField.alignment = NSCenterTextAlignment;
@@ -173,17 +173,17 @@
     self.captionField.layer.opacity = 0.7;
     self.captionField.layer.zPosition = 1;
     [self addSubview:self.captionField];
-    
+
     self.normalImageLayer = [[CALayer alloc] init];
     self.normalImageLayer.contentsGravity = kCAGravityResizeAspect;
     self.lutImageLayer = [[CALayer alloc] init];
     self.lutImageLayer.contentsGravity = kCAGravityResizeAspect;
     self.layerUsesCoreImageFilters = YES;
-    
+
     _maskLayer = [CALayer layer];
     _maskLayer.backgroundColor = NSColor.whiteColor.CGColor;
     _maskLayer.frame = CGRectMake(0, 0, self.bounds.size.width * self.maskAmount, self.bounds.size.height);
-    
+
     _borderView = [[NSView alloc] initWithFrame:NSMakeRect(0, 0, 0, 0)];
     _borderView.wantsLayer = YES;
     _borderView.layer.backgroundColor = [NSColor colorWithWhite:1 alpha:0.5].CGColor;
@@ -201,13 +201,13 @@
         [self.normalVideoLayer removeFromSuperlayer];
         [self.lutImageLayer removeFromSuperlayer];
         [self.normalImageLayer removeFromSuperlayer];
-        
+
         self.lutVideoLayer = [AVPlayerLayer playerLayerWithPlayer:self.avPlayer];
         self.normalVideoLayer = [AVPlayerLayer playerLayerWithPlayer:self.avPlayer];
-        
+
         [self.layer addSublayer:self.lutVideoLayer];
         [self.layer addSublayer:self.normalVideoLayer];
-        
+
         self.normalVideoLayer.mask = self.maskLayer;
     }
     else {
@@ -216,7 +216,7 @@
 
         [self.layer addSublayer:self.lutImageLayer];
         [self.layer addSublayer:self.normalImageLayer];
-        
+
         self.normalImageLayer.mask = self.maskLayer;
     }
     [self updateFilters];

@@ -57,7 +57,7 @@
     else{
         return [[formatter class] dataFromLUT:self withOptions:options];
     }
-    
+
 }
 
 + (instancetype)LUTOfSize:(NSUInteger)size
@@ -70,11 +70,11 @@
                   inputLowerBound:(double)inputLowerBound
                   inputUpperBound:(double)inputUpperBound{
     LUT *identityLUT = [self LUTOfSize:size inputLowerBound:inputLowerBound inputUpperBound:inputUpperBound];
-    
+
     [identityLUT LUTLoopWithBlock:^(size_t r, size_t g, size_t b) {
         [identityLUT setColor:[identityLUT identityColorAtR:r g:g b:b] r:r g:g b:b];
     }];
-    
+
     return identityLUT;
 }
 
@@ -95,11 +95,11 @@
         return [self copy];
     }
     LUT *resizedLUT = [[self class] LUTOfSize:newSize inputLowerBound:[self inputLowerBound] inputUpperBound:[self inputUpperBound]];
-    
+
     [resizedLUT copyMetaPropertiesFromLUT:self];
-    
+
     double ratio = ((double)self.size - 1.0) / ((double)newSize - 1.0);
-    
+
     [resizedLUT LUTLoopWithBlock:^(size_t r, size_t g, size_t b) {
         LUTColor *color = [self colorAtInterpolatedR:clampUpperBound(r * ratio, self.size-1.0) g:clampUpperBound(g * ratio, self.size-1.0) b:clampUpperBound(b * ratio, self.size-1.0)];
         [resizedLUT setColor:color r:r g:g b:b];
@@ -112,33 +112,33 @@
                              upperBound:(double)upperBound{
     LUT *newLUT = [[self class] LUTOfSize:[self size] inputLowerBound:[self inputLowerBound] inputUpperBound:[self inputUpperBound]];
     [newLUT copyMetaPropertiesFromLUT:self];
-    
+
     [newLUT LUTLoopWithBlock:^(size_t r, size_t g, size_t b) {
         [newLUT setColor:[[self colorAtR:r g:g b:b] clampedWithLowerBound:lowerBound upperBound:upperBound] r:r g:g b:b];
     }];
-    
+
     return newLUT;
 }
 
 - (instancetype)LUTByClampingLowerBoundOnly:(double)lowerBound{
     LUT *newLUT = [[self class] LUTOfSize:[self size] inputLowerBound:[self inputLowerBound] inputUpperBound:[self inputUpperBound]];
     [newLUT copyMetaPropertiesFromLUT:self];
-    
+
     [newLUT LUTLoopWithBlock:^(size_t r, size_t g, size_t b) {
         [newLUT setColor:[[self colorAtR:r g:g b:b] clampedWithLowerBoundOnly:lowerBound] r:r g:g b:b];
     }];
-    
+
     return newLUT;
 }
 
 - (instancetype)LUTByClampingUpperBoundOnly:(double)upperBound{
     LUT *newLUT = [[self class] LUTOfSize:[self size] inputLowerBound:[self inputLowerBound] inputUpperBound:[self inputUpperBound]];
     [newLUT copyMetaPropertiesFromLUT:self];
-    
+
     [newLUT LUTLoopWithBlock:^(size_t r, size_t g, size_t b) {
         [newLUT setColor:[[self colorAtR:r g:g b:b] clampedWithUpperBoundOnly:upperBound] r:r g:g b:b];
     }];
-    
+
     return newLUT;
 }
 
@@ -149,7 +149,7 @@
                                          bounded:(BOOL)bounded{
     LUT *newLUT = [[self class] LUTOfSize:[self size] inputLowerBound:[self inputLowerBound] inputUpperBound:[self inputUpperBound]];
     [newLUT copyMetaPropertiesFromLUT:self];
-    
+
     [newLUT LUTLoopWithBlock:^(size_t r, size_t g, size_t b) {
         [newLUT setColor:[[self colorAtR:r g:g b:b] remappedFromInputLow:inputLow
                                                                inputHigh:inputHigh
@@ -157,9 +157,9 @@
                                                               outputHigh:outputHigh
                                                                  bounded:bounded] r:r g:g b:b];
     }];
-    
+
     return newLUT;
-    
+
 }
 
 - (instancetype)LUTByChangingStrength:(double)strength{
@@ -171,11 +171,11 @@
     }
     LUT *newLUT = [[self class] LUTOfSize:[self size] inputLowerBound:[self inputLowerBound] inputUpperBound:[self inputUpperBound]];
     [newLUT copyMetaPropertiesFromLUT:self];
-    
+
     [newLUT LUTLoopWithBlock:^(size_t r, size_t g, size_t b) {
         [newLUT setColor:[[self identityColorAtR:r g:g b:b] lerpTo:[self colorAtR:r g:g b:b] amount:strength] r:r g:g b:b];
     }];
-    
+
     return newLUT;
 }
 
@@ -188,27 +188,27 @@
     if(inputLowerBound == [self inputLowerBound] && inputUpperBound == [self inputUpperBound]){
         return [self copy];
     }
-    
+
     LUT *newLUT = [[self class] LUTOfSize:[self size] inputLowerBound:inputLowerBound inputUpperBound:inputUpperBound];
     [newLUT copyMetaPropertiesFromLUT:self];
-    
+
     [newLUT LUTLoopWithBlock:^(size_t r, size_t g, size_t b) {
         LUTColor *identityColor = [newLUT identityColorAtR:r g:g b:b];
         [newLUT setColor:[self colorAtColor:identityColor] r:r g:g b:b];
     }];
-    
+
     return newLUT;
 }
 
 - (instancetype)LUTByInvertingColor{
     LUT *newLUT = [[self class] LUTOfSize:[self size] inputLowerBound:self.inputLowerBound inputUpperBound:self.inputUpperBound];
     [newLUT copyMetaPropertiesFromLUT:self];
-    
+
     [newLUT LUTLoopWithBlock:^(size_t r, size_t g, size_t b) {
         LUTColor *startColor = [self colorAtR:r g:g b:b];
         [newLUT setColor:[startColor colorByInvertingColorWithMinimumValue:0 maximumValue:1] r:r g:g b:b];
     }];
-    
+
     return newLUT;
 }
 
@@ -224,7 +224,7 @@
     double redRemappedInterpolatedIndex = remap(color.red, [self inputLowerBound], [self inputUpperBound], 0, [self size]-1);
     double greenRemappedInterpolatedIndex = remap(color.green, [self inputLowerBound], [self inputUpperBound], 0, [self size]-1);
     double blueRemappedInterpolatedIndex = remap(color.blue, [self inputLowerBound], [self inputUpperBound], 0, [self size]-1);
-    
+
     return [self colorAtInterpolatedR:clamp(redRemappedInterpolatedIndex, 0, self.size-1)
                                     g:clamp(greenRemappedInterpolatedIndex, 0, self.size-1)
                                     b:clamp(blueRemappedInterpolatedIndex, 0, self.size-1)];
@@ -312,24 +312,24 @@
 - (CIFilter *)coreImageFilterWithColorSpace:(CGColorSpaceRef)colorSpace {
     NSUInteger sizeOfColorCubeFilter = clamp([self size], 0, COCOALUT_MAX_CICOLORCUBE_SIZE);
     LUT3D *used3DLUT = [LUTAsLUT3D(self, sizeOfColorCubeFilter) LUTByChangingInputLowerBound:0.0 inputUpperBound:1.0];
-    
+
     size_t size = [used3DLUT size];
     size_t cubeDataSize = size * size * size * sizeof (float) * 4;
     float *cubeData = (float *) malloc (cubeDataSize);
-    
+
     [used3DLUT LUTLoopWithBlock:^(size_t r, size_t g, size_t b) {
         LUTColor *transformedColor = [used3DLUT colorAtR:r g:g b:b];
-        
+
         size_t offset = 4*(b*size*size + g*size + r);
-        
+
         cubeData[offset]   = (float)transformedColor.red;
         cubeData[offset+1] = (float)transformedColor.green;
         cubeData[offset+2] = (float)transformedColor.blue;
         cubeData[offset+3] = 1.0f;
     }];
-    
+
     NSData *data = [NSData dataWithBytesNoCopy:cubeData length:cubeDataSize freeWhenDone:YES];
-    
+
     CIFilter *colorCube;
     if (colorSpace) {
         colorCube = [CIFilter filterWithName:@"CIColorCubeWithColorSpace"];
@@ -358,14 +358,14 @@
 
 - (NSImage *)processNSImage:(NSImage *)image
                  renderPath:(LUTImageRenderPath)renderPath {
-        
+
     if (renderPath == LUTImageRenderPathCoreImage || renderPath == LUTImageRenderPathCoreImageSoftware) {
         NSImageRep *firstRep = [image.representations firstObject];
-        
+
         if (![firstRep isKindOfClass:[NSBitmapImageRep class]]) {
             return nil;
         }
-        
+
         CIImage *inputCIImage = [[CIImage alloc] initWithBitmapImageRep:(NSBitmapImageRep *)firstRep];
         CIImage *outputCIImage = [self processCIImage:inputCIImage];
         return LUTNSImageFromCIImage(outputCIImage, renderPath == LUTImageRenderPathCoreImageSoftware);
@@ -373,14 +373,14 @@
     else if (renderPath == LUTImageRenderPathDirect) {
         return [self processNSImageDirectly:image];
     }
-    
+
     return nil;
 }
 
 - (NSImage *)processNSImageDirectly:(NSImage *)image {
-    
+
     NSBitmapImageRep *inImageRep = [image representations][0];
-    
+
 
     int nchannels = 3;
     int bps = 16;
@@ -394,17 +394,17 @@
                                                                      colorSpaceName:NSDeviceRGBColorSpace
                                                                         bytesPerRow:(image.size.width * (bps * nchannels)) / 8
                                                                        bitsPerPixel:bps * nchannels];
-    
+
     for (int x = 0; x < image.size.width; x++) {
         for (int y = 0; y < image.size.height; y++) {
-            
+
             LUTColor *lutColor = [LUTColor colorWithSystemColor:[inImageRep colorAtX:x y:y]];
             LUTColor *transformedColor =[self colorAtColor:lutColor];
             [imageRep setColor:transformedColor.systemColor atX:x y:y];
 
         }
     }
-    
+
     NSImage* outImage = [[NSImage alloc] initWithSize:image.size];
     [outImage addRepresentation:imageRep];
     return outImage;

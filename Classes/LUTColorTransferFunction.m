@@ -77,21 +77,21 @@
 + (LUT *)transformedLUTFromLUT:(LUT *)sourceLUT
           fromColorTransferFunction:(LUTColorTransferFunction *)sourceColorTransferFunction
             toColorTransferFunction:(LUTColorTransferFunction *)destinationColorTransferFunction{
-    
+
     LUT *transformedLUT = [[sourceLUT class] LUTOfSize:[sourceLUT size] inputLowerBound:[sourceLUT inputLowerBound] inputUpperBound:[sourceLUT inputUpperBound]];
-    
+
     [transformedLUT copyMetaPropertiesFromLUT:sourceLUT];
-    
+
     [transformedLUT LUTLoopWithBlock:^(size_t r, size_t g, size_t b) {
         LUTColor *transformedColor = [LUTColorTransferFunction transformedColorFromColor:[sourceLUT colorAtR:r g:g b:b]
                                                                fromColorTransferFunction:sourceColorTransferFunction
                                                                  toColorTransferFunction:destinationColorTransferFunction];
-        
+
         [transformedLUT setColor:transformedColor r:r g:g b:b];
     }];
-    
+
     return transformedLUT;
-    
+
 }
 
 + (LUTColor *)transformedColorFromColor:(LUTColor *)sourceColor
@@ -102,7 +102,7 @@
 }
 
 + (NSArray *)knownColorTransferFunctions{
-    
+
     return @[[self linearTransferFunction],
              [self cineonTransferFunction],
              [self redLogFilmTransferFunction],
@@ -121,7 +121,7 @@
 }
 
 +(instancetype)linearTransferFunction{
-    
+
     return [LUTColorTransferFunction LUTColorTransferFunctionWithTransformedToLinearBlock1D:^double(double value) {
         return value;}
                                                                  linearToTransformedBlock1D:^double(double value) {
@@ -189,7 +189,7 @@
     double pdxLogReference = 445.0;
     double pdxNegativeGamma = .6;
     double pdxDensityPerCodeValue = .002;
-    
+
     return [LUTColorTransferFunction LUTColorTransferFunctionWithTransformedToLinearBlock1D:^double(double value){
                                                                     value = clamp(value, 0.0, 1.0);
                                                                     return pow(10.0, (value*1023.0 - pdxLogReference)*pdxDensityPerCodeValue/pdxNegativeGamma) * pdxLinReference;}
@@ -204,13 +204,13 @@
 + (instancetype)alexaLogCV3TransferFunctionWithEI:(double)EI{
     //taken from ACES git repo
     //https://github.com/ampas/aces-dev/blob/master/transforms/ctl/idt/vendorSupplied/arri/alexa/v3_IDT_maker.py
-    
+
     double nominalEI = 400.0;
     double blackSignal = 0.003907;
     double midGraySignal = 0.01;
     double encodingGain = 0.256598;
     double encodingOffset = 0.391007;
-    
+
     double cut = 1.0 / 9.0;
     double slope = 1.0 / (cut * log(10));
     double offset = log10(cut) - slope * cut;
@@ -236,32 +236,32 @@
     a = a * s;
     f = f + e * t;
     e = e * s;
-    
+
     cut = (cut-b) / a;
     double c = encGain;
     double d = encOffset;
-    
-    
-    
+
+
+
     return [LUTColorTransferFunction LUTColorTransferFunctionWithTransformedToLinearBlock1D:^double(double value){
                                                                                             value = clamp(value, 0.0, 1.0);
                                                                                             return (value > e * cut + f) ? (pow(10.0, (value - d) / c) - b) / a: (value - f) / e;}
-        
+
                                                                  linearToTransformedBlock1D:^double(double value){
-                                                                     
+
                                                                                             double output = (value > cut) ? c * log10(a * value + b) + d: e * value + f;
                                                                                             return clamp(output, 0.0, 1.0);}
                                                                                        name:[NSString stringWithFormat:@"AlexaV3LogC EI %i", (int)EI]];
-    
+
 }
 
 + (instancetype)canonLogTransferFunction {
-    
+
     return [LUTColorTransferFunction LUTColorTransferFunctionWithTransformedToLinearBlock1D:^double(double value){
                                                                                             value = clamp(value, 0.0, 1.0);
                                                                                             double valueAsIRE = (value*1023.0 - 64.0) / 876.0;
                                                                                             return (pow(10,(valueAsIRE-0.0730597)/0.529136)-1)/10.1596;}
-            
+
                                                                  linearToTransformedBlock1D:^double(double value){
                                                                                             double valueAsIRE = .529136*log10(10.1596*value+1)+.0730597;
                                                                                             double output = (876.0*valueAsIRE + 64.0)/1023.0;
@@ -289,7 +289,7 @@
                                                                      }
                                                                      return clamp(output, 0, 1);
                                                                  }
-            
+
                                                                                        name:@"S-Log"];
 }
 
@@ -315,7 +315,7 @@
          }
          return clamp(output, 0, 1);
                                                                  }
-        
+
                                                                                        name:@"S-Log2"];
 }
 
@@ -339,7 +339,7 @@
                                                                      }
                                                                      return clamp(output, 0, 1);
                                                                  }
-            
+
                                                                                        name:@"S-Log3"];
 }
 
@@ -349,7 +349,7 @@
     dispatch_once(&onceToken, ^{
         transferFunctionsBundle = [NSBundle bundleWithURL:[[NSBundle mainBundle] URLForResource:@"TransferFunctionLUTs" withExtension:@"bundle"]];
     });
-    
+
     return transferFunctionsBundle;
 }
 
@@ -364,20 +364,20 @@
         NSURL *lutURL = [self lutFromBundleWithName:@"BMDFilm_to_Linear" extension:@"cube"];
         bmdFilmToLinear = (LUT1D *)[LUT LUTFromURL:lutURL];
     });
-    
+
     static LUT1D *linearToBMDFilm = nil;
     static dispatch_once_t onceToken2;
     dispatch_once(&onceToken2, ^{
         NSURL *lutURL = [self lutFromBundleWithName:@"Linear_to_BMDFilm" extension:@"cube"];
         linearToBMDFilm = (LUT1D *)[LUT LUTFromURL:lutURL];
     });
-    
+
     return [LUTColorTransferFunction LUTColorTransferFunctionWithTransformedToLinearBlock1D:^double(double value){
         return [bmdFilmToLinear colorAtColor:[LUTColor colorWithRed:value green:value blue:value]].red;
     }
                                                                  linearToTransformedBlock1D:^double(double value){
      return [linearToBMDFilm colorAtColor:[LUTColor colorWithRed:value green:value blue:value]].red;}
-            
+
                                                                                        name:@"BMDFilm"];
 }
 
@@ -388,23 +388,23 @@
         NSURL *lutURL = [self lutFromBundleWithName:@"BMDFilm4K_to_Linear" extension:@"cube"];
         bmdFilm4KToLinear = (LUT1D *)[LUT LUTFromURL:lutURL];
     });
-    
+
     static LUT1D *linearToBMDFilm4K = nil;
     static dispatch_once_t onceToken2;
     dispatch_once(&onceToken2, ^{
         NSURL *lutURL = [self lutFromBundleWithName:@"Linear_to_BMDFilm4K" extension:@"cube"];
         linearToBMDFilm4K = (LUT1D *)[LUT LUTFromURL:lutURL];
     });
-    
-    
+
+
     return [LUTColorTransferFunction LUTColorTransferFunctionWithTransformedToLinearBlock1D:^double(double value){
         return [bmdFilm4KToLinear colorAtColor:[LUTColor colorWithRed:value green:value blue:value]].red;
     }
                                                                  linearToTransformedBlock1D:^double(double value){
-                                                                     
-                                                                     
+
+
                                                                      return [linearToBMDFilm4K colorAtColor:[LUTColor colorWithRed:value green:value blue:value]].red;}
-            
+
                                                                                        name:@"BMDFilm4K"];
 }
 

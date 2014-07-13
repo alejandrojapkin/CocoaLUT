@@ -39,16 +39,16 @@
     if(![self optionsAreValid:options]){
         @throw [NSException exceptionWithName:@"ImageBasedWriteError" reason:[NSString stringWithFormat:@"Options don't pass the spec: %@", options] userInfo:nil];
     }
-    
+
     NSDictionary *exposedOptions = options[[self utiString]];
-//    
+//
 //    #if defined(COCOAPODS_POD_AVAILABLE_oiiococoa)
 //    if([exposedOptions[@"fileTypeVariant"] isEqualToString:@"DPX"]){
 //        NSString *tempFileName = [NSString stringWithFormat:@"%@_%@", [[NSProcessInfo processInfo] globallyUniqueString], @"file.dpx"];
 //        NSURL *tempFileURL = [NSURL fileURLWithPath:[NSTemporaryDirectory() stringByAppendingPathComponent:tempFileName]];
-//        
+//
 //        OIIOImageEncodingType oiioEncodingType = [exposedOptions[@"bitDepth"] integerValue];
-//        
+//
 //        BOOL writeSuccess = [[self imageFromLUT:lut] oiio_forceWriteToURL:tempFileURL encodingType:oiioEncodingType];
 //        if(!writeSuccess){
 //            @throw [NSException exceptionWithName:@"ImageBasedReadError"
@@ -61,7 +61,7 @@
 //        }
 //    }
 //    #endif
-    
+
     return [[self imageFromLUT:lut bitdepth:[exposedOptions[@"bitDepth"] integerValue]] TIFFRepresentation];
 }
 
@@ -69,7 +69,7 @@
     if(![[self fileExtensions] containsObject:[fileURL pathExtension].lowercaseString]){
         @throw [NSException exceptionWithName:@"ImageBasedReadError"
                                        reason:@"Invalid file extension." userInfo:nil];
-        
+
     }
     NSMutableDictionary *passthroughFileOptions = [NSMutableDictionary dictionary];
     NSImage *image;
@@ -85,16 +85,16 @@
     image = [[NSImage alloc] initWithContentsOfURL:fileURL];
     passthroughFileOptions[@"bitDepth"] = @([(NSImageRep*)image.representations[0] bitsPerSample]);
   //  #endif
-    
+
     NSString *fileTypeVariant = [fileURL pathExtension].uppercaseString;
-    
+
     if([fileTypeVariant isEqualToString:@"TIF"]){
         fileTypeVariant = @"TIFF";
     }
-    
+
     passthroughFileOptions[@"fileTypeVariant"] = fileTypeVariant;
-    
-    
+
+
     LUT *lut = [self LUTFromImage:image];
     lut.passthroughFileOptions = @{[self utiString] : passthroughFileOptions};
     return lut;
@@ -114,7 +114,7 @@
     if([super isValidReaderForURL:fileURL] == NO){
         return NO;
     }
-    
+
     LUT *lut;
     @try {
         lut = [self LUTFromURL:fileURL];
@@ -160,14 +160,14 @@
 
 + (NSArray *)allOptions{
     M13OrderedDictionary *tiffBitDepthOrderedDict = [[M13OrderedDictionary alloc] initWithObjects:@[@(16),@(8)] pairedWithKeys:@[@"16-bit", @"8-bit"]];
-    
+
     NSDictionary *tiffOptions =
     @{@"fileTypeVariant":@"TIFF",
       @"bitDepth":tiffBitDepthOrderedDict};
-    
+
 //    #if defined(COCOAPODS_POD_AVAILABLE_oiiococoa)
 //    M13OrderedDictionary *dpxBitDepthOrderedDict = [[M13OrderedDictionary alloc] initWithObjects:@[@(OIIOImageEncodingTypeUINT10), @(OIIOImageEncodingTypeUINT12), @(OIIOImageEncodingTypeUINT16)] pairedWithKeys:@[@"10-bit", @"12-bit", @"16-bit"]];
-//    
+//
 //    NSDictionary *dpxOptions =
 //    @{@"fileTypeVariant":@"DPX",
 //      @"bitDepth":dpxBitDepthOrderedDict};

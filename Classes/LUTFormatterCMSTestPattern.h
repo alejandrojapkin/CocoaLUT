@@ -1,6 +1,6 @@
 //
 //  LUTFormatterNukeCMSTestPattern.h
-//  
+//
 //
 //  Created by Greg Cotten on 3/30/14.
 //

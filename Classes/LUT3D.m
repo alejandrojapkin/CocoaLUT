@@ -46,33 +46,33 @@
 - (LUT *)LUTByCombiningWithLUT:(LUT *)otherLUT {
     LUT3D *newLUT = [LUT3D LUTOfSize:[self size] inputLowerBound:[self inputLowerBound] inputUpperBound:[self inputUpperBound]];
     [newLUT copyMetaPropertiesFromLUT:self];
-    
+
     [newLUT LUTLoopWithBlock:^(size_t r, size_t g, size_t b) {
         LUTColor *startColor = [self colorAtR:r g:g b:b];
         LUTColor *newColor = [otherLUT colorAtColor:startColor];
         [newLUT setColor:newColor r:r g:g b:b];
     }];
-    
-    
+
+
     return newLUT;
 }
 
 - (instancetype)LUT3DByExtractingColorOnlyWith1DReverseStrictness:(BOOL)strictness{
     LUT1D *selfLUT1D = [self LUT1D];
-    
+
     if([selfLUT1D isReversibleWithStrictness:strictness] == NO){
         return nil;
     }
-    
+
     LUT1D *reversed1D = [[selfLUT1D LUTByResizingToSize:2048] LUT1DByReversingWithStrictness:strictness];
-    
+
     if(reversed1D == nil){
         return nil;
     }
-    
+
     LUT3D *extractedLUT = (LUT3D *)[self LUTByCombiningWithLUT:reversed1D];
     [extractedLUT copyMetaPropertiesFromLUT:self];
-    
+
     return extractedLUT;
 }
 
@@ -83,12 +83,12 @@
 - (LUT1D *)LUT1D{
     LUT1D *lut1D = [LUT1D LUTOfSize:[self size] inputLowerBound:[self inputLowerBound] inputUpperBound:[self inputUpperBound]];
     [lut1D copyMetaPropertiesFromLUT:self];
-    
+
     [lut1D LUTLoopWithBlock:^(size_t r, size_t g, size_t b) {
         LUTColor *color = [self colorAtR:r g:g b:b];
         [lut1D setColor:color r:r g:g b:b];
     }];
-    
+
     return lut1D;
 }
 
@@ -107,11 +107,11 @@
 - (instancetype)LUT3DByConvertingToMonoWithConversionMethod:(LUTMonoConversionMethod)conversionMethod{
     LUT3D *newLUT = [LUT3D LUTOfSize:[self size] inputLowerBound:[self inputLowerBound] inputUpperBound:[self inputUpperBound]];
     [newLUT copyMetaPropertiesFromLUT:self];
-    
+
     typedef LUTColor* (^converter)(LUTColor *);
-    
+
     converter convertToMonoBlock;
-    
+
     if(conversionMethod == LUTMonoConversionMethodAverageRGB){
         convertToMonoBlock = ^(LUTColor *color){double average = (color.red+color.green+color.blue)/3.0; return [LUTColor colorWithRed:average green:average blue:average];};
     }
@@ -124,17 +124,17 @@
     else if (conversionMethod == LUTMonoConversionMethodBlueCopiedToRGB){
         convertToMonoBlock = ^(LUTColor *color){return [LUTColor colorWithRed:color.blue green:color.blue blue:color.blue];};
     }
-    
-    
+
+
     [newLUT LUTLoopWithBlock:^(size_t r, size_t g, size_t b) {
         [newLUT setColor:convertToMonoBlock([self colorAtR:r g:g b:b])
                        r:r
                        g:g
                        b:b];
     }];
-    
+
     return newLUT;
-    
+
 }
 
 + (M13OrderedDictionary *)LUTMonoConversionMethods{
@@ -242,7 +242,7 @@
 - (id)copyWithZone:(NSZone *)zone{
     LUT3D *copiedLUT = [super copyWithZone:zone];
     [copiedLUT setLatticeArray:[[self latticeArray] mutableCopyWithZone:zone]];
-    
+
     return copiedLUT;
 }
 
