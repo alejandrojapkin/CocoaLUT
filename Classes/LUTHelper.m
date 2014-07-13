@@ -144,7 +144,7 @@ LUT3D* LUTAsLUT3D(LUT* lut, NSUInteger size){
     else{
         return [(LUT3D *)lut LUTByResizingToSize:size];
     }
-    
+
 }
 
 LUT1D* LUTAsLUT1D(LUT* lut, NSUInteger size){
@@ -173,17 +173,17 @@ CGSize CGSizeProportionallyScaled(CGSize currentSize, CGSize targetSize) {
     if ( CGSizeEqualToSize(currentSize, targetSize) == NO ) {
         float widthFactor  = targetSize.width / currentSize.width;
         float heightFactor = targetSize.height / currentSize.height;
-        
+
         float scaleFactor  = 0.0;
 
         if ( widthFactor < heightFactor )
             scaleFactor = widthFactor;
         else
             scaleFactor = heightFactor;
-        
+
         float scaledWidth  = currentSize.width  * scaleFactor;
         float scaledHeight = currentSize.height * scaleFactor;
-        
+
         return CGSizeMake(scaledWidth, scaledHeight);
     }
     return currentSize;
@@ -192,7 +192,7 @@ CGSize CGSizeProportionallyScaled(CGSize currentSize, CGSize targetSize) {
 M13OrderedDictionary* M13OrderedDictionaryFromOrderedArrayWithDictionaries(NSArray *array){
     NSMutableArray *keys = [[NSMutableArray alloc] init];
     NSMutableArray *values = [[NSMutableArray alloc] init];
-    
+
     for (NSDictionary *item in array){
         if([[item allKeys] count] == 1 && [[item allValues] count] == 1){
             [keys addObject:[item allKeys][0]];
@@ -202,7 +202,7 @@ M13OrderedDictionary* M13OrderedDictionaryFromOrderedArrayWithDictionaries(NSArr
             @throw [NSException exceptionWithName:@"M13OrderedDictionary generator failed." reason:@"A dictionary in the array was not of count 1" userInfo:nil];
         }
     }
-    
+
     return [[M13OrderedDictionary alloc] initWithObjects:values pairedWithKeys:keys];
 }
 
@@ -233,7 +233,7 @@ NSUInteger findFirstLUTLineInLines(NSArray *lines, NSString *seperator, int numV
     for (int i = startLine; i < lines.count; i++){
         NSArray *splitLine = [lines[i] componentsSeparatedByString:seperator];
         splitLine = arrayWithEmptyElementsRemoved(splitLine);
-        
+
         if(splitLine.count == numValues){
             BOOL isLine = YES;
             for (int j = 0; j < numValues; j++){
@@ -277,14 +277,14 @@ NSString* FirstRegexMatch(NSString *text, NSString *pattern) {
 }
 
 NSImage* LUTNSImageFromCIImage(CIImage *ciImage, BOOL useSoftwareRenderer) {
-    
+
     [NSGraphicsContext saveGraphicsState];
-    
+
     int width = [ciImage extent].size.width;
     int rows = [ciImage extent].size.height;
     int rowBytes = (width * 8);
-    
-    
+
+
     NSBitmapImageRep* rep = [[NSBitmapImageRep alloc] initWithBitmapDataPlanes:nil
                                                                     pixelsWide:width
                                                                     pixelsHigh:rows
@@ -296,7 +296,7 @@ NSImage* LUTNSImageFromCIImage(CIImage *ciImage, BOOL useSoftwareRenderer) {
                                                                   bitmapFormat:0
                                                                    bytesPerRow:rowBytes
                                                                   bitsPerPixel:0];
-    
+
     CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
     CGContextRef context = CGBitmapContextCreate([rep bitmapData],
                                                  width,
@@ -305,24 +305,24 @@ NSImage* LUTNSImageFromCIImage(CIImage *ciImage, BOOL useSoftwareRenderer) {
                                                  rowBytes,
                                                  colorSpace,
                                                  (CGBitmapInfo)kCGImageAlphaPremultipliedLast);
-    
+
     NSDictionary *contextOptions = @{
                                      kCIContextWorkingColorSpace: (__bridge id)colorSpace,
                                      kCIContextOutputColorSpace: (__bridge id)colorSpace,
                                      kCIContextUseSoftwareRenderer: @(useSoftwareRenderer)
                                      };
-    
+
     CIContext* ciContext = [CIContext contextWithCGContext:context options:contextOptions];
-    
-    
+
+
     CGImageRef cgImage = [ciContext createCGImage:ciImage fromRect:ciImage.extent];
     NSImage *nsImage = [[NSImage alloc] initWithCGImage:cgImage size:ciImage.extent.size];
-    
+
 	CGContextRelease(context);
 	CGColorSpaceRelease(colorSpace);
-    
+
     [NSGraphicsContext restoreGraphicsState];
-    
+
 	return nsImage;
 }
 

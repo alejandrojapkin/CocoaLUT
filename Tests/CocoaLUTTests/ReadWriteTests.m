@@ -24,7 +24,7 @@
     NSString *fileName = [NSString stringWithFormat:@"%@_%@", [[NSProcessInfo processInfo] globallyUniqueString], [NSString stringWithFormat:@"file.%@", fileExtension]];
     NSURL *fileURL = [NSURL fileURLWithPath:[NSTemporaryDirectory() stringByAppendingPathComponent:fileName]];
     return fileURL;
-    
+
 }
 
 - (void)testReadWriteCube {
@@ -34,13 +34,13 @@
     NSURL *lutURL = [self.class uniqueTempFileURLWithFileExtension:@".cube"];
     [lutData writeToURL:lutURL atomically:YES];
     XCTAssert([lutURL checkResourceIsReachableAndReturnError:nil], @"Cube didn't write successfully.");
-    
+
     XCTAssertEqual([LUTFormatter LUTFormatterValidForReadingURL:lutURL], [LUTFormatterCube class], @"LUT isn't recognized as a cube.");
-    
+
     LUT *readLUT = [LUT LUTFromURL:lutURL];
-    
+
     XCTAssert([readLUT equalsLUT:identityLUT]);
-    
+
     [[NSFileManager defaultManager] removeItemAtURL:lutURL error:nil];
 }
 

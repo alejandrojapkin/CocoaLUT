@@ -90,7 +90,7 @@
     M13OrderedDictionaryFromOrderedArrayWithDictionaries(@[@{@"id":@"ChangeInputBounds"},
                                                            @{@"inputLowerBound": @(inputLowerBound)},
                                                            @{@"inputUpperBound": @(inputUpperBound)}]);
-    
+
     return [self actionWithBlock:^LUT *(LUT *lut) {
         return [lut LUTByChangingInputLowerBound:inputLowerBound inputUpperBound:inputUpperBound];
     }
@@ -104,11 +104,11 @@
     M13OrderedDictionaryFromOrderedArrayWithDictionaries(@[@{@"id":@"Clamp"},
                                                            @{@"lowerBound": @(lowerBound)},
                                                            @{@"upperBound": @(upperBound)}]);
-    
+
     return [LUTAction actionWithBlock:^LUT *(LUT *lut) {
         return [lut LUTByClampingLowerBound:lowerBound upperBound:upperBound];
     }
-     
+
                            actionName:[NSString stringWithFormat:@"Clamp LUT to [%.3f, %.3f]", lowerBound, upperBound]
                        actionMetadata:actionMetadata];
 }
@@ -123,7 +123,7 @@
                                                            @{@"inputHigh": @(inputHigh)},
                                                            @{@"outputLow": @(outputLow)},
                                                            @{@"outputHigh": @(outputHigh)}]);
-    
+
     return [LUTAction actionWithBlock:^LUT *(LUT *lut) {
         return [lut LUTByRemappingValuesWithInputLow:inputLow
                                            inputHigh:inputHigh
@@ -138,7 +138,7 @@
 +(instancetype)actionWithLUTByScalingLegalToExtended{
     M13OrderedDictionary *actionMetadata =
     M13OrderedDictionaryFromOrderedArrayWithDictionaries(@[@{@"id":@"ScaleLegalToExtended"}]);
-    
+
     return [LUTAction actionWithBlock:^LUT *(LUT *lut) {
         return [lut LUTByRemappingValuesWithInputLow:LEGAL_LEVELS_MIN
                                            inputHigh:LEGAL_LEVELS_MAX
@@ -153,7 +153,7 @@
 +(instancetype)actionWithLUTByScalingExtendedToLegal{
     M13OrderedDictionary *actionMetadata =
     M13OrderedDictionaryFromOrderedArrayWithDictionaries(@[@{@"id":@"ScaleExtendedToLegal"}]);
-    
+
     return [LUTAction actionWithBlock:^LUT *(LUT *lut) {
         return [lut LUTByRemappingValuesWithInputLow:EXTENDED_LEVELS_MIN
                                            inputHigh:EXTENDED_LEVELS_MAX
@@ -168,7 +168,7 @@
 +(instancetype)actionWithLUTByScalingTo01{
     M13OrderedDictionary *actionMetadata =
     M13OrderedDictionaryFromOrderedArrayWithDictionaries(@[@{@"id":@"ScaleTo01"}]);
-    
+
     return [LUTAction actionWithBlock:^LUT *(LUT *lut) {
         return [lut LUTByRemappingValuesWithInputLow:lut.minimumOutputValue
                                            inputHigh:lut.maximumOutputValue
@@ -195,9 +195,9 @@
 +(instancetype)actionWithLUTByScalingCurvesTo01{
     M13OrderedDictionary *actionMetadata =
     M13OrderedDictionaryFromOrderedArrayWithDictionaries(@[@{@"id":@"ScaleCurvesTo01"}]);
-    
+
     return [LUTAction actionWithBlock:^LUT *(LUT *lut) {
-        
+
         if(isLUT1D(lut)){
             return [lut LUTByRemappingValuesWithInputLow:lut.minimumOutputValue
                                                inputHigh:lut.maximumOutputValue
@@ -214,8 +214,8 @@
                                               outputHigh:1
                                                  bounded:NO];
         }
-        
-        
+
+
     }
                            actionName:[NSString stringWithFormat:@"Scale 0 to 1"]
                        actionMetadata:actionMetadata];
@@ -225,7 +225,7 @@
     M13OrderedDictionary *actionMetadata =
     M13OrderedDictionaryFromOrderedArrayWithDictionaries(@[@{@"id":@"Resize"},
                                                            @{@"size": @(size)}]);
-    
+
     return [LUTAction actionWithBlock:^LUT *(LUT *lut) {
         return [lut LUTByResizingToSize:size];
     }

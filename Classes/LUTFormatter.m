@@ -48,7 +48,7 @@ static NSMutableArray *allFormatters;
         if([[[formatter class] fileExtensions] containsObject:fileExtension.lowercaseString]){
             [formatters addObject:formatter];
         }
-    
+
     }
     return [NSArray arrayWithArray:formatters];
 }
@@ -152,21 +152,21 @@ static NSMutableArray *allFormatters;
         return NO;
     }
     else if(optionsExposed != nil && defaultOptionsExposed != nil){
-        
+
         NSArray *allOptions = [self allOptions];
-        
+
         NSDictionary *allOptionsOfSameFileTypeVariant;
-        
+
         for(NSDictionary *optionDict in allOptions){
             if ([optionDict[@"fileTypeVariant"] isEqualToString:optionsExposed[@"fileTypeVariant"]]) {
                 allOptionsOfSameFileTypeVariant = optionDict;
             }
         }
-        
+
         if(allOptionsOfSameFileTypeVariant == nil){
             return NO;
         }
-        
+
         for(NSString *key in [optionsExposed allKeys]){
             //NSLog(@"%@", allOptionsOfSameFileTypeVariant[key]);
             if(allOptionsOfSameFileTypeVariant[key] == nil && [[(M13OrderedDictionary *)allOptionsOfSameFileTypeVariant[key] allObjects] indexOfObject:optionsExposed[key]] == NSNotFound){
@@ -175,7 +175,7 @@ static NSMutableArray *allFormatters;
 
         }
         return YES;
-        
+
     }
     return NO;
 }
@@ -195,7 +195,7 @@ static NSMutableArray *allFormatters;
 + (NSString *)fullName{
     NSMutableString *extensionsString = [[NSMutableString alloc] initWithString:@"("];
     NSArray *fileExtensions = [self fileExtensions];
-    
+
     for(int i = 0; i < fileExtensions.count; i++){
         [extensionsString appendString:[@"." stringByAppendingString:fileExtensions[i]]];
         if(i + 1 < fileExtensions.count){
@@ -234,14 +234,14 @@ static NSMutableArray *allFormatters;
 
 + (NSArray *)LUTActionsForLUT:(LUT *)lut options:(NSDictionary *)options{
     NSMutableArray *arrayOfActions = [NSMutableArray array];
-    
+
     if(![self optionsAreValid:options]){
        @throw [NSException exceptionWithName:@"LUTActionsForLUTError" reason:[NSString stringWithFormat:@"Provided options don't pass the spec: %@", options] userInfo:nil];
     }
-    
+
     NSDictionary *exposedOptions = options == nil ? nil : options[[self utiString]];
     NSDictionary *formatterConstantConstraints = [self constantConstraints];
-    
+
     if(formatterConstantConstraints != nil){
         if(formatterConstantConstraints[@"inputBounds"] != nil){
             NSArray *array = formatterConstantConstraints[@"inputBounds"];
@@ -284,7 +284,7 @@ static NSMutableArray *allFormatters;
             }
         }
     }
-    
+
     if(exposedOptions != nil){
         if(exposedOptions[@"lutSize"] != nil){
             NSInteger resizeSize = [exposedOptions[@"lutSize"] integerValue];

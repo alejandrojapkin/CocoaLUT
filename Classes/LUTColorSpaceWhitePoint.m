@@ -34,7 +34,7 @@
                                   [self d60WhitePoint],
                                   [self d55WhitePoint],
                                   [self dciWhitePoint]];
-    
+
     return allKnownWhitePoints;
 }
 

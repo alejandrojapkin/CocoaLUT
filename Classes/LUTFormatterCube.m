@@ -21,41 +21,41 @@
     NSString *description;
     NSMutableDictionary *metadata;
     NSMutableDictionary *passthroughFileOptions = [NSMutableDictionary dictionary];
-    
+
     NSMutableDictionary *data = [NSMutableDictionary dictionary];
-    
+
     BOOL __block isLUT3D = NO;
     BOOL __block isLUT1D = NO;
-    
+
     NSUInteger cubeLinesStartIndex = findFirstLUTLineInLines(lines, @" ", 3, 0);
-    
+
     if(cubeLinesStartIndex == -1){
         @throw [NSException exceptionWithName:@"LUTParserError" reason:@"Couldn't find start of LUT data lines." userInfo:nil];
     }
-    
+
     NSArray *headerLines = [lines subarrayWithRange:NSMakeRange(0, cubeLinesStartIndex)];
-    
+
     NSDictionary *metadataAndDescription = [LUTMetadataFormatter metadataAndDescriptionFromLines:headerLines];
     metadata = metadataAndDescription[@"metadata"];
     description = metadataAndDescription[@"description"];
-    
+
     for(NSString *untrimmedLine in headerLines){
         NSString *titleMatch;
         NSString *line = [untrimmedLine stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
         if([line rangeOfString:@"#"].location == NSNotFound){
             if ([line rangeOfString:@"LUT_3D_SIZE"].location != NSNotFound) {
                 isLUT3D = YES;
-                
+
                 if (data[@"cubeSize"] != nil){
                     @throw [NSException exceptionWithName:@"CubeLUTParseError"
                                                    reason:@"Size parameter already once."
                                                  userInfo:nil];
                 }
-                
+
                 NSArray *splitLine = [line componentsSeparatedByString:@" "];
                 if(splitLine.count == 2 && stringIsValidNumber(splitLine[1])){
                     data[@"cubeSize"] = @([splitLine[1] integerValue]);
-                    
+
                 }
                 else{
                     @throw [NSException exceptionWithName:@"CubeLUTParseError"
@@ -65,15 +65,15 @@
             }
             else if ([line rangeOfString:@"LUT_1D_SIZE"].location != NSNotFound) {
                 isLUT1D = YES;
-                
+
                 if (data[@"cubeSize"] != nil){
                     @throw [NSException exceptionWithName:@"CubeLUTParseError"
                                                    reason:@"Size parameter already once."
                                                  userInfo:nil];
                 }
-                
+
                 NSArray *splitLine = [line componentsSeparatedByString:@" "];
-                
+
                 if(splitLine.count == 2 && stringIsValidNumber(splitLine[1])){
                     data[@"cubeSize"] = @([splitLine[1] integerValue]);
 
@@ -92,7 +92,7 @@
                                                  userInfo:nil];
                 }
                 NSArray *splitLine = [line componentsSeparatedByString:@" "];
-                
+
                 if(splitLine.count == 3 && stringIsValidNumber(splitLine[1]) && stringIsValidNumber(splitLine[2])){
                     data[@"inputLowerBound"] = @([splitLine[1] doubleValue]);
                     data[@"inputUpperBound"] = @([splitLine[2] doubleValue]);
@@ -111,7 +111,7 @@
                                                  userInfo:nil];
                 }
                 NSArray *splitLine = [line componentsSeparatedByString:@" "];
-                
+
                 if(splitLine.count == 3 && stringIsValidNumber(splitLine[1]) && stringIsValidNumber(splitLine[2])){
                     data[@"inputLowerBound"] = @([splitLine[1] doubleValue]);
                     data[@"inputUpperBound"] = @([splitLine[2] doubleValue]);
@@ -121,8 +121,8 @@
                                                    reason:@"INPUT_RANGE invalid."
                                                  userInfo:nil];
                 }
-                
-                
+
+
             }
             else if ([line rangeOfString:@"DOMAIN_MIN"].location != NSNotFound) {
                 passthroughFileOptions[@"fileTypeVariant"] = @"Iridas/Adobe";
@@ -140,8 +140,8 @@
                                                    reason:@"DOMAIN_MIN invalid."
                                                  userInfo:nil];
                 }
-                
-                
+
+
             }
             else if ([line rangeOfString:@"DOMAIN_MAX"].location != NSNotFound) {
                 passthroughFileOptions[@"fileTypeVariant"] = @"Iridas/Adobe";
@@ -159,17 +159,17 @@
                                                    reason:@"DOMAIN_MAX invalid."
                                                  userInfo:nil];
                 }
-                
+
             }
             else if ((titleMatch = [line firstMatch:RX(@"(?<=TITLE \")[^\"]*(?=\")")])) {
                 [title appendString:titleMatch];
             }
         }
     }
-    
-    
+
+
     NSUInteger cubeSize;
-    
+
     if (data[@"cubeSize"] == nil) {
         NSException *exception = [NSException exceptionWithName:@"CubeLUTParseError" reason:@"Couldn't find LUT size in file" userInfo:nil];
         @throw exception;
@@ -177,14 +177,14 @@
     else{
         cubeSize = [data[@"cubeSize"] integerValue];
     }
-    
+
     if ((isLUT1D && isLUT3D) || (!isLUT1D && !isLUT3D)){
         @throw [NSException exceptionWithName:@"CubeLUTParseError" reason:@"Couldn't figure out if 3D or 1D LUT" userInfo:nil];
     }
-    
+
     double inputLowerBound;
     double inputUpperBound;
-    
+
     if(data[@"inputLowerBound"] == nil && data[@"inputUpperBound"] == nil){
         passthroughFileOptions[@"fileTypeVariant"] = @"Nuke";
         inputLowerBound = 0;
@@ -194,15 +194,15 @@
         inputLowerBound = [data[@"inputLowerBound"] doubleValue];
         inputUpperBound = [data[@"inputUpperBound"] doubleValue];
     }
-    
+
     LUT *lut;
-    
+
     if(isLUT3D){
         lut = [LUT3D LUTOfSize:cubeSize inputLowerBound:inputLowerBound inputUpperBound:inputUpperBound];
 
         NSUInteger currentCubeIndex = 0;
         for (NSString *line in [lines subarrayWithRange:NSMakeRange(cubeLinesStartIndex, lines.count - cubeLinesStartIndex)]) {
-            
+
             if (line.length > 0 && [line rangeOfString:@"#"].location == NSNotFound) {
                 NSArray *splitLine = [line componentsSeparatedByString:@" "];
                 if (splitLine.count == 3) {
@@ -211,20 +211,20 @@
                             @throw [NSException exceptionWithName:@"CubeLUTParseError" reason:[NSString stringWithFormat:@"NaN detected at line %i", (int)currentCubeIndex+(int)cubeLinesStartIndex] userInfo:nil];
                         }
                     }
-                    
+
                     // Valid cube line
                     LUTColorValue redValue = ((NSString *)splitLine[0]).doubleValue;
                     LUTColorValue greenValue = ((NSString *)splitLine[1]).doubleValue;
                     LUTColorValue blueValue = ((NSString *)splitLine[2]).doubleValue;
-                    
+
                     LUTColor *color = [LUTColor colorWithRed:redValue green:greenValue blue:blueValue];
-                    
+
                     NSUInteger redIndex = currentCubeIndex % cubeSize;
                     NSUInteger greenIndex = ( (currentCubeIndex % (cubeSize * cubeSize)) / (cubeSize) );
                     NSUInteger blueIndex = currentCubeIndex / (cubeSize * cubeSize);
-                    
+
                     [lut setColor:color r:redIndex g:greenIndex b:blueIndex];
-                    
+
                     currentCubeIndex++;
                 }
             }
@@ -236,29 +236,29 @@
     else{
         //1D LUT
         lut = [LUT1D LUTOfSize:cubeSize inputLowerBound:inputLowerBound inputUpperBound:inputUpperBound];
-        
+
         NSUInteger currentLineIndex = 0;
         for (NSString *line in [lines subarrayWithRange:NSMakeRange(cubeLinesStartIndex, lines.count - cubeLinesStartIndex)]) {
-            
+
             if (line.length > 0 && [line rangeOfString:@"#"].location == NSNotFound) {
                 NSArray *splitLine = [line componentsSeparatedByString:@" "];
                 if (splitLine.count == 3) {
-                    
+
                     for(NSString *checkLine in splitLine){
                         if(stringIsValidNumber(checkLine) == NO){
                             @throw [NSException exceptionWithName:@"CubeLUTParseError" reason:[NSString stringWithFormat:@"NaN detected at line %i", (int)currentLineIndex+(int)cubeLinesStartIndex] userInfo:nil];
                         }
                     }
-                    
+
                     // Valid cube line
                     LUTColorValue redValue = ((NSString *)splitLine[0]).doubleValue;
                     LUTColorValue greenValue = ((NSString *)splitLine[1]).doubleValue;
                     LUTColorValue blueValue = ((NSString *)splitLine[2]).doubleValue;
-                    
+
                     LUTColor *color = [LUTColor colorWithRed:redValue green:greenValue blue:blueValue];
-                    
+
                     [lut setColor:color r:currentLineIndex g:currentLineIndex b:currentLineIndex];
-                    
+
                     currentLineIndex++;
                 }
             }
@@ -283,24 +283,24 @@
     else{
         options = options[[self utiString]];
     }
-    
+
     NSMutableString *string = [NSMutableString stringWithString:@""];
-    
+
     NSUInteger lutSize = [lut size];
-    
+
     if (lut.title && lut.title.length > 0) {
         [string appendString:[NSString stringWithFormat:@"TITLE \"%@\"\n", lut.title]];
     }
-    
-    
+
+
     //metadata and description write
     [string appendString: [LUTMetadataFormatter stringFromMetadata:lut.metadata description:lut.descriptionText]];
     [string appendString:@"\n"];
-    
+
     if(isLUT1D(lut)){
         //maybe implement writing a CUBE as 1D here?
         [string appendString:[NSString stringWithFormat:@"LUT_1D_SIZE %i\n", (int)lutSize]];
-        
+
         if ([options[@"fileTypeVariant"] isEqualToString:@"Resolve"]) {
             [string appendString:[NSString stringWithFormat:@"LUT_1D_INPUT_RANGE %.6f %.6f\n", [lut inputLowerBound], [lut inputUpperBound]]];
         }
@@ -308,10 +308,10 @@
             [string appendString:[NSString stringWithFormat:@"DOMAIN_MIN %f %f %f\n", [lut inputLowerBound], [lut inputLowerBound], [lut inputLowerBound]]];
             [string appendString:[NSString stringWithFormat:@"DOMAIN_MAX %f %f %f\n", [lut inputUpperBound], [lut inputUpperBound], [lut inputUpperBound]]];
         }
-        
-        
+
+
         [string appendString:@"\n"];
-        
+
         for (int i = 0; i < lutSize; i++){
             LUTColor *color = [lut colorAtR:i g:i b:i];
             [string appendString:[NSString stringWithFormat:@"%.10f %.10f %.10f", color.red, color.green, color.blue]];
@@ -319,11 +319,11 @@
                 [string appendString:@"\n"];
             }
         }
-        
+
     }
     else if(isLUT3D(lut)){
         [string appendString:[NSString stringWithFormat:@"LUT_3D_SIZE %i\n", (int)lutSize]];
-        
+
         if ([options[@"fileTypeVariant"] isEqualToString:@"Resolve"]) {
         [string appendString:[NSString stringWithFormat:@"LUT_3D_INPUT_RANGE %.6f %.6f\n", [lut inputLowerBound], [lut inputUpperBound]]];
         }
@@ -331,53 +331,53 @@
             [string appendString:[NSString stringWithFormat:@"DOMAIN_MIN %.6f %.6f %.6f\n", [lut inputLowerBound], [lut inputLowerBound], [lut inputLowerBound]]];
             [string appendString:[NSString stringWithFormat:@"DOMAIN_MAX %.6f %.6f %.6f\n", [lut inputUpperBound], [lut inputUpperBound], [lut inputUpperBound]]];
         }
-        
+
         [string appendString:@"\n"];
-        
+
         NSUInteger arrayLength = lutSize * lutSize * lutSize;
         for (int i = 0; i < arrayLength; i++) {
             int redIndex = i % lutSize;
             int greenIndex = ((i % (lutSize * lutSize)) / (lutSize) );
             int blueIndex = i / (lutSize * lutSize);
-            
+
             LUTColor *color = [lut colorAtR:redIndex g:greenIndex b:blueIndex];
-            
+
             [string appendString:[NSString stringWithFormat:@"%.6f %.6f %.6f", color.red, color.green, color.blue]];
-            
+
             if(i != arrayLength - 1) {
                 [string appendString:@"\n"];
             }
-            
+
         }
     }
     //but not for now
-    
+
     return string;
 
 }
 
 + (NSArray *)allOptions{
-    
+
     NSDictionary *nukeOptions = @{@"fileTypeVariant":@"Nuke"};
-    
+
     NSDictionary *resolveOptions = @{@"fileTypeVariant":@"Resolve"};
-    
+
     NSDictionary *iridasAdobeOptions = @{@"fileTypeVariant":@"Iridas/Adobe"};
-    
+
     return @[resolveOptions, nukeOptions, iridasAdobeOptions];
 }
 
 + (NSArray *)LUTActionsForLUT:(LUT *)lut options:(NSDictionary *)options{
     NSMutableArray *array = [NSMutableArray arrayWithArray:[super LUTActionsForLUT:lut options:options]];
     //options are validated by superclass, no need to do that here.
-    
+
     NSDictionary *exposedOptions = options[[self utiString]];
     if ([exposedOptions[@"fileTypeVariant"] isEqualToString:@"Nuke"]) {
         if(lut.inputLowerBound != 0 || lut.inputUpperBound != 1){
             [array addObject:[LUTAction actionWithLUTByChangingInputLowerBound:0 inputUpperBound:1]];
         }
     }
-    
+
     return array.count == 0 ? nil : array;
 }
 

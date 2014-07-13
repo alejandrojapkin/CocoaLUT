@@ -134,21 +134,21 @@ forwardFootlambertCompensation:(double)flCompensation
     double redChromaticityZ = 1 - (colorSpace.redChromaticityX + colorSpace.redChromaticityY);
     double greenChromaticityZ = 1 - (colorSpace.greenChromaticityX + colorSpace.greenChromaticityY);
     double blueChromaticityZ = 1 - (colorSpace.blueChromaticityX + colorSpace.blueChromaticityY);
-    
+
     GLKMatrix3 P = GLKMatrix3MakeWithRows(GLKVector3Make(colorSpace.redChromaticityX, colorSpace.greenChromaticityX, colorSpace.blueChromaticityX),
                                           GLKVector3Make(colorSpace.redChromaticityY, colorSpace.greenChromaticityY, colorSpace.blueChromaticityY),
                                           GLKVector3Make(redChromaticityZ, greenChromaticityZ, blueChromaticityZ));
-    
+
     GLKVector3 W = GLKVector3Make(whitePoint.whiteChromaticityX / whitePoint.whiteChromaticityY, 1.0, whiteChromaticityZ / whitePoint.whiteChromaticityY);
     bool isInvertible;
     GLKVector3 pInverseDotW = GLKMatrix3MultiplyVector3(GLKMatrix3Invert(P, &isInvertible), W);
-    
+
     NSAssert(isInvertible == YES, @"NPM can't be generated because matrix is not invertible");
-    
+
     GLKMatrix3 C = GLKMatrix3MakeWithRows(GLKVector3Make(pInverseDotW.x,0.0,0.0),
                                           GLKVector3Make(0.0,pInverseDotW.y,0.0),
                                           GLKVector3Make(0.0,0.0,pInverseDotW.z));
-    
+
     return GLKMatrix3Multiply(P, C);
 }
 
@@ -157,39 +157,39 @@ forwardFootlambertCompensation:(double)flCompensation
            toColorSpace:(LUTColorSpace *)destinationColorSpace
              whitePoint:(LUTColorSpaceWhitePoint *)destinationWhitePoint{
     //NSLog(@"Source NPM: %@\n Destination NPM: %@", NSStringFromGLKMatrix3(sourceColorSpace.npm), NSStringFromGLKMatrix3(destinationColorSpace.npm));
-    
+
     GLKMatrix3 transformationMatrix = [self transformationMatrixFromColorSpace:sourceColorSpace
                                                                     whitePoint:sourceWhitePoint
                                                                   toColorSpace:destinationColorSpace
                                                                     whitePoint:destinationWhitePoint];
     //NSLog(@"Transformation Matrix: %@", NSStringFromGLKMatrix3(transformationMatrix));
-    
+
     LUT3D *transformedLUT = [LUT3D LUTOfSize:[lut size] inputLowerBound:[lut inputLowerBound] inputUpperBound:[lut inputUpperBound]];
-    
+
     [transformedLUT copyMetaPropertiesFromLUT:lut];
-    
+
     double sourceFLCompensation = 1.0/sourceColorSpace.forwardFootlambertCompensation;
     double destinationFLCompensation = destinationColorSpace.forwardFootlambertCompensation;
-    
+
     BOOL useFLCompensation = sourceFLCompensation != 1.0/destinationFLCompensation;
-    
+
     [transformedLUT LUTLoopWithBlock:^(size_t r, size_t g, size_t b) {
         LUTColor *sourceColor = [lut colorAtR:r g:g b:b];
         if (useFLCompensation && sourceFLCompensation != 1.0) {
             sourceColor = [sourceColor colorByMultiplyingByNumber:sourceFLCompensation];
         }
-        
+
         GLKVector3 transformedColor = GLKMatrix3MultiplyVector3(transformationMatrix, GLKVector3Make(sourceColor.red, sourceColor.green, sourceColor.blue));
-        
+
         LUTColor *destinationColor = [LUTColor colorWithRed:transformedColor.x green:transformedColor.y blue:transformedColor.z];
-        
+
         if (useFLCompensation && destinationFLCompensation != 1.0) {
             destinationColor = [destinationColor colorByMultiplyingByNumber:destinationFLCompensation];
         }
-        
+
         [transformedLUT setColor:destinationColor r:r g:g b:b];
     }];
-    
+
     return transformedLUT;
 }
 
@@ -213,7 +213,7 @@ forwardFootlambertCompensation:(double)flCompensation
                                      [self sGamutColorSpace],
                                      [self acesGamutColorSpace],
                                      [self xyzColorSpace]];
-    
+
     return allKnownColorSpaces;
 }
 
@@ -249,7 +249,7 @@ forwardFootlambertCompensation:(double)flCompensation
                                             blueChromaticityX:0.131
                                             blueChromaticityY:0.046
                                                          name:@"Rec. 2020"];
-    
+
 }
 
 + (instancetype)alexaWideGamutColorSpace{
