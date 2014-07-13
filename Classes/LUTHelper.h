@@ -52,6 +52,7 @@ LUT3D* LUTAsLUT3D(LUT* lut, NSUInteger size);
 CGSize CGSizeProportionallyScaled(CGSize currentSize, CGSize targetSize);
 
 M13OrderedDictionary* M13OrderedDictionaryFromOrderedArrayWithDictionaries(NSArray *array);
+NSDictionary *NSDictionaryFromM13OrderedDictionary(M13OrderedDictionary *stupidDict);
 
 /**
  *  Runs the passed block cubeSize ^ 3 times, iterating over each point on a cube of edge length `cubeSize`.

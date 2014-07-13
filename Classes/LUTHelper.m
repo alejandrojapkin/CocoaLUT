@@ -189,6 +189,10 @@ CGSize CGSizeProportionallyScaled(CGSize currentSize, CGSize targetSize) {
     return currentSize;
 }
 
+NSDictionary *NSDictionaryFromM13OrderedDictionary(M13OrderedDictionary *stupidDict) {
+    return [NSDictionary dictionaryWithObjects:stupidDict.allObjects forKeys:stupidDict.allKeys];
+}
+
 M13OrderedDictionary* M13OrderedDictionaryFromOrderedArrayWithDictionaries(NSArray *array){
     NSMutableArray *keys = [[NSMutableArray alloc] init];
     NSMutableArray *values = [[NSMutableArray alloc] init];
