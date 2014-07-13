@@ -52,7 +52,6 @@
 - (instancetype)LUT1DBySwizzling1DChannelsWithMethod:(LUT1DSwizzleChannelsMethod)method;
 
 + (M13OrderedDictionary *)LUT1DSwizzleChannelsMethods;
-+ (M13OrderedDictionary *)LUT1DDefaultSizes;
 
 /**
  *  Initializes a newly allocated 1D LUT with the specified channel curves.
