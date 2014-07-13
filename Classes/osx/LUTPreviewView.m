@@ -11,13 +11,14 @@
 
 @interface LUTPreviewView () {}
 
+// Redefinition of videoPlayer to make it writable
+@property (strong) AVPlayer *videoPlayer;
+
 // Images
 @property (strong) CALayer *normalImageLayer;
 @property (strong) CALayer *lutImageLayer;
 
 // Video
-@property (strong) AVPlayer *lutVideoPlayer;
-@property (strong) AVPlayer *normalVideoPlayer;
 @property (strong) AVPlayerLayer *lutVideoLayer;
 @property (strong) AVPlayerLayer *normalVideoLayer;
 
@@ -124,26 +125,24 @@
 - (void)setVideoURL:(NSURL *)videoURL {
     _videoURL = videoURL;
 
-
     if (videoURL) {
 
-        self.lutVideoPlayer = nil;
+        AVPlayerItem *item = [AVPlayerItem playerItemWithURL:videoURL];
+        [self.videoPlayer replaceCurrentItemWithPlayerItem:item];
 
-        self.lutVideoPlayer = [AVPlayer playerWithURL:videoURL];
-        self.lutVideoPlayer.muted = YES;
-        self.lutVideoPlayer.actionAtItemEnd = AVPlayerActionAtItemEndNone;
-        [self.lutVideoPlayer play];
-//
-//        self.normalVideoPlayer = [AVPlayer playerWithURL:videoURL];
-//        self.normalVideoPlayer.muted = YES;
-//        self.normalVideoPlayer.actionAtItemEnd = AVPlayerActionAtItemEndNone;
-//        [self.normalVideoPlayer play];
+        [[NSNotificationCenter defaultCenter] addObserverForName:AVPlayerItemDidPlayToEndTimeNotification
+                                                          object:item
+                                                           queue:[NSOperationQueue mainQueue]
+                                                      usingBlock:^(NSNotification *note) {
+            [[self.videoPlayer currentItem] seekToTime:kCMTimeZero];
+        }];
+        
+        [self.videoPlayer play];
 
         self.previewImage = nil;
     }
     else {
-        self.lutVideoPlayer = nil;
-        self.normalVideoPlayer = nil;
+        [self.videoPlayer pause];
     }
 
     [self setupPlaybackLayers];
@@ -162,7 +161,6 @@
 }
 
 -(void)mouseDragged:(NSEvent *)event {
-//    [[NSCursor closedHandCursor] push];
     [self maskToEvent:event];
 }
 
@@ -173,11 +171,20 @@
 
 - (void)initialize {
 
+    // Video Player
+    self.videoPlayer = [[AVPlayer alloc] init];
+    self.videoPlayer.muted = YES;
+    self.videoPlayer.actionAtItemEnd = AVPlayerActionAtItemEndNone;
+
+    // Initial Mask
     self.maskAmount = 0.5;
 
+    // Layer Settings
     self.wantsLayer = YES;
+    self.layerUsesCoreImageFilters = YES;
     self.layer.backgroundColor = NSColor.blackColor.CGColor;
 
+    // Caption Field
     self.captionField = [[NSTextField alloc] initWithFrame:CGRectZero];
     self.captionField.textColor = [NSColor whiteColor];
     self.captionField.alignment = NSCenterTextAlignment;
@@ -197,62 +204,53 @@
     self.captionField.layer.zPosition = 1;
     [self addSubview:self.captionField];
 
+    // Border Line
+    self.borderView = [[NSView alloc] initWithFrame:NSMakeRect(0, 0, 0, 0)];
+    self.borderView.wantsLayer = YES;
+    self.borderView.layer.backgroundColor = [NSColor colorWithWhite:1 alpha:0.5].CGColor;
+    self.borderView.frame = CGRectMake(self.bounds.size.width * self.maskAmount, 0, 1, self.bounds.size.height);
+    self.borderView.layer.zPosition = 1;
+    [self addSubview:self.borderView];
+
+    // Mask
+    self.maskLayer = [CALayer layer];
+    self.maskLayer.backgroundColor = NSColor.whiteColor.CGColor;
+    self.maskLayer.frame = CGRectMake(0, 0, self.bounds.size.width * self.maskAmount, self.bounds.size.height);
+
+    // Image Layers
     self.normalImageLayer = [[CALayer alloc] init];
     self.normalImageLayer.contentsGravity = kCAGravityResizeAspect;
     self.lutImageLayer = [[CALayer alloc] init];
     self.lutImageLayer.contentsGravity = kCAGravityResizeAspect;
-    self.layerUsesCoreImageFilters = YES;
+    [self.layer addSublayer:self.lutImageLayer];
+    [self.layer addSublayer:self.normalImageLayer];
 
-    _maskLayer = [CALayer layer];
-    _maskLayer.backgroundColor = NSColor.whiteColor.CGColor;
-    _maskLayer.frame = CGRectMake(0, 0, self.bounds.size.width * self.maskAmount, self.bounds.size.height);
-
-    _borderView = [[NSView alloc] initWithFrame:NSMakeRect(0, 0, 0, 0)];
-    _borderView.wantsLayer = YES;
-    _borderView.layer.backgroundColor = [NSColor colorWithWhite:1 alpha:0.5].CGColor;
-    _borderView.frame = CGRectMake(self.bounds.size.width * self.maskAmount, 0, 1, self.bounds.size.height);
-    _borderView.layer.zPosition = 1;
-    [self addSubview:_borderView];
+    // Video Layers
+    self.lutVideoLayer = [AVPlayerLayer playerLayerWithPlayer:self.videoPlayer];
+    self.normalVideoLayer = [AVPlayerLayer playerLayerWithPlayer:self.videoPlayer];
+    [self.layer addSublayer:self.lutVideoLayer];
+    [self.layer addSublayer:self.normalVideoLayer];
 
     [self setupPlaybackLayers];
+
 }
 
 - (void)setupPlaybackLayers {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if (self.videoURL) {
-            // remove players before reassigning
-            [self.lutVideoLayer removeFromSuperlayer];
-            [self.normalVideoLayer removeFromSuperlayer];
-            [self.lutImageLayer removeFromSuperlayer];
-            [self.normalImageLayer removeFromSuperlayer];
+    BOOL isVideo = !!self.videoURL;
 
-            self.lutVideoLayer = nil;
-            self.normalVideoLayer = nil;
+    self.lutVideoLayer.hidden = !isVideo;
+    self.normalVideoLayer.hidden = !isVideo;
 
-            self.lutVideoLayer = [AVPlayerLayer playerLayerWithPlayer:self.lutVideoPlayer];
-            self.normalVideoLayer = [AVPlayerLayer playerLayerWithPlayer:self.lutVideoPlayer];
+    self.normalImageLayer.hidden = isVideo;
+    self.lutImageLayer.hidden = isVideo;
 
-            [self.layer addSublayer:self.lutVideoLayer];
-            [self.layer addSublayer:self.normalVideoLayer];
 
-            self.normalVideoLayer.mask = self.maskLayer;
-
-        }
-        else {
-            [self.lutVideoLayer removeFromSuperlayer];
-            [self.normalVideoLayer removeFromSuperlayer];
-
-            [self.layer addSublayer:self.lutImageLayer];
-            [self.layer addSublayer:self.normalImageLayer];
-
-            self.normalImageLayer.mask = self.maskLayer;
-        }
-        [self updateFilters];
-
-        [self setNeedsDisplay:YES];
-        [self.layer setNeedsDisplay];
-        [self.layer setNeedsLayout];
-    });
+    if (isVideo) {
+        self.normalVideoLayer.mask = self.maskLayer;
+    }
+    else {
+        self.normalImageLayer.mask = self.maskLayer;
+    }
 }
 
 @end
