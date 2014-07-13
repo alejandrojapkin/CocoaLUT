@@ -130,7 +130,6 @@
 }
 
 +(instancetype)gammaTransferFunctionWithGamma:(double)gamma{
-    
     return [LUTColorTransferFunction LUTColorTransferFunctionWithTransformedToLinearBlock1D:^double(double value) {
                                                                                             if(gamma == 1.0){
                                                                                                 return value;
@@ -141,7 +140,7 @@
                                                                                                 return value;
                                                                                              }
                                                                                             return pow(value, 1.0/gamma);}
-            name:[NSString stringWithFormat:@"Gamma %.1f", gamma]];
+            name:[NSString stringWithFormat:@"Gamma %g", gamma]];
 }
 
 + (instancetype)rec709TransferFunction{
@@ -344,12 +343,18 @@
                                                                                        name:@"S-Log3"];
 }
 
-+ (NSURL *)transferFunctionsLUTResourceBundleURL{
-    return [[NSBundle mainBundle] URLForResource:@"TransferFunctionLUTs" withExtension:@"bundle"];
++ (NSBundle *)transferFunctionsLUTResourceBundle{
+    static NSBundle *transferFunctionsBundle = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        transferFunctionsBundle = [NSBundle bundleWithURL:[[NSBundle mainBundle] URLForResource:@"TransferFunctionLUTs" withExtension:@"bundle"]];
+    });
+    
+    return transferFunctionsBundle;
 }
 
 + (NSURL *)lutFromBundleWithName:(NSString *)name extension:(NSString *)extension{
-    return [[NSBundle bundleWithURL:[self transferFunctionsLUTResourceBundleURL]] URLForResource:name withExtension:extension];
+    return [[self.class transferFunctionsLUTResourceBundle] URLForResource:name withExtension:extension];
 }
 
 + (instancetype)bmdFilmTransferFunction{

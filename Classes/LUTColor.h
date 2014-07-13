@@ -90,6 +90,8 @@ typedef double LUTColorValue;
                         outputHigh:(double)outputHigh
                            bounded:(BOOL)bounded;
 
+- (LUTColor *)colorByMultiplyingByNumber:(double)number;
+- (LUTColor *)colorByMultiplyingColor:(LUTColor *)offsetColor;
 - (LUTColor *)colorByAddingColor:(LUTColor *)offsetColor;
 - (LUTColor *)colorBySubtractingColor:(LUTColor *)offsetColor;
 

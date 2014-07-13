@@ -60,6 +60,14 @@
                              blue:contrastStretch(self.blue, currentMin, currentMax, finalMin, finalMax)];
 }
 
+- (LUTColor *)colorByMultiplyingByNumber:(double)number{
+    return [LUTColor colorWithRed:self.red*number green:self.green*number blue:self.blue*number];
+}
+
+- (LUTColor *)colorByMultiplyingColor:(LUTColor *)offsetColor{
+    return [LUTColor colorWithRed:self.red*offsetColor.red green:self.green*offsetColor.green blue:self.blue*offsetColor.blue];
+}
+
 - (LUTColor *)colorByAddingColor:(LUTColor *)offsetColor{
     return [LUTColor colorWithRed:self.red+offsetColor.red green:self.green+offsetColor.green blue:self.blue+offsetColor.blue];
 }

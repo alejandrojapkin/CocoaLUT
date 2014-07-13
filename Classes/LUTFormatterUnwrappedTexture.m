@@ -24,7 +24,8 @@
 
 #elif TARGET_OS_MAC
 
-+ (NSImage *)imageFromLUT:(LUT *)lut {
++ (NSImage *)imageFromLUT:(LUT *)lut
+                 bitdepth:(NSUInteger)bitdepth {
     
     LUT3D *lut3D = LUTAsLUT3D(lut, clampUpperBound([lut size], 64));
     
@@ -34,13 +35,13 @@
     NSBitmapImageRep *imageRep = [[NSBitmapImageRep alloc] initWithBitmapDataPlanes:NULL
                                                                    pixelsWide:width
                                                                    pixelsHigh:height
-                                                                bitsPerSample:16
+                                                                bitsPerSample:bitdepth
                                                               samplesPerPixel:3
                                                                      hasAlpha:NO
                                                                      isPlanar:NO
                                                                colorSpaceName:NSDeviceRGBColorSpace
-                                                                  bytesPerRow:(width * (16 * 3)) / 8
-                                                                 bitsPerPixel:16 * 3];
+                                                                  bytesPerRow:(width * (bitdepth * 3)) / 8
+                                                                 bitsPerPixel:bitdepth * 3];
     
     [lut3D LUTLoopWithBlock:^(size_t r, size_t g, size_t b) {
         NSUInteger x = b * [lut3D size] + r;

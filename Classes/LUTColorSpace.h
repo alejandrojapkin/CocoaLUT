@@ -22,6 +22,7 @@
 @property (assign) double blueChromaticityY;
 
 @property (assign) BOOL forcesNPM;
+@property (assign) double forwardFootlambertCompensation;
 
 @property (assign) GLKMatrix3 npm;
 

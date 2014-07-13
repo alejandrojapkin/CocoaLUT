@@ -237,12 +237,7 @@
     return [C0 lerpTo:C1 amount:1.0 - (upperGreenPoint - greenPoint)];
 }
 
-+ (M13OrderedDictionary *)LUT3DDefaultSizes{
-    return M13OrderedDictionaryFromOrderedArrayWithDictionaries(@[@{@"17": @(17)},
-                                                                  @{@"32": @(32)},
-                                                                  @{@"33": @(33)},
-                                                                  @{@"64": @(64)}]);
-}
+
 
 - (id)copyWithZone:(NSZone *)zone{
     LUT3D *copiedLUT = [super copyWithZone:zone];
