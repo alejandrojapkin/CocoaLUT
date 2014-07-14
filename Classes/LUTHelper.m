@@ -232,7 +232,7 @@ BOOL stringIsValidNumber(NSString *string){
     return [string rangeOfCharacterFromSet:sharedInvertedNumericCharacterSet()].location == NSNotFound;
 }
 
-NSUInteger findFirstLUTLineInLines(NSArray *lines, NSString *seperator, int numValues, int startLine){
+NSInteger findFirstLUTLineInLines(NSArray *lines, NSString *seperator, int numValues, int startLine){
 
     for (int i = startLine; i < lines.count; i++){
         NSArray *splitLine = [lines[i] componentsSeparatedByString:seperator];

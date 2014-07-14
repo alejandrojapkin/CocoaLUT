@@ -40,7 +40,7 @@ double roundValueToNearest(double value, double nearestValue);
 NSArray* arrayWithEmptyElementsRemoved(NSArray *array);
 NSArray* arrayWithComponentsSeperatedByNewlineWithEmptyElementsRemoved(NSString *string);
 NSArray* arrayWithComponentsSeperatedByNewlineAndWhitespaceWithEmptyElementsRemoved(NSString *string);
-NSUInteger findFirstLUTLineInLines(NSArray *lines, NSString *seperator, int numValues, int startLine);
+NSInteger findFirstLUTLineInLines(NSArray *lines, NSString *seperator, int numValues, int startLine);
 
 NSNumberFormatter* sharedNumberFormatter();
 BOOL stringIsValidNumber(NSString *string);
