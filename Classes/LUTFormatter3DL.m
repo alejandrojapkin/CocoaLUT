@@ -132,7 +132,7 @@
 
     fileTypeVariant = options[@"fileTypeVariant"];
     integerMaxOutput = [options[@"integerMaxOutput"] integerValue];
-    lutSize = lut.size;
+    lutSize = [options[@"lutSize"] integerValue];
     //----------------
 
 
