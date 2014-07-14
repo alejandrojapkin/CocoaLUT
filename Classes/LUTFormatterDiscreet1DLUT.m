@@ -20,6 +20,8 @@
     NSMutableDictionary *metadata;
     NSMutableDictionary *passthroughFileOptions = [NSMutableDictionary dictionary];
 
+    passthroughFileOptions[@"fileTypeVariant"] = @"Discreet";
+
     NSMutableArray *redCurve = [NSMutableArray array];
     NSMutableArray *greenCurve = [NSMutableArray array];
     NSMutableArray *blueCurve = [NSMutableArray array];
