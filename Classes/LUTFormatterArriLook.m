@@ -105,6 +105,17 @@
     return LUTFormatterOutputTypeNone;
 }
 
++ (BOOL)isValidReaderForURL:(NSURL *)fileURL{
+    if ([super isValidReaderForURL:fileURL] == NO) {
+        return NO;
+    }
+    NSDictionary *xml = [NSDictionary dictionaryWithXMLFile:[fileURL path]];
+    if([[xml attributes][@"version"] isEqualToString:@"1.0"] || [[xml attributes][@"camera"] isEqualToString:@"alexa"]){
+        return YES;
+    }
+    return NO;
+}
+
 + (NSString *)formatterName{
     return @"Arri Look";
 }
