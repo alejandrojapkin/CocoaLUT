@@ -132,10 +132,9 @@
 
     fileTypeVariant = options[@"fileTypeVariant"];
     integerMaxOutput = [options[@"integerMaxOutput"] integerValue];
-    lutSize = [options[@"lutSize"] integerValue];
+    lutSize = lut.size;
     //----------------
 
-    lut = [lut LUTByResizingToSize:lutSize];
 
     [string appendString: [LUTMetadataFormatter stringFromMetadata:lut.metadata description:lut.descriptionText]];
     [string appendString:@"\n"];
