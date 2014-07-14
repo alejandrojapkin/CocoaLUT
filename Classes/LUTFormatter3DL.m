@@ -250,7 +250,7 @@
 
     NSDictionary *nukeOptions =
                 @{@"fileTypeVariant":@"Nuke",
-                  @"integerMaxOutput": M13OrderedDictionaryFromOrderedArrayWithDictionaries(@[@{@"12-bit": @(pow(2, 12) - 1)},
+                  @"integerMaxOutput": M13OrderedDictionaryFromOrderedArrayWithDictionaries(@[@{@"12-bit": @(pow(2, 16) - 1)},
                                                                                               @{@"16-bit": @(pow(2, 16) - 1)}]),
                   @"lutSize": M13OrderedDictionaryFromOrderedArrayWithDictionaries(@[@{@"32": @(32)},
                                                                                      @{@"64": @(64)}])};
