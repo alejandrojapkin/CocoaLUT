@@ -41,6 +41,9 @@
 
 + (instancetype)LUTFromURL:(NSURL *)url {
     LUTFormatter *formatter = [LUTFormatter LUTFormatterValidForReadingURL:url];
+    if(formatter == nil){
+        return nil;
+    }
     return [[formatter class] LUTFromURL:url];
 }
 
