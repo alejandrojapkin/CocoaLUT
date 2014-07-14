@@ -83,7 +83,7 @@
     LUT1D *lut = [LUT1D LUT1DWithRedCurve:redCurve greenCurve:greenCurve blueCurve:blueCurve lowerBound:0.0 upperBound:1.0];
     [lut setMetadata:metadata];
     lut.descriptionText = description;
-    [lut setPassthroughFileOptions:@{[self utiString]: passthroughFileOptions}];
+    [lut setPassthroughFileOptions:@{[self formatterID]: passthroughFileOptions}];
     return lut;
 }
 
@@ -93,7 +93,7 @@
         @throw [NSException exceptionWithName:@"Discreet1DLUTWriteError" reason:[NSString stringWithFormat:@"Options don't pass the spec: %@", options] userInfo:nil];
     }
     else{
-        options = options[[self utiString]];
+        options = options[[self formatterID]];
     }
 
     NSMutableString *string = [NSMutableString stringWithString:@""];
@@ -143,7 +143,7 @@
 + (NSDictionary *)defaultOptions{
     NSDictionary *dictionary = @{@"fileTypeVariant": @"Discreet",
                                  @"integerMaxOutput": @((int)(pow(2, 12) - 1))};
-    return @{[self utiString]:dictionary};
+    return @{[self formatterID]:dictionary};
 }
 
 + (NSString *)utiString{
@@ -156,6 +156,10 @@
 
 + (NSString *)formatterName{
     return @"Discreet 1D LUT";
+}
+
++ (NSString *)formatterID{
+    return @"discreet";
 }
 
 + (BOOL)canRead{

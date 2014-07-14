@@ -109,6 +109,10 @@
     return @"Arri Look";
 }
 
++ (NSString *)formatterID{
+    return @"arriLook";
+}
+
 + (BOOL)canRead{
     return YES;
 }

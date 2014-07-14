@@ -85,6 +85,10 @@
     return @"Blackmagic Design 1D LUT";
 }
 
++ (NSString *)formatterID{
+    return @"olut";
+}
+
 + (BOOL)canRead{
     return YES;
 }

@@ -10,6 +10,7 @@
 #import "CocoaLUT.h"
 #import "LUTFormatter.h"
 
+
 @interface LUT ()
 @end
 
@@ -43,11 +44,10 @@
     return [[formatter class] LUTFromURL:url];
 }
 
-- (NSData *)dataFromLUTWithUTIString:(NSString *)utiString
+- (NSData *)dataFromLUTWithFormatter:(LUTFormatter *)formatter
                              options:(NSDictionary *)options{
-    LUTFormatter *formatter = [LUTFormatter LUTFormatterForUTIString:utiString];
     if(formatter == nil){
-        NSLog(@"Formatter for UTI %@ not found.", utiString);
+        NSLog(@"Formatter can't be nil.");
         return nil;
     }
     else if([[formatter class] isValidWriterForLUTType:self] == NO){

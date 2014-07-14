@@ -271,7 +271,7 @@
     [lut setTitle:title];
     lut.descriptionText = description;
     [lut setMetadata:metadata];
-    lut.passthroughFileOptions = @{[self utiString]:passthroughFileOptions};
+    lut.passthroughFileOptions = @{[self formatterID]:passthroughFileOptions};
 
     return lut;
 }
@@ -281,7 +281,7 @@
         @throw [NSException exceptionWithName:@"CubeLUTWriteError" reason:[NSString stringWithFormat:@"Options don't pass the spec: %@", options] userInfo:nil];
     }
     else{
-        options = options[[self utiString]];
+        options = options[[self formatterID]];
     }
 
     NSMutableString *string = [NSMutableString stringWithString:@""];
@@ -367,11 +367,11 @@
     return @[resolveOptions, nukeOptions, iridasAdobeOptions];
 }
 
-+ (NSArray *)LUTActionsForLUT:(LUT *)lut options:(NSDictionary *)options{
-    NSMutableArray *array = [NSMutableArray arrayWithArray:[super LUTActionsForLUT:lut options:options]];
++ (NSArray *)conformanceLUTActionsForLUT:(LUT *)lut options:(NSDictionary *)options{
+    NSMutableArray *array = [NSMutableArray arrayWithArray:[super conformanceLUTActionsForLUT:lut options:options]];
     //options are validated by superclass, no need to do that here.
 
-    NSDictionary *exposedOptions = options[[self utiString]];
+    NSDictionary *exposedOptions = options[[self formatterID]];
     if ([exposedOptions[@"fileTypeVariant"] isEqualToString:@"Nuke"]) {
         if(lut.inputLowerBound != 0 || lut.inputUpperBound != 1){
             [array addObject:[LUTAction actionWithLUTByChangingInputLowerBound:0 inputUpperBound:1]];
@@ -383,7 +383,7 @@
 
 + (NSDictionary *)defaultOptions{
     NSDictionary *dictionary = @{@"fileTypeVariant": @"Resolve"};
-    return @{[self utiString]:dictionary};
+    return @{[self formatterID]:dictionary};
 }
 
 
@@ -398,6 +398,10 @@
 
 + (NSArray *)fileExtensions{
     return @[@"cube"];
+}
+
++ (NSString *)formatterID{
+    return @"cube";
 }
 
 + (NSString *)formatterName{

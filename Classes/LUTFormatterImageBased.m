@@ -40,7 +40,7 @@
         @throw [NSException exceptionWithName:@"ImageBasedWriteError" reason:[NSString stringWithFormat:@"Options don't pass the spec: %@", options] userInfo:nil];
     }
 
-    NSDictionary *exposedOptions = options[[self utiString]];
+    NSDictionary *exposedOptions = options[[self formatterID]];
 //
 //    #if defined(COCOAPODS_POD_AVAILABLE_oiiococoa)
 //    if([exposedOptions[@"fileTypeVariant"] isEqualToString:@"DPX"]){
@@ -96,7 +96,7 @@
 
 
     LUT *lut = [self LUTFromImage:image];
-    lut.passthroughFileOptions = @{[self utiString] : passthroughFileOptions};
+    lut.passthroughFileOptions = @{[self formatterID] : passthroughFileOptions};
     return lut;
 }
 
@@ -186,7 +186,7 @@
     dictionary = @{@"fileTypeVariant": @"TIFF",
                    @"bitDepth": @(16)};
 //#endif
-    return @{[self utiString]: dictionary};
+    return @{[self formatterID]: dictionary};
 }
 
 

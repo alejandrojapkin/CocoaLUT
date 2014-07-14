@@ -34,14 +34,6 @@ static NSMutableArray *allFormatters;
     return array;
 }
 
-+ (LUTFormatter *)LUTFormatterForUTIString:(NSString *)utiString{
-    for(LUTFormatter *formatter in allFormatters){
-        if([[[formatter class] utiString] isEqualToString:utiString])
-            return formatter;
-    }
-    return nil;
-}
-
 + (NSArray *)LUTFormattersForFileExtension:(NSString *)fileExtension{
     NSMutableArray *formatters = [NSMutableArray array];
     for(LUTFormatter *formatter in allFormatters){
@@ -51,6 +43,15 @@ static NSMutableArray *allFormatters;
 
     }
     return [NSArray arrayWithArray:formatters];
+}
+
++ (LUTFormatter *)LUTFormatterWithID:(NSString *)identifier{
+    for(LUTFormatter* formatter in allFormatters){
+        if([[[formatter class] formatterID] isEqualToString:identifier]){
+            return formatter;
+        }
+    }
+    return nil;
 }
 
 + (LUTFormatter *)LUTFormatterValidForReadingURL:(NSURL *)fileURL{
@@ -140,8 +141,8 @@ static NSMutableArray *allFormatters;
 }
 
 + (BOOL)optionsAreValid:(NSDictionary *)options{
-    NSDictionary *defaultOptionsExposed = [self defaultOptions][[self utiString]];
-    NSDictionary *optionsExposed = options[[self utiString]];
+    NSDictionary *defaultOptionsExposed = [self defaultOptions][[self formatterID]];
+    NSDictionary *optionsExposed = options[[self formatterID]];
     if(optionsExposed == nil && defaultOptionsExposed == nil){
         return YES;
     }
@@ -192,7 +193,11 @@ static NSMutableArray *allFormatters;
     @throw [NSException exceptionWithName:@"NotImplemented" reason:[NSString stringWithFormat:@"\"%s\" Not Implemented", __func__] userInfo:nil];
 }
 
-+ (NSString *)fullName{
++ (NSString *)formatterID{
+    @throw [NSException exceptionWithName:@"NotImplemented" reason:[NSString stringWithFormat:@"\"%s\" Not Implemented", __func__] userInfo:nil];
+}
+
++ (NSString *)nameWithExtensions{
     NSMutableString *extensionsString = [[NSMutableString alloc] initWithString:@"("];
     NSArray *fileExtensions = [self fileExtensions];
 
@@ -232,14 +237,14 @@ static NSMutableArray *allFormatters;
              @"outputBounds":@[[NSNull null], [NSNull null]]};
 }
 
-+ (NSArray *)LUTActionsForLUT:(LUT *)lut options:(NSDictionary *)options{
++ (NSArray *)conformanceLUTActionsForLUT:(LUT *)lut options:(NSDictionary *)options{
     NSMutableArray *arrayOfActions = [NSMutableArray array];
 
     if(![self optionsAreValid:options]){
        @throw [NSException exceptionWithName:@"LUTActionsForLUTError" reason:[NSString stringWithFormat:@"Provided options don't pass the spec: %@", options] userInfo:nil];
     }
 
-    NSDictionary *exposedOptions = options == nil ? nil : options[[self utiString]];
+    NSDictionary *exposedOptions = options == nil ? nil : options[[self formatterID]];
     NSDictionary *formatterConstantConstraints = [self constantConstraints];
 
     if(formatterConstantConstraints != nil){
@@ -266,19 +271,19 @@ static NSMutableArray *allFormatters;
         if(formatterConstantConstraints[@"outputBounds"] != nil){
             NSArray *array = formatterConstantConstraints[@"outputBounds"];
             if(array[0] != [NSNull null] && array[1] != [NSNull null]){
-                if(lut.minimumOutputValue != [array[0] doubleValue] || lut.maximumOutputValue != [array[1] doubleValue]){
+                if(lut.minimumOutputValue < [array[0] doubleValue] || lut.maximumOutputValue > [array[1] doubleValue]){
                     [arrayOfActions addObject:[LUTAction actionWithLUTByClampingLowerBound:[array[0] doubleValue] upperBound:[array[1] doubleValue]]];
                 }
             }
             else if(array[0] == [NSNull null] && array[1] != [NSNull null]){
                 //strange setup, bro
-                if(lut.maximumOutputValue != [array[1] doubleValue]){
+                if(lut.maximumOutputValue > [array[1] doubleValue]){
                     [arrayOfActions addObject:[LUTAction actionWithLUTByClampingLowerBound:lut.minimumOutputValue upperBound:[array[1] doubleValue]]];
                 }
             }
             else if(array[0] != [NSNull null] && array[1] == [NSNull null]){
                 //strange setup, bro
-                if(lut.minimumOutputValue != [array[0] doubleValue]){
+                if(lut.minimumOutputValue < [array[0] doubleValue]){
                     [arrayOfActions addObject:[LUTAction actionWithLUTByClampingLowerBound:[array[0] doubleValue] upperBound:lut.maximumOutputValue]];
                 }
             }

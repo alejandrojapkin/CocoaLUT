@@ -121,6 +121,10 @@
     return @"CMS Test Pattern Image 3D LUT";
 }
 
++ (NSString *)formatterID{
+    return @"cms";
+}
+
 
 
 

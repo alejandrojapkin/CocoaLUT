@@ -104,7 +104,7 @@
 
     [lut setMetadata:metadata];
     lut.descriptionText = description;
-    [lut setPassthroughFileOptions:@{[self utiString]: passthroughFileOptions}];
+    [lut setPassthroughFileOptions:@{[self formatterID]: passthroughFileOptions}];
 
     return lut;
 
@@ -117,7 +117,7 @@
         @throw [NSException exceptionWithName:@"3DLWriteError" reason:[NSString stringWithFormat:@"Options don't pass the spec: %@", options] userInfo:nil];
     }
     else{
-        options = options[[self utiString]];
+        options = options[[self formatterID]];
     }
 
 
@@ -200,15 +200,15 @@
 }
 
 + (BOOL)optionsAreValid:(NSDictionary *)options{
-    if(options[[self utiString]] == nil){
+    if(options[[self formatterID]] == nil){
         return NO;
     }
-    NSMutableDictionary *exposedOptions = [options[[self utiString]] mutableCopy];
+    NSMutableDictionary *exposedOptions = [options[[self formatterID]] mutableCopy];
     if(exposedOptions[@"integerMaxOutput"] == nil || [exposedOptions[@"integerMaxOutput"] integerValue] <= 0){
         return NO;
     }
     [exposedOptions removeObjectForKey:@"integerMaxOutput"];//don't let the superclass compare integerMaxOutput value to available options (good for reading in a weird lut and writing it out the same way again
-    return [super optionsAreValid:@{[self utiString] : exposedOptions}];
+    return [super optionsAreValid:@{[self formatterID] : exposedOptions}];
 }
 
 
@@ -226,6 +226,10 @@
 
 + (NSString *)formatterName{
     return @"Nuke/Lustre 3D LUT";
+}
+
++ (NSString *)formatterID{
+    return @"3dl";
 }
 
 + (BOOL)canRead{
@@ -261,7 +265,7 @@
                                  @"integerMaxOutput": @((int)(pow(2, 16) - 1)),
                                  @"lutSize": @(32)};
 
-    return @{[self utiString]: dictionary};
+    return @{[self formatterID]: dictionary};
 }
 
 

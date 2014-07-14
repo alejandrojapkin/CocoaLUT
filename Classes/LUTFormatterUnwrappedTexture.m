@@ -88,4 +88,8 @@
     return @"Unwrapped Cube Image 3D LUT";
 }
 
++ (NSString *)formatterID{
+    return @"unwrappedCube";
+}
+
 @end

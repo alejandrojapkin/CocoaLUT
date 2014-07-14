@@ -56,6 +56,10 @@
     return @"ICC Profile";
 }
 
++ (NSString *)formatterID{
+    return @"iccProfile";
+}
+
 + (BOOL)canRead{
     return YES;
 }
