@@ -38,6 +38,7 @@ NSArray* indicesIntegerArray(int startValue, int endValue, int numIndices);
 double roundValueToNearest(double value, double nearestValue);
 
 NSArray* arrayWithEmptyElementsRemoved(NSArray *array);
+NSArray* arrayWithComponentsSeperatedByNewlineWithEmptyElementsRemoved(NSString *string);
 NSArray* arrayWithComponentsSeperatedByNewlineAndWhitespaceWithEmptyElementsRemoved(NSString *string);
 NSUInteger findFirstLUTLineInLines(NSArray *lines, NSString *seperator, int numValues, int startLine);
 
