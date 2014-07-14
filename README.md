@@ -10,7 +10,7 @@ CocoaLUT is a tool for importing, exporting, and manipulating [3D look up tables
 
 The goal of this project is to have a fast, modern Objective-C (and soon, Swift) library that works on both iOS and OS X.
 
-[![Lattice](lattice.png)](http://lut.biz)
+[![Lattice](lattice.png)](http://lattice.videovillage.co)
 
 ## Features
 
