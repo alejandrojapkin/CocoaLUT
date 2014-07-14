@@ -30,7 +30,7 @@
 - (void)testReadWriteCube {
     LUT3D *identityLUT = [LUT3D LUTIdentityOfSize:33 inputLowerBound:0 inputUpperBound:1];
     NSDictionary *outputOptions = [LUTFormatterCube defaultOptions];
-    NSData *lutData = [identityLUT dataFromLUTWithUTIString:[LUTFormatterCube utiString] options:outputOptions];
+    NSData *lutData = [identityLUT dataFromLUTWithFormatterID:[LUTFormatterCube formatterID] options:outputOptions];
     NSURL *lutURL = [self.class uniqueTempFileURLWithFileExtension:@".cube"];
     [lutData writeToURL:lutURL atomically:YES];
     XCTAssert([lutURL checkResourceIsReachableAndReturnError:nil], @"Cube didn't write successfully.");
