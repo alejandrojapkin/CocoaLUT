@@ -47,8 +47,10 @@
     return [[formatter class] LUTFromURL:url];
 }
 
-- (NSData *)dataFromLUTWithFormatter:(LUTFormatter *)formatter
-                             options:(NSDictionary *)options{
+- (NSData *)dataFromLUTWithFormatterID:(NSString *)formatterID
+                               options:(NSDictionary *)options{
+    LUTFormatter *formatter = [LUTFormatter LUTFormatterWithID:formatterID];
+
     if(formatter == nil){
         NSLog(@"Formatter can't be nil.");
         return nil;
