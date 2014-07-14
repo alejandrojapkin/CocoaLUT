@@ -26,7 +26,9 @@
 @property (strong) CALayer *maskLayer;
 
 @property (strong) NSView  *borderView;
-@property (strong) NSTextField *captionField;
+
+@property (strong) NSTextField *normalCaptionField;
+@property (strong) NSTextField *lutCaptionField;
 
 @end
 
@@ -62,7 +64,8 @@
 
     _borderView.frame = CGRectMake(self.bounds.size.width * self.maskAmount, 0, 1, self.bounds.size.height);
 
-    self.captionField.frame = CGRectMake(self.bounds.size.width * self.maskAmount - 61, 10, 100, 20);
+    self.normalCaptionField.frame = CGRectMake(self.bounds.size.width * self.maskAmount - 100 - 5, 10, 100, 20);
+    self.lutCaptionField.frame = CGRectMake(self.bounds.size.width * self.maskAmount + 5, 10, 100, 20);
 
     [CATransaction commit];
 
@@ -137,7 +140,7 @@
                                                       usingBlock:^(NSNotification *note) {
             [[self.videoPlayer currentItem] seekToTime:kCMTimeZero];
         }];
-        
+
         [self.videoPlayer play];
 
         self.previewImage = nil;
@@ -172,6 +175,25 @@
     self.maskAmount = newDragLocation.x / self.bounds.size.width;
 }
 
+- (NSTextField *)textFieldWithSettings {
+    NSTextField *textField = [[NSTextField alloc] initWithFrame:CGRectZero];
+    textField.textColor = [NSColor whiteColor];
+    [textField setBezeled:NO];
+    [textField setDrawsBackground:NO];
+    [textField setEditable:NO];
+    [textField setSelectable:NO];
+    [textField setWantsLayer:YES];
+    textField.font = [NSFont systemFontOfSize:[NSFont systemFontSizeForControlSize:NSSmallControlSize]];
+    textField.layer.shadowColor = [NSColor blackColor].CGColor;
+    textField.layer.shadowOpacity = 1;
+    textField.layer.shadowOffset = CGSizeMake(0, 1);
+    textField.layer.shadowRadius = 0;
+    textField.layer.masksToBounds = YES;
+    textField.layer.opacity = 0.7;
+    textField.layer.zPosition = 1;
+    return textField;
+}
+
 - (void)initialize {
 
     // Video Player
@@ -187,25 +209,16 @@
     self.layerUsesCoreImageFilters = YES;
     self.layer.backgroundColor = NSColor.blackColor.CGColor;
 
-    // Caption Field
-    self.captionField = [[NSTextField alloc] initWithFrame:CGRectZero];
-    self.captionField.textColor = [NSColor whiteColor];
-    self.captionField.alignment = NSCenterTextAlignment;
-    self.captionField.stringValue = @"Original   LUT";
-    [self.captionField setBezeled:NO];
-    [self.captionField setDrawsBackground:NO];
-    [self.captionField setEditable:NO];
-    [self.captionField setSelectable:NO];
-    [self.captionField setWantsLayer:YES];
-    self.captionField.font = [NSFont systemFontOfSize:[NSFont systemFontSizeForControlSize:NSSmallControlSize]];
-    self.captionField.layer.shadowColor = [NSColor blackColor].CGColor;
-    self.captionField.layer.shadowOpacity = 1;
-    self.captionField.layer.shadowOffset = CGSizeMake(0, 1);
-    self.captionField.layer.shadowRadius = 0;
-    self.captionField.layer.masksToBounds = YES;
-    self.captionField.layer.opacity = 0.7;
-    self.captionField.layer.zPosition = 1;
-    [self addSubview:self.captionField];
+    // Caption Fields
+    self.normalCaptionField = [self textFieldWithSettings];
+    self.normalCaptionField.alignment = NSRightTextAlignment;
+    self.normalCaptionField.stringValue = @"Original";
+    [self addSubview:self.normalCaptionField];
+
+    self.lutCaptionField = [self textFieldWithSettings];
+    self.lutCaptionField.alignment = NSLeftTextAlignment;
+    self.lutCaptionField.stringValue = @"LUT";
+    [self addSubview:self.lutCaptionField];
 
     // Border Line
     self.borderView = [[NSView alloc] initWithFrame:NSMakeRect(0, 0, 0, 0)];
