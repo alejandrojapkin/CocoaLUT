@@ -139,7 +139,7 @@
 }
 
 + (NSString *)formatterName{
-    return @"DVS Clipster LUT";
+    return @"DVS Clipster 3D LUT";
 }
 
 + (NSString *)formatterID{
