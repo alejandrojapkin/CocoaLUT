@@ -137,8 +137,6 @@
 
     lut = [lut LUTByResizingToSize:lutSize];
 
-    //lut = LUTAsLUT3D(lut, lutSize);
-
     [string appendString: [LUTMetadataFormatter stringFromMetadata:lut.metadata description:lut.descriptionText]];
     [string appendString:@"\n"];
 
