@@ -125,6 +125,8 @@ typedef double LUTColorValue;
  */
 - (LUTColor *)lerpTo:(LUTColor *)otherColor amount:(double)amount;
 
+- (double)distanceToColor:(LUTColor *)otherColor;
+
 /**
  *  A LUTColor representation of the system color. On OS X this takes an NSColor, on iOS a UIColor.
  *

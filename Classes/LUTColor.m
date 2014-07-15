@@ -164,6 +164,12 @@
 
 }
 
+- (double)distanceToColor:(LUTColor *)otherColor{
+    return sqrt(pow(self.red - otherColor.red, 2) + pow(self.green - otherColor.green, 2) + pow(self.blue - otherColor.blue, 2));
+}
+
+
+
 - (NSString *)description{
     return [NSString stringWithFormat:@"(%.6f, %.6f, %.6f)", self.red, self.green, self.blue];
 }
