@@ -264,6 +264,33 @@ NSArray* arrayWithComponentsSeperatedByNewlineWithEmptyElementsRemoved(NSString 
     return arrayWithEmptyElementsRemoved([string componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]]);
 }
 
+SystemColor* systemColorWithHexString(NSString* hexString){
+    #if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR
+    return [UIColor colorWithHexString(hexString)];
+    #elif TARGET_OS_MAC
+    NSColor* result = nil;
+    unsigned colorCode = 0;
+    unsigned char redByte, greenByte, blueByte;
+
+    if (hexString != nil)
+    {
+        hexString = [hexString stringByReplacingOccurrencesOfString:@"#" withString:@""];
+        NSScanner* scanner = [NSScanner scannerWithString:hexString];
+        (void) [scanner scanHexInt:&colorCode]; // ignore error
+    }
+    redByte = (unsigned char)(colorCode >> 16);
+    greenByte = (unsigned char)(colorCode >> 8);
+    blueByte = (unsigned char)(colorCode); // masks off high bits
+
+    result = [NSColor
+              colorWithDeviceRed:(CGFloat)redByte / 0xff
+              green:(CGFloat)greenByte / 0xff
+              blue:(CGFloat)blueByte / 0xff
+              alpha:1.0];
+    return result;
+    #endif
+}
+
 
 #if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR
 #elif TARGET_OS_MAC

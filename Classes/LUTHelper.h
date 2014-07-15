@@ -64,6 +64,8 @@ void LUT1DLoop(NSUInteger size, void (^block)(NSUInteger index));
 
 void LUTConcurrentRectLoop(NSUInteger width, NSUInteger height, void (^block)(NSUInteger x, NSUInteger y));
 
+SystemColor* systemColorWithHexString(NSString* hexString);
+
 #if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR
 #elif TARGET_OS_MAC
 void LUTNSImageLog(NSImage *image);
