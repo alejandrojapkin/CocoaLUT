@@ -31,7 +31,7 @@
             @throw [NSException exceptionWithName:@"LUTCreationError" reason:@"Input Lower Bound >= Input Upper Bound" userInfo:nil];
         }
         self.metadata = [NSMutableDictionary dictionary];
-        self.passthroughFileOptions = nil;
+        self.passthroughFileOptions = [NSDictionary dictionary];
         self.size = size;
         self.inputLowerBound = inputLowerBound;
         self.inputUpperBound = inputUpperBound;
