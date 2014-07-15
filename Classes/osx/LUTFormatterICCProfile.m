@@ -33,6 +33,8 @@
         [lut setColor:[LUTColor colorWithRed:componentArray[0] green:componentArray[1] blue:componentArray[2]] r:r g:g b:b];
     }];
 
+    lut.passthroughFileOptions = @{[self formatterID]:@{}};
+
     return lut;
 }
 

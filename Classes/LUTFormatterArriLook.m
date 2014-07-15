@@ -97,6 +97,8 @@
         [lut3D setColor:color r:r g:g b:b];
     }];
 
+    lut3D.passthroughFileOptions = @{[self formatterID]:@{}};
+
     return lut3D;
 }
 
