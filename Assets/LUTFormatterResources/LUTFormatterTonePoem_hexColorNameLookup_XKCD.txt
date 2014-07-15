@@ -69,7 +69,7 @@ sickly yellow	#d0e429
 sunny yellow	#fff917	
 azul	#1d5dec	
 darkgreen	#054907	
-green/yellow	#b5ce08	
+green-yellow	#b5ce08	
 lichen	#8fb67b	
 light light green	#c8ffb0	
 pale gold	#fdde6c	
@@ -125,7 +125,7 @@ ugly blue	#31668a
 clear blue	#247afd	
 creme	#ffffb6	
 foam green	#90fda9	
-grey/green	#86a17d	
+grey-green	#86a17d	
 light gold	#fddc5c	
 seafoam blue	#78d1b6	
 topaz	#13bbaf	
@@ -138,7 +138,7 @@ light yellowish green	#c2ff89
 pale magenta	#d767ad	
 rich purple	#720058	
 sunflower yellow	#ffda03	
-green/blue	#01c08d	
+green-blue	#01c08d	
 leather	#ac7434	
 racing green	#014600	
 vivid purple	#9900fa	
@@ -226,7 +226,7 @@ lawn green	#4da409
 putty	#beae8a	
 vibrant blue	#0339f8	
 dark sand	#a88f59	
-purple/blue	#5d21d0	
+purple-blue	#5d21d0	
 saffron	#feb209	
 twilight	#4e518b	
 warm brown	#964e02	
@@ -262,9 +262,9 @@ muddy yellow	#bfac05
 dark seafoam green	#3eaf76	
 deep rose	#c74767	
 dusty red	#b9484e	
-grey/blue	#647d8e	
+grey-blue	#647d8e	
 lemon lime	#bffe28	
-purple/pink	#d725de	
+purple-pink	#d725de	
 brown yellow	#b29705	
 purple brown	#673a3f	
 wisteria	#a87dc2	
@@ -279,7 +279,7 @@ eggshell blue	#c4fff7
 sandy yellow	#fdee73	
 cool green	#33b864	
 pale	#fff9d0	
-blue/grey	#758da3	
+blue-grey	#758da3	
 hot magenta	#f504c9	
 greyblue	#77a1b5	
 purpley	#8756e4	
@@ -342,7 +342,7 @@ apple	#6ecb3c
 baby poop green	#8f9805	
 green apple	#5edc1f	
 heliotrope	#d94ff5	
-yellow/green	#c8fd3d	
+yellow-green	#c8fd3d	
 almost black	#070d0d	
 cool blue	#4984b8	
 leafy green	#51b73b	
@@ -390,7 +390,7 @@ muted blue	#3b719f
 pale rose	#fdc1c5	
 dark mint green	#20c073	
 amethyst	#9b5fc0	
-blue/green	#0f9b8e	
+blue-green	#0f9b8e	
 chestnut	#742802	
 sick green	#9db92c	
 pea	#a4bf20	
@@ -432,7 +432,7 @@ orangish brown	#b25f03
 tree green	#2a7e19	
 deep violet	#490648	
 gunmetal	#536267	
-blue/purple	#5a06ef	
+blue-purple	#5a06ef	
 cherry	#cf0234	
 sandy brown	#c4a661	
 warm grey	#978a84	
@@ -459,7 +459,7 @@ purplish red	#b0054b
 slime green	#99cc04	
 baby poop	#937c00	
 irish green	#019529	
-pink/purple	#ef1de7	
+pink-purple	#ef1de7	
 dark navy	#000435	
 greeny blue	#42b395	
 light plum	#9d5783	
