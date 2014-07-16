@@ -264,6 +264,13 @@ NSArray* arrayWithComponentsSeperatedByNewlineWithEmptyElementsRemoved(NSString 
     return arrayWithEmptyElementsRemoved([string componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]]);
 }
 
+NSString* substringBetweenTwoStrings(NSString *originString, NSString *firstString, NSString *secondString){
+    NSRange r1 = [originString rangeOfString:firstString];
+    NSRange r2 = [originString rangeOfString:secondString];
+    NSRange rSub = NSMakeRange(r1.location + r1.length, r2.location - r1.location - r1.length);
+    return [originString substringWithRange:rSub];
+}
+
 SystemColor* systemColorWithHexString(NSString* hexString){
     #if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR
     return [UIColor colorWithHexString(hexString)];

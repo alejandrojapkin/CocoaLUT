@@ -90,23 +90,24 @@
             isLUT1D = YES;
         }
         if ([lineString rangeOfString:@"breadth"].location != NSNotFound) {
-            NSArray *splitLine = [lineString componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-            splitLine = arrayWithEmptyElementsRemoved(splitLine);
+            NSString *wordString = [lineString stringByReplacingOccurrencesOfString:@"breadth of " withString:@""];
             NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
             [formatter setNumberStyle: NSNumberFormatterSpellOutStyle];
 
-            lutSize = [[formatter numberFromString:splitLine[2]] integerValue];
+            lutSize = [[formatter numberFromString:wordString] integerValue];
         }
         if ([lineString rangeOfString:@"all remain unchanging"].location != NSNotFound) {
             isIdentity = YES;
         }
         if ([lineString rangeOfString:@"encompasses"].location != NSNotFound) {
-            NSArray *splitLine = [lineString componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-            splitLine = arrayWithEmptyElementsRemoved(splitLine);
             NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
             [formatter setNumberStyle: NSNumberFormatterSpellOutStyle];
-            inputLowerBound = [[formatter numberFromString:splitLine[1]] doubleValue];
-            inputUpperBound = [[formatter numberFromString:splitLine[3]] doubleValue];
+            NSString *inputLowerBoundString = substringBetweenTwoStrings(lineString, @"encompasses ", @" to");
+            NSRange toRange = [lineString rangeOfString:@"to "];
+            NSString *inputUpperBoundString = [lineString substringFromIndex:toRange.location+toRange.length];
+
+            inputLowerBound = [[formatter numberFromString:inputLowerBoundString] doubleValue];
+            inputUpperBound = [[formatter numberFromString:inputUpperBoundString] doubleValue];
 
         }
         if ([lineString rangeOfString:@"remains"].location != NSNotFound || [lineString rangeOfString:@"becomes"].location != NSNotFound){
@@ -115,11 +116,7 @@
         }
     }
 
-    if(cubeLinesStartIndex == -1){
-        @throw [NSException exceptionWithName:@"LUTParserError" reason:@"Couldn't find start of LUT data lines." userInfo:nil];
-    }
 
-    NSArray *cubeLines = [lines subarrayWithRange:NSMakeRange(cubeLinesStartIndex, lines.count-cubeLinesStartIndex)];
 
     if (isLUT3D && isLUT1D) {
         @throw [NSException exceptionWithName:@"LUTTonePoemParserError" reason:@"Can't be both LUT formats" userInfo:nil];
@@ -137,6 +134,12 @@
         }
     }
     else{
+        if(cubeLinesStartIndex == -1){
+            @throw [NSException exceptionWithName:@"LUTParserError" reason:@"Couldn't find start of LUT data lines." userInfo:nil];
+        }
+
+        NSArray *cubeLines = [lines subarrayWithRange:NSMakeRange(cubeLinesStartIndex, lines.count-cubeLinesStartIndex)];
+
         NSArray *lookupArray = [self nameColorPairsFromXKCD];
         if (isLUT1D) {
             lut = [LUT1D LUTOfSize:lutSize inputLowerBound:inputLowerBound inputUpperBound:inputUpperBound];
@@ -245,6 +248,10 @@
 
 
     return string;
+}
+
++ (NSDictionary *)constantConstraints{
+    return @{@"outputBounds":@[[NSNull null], [NSNull null]]};
 }
 
 
