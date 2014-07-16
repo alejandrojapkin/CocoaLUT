@@ -143,6 +143,12 @@ static NSMutableArray *allFormatters;
 + (BOOL)optionsAreValid:(NSDictionary *)options{
     NSDictionary *defaultOptionsExposed = [self defaultOptions][[self formatterID]];
     NSDictionary *optionsExposed = options[[self formatterID]];
+    if (optionsExposed == nil && defaultOptionsExposed.count == 0) {
+        return YES;
+    }
+    if (optionsExposed.count == 0 && defaultOptionsExposed.count == 0) {
+        return YES;
+    }
     if(optionsExposed == nil && defaultOptionsExposed == nil){
         return YES;
     }
@@ -239,7 +245,7 @@ static NSMutableArray *allFormatters;
 
 + (NSArray *)conformanceLUTActionsForLUT:(LUT *)lut options:(NSDictionary *)options{
     NSMutableArray *arrayOfActions = [NSMutableArray array];
-
+    
     if(![self optionsAreValid:options]){
        @throw [NSException exceptionWithName:@"LUTActionsForLUTError" reason:[NSString stringWithFormat:@"Provided options don't pass the spec: %@", options] userInfo:nil];
     }
