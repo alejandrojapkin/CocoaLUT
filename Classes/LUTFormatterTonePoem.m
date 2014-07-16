@@ -14,9 +14,7 @@
     [super load];
 }
 
-+ (LUT *)LUTFromLines:(NSArray *)lines{
-    return nil;
-}
+
 
 //change this to KDTree
 +(NSArray *)nameColorPairsFromXKCD{
@@ -44,6 +42,16 @@
     return nameColorPairs;
 }
 
++(LUTColor *)colorFromName:(NSString *)name
+               lookupArray:(NSArray *)lookupArray{
+    for(NSArray *pair in lookupArray){
+        if ([pair[0] isEqualToString:name]) {
+            return pair[1];
+        }
+    }
+    return nil;
+}
+
 //Change this to receive KDTree
 +(NSArray *)closestNameColorMatchFromLookupArray:(NSArray *)lookupArray
                                            color:(LUTColor *)color{
@@ -60,6 +68,108 @@
     return closestMatch;
 }
 
++ (LUT *)LUTFromLines:(NSArray *)lines{
+
+
+    NSUInteger cubeLinesStartIndex = -1;
+    BOOL isLUT3D = NO;
+    BOOL isLUT1D = NO;
+    BOOL isIdentity = NO;
+
+    double inputLowerBound = 0;
+    double inputUpperBound = 0;
+
+    NSUInteger lutSize = 0;
+
+    for(int i = 0; i < lines.count; i++){
+        NSString *lineString = lines[i];
+        if ([lineString rangeOfString:@"third"].location != NSNotFound) {
+            isLUT3D = YES;
+        }
+        if ([lineString rangeOfString:@"first"].location != NSNotFound) {
+            isLUT1D = YES;
+        }
+        if ([lineString rangeOfString:@"breadth"].location != NSNotFound) {
+            NSArray *splitLine = [lineString componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+            splitLine = arrayWithEmptyElementsRemoved(splitLine);
+            NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
+            [formatter setNumberStyle: NSNumberFormatterSpellOutStyle];
+
+            lutSize = [[formatter numberFromString:splitLine[2]] integerValue];
+        }
+        if ([lineString rangeOfString:@"all remain unchanging"].location != NSNotFound) {
+            isIdentity = YES;
+        }
+        if ([lineString rangeOfString:@"encompasses"].location != NSNotFound) {
+            NSArray *splitLine = [lineString componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+            splitLine = arrayWithEmptyElementsRemoved(splitLine);
+            NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
+            [formatter setNumberStyle: NSNumberFormatterSpellOutStyle];
+            inputLowerBound = [[formatter numberFromString:splitLine[1]] doubleValue];
+            inputUpperBound = [[formatter numberFromString:splitLine[3]] doubleValue];
+
+        }
+        if ([lineString rangeOfString:@"remains"].location != NSNotFound || [lineString rangeOfString:@"becomes"].location != NSNotFound){
+            cubeLinesStartIndex = i;
+            break;
+        }
+    }
+
+    if(cubeLinesStartIndex == -1){
+        @throw [NSException exceptionWithName:@"LUTParserError" reason:@"Couldn't find start of LUT data lines." userInfo:nil];
+    }
+
+    NSArray *cubeLines = [lines subarrayWithRange:NSMakeRange(cubeLinesStartIndex, lines.count-cubeLinesStartIndex)];
+
+    if (isLUT3D && isLUT1D) {
+        @throw [NSException exceptionWithName:@"LUTTonePoemParserError" reason:@"Can't be both LUT formats" userInfo:nil];
+    }
+
+    LUT *lut;
+
+    if (isIdentity) {
+        if (isLUT1D) {
+            lut = [LUT1D LUTIdentityOfSize:lutSize inputLowerBound:inputLowerBound inputUpperBound:inputUpperBound];
+        }
+        else{
+            //LUT 3D
+            lut = [LUT3D LUTIdentityOfSize:lutSize inputLowerBound:inputLowerBound inputUpperBound:inputUpperBound];
+        }
+    }
+    else{
+        NSArray *lookupArray = [self nameColorPairsFromXKCD];
+        if (isLUT1D) {
+            lut = [LUT1D LUTOfSize:lutSize inputLowerBound:inputLowerBound inputUpperBound:inputUpperBound];
+            for (int i = 0; i < lutSize; i++){
+                NSArray *splitLine = [cubeLines[i] componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+
+                [lut setColor:[self colorFromName:splitLine[2] lookupArray:lookupArray] r:i g:i b:i];
+            }
+        }
+        else{
+            lut = [LUT3D LUTOfSize:lutSize inputLowerBound:inputLowerBound inputUpperBound:inputUpperBound];
+
+            NSUInteger currentCubeIndex = 0;
+            for (NSString *line in cubeLines) {
+                if (line.length > 0 && [line rangeOfString:@"#"].location == NSNotFound) {
+                    NSArray *splitLine = [line componentsSeparatedByString:@" "];
+                    NSUInteger redIndex = currentCubeIndex % lutSize;
+                    NSUInteger greenIndex = ( (currentCubeIndex % (lutSize * lutSize)) / (lutSize) );
+                    NSUInteger blueIndex = currentCubeIndex / (lutSize * lutSize);
+
+                    [lut setColor:[self colorFromName:splitLine[2] lookupArray:lookupArray] r:redIndex g:greenIndex b:blueIndex];
+
+                    currentCubeIndex++;
+                }
+            }
+        }
+    }
+
+    lut.passthroughFileOptions = @{[self formatterID]: @{}};
+    return lut;
+
+}
+
 +(NSString *)stringFromLUT:(LUT *)lut withOptions:(NSDictionary *)options{
     NSMutableString *string;
 
@@ -67,16 +177,18 @@
     [formatter setNumberStyle: NSNumberFormatterSpellOutStyle];
 
     NSString *sizeSpelledOut = [formatter stringFromNumber:@(lut.size)];
+    NSString *inputLowerBoundSpelledOut = [formatter stringFromNumber:@(lut.inputLowerBound)];
+    NSString *inputUpperBoundSpelledOut = [formatter stringFromNumber:@(lut.inputUpperBound)];
 
     if (isLUT3D(lut)) {
-        string = [NSMutableString stringWithFormat:@"lookup of dimension third\nbreadth of %@\n", sizeSpelledOut];
+        string = [NSMutableString stringWithFormat:@"lookup of dimension third\nbreadth of %@\nencompasses %@ to %@\n", sizeSpelledOut, inputLowerBoundSpelledOut, inputUpperBoundSpelledOut];
     }
     else{
         //1D LUT
-        string = [NSMutableString stringWithFormat:@"lookup of dimension first\nbreadth of %@\n", sizeSpelledOut];
+        string = [NSMutableString stringWithFormat:@"lookup of dimension first\nbreadth of %@\nencompasses %@ to %@\n", sizeSpelledOut, inputLowerBoundSpelledOut, inputUpperBoundSpelledOut];
     }
     if ([lut equalsIdentityLUT]) {
-        [string appendString:@"all remains unchanging."];
+        [string appendString:@"all remain unchanging."];
         return string;
     }
     [string appendString:@"fastest is red.\n\n"];
