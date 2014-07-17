@@ -113,6 +113,18 @@
                        actionMetadata:actionMetadata];
 }
 
++(instancetype)actionWithLUTByCombiningWithLUT:(LUT *)lutToCombine
+                                        lutURL:(NSURL *)lutURL{
+    M13OrderedDictionary *actionMetadata =
+    M13OrderedDictionaryFromOrderedArrayWithDictionaries(@[@{@"id":@"Combine"},
+                                                           @{@"lutURL": [lutURL copy]}]);
+    return [LUTAction actionWithBlock:^LUT *(LUT *lut) {
+        return [lut LUTByCombiningWithLUT:lutToCombine];
+    }
+                           actionName:[NSString stringWithFormat:@"Combine with LUT"]
+                       actionMetadata:actionMetadata];
+}
+
 +(instancetype)actionWithLUTByRemappingValuesWithInputLow:(double)inputLow
                                                 inputHigh:(double)inputHigh
                                                 outputLow:(double)outputLow
@@ -140,7 +152,7 @@
                                                      outputLow:(LUTColor *)outputLowColor
                                                     outputHigh:(LUTColor *)outputHighColor{
     M13OrderedDictionary *actionMetadata =
-    M13OrderedDictionaryFromOrderedArrayWithDictionaries(@[@{@"id":@"ScaleOutput"},
+    M13OrderedDictionaryFromOrderedArrayWithDictionaries(@[@{@"id":@"ScaleOutputRGB"},
                                                            @{@"inputLowColor": inputLowColor.rgbArray},
                                                            @{@"inputHighColor": inputHighColor.rgbArray},
                                                            @{@"outputLowColor": outputLowColor.rgbArray},
@@ -153,7 +165,75 @@
                                          outputHigh:outputHighColor
                                             bounded:NO];
     }
-                           actionName:[NSString stringWithFormat:@"Scale Output"]
+                           actionName:[NSString stringWithFormat:@"Scale Output RGB"]
+                       actionMetadata:actionMetadata];
+}
+
++(instancetype)actionWithLUTByScalingTo01{
+    M13OrderedDictionary *actionMetadata =
+    M13OrderedDictionaryFromOrderedArrayWithDictionaries(@[@{@"id":@"ScaleTo01"}]);
+
+    return [LUTAction actionWithBlock:^LUT *(LUT *lut) {
+        return [lut LUTByRemappingValuesWithInputLow:lut.minimumOutputValue
+                                           inputHigh:lut.maximumOutputValue
+                                           outputLow:0
+                                          outputHigh:1
+                                             bounded:NO];
+    }
+                           actionName:[NSString stringWithFormat:@"Scale Absolute 0 to 1"]
+                       actionMetadata:actionMetadata];
+}
+
++(instancetype)actionWithLUTByScalingCurvesTo01{
+    M13OrderedDictionary *actionMetadata =
+    M13OrderedDictionaryFromOrderedArrayWithDictionaries(@[@{@"id":@"ScaleCurvesTo01"}]);
+    return [LUTAction actionWithBlock:^LUT *(LUT *lut) {
+
+        LUT *usedLUT = isLUT1D(lut) ? lut : LUTAsLUT1D(lut, lut.size);
+        return [lut LUTByRemappingValuesWithInputLow:usedLUT.minimumOutputValue
+                                           inputHigh:usedLUT.maximumOutputValue
+                                           outputLow:0
+                                          outputHigh:1
+                                             bounded:NO];
+
+
+    }
+                           actionName:[NSString stringWithFormat:@"Scale Curves 0 to 1"]
+                       actionMetadata:actionMetadata];
+}
+
++(instancetype)actionWithLUTByScalingRGBTo01{
+    M13OrderedDictionary *actionMetadata =
+    M13OrderedDictionaryFromOrderedArrayWithDictionaries(@[@{@"id":@"ScaleRGBTo01"}]);
+
+    return [LUTAction actionWithBlock:^LUT *(LUT *lut) {
+        return [lut LUTByRemappingFromInputLowColor:lut.minimumOutputColor
+                                          inputHigh:lut.maximumOutputColor
+                                          outputLow:[LUTColor colorWithRed:0 green:0 blue:0]
+                                         outputHigh:[LUTColor colorWithRed:1 green:1 blue:1]
+                                            bounded:NO];
+    }
+                           actionName:[NSString stringWithFormat:@"Scale Absolute RGB 0 to 1"]
+                       actionMetadata:actionMetadata];
+}
+
+
+
++(instancetype)actionWithLUTByScalingCurvesRGBTo01{
+    M13OrderedDictionary *actionMetadata =
+    M13OrderedDictionaryFromOrderedArrayWithDictionaries(@[@{@"id":@"ScaleCurvesRGBTo01"}]);
+    return [LUTAction actionWithBlock:^LUT *(LUT *lut) {
+
+        LUT *usedLUT = isLUT1D(lut) ? lut : LUTAsLUT1D(lut, lut.size);
+        return [lut LUTByRemappingFromInputLowColor:usedLUT.minimumOutputColor
+                                          inputHigh:usedLUT.maximumOutputColor
+                                          outputLow:[LUTColor colorWithRed:0 green:0 blue:0]
+                                         outputHigh:[LUTColor colorWithRed:1 green:1 blue:1]
+                                            bounded:NO];
+
+
+    }
+                           actionName:[NSString stringWithFormat:@"Scale Curves RGB 0 to 1"]
                        actionMetadata:actionMetadata];
 }
 
@@ -168,8 +248,8 @@
                                           outputHigh:EXTENDED_LEVELS_MAX
                                              bounded:NO];
     }
-                                                actionName:[NSString stringWithFormat:@"Legal to Extended"]
-                                            actionMetadata:actionMetadata];
+                           actionName:[NSString stringWithFormat:@"Legal to Extended"]
+                       actionMetadata:actionMetadata];
 }
 
 +(instancetype)actionWithLUTByScalingExtendedToLegal{
@@ -184,60 +264,6 @@
                                              bounded:NO];
     }
                            actionName:[NSString stringWithFormat:@"Extended to Legal"]
-                       actionMetadata:actionMetadata];
-}
-
-+(instancetype)actionWithLUTByScalingTo01{
-    M13OrderedDictionary *actionMetadata =
-    M13OrderedDictionaryFromOrderedArrayWithDictionaries(@[@{@"id":@"ScaleTo01"}]);
-
-    return [LUTAction actionWithBlock:^LUT *(LUT *lut) {
-        return [lut LUTByRemappingFromInputLowColor:lut.minimumOutputColor
-                                          inputHigh:lut.maximumOutputColor
-                                          outputLow:[LUTColor colorWithRed:0 green:0 blue:0]
-                                         outputHigh:[LUTColor colorWithRed:1 green:1 blue:1]
-                                            bounded:NO];
-    }
-                           actionName:[NSString stringWithFormat:@"Scale 0 to 1"]
-                       actionMetadata:actionMetadata];
-}
-
-+(instancetype)actionWithLUTByCombiningWithLUT:(LUT *)lutToCombine
-                                        lutURL:(NSURL *)lutURL{
-    M13OrderedDictionary *actionMetadata =
-    M13OrderedDictionaryFromOrderedArrayWithDictionaries(@[@{@"id":@"Combine"},
-                                                           @{@"lutURL": [lutURL copy]}]);
-    return [LUTAction actionWithBlock:^LUT *(LUT *lut) {
-        return [lut LUTByCombiningWithLUT:lutToCombine];
-    }
-                                                actionName:[NSString stringWithFormat:@"Combine with LUT"]
-                                            actionMetadata:actionMetadata];
-}
-
-+(instancetype)actionWithLUTByScalingCurvesTo01{
-    M13OrderedDictionary *actionMetadata =
-    M13OrderedDictionaryFromOrderedArrayWithDictionaries(@[@{@"id":@"ScaleCurvesTo01"}]);
-    return [LUTAction actionWithBlock:^LUT *(LUT *lut) {
-        if(isLUT1D(lut)){
-            return [lut LUTByRemappingFromInputLowColor:lut.minimumOutputColor
-                                              inputHigh:lut.maximumOutputColor
-                                              outputLow:[LUTColor colorWithRed:0 green:0 blue:0]
-                                             outputHigh:[LUTColor colorWithRed:1 green:1 blue:1]
-                                                bounded:NO];
-        }
-        else{
-            //is lut 3D
-            LUT1D *lut1D = LUTAsLUT1D(lut, lut.size);
-            return [lut LUTByRemappingFromInputLowColor:lut1D.minimumOutputColor
-                                       inputHigh:lut1D.maximumOutputColor
-                                       outputLow:[LUTColor colorWithRed:0 green:0 blue:0]
-                                      outputHigh:[LUTColor colorWithRed:1 green:1 blue:1]
-                                         bounded:NO];
-        }
-
-
-    }
-                           actionName:[NSString stringWithFormat:@"Scale 0 to 1"]
                        actionMetadata:actionMetadata];
 }
 

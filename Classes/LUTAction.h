@@ -50,8 +50,10 @@
 +(instancetype)actionWithLUTByScalingExtendedToLegal;
 
 +(instancetype)actionWithLUTByScalingTo01;
++(instancetype)actionWithLUTByScalingRGBTo01;
 
 +(instancetype)actionWithLUTByScalingCurvesTo01;
++(instancetype)actionWithLUTByScalingCurvesRGBTo01;
 
 +(instancetype)actionWithLUTByResizingToSize:(NSUInteger)size;
 
