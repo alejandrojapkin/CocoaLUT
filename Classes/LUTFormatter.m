@@ -313,18 +313,4 @@ static NSMutableArray *allFormatters;
     }
 }
 
-+ (NSBundle *)formatterResourceBundle{
-    static NSBundle *formatterResourcesBundle = nil;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        formatterResourcesBundle = [NSBundle bundleWithURL:[[NSBundle mainBundle] URLForResource:@"LUTFormatterResources" withExtension:@"bundle"]];
-    });
-
-    return formatterResourcesBundle;
-}
-
-+ (NSURL *)formatterResourceURLFromBundleWithName:(NSString *)name extension:(NSString *)extension{
-    return [[self.class formatterResourceBundle] URLForResource:name withExtension:extension];
-}
-
 @end
