@@ -36,7 +36,7 @@
 
     for (NSString *line in trimmedLines) {
         NSArray *splitLine = [line componentsSeparatedByString:@","];
-
+        splitLine = arrayWithEmptyElementsRemoved(splitLine);
         for(NSString *checkLine in splitLine){
             if(stringIsValidNumber(checkLine) == NO){
                 @throw [NSException exceptionWithName:@"LUTParserError" reason:[NSString stringWithFormat:@"NaN detected in LUT"] userInfo:nil];

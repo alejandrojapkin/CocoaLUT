@@ -205,6 +205,7 @@
 
             if (line.length > 0 && [line rangeOfString:@"#"].location == NSNotFound) {
                 NSArray *splitLine = [line componentsSeparatedByString:@" "];
+                splitLine = arrayWithEmptyElementsRemoved(splitLine);
                 if (splitLine.count == 3) {
                     for(NSString *checkLine in splitLine){
                         if(stringIsValidNumber(checkLine) == NO){
