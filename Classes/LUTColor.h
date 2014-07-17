@@ -22,7 +22,7 @@ typedef double LUTColorValue;
 /**
  *  Represents a color value on a 3D LUT lattice.
  */
-@interface LUTColor : NSObject
+@interface LUTColor : NSObject <NSCopying>
 
 /**
  *  The value of the red channel of the color. Values should be between 0 and 1
@@ -38,6 +38,8 @@ typedef double LUTColorValue;
  *  The value of the blue channel of the color. Values should be between 0 and 1
  */
 @property (assign) LUTColorValue blue;
+
+- (NSArray *)rgbArray;
 
 
 /**
@@ -89,6 +91,12 @@ typedef double LUTColorValue;
                          outputLow:(double)outputLow
                         outputHigh:(double)outputHigh
                            bounded:(BOOL)bounded;
+
+- (LUTColor *)colorByRemappingFromInputLowColor:(LUTColor *)inputLowColor
+                                      inputHigh:(LUTColor *)inputHighColor
+                                      outputLow:(LUTColor *)outputLowColor
+                                     outputHigh:(LUTColor *)outputHighColor
+                                        bounded:(BOOL)bounded;
 
 - (LUTColor *)colorByMultiplyingByNumber:(double)number;
 - (LUTColor *)colorByMultiplyingColor:(LUTColor *)offsetColor;

@@ -167,6 +167,26 @@
 
 }
 
+- (instancetype)LUTByRemappingFromInputLowColor:(LUTColor *)inputLowColor
+                                      inputHigh:(LUTColor *)inputHighColor
+                                      outputLow:(LUTColor *)outputLowColor
+                                     outputHigh:(LUTColor *)outputHighColor
+                                        bounded:(BOOL)bounded{
+    LUT *newLUT = [[self class] LUTOfSize:[self size] inputLowerBound:[self inputLowerBound] inputUpperBound:[self inputUpperBound]];
+    [newLUT copyMetaPropertiesFromLUT:self];
+
+    [newLUT LUTLoopWithBlock:^(size_t r, size_t g, size_t b) {
+        [newLUT setColor:[[self colorAtR:r g:g b:b] colorByRemappingFromInputLowColor:inputLowColor
+                                                                            inputHigh:inputHighColor
+                                                                            outputLow:outputLowColor
+                                                                           outputHigh:outputHighColor
+                                                                              bounded:bounded] r:r g:g b:b];
+    }];
+
+    return newLUT;
+    
+}
+
 - (instancetype)LUTByChangingStrength:(double)strength{
     if(strength > 1.0){
         @throw [NSException exceptionWithName:@"ChangeStrengthError" reason:[NSString stringWithFormat:@"You can't set the strength of the LUT past 1.0 (%f)", strength] userInfo:nil];
@@ -245,6 +265,48 @@
 
 - (void)setColor:(LUTColor *)color r:(NSUInteger)r g:(NSUInteger)g b:(NSUInteger)b{
     @throw [NSException exceptionWithName:@"NotImplemented" reason:[NSString stringWithFormat:@"\"%s\" Not Implemented", __func__] userInfo:nil];
+}
+
+- (LUTColor *)maximumOutputColor{
+    LUTColor *start = [self colorAtR:0 g:0 b:0];
+    __block double maxRed = start.red;
+    __block double maxGreen = start.green;
+    __block double maxBlue = start.blue;
+
+    [self LUTLoopWithBlock:^(size_t r, size_t g, size_t b) {
+        LUTColor *color = [self colorAtR:r g:g b:b];
+        if(color.red > maxRed){
+            maxRed = color.red;
+        }
+        if(color.green > maxGreen){
+            maxGreen = color.green;
+        }
+        if(color.blue > maxBlue){
+            maxBlue = color.blue;
+        }
+    }];
+    return [LUTColor colorWithRed:maxRed green:maxGreen blue:maxBlue];
+}
+
+- (LUTColor *)minimumOutputColor{
+    LUTColor *start = [self colorAtR:0 g:0 b:0];
+    __block double minRed = start.red;
+    __block double minGreen = start.green;
+    __block double minBlue = start.blue;
+
+    [self LUTLoopWithBlock:^(size_t r, size_t g, size_t b) {
+        LUTColor *color = [self colorAtR:r g:g b:b];
+        if(color.red < minRed){
+            minRed = color.red;
+        }
+        if(color.green < minGreen){
+            minGreen = color.green;
+        }
+        if(color.blue < minBlue){
+            minBlue = color.blue;
+        }
+    }];
+    return [LUTColor colorWithRed:minRed green:minGreen blue:minBlue];
 }
 
 - (double)maximumOutputValue{

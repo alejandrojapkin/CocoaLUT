@@ -13,6 +13,10 @@
 
 @implementation LUTColor
 
+-(instancetype)copyWithZone:(NSZone *)zone{
+    return [LUTColor colorWithRed:self.red green:self.green blue:self.blue];
+}
+
 + (instancetype)colorWithRed:(LUTColorValue)r green:(LUTColorValue)g blue:(LUTColorValue)b {
     LUTColor *color = [[LUTColor alloc] init];
     color.red = isnan(r) ? 0 : r;
@@ -164,6 +168,25 @@
 
 }
 
+- (LUTColor *)colorByRemappingFromInputLowColor:(LUTColor *)inputLowColor
+                                      inputHigh:(LUTColor *)inputHighColor
+                                      outputLow:(LUTColor *)outputLowColor
+                                     outputHigh:(LUTColor *)outputHighColor
+                                        bounded:(BOOL)bounded{
+    if(!bounded){
+        return [LUTColor colorWithRed:remapNoError(self.red, inputLowColor.red, inputHighColor.red, outputLowColor.red, outputHighColor.red)
+                                green:remapNoError(self.green, inputLowColor.green, inputHighColor.green, outputLowColor.green, outputHighColor.green)
+                                 blue:remapNoError(self.blue, inputLowColor.blue, inputHighColor.blue, outputLowColor.blue, outputHighColor.blue)];
+
+    }
+    else{
+        return [LUTColor colorWithRed:remap(self.red, inputLowColor.red, inputHighColor.red, outputLowColor.red, outputHighColor.red)
+                                green:remap(self.green, inputLowColor.green, inputHighColor.green, outputLowColor.green, outputHighColor.green)
+                                 blue:remap(self.blue, inputLowColor.blue, inputHighColor.blue, outputLowColor.blue, outputHighColor.blue)];
+    }
+    
+}
+
 - (double)distanceToColor:(LUTColor *)otherColor{
     return sqrt(pow(self.red - otherColor.red, 2) + pow(self.green - otherColor.green, 2) + pow(self.blue - otherColor.blue, 2));
 }
@@ -172,6 +195,10 @@
 
 - (NSString *)description{
     return [NSString stringWithFormat:@"(%.6f, %.6f, %.6f)", self.red, self.green, self.blue];
+}
+
+- (NSArray *)rgbArray{
+    return @[@(self.red), @(self.green), @(self.blue)];
 }
 
 - (NSAttributedString *)colorizedAttributedStringWithFormat:(NSString *)formatString{

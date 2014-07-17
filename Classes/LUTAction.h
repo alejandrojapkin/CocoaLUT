@@ -37,6 +37,11 @@
                                                 outputLow:(double)outputLow
                                                outputHigh:(double)outputHigh;
 
++(instancetype)actionWithLUTByRemappingValuesWithInputLowColor:(LUTColor *)inputLowColor
+                                                     inputHigh:(LUTColor *)inputHighColor
+                                                     outputLow:(LUTColor *)outputLowColor
+                                                    outputHigh:(LUTColor *)outputHighColor;
+
 +(instancetype)actionWithLUTByCombiningWithLUT:(LUT *)lutToCombine
                                         lutURL:(NSURL *)lutURL;
 
