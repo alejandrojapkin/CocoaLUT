@@ -147,7 +147,5 @@ typedef NS_ENUM(NSInteger, LUTFormatterRole) {
 
 + (NSArray *)conformanceLUTActionsForLUT:(LUT *)lut options:(NSDictionary *)options;
 
-+ (NSURL *)formatterResourceURLFromBundleWithName:(NSString *)name extension:(NSString *)extension;
-
 
 @end
