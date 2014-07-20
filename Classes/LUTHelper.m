@@ -272,10 +272,7 @@ NSString* substringBetweenTwoStrings(NSString *originString, NSString *firstStri
 }
 
 SystemColor* systemColorWithHexString(NSString* hexString){
-    #if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR
-    return [UIColor colorWithHexString(hexString)];
-    #elif TARGET_OS_MAC
-    NSColor* result = nil;
+    SystemColor* result = nil;
     unsigned colorCode = 0;
     unsigned char redByte, greenByte, blueByte;
 
@@ -289,13 +286,20 @@ SystemColor* systemColorWithHexString(NSString* hexString){
     greenByte = (unsigned char)(colorCode >> 8);
     blueByte = (unsigned char)(colorCode); // masks off high bits
 
-    result = [NSColor
+#if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR
+    result = [SystemColor
+              colorWithRed:(CGFloat)redByte / 0xff
+              green:(CGFloat)greenByte / 0xff
+              blue:(CGFloat)blueByte / 0xff
+              alpha:1.0];
+#elif TARGET_OS_MAC
+    result = [SystemColor
               colorWithDeviceRed:(CGFloat)redByte / 0xff
               green:(CGFloat)greenByte / 0xff
               blue:(CGFloat)blueByte / 0xff
               alpha:1.0];
+#endif
     return result;
-    #endif
 }
 
 
