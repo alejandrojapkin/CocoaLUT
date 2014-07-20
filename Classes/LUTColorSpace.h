@@ -57,6 +57,7 @@
 + (NSArray *)knownColorSpaces;
 
 + (instancetype)rec709ColorSpace;
++ (instancetype)adobeRGBColorSpace;
 + (instancetype)dciP3ColorSpace;
 + (instancetype)rec2020ColorSpace;
 + (instancetype)alexaWideGamutColorSpace;

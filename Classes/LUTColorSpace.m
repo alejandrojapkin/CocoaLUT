@@ -208,6 +208,7 @@ forwardFootlambertCompensation:(double)flCompensation
     NSArray *allKnownColorSpaces = @[[self rec709ColorSpace],
                                      [self dciP3ColorSpace],
                                      [self rec2020ColorSpace],
+                                     [self adobeRGBColorSpace],
                                      [self alexaWideGamutColorSpace],
                                      [self sGamut3CineColorSpace],
                                      [self sGamutColorSpace],
@@ -227,6 +228,17 @@ forwardFootlambertCompensation:(double)flCompensation
                                   blueChromaticityX:0.15
                                   blueChromaticityY:0.06
                                                name:@"Rec. 709"];
+}
+
++ (instancetype)adobeRGBColorSpace{
+    return [self LUTColorSpaceWithDefaultWhitePoint:[LUTColorSpaceWhitePoint d65WhitePoint]
+                                   redChromaticityX:0.64
+                                   redChromaticityY:0.33
+                                 greenChromaticityX:0.21
+                                 greenChromaticityY:0.71
+                                  blueChromaticityX:0.15
+                                  blueChromaticityY:0.06
+                                               name:@"Adobe RGB"];
 }
 
 + (instancetype)dciP3ColorSpace{
