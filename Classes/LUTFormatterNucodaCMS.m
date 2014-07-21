@@ -211,7 +211,7 @@
                                                  outputHigh:1
                                                     bounded:NO];
         }
-
+        passthroughFileOptions[@"lutType"] = @"1D and 3D";
         outLUT = [lut1D LUTByCombiningWithLUT:lut3D];
     }
     else if(use1D && !use3D){
@@ -219,7 +219,7 @@
         LUT1D *lut1D = [LUT1D LUTOfSize:lut1DSize inputLowerBound:lut1DInputLowerBound inputUpperBound:lut1DInputUpperBound];
 
         NSArray *lut1DLines = [lines subarrayWithRange:NSMakeRange(cubeLinesStartIndex, lut1D.size)];
-
+        passthroughFileOptions[@"lutType"] = @"1D only";
         outLUT = [self lut1DFromLines:lut1DLines blankLUT:lut1D];
 
     }
@@ -228,7 +228,7 @@
         LUT3D *lut3D = [LUT3D LUTOfSize:lut3DSize inputLowerBound:lut3DInputLowerBound inputUpperBound:lut3DInputUpperBound];
 
         NSArray *lut3DLines = [lines subarrayWithRange:NSMakeRange(cubeLinesStartIndex, lut3D.size*lut3D.size*lut3D.size)];
-
+        passthroughFileOptions[@"lutType"] = @"3D only";
         outLUT = [self lut3DFromLines:lut3DLines blankLUT:lut3D];
     }
     
