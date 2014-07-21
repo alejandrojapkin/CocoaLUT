@@ -25,7 +25,7 @@
 
     NSMutableDictionary *data = [NSMutableDictionary dictionary];
 
-    NSUInteger cubeLinesStartIndex = findFirstLUTLineInLines(lines, @"  ", 3, 0);
+    NSUInteger cubeLinesStartIndex = findFirstLUTLineInLinesWithWhitespaceSeparators(lines, 3, 0);
 
     if(cubeLinesStartIndex == -1){
         @throw [NSException exceptionWithName:@"LUTParserError" reason:@"Couldn't find start of LUT data lines." userInfo:nil];
