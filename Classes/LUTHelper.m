@@ -249,7 +249,27 @@ NSInteger findFirstLUTLineInLines(NSArray *lines, NSString *seperator, int numVa
             }
         }
     }
-    return -1;
+    return NSNotFound;
+}
+
+NSInteger findFirstLUTLineInLinesWithWhitespaceSeparators(NSArray *lines, int numValues, int startLine){
+
+    for (int i = startLine; i < lines.count; i++){
+        NSArray *splitLine = [lines[i] componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+        splitLine = arrayWithEmptyElementsRemoved(splitLine);
+        if(splitLine.count == numValues){
+            BOOL isLine = YES;
+            for (int j = 0; j < numValues; j++){
+                if(!stringIsValidNumber(splitLine[j])){
+                    isLine = NO;
+                }
+            }
+            if(isLine){
+                return i;
+            }
+        }
+    }
+    return NSNotFound;
 }
 
 NSArray* arrayWithEmptyElementsRemoved(NSArray *array){

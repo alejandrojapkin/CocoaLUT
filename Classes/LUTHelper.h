@@ -43,6 +43,7 @@ NSArray* arrayWithComponentsSeperatedByNewlineAndWhitespaceWithEmptyElementsRemo
 NSString* substringBetweenTwoStrings(NSString *originString, NSString *firstString, NSString *secondString);
 
 NSInteger findFirstLUTLineInLines(NSArray *lines, NSString *seperator, int numValues, int startLine);
+NSInteger findFirstLUTLineInLinesWithWhitespaceSeparators(NSArray *lines, int numValues, int startLine);
 
 NSNumberFormatter* sharedNumberFormatter();
 BOOL stringIsValidNumber(NSString *string);
