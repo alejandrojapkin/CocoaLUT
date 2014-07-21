@@ -48,7 +48,7 @@
                                                  userInfo:nil];
                 }
 
-                NSArray *splitLine = arrayWithEmptyElementsRemoved([line componentsSeparatedByString:@" "]);
+                NSArray *splitLine = arrayWithEmptyElementsRemoved([line componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]);
 
                 if(splitLine.count == 2 && stringIsValidNumber(splitLine[1])){
                     data[@"version"] = @([splitLine[1] integerValue]);
@@ -247,7 +247,7 @@
     NSUInteger currentLUTLineIndex = 0;
     for (NSString *line in lut1DLines) {
         if (line.length > 0 && [line rangeOfString:@"#"].location == NSNotFound) {
-            NSArray *splitLine = [line componentsSeparatedByString:@" "];
+            NSArray *splitLine = [line componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
             splitLine = arrayWithEmptyElementsRemoved(splitLine);
             if (splitLine.count == 3) {
                 for(NSString *checkLine in splitLine){
@@ -283,7 +283,7 @@
     NSUInteger currentLUTLineIndex = 0;
     for (NSString *line in lut3DLines) {
         if (line.length > 0 && [line rangeOfString:@"#"].location == NSNotFound) {
-            NSArray *splitLine = [line componentsSeparatedByString:@" "];
+            NSArray *splitLine = [line componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
             splitLine = arrayWithEmptyElementsRemoved(splitLine);
             if (splitLine.count == 3) {
                 for(NSString *checkLine in splitLine){

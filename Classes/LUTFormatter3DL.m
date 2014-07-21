@@ -37,7 +37,7 @@
     // Find the size
     for(NSString *line in headerLines) {
         if ([line rangeOfString:@"Mesh"].location != NSNotFound) {
-            NSArray *components = [line componentsSeparatedByString:@" "];
+            NSArray *components = [line componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
             NSInteger inputDepth = [components[1] integerValue];
             integerMaxOutput = pow(2, [components[2] integerValue]) - 1;
             cubeSize = pow(2, inputDepth) + 1;
@@ -45,7 +45,7 @@
             break;
         }
         if ([line rangeOfString:@"#"].location == NSNotFound && [line rangeOfString:@"0"].location != NSNotFound) {
-            NSArray *components = [line componentsSeparatedByString:@" "];
+            NSArray *components = [line componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
             components = arrayWithEmptyElementsRemoved(components);
             integerMaxOutput = [components[components.count - 1] intValue];
             cubeSize = components.count;

@@ -32,11 +32,11 @@
 
     for(NSString *line in headerLines) {
         if ([line rangeOfString:@"max value"].location != NSNotFound) {
-            NSArray *components = [line componentsSeparatedByString:@" "];
+            NSArray *components = [line componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
             integerMaxOutput = [components[2] integerValue];
         }
         if ([line rangeOfString:@"vertices"].location != NSNotFound) {
-            NSArray *components = [line componentsSeparatedByString:@" "];
+            NSArray *components = [line componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
             cubeSize = [components[1] integerValue];
         }
 

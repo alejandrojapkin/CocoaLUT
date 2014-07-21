@@ -52,7 +52,7 @@
                                                  userInfo:nil];
                 }
 
-                NSArray *splitLine = [line componentsSeparatedByString:@" "];
+                NSArray *splitLine = [line componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
                 if(splitLine.count == 2 && stringIsValidNumber(splitLine[1])){
                     data[@"cubeSize"] = @([splitLine[1] integerValue]);
 
@@ -72,7 +72,7 @@
                                                  userInfo:nil];
                 }
 
-                NSArray *splitLine = [line componentsSeparatedByString:@" "];
+                NSArray *splitLine = [line componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
 
                 if(splitLine.count == 2 && stringIsValidNumber(splitLine[1])){
                     data[@"cubeSize"] = @([splitLine[1] integerValue]);
@@ -91,7 +91,7 @@
                                                    reason:@"Input Bounds already defined."
                                                  userInfo:nil];
                 }
-                NSArray *splitLine = [line componentsSeparatedByString:@" "];
+                NSArray *splitLine = [line componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
 
                 if(splitLine.count == 3 && stringIsValidNumber(splitLine[1]) && stringIsValidNumber(splitLine[2])){
                     data[@"inputLowerBound"] = @([splitLine[1] doubleValue]);
@@ -110,7 +110,7 @@
                                                    reason:@"Input Bounds already defined."
                                                  userInfo:nil];
                 }
-                NSArray *splitLine = [line componentsSeparatedByString:@" "];
+                NSArray *splitLine = [line componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
 
                 if(splitLine.count == 3 && stringIsValidNumber(splitLine[1]) && stringIsValidNumber(splitLine[2])){
                     data[@"inputLowerBound"] = @([splitLine[1] doubleValue]);
@@ -131,7 +131,7 @@
                                                    reason:@"Input Bound already defined."
                                                  userInfo:nil];
                 }
-                NSArray *splitLine = [line componentsSeparatedByString:@" "];
+                NSArray *splitLine = [line componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
                 if(splitLine.count == 4 && [splitLine[1] doubleValue] == [splitLine[2] doubleValue] && [splitLine[1] doubleValue] == [splitLine[3] doubleValue] && stringIsValidNumber(splitLine[1])){
                     data[@"inputLowerBound"] = @([splitLine[1] doubleValue]);
                 }
@@ -150,7 +150,7 @@
                                                    reason:@"Input Bound already defined."
                                                  userInfo:nil];
                 }
-                NSArray *splitLine = [line componentsSeparatedByString:@" "];
+                NSArray *splitLine = [line componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
                 if(splitLine.count == 4 && [splitLine[1] doubleValue] == [splitLine[2] doubleValue] && [splitLine[1] doubleValue] == [splitLine[3] doubleValue] && stringIsValidNumber(splitLine[1])){
                     data[@"inputUpperBound"] = @([splitLine[1] doubleValue]);
                 }
@@ -204,7 +204,7 @@
         for (NSString *line in [lines subarrayWithRange:NSMakeRange(cubeLinesStartIndex, lines.count - cubeLinesStartIndex)]) {
 
             if (line.length > 0 && [line rangeOfString:@"#"].location == NSNotFound) {
-                NSArray *splitLine = [line componentsSeparatedByString:@" "];
+                NSArray *splitLine = [line componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
                 splitLine = arrayWithEmptyElementsRemoved(splitLine);
                 if (splitLine.count == 3) {
                     for(NSString *checkLine in splitLine){
@@ -242,7 +242,7 @@
         for (NSString *line in [lines subarrayWithRange:NSMakeRange(cubeLinesStartIndex, lines.count - cubeLinesStartIndex)]) {
 
             if (line.length > 0 && [line rangeOfString:@"#"].location == NSNotFound) {
-                NSArray *splitLine = [line componentsSeparatedByString:@" "];
+                NSArray *splitLine = [line componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
                 if (splitLine.count == 3) {
 
                     for(NSString *checkLine in splitLine){

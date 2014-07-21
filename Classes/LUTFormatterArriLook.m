@@ -29,7 +29,7 @@
     NSMutableArray *curve1D = [NSMutableArray array];
 
     for (NSString *line in toneMapLines){
-        if([line componentsSeparatedByString:@" "].count > 1){
+        if([line componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]].count > 1){
            @throw [NSException exceptionWithName:@"LUTFormatterArriLookParseError" reason:@"Tone Map Value invalid" userInfo:nil];
         }
 
