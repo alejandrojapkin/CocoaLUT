@@ -51,6 +51,11 @@
                 NSArray *splitLine = arrayWithEmptyElementsRemoved([line componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]);
 
                 if(splitLine.count == 2 && stringIsValidNumber(splitLine[1])){
+                    if ([splitLine[1] integerValue] < 1 || [splitLine[1] integerValue] > 3) {
+                        @throw [NSException exceptionWithName:@"NucodaLUTParseError"
+                                                       reason:@"Version must be 1, 2, or 3."
+                                                     userInfo:nil];
+                    }
                     data[@"version"] = @([splitLine[1] integerValue]);
 
                 }
@@ -211,7 +216,7 @@
                                                  outputHigh:1
                                                     bounded:NO];
         }
-        passthroughFileOptions[@"lutType"] = @"1D and 3D";
+        passthroughFileOptions[@"lutType"] = @"Pre-LUT and LUT";
         outLUT = [lut1D LUTByCombiningWithLUT:lut3D];
     }
     else if(use1D && !use3D){
@@ -219,7 +224,7 @@
         LUT1D *lut1D = [LUT1D LUTOfSize:lut1DSize inputLowerBound:lut1DInputLowerBound inputUpperBound:lut1DInputUpperBound];
 
         NSArray *lut1DLines = [lines subarrayWithRange:NSMakeRange(cubeLinesStartIndex, lut1D.size)];
-        passthroughFileOptions[@"lutType"] = @"1D only";
+        passthroughFileOptions[@"lutType"] = @"No Pre-LUT";
         outLUT = [self lut1DFromLines:lut1DLines blankLUT:lut1D];
 
     }
@@ -228,7 +233,7 @@
         LUT3D *lut3D = [LUT3D LUTOfSize:lut3DSize inputLowerBound:lut3DInputLowerBound inputUpperBound:lut3DInputUpperBound];
 
         NSArray *lut3DLines = [lines subarrayWithRange:NSMakeRange(cubeLinesStartIndex, lut3D.size*lut3D.size*lut3D.size)];
-        passthroughFileOptions[@"lutType"] = @"3D only";
+        passthroughFileOptions[@"lutType"] = @"No Pre-LUT";
         outLUT = [self lut3DFromLines:lut3DLines blankLUT:lut3D];
     }
     
@@ -324,8 +329,94 @@
     return lut3D;
 }
 
+
++ (NSString *)lutStringFromLUT:(LUT *)lut{
+    NSMutableString *string = [[NSMutableString alloc] init];
+    if (isLUT1D(lut)) {
+
+        for (int i = 0; i < lut.size; i++) {
+            LUTColor *color = [lut colorAtR:i g:i b:i];
+            [string appendString:[NSString stringWithFormat:@"%.6f %.6f %.6f", color.red, color.green, color.blue]];
+            if(i != lut.size - 1) {
+                [string appendString:@"\n"];
+            }
+        }
+
+        return string;
+    }
+    else{
+        //it's 3D
+        NSUInteger arrayLength = lut.size * lut.size * lut.size;
+        for (int i = 0; i < arrayLength; i++) {
+            int redIndex = i % lut.size;
+            int greenIndex = ((i % (lut.size * lut.size)) / (lut.size) );
+            int blueIndex = i / (lut.size * lut.size);
+
+            LUTColor *color = [lut colorAtR:redIndex g:greenIndex b:blueIndex];
+
+            [string appendString:[NSString stringWithFormat:@"%.6f %.6f %.6f", color.red, color.green, color.blue]];
+
+            if(i != arrayLength - 1) {
+                [string appendString:@"\n"];
+            }
+            
+        }
+
+        return string;
+    }
+}
+
 + (NSString *)stringFromLUT:(LUT *)lut withOptions:(NSDictionary *)options{
-    return nil;
+    if(![self optionsAreValid:options]){
+        @throw [NSException exceptionWithName:@"CubeLUTWriteError" reason:[NSString stringWithFormat:@"Options don't pass the spec: %@", options] userInfo:nil];
+    }
+    else{
+        options = options[[self formatterID]];
+    }
+
+
+    NSMutableString *string = [[NSMutableString alloc] init];
+
+    //metadata and description write
+    [string appendString: [LUTMetadataFormatter stringFromMetadata:lut.metadata description:lut.descriptionText]];
+    [string appendString:@"\n"];
+
+    NSUInteger nucodaVersion = 0;
+    if ([options[@"fileTypeVariant"] isEqualToString:@"Nucoda v1"]) {
+        nucodaVersion = 1;
+    }
+    else if ([options[@"fileTypeVariant"] isEqualToString:@"Nucoda v2"]) {
+        nucodaVersion = 2;
+    }
+    else if ([options[@"fileTypeVariant"] isEqualToString:@"Nucoda v3"]) {
+        nucodaVersion = 3;
+    }
+
+    [string appendString:[NSString stringWithFormat:@"NUCODA_3D_CUBE %i\n\n", (int)nucodaVersion]];
+
+    if (lut.title && lut.title.length > 0) {
+        [string appendString:[NSString stringWithFormat:@"TITLE \"%@\"\n\n", lut.title]];
+    }
+
+    if (isLUT1D(lut)) {
+        [string appendString:[NSString stringWithFormat:@"LUT_1D_SIZE %i\n", (int)lut.size]];
+        if (nucodaVersion == 3) {
+            [string appendString:[NSString stringWithFormat:@"LUT_1D_INPUT_RANGE %.3f %.3f\n", lut.inputLowerBound, lut.inputUpperBound]];
+        }
+    }
+    else{
+        //3D
+        [string appendString:[NSString stringWithFormat:@"LUT_3D_SIZE %i\n", (int)lut.size]];
+        if (nucodaVersion == 3) {
+            [string appendString:[NSString stringWithFormat:@"LUT_3D_INPUT_RANGE %.3f %.3f\n", lut.inputLowerBound, lut.inputUpperBound]];
+        }
+    }
+
+    [string appendString:@"\n"];
+
+    [string appendString:[self lutStringFromLUT:lut]];
+
+    return string;
 }
 
 + (NSArray *)allOptions{
@@ -371,7 +462,7 @@
 }
 
 + (BOOL)canWrite{
-    return NO;
+    return YES;
 }
 
 
