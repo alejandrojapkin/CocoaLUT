@@ -242,6 +242,14 @@
     return outLUT;
 }
 
++ (BOOL)isDestructiveWithOptions:(NSDictionary *)options{
+    options = options[[self formatterID]];
+    if ([options[@"lutType"] isEqualToString:@"Pre-LUT and LUT"]) {
+        return YES;
+    }
+    return NO;
+}
+
 + (LUT1D *)lut1DFromLines:(NSArray *)lut1DLines blankLUT:(LUT1D *)blankLUT1D{
     LUT1D *lut1D = [blankLUT1D copy];
     NSUInteger currentLUTLineIndex = 0;

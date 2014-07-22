@@ -103,6 +103,10 @@ static NSMutableArray *allFormatters;
     return NO;
 }
 
++ (BOOL)isDestructiveWithOptions:(NSDictionary *)options{
+    return NO;
+}
+
 + (LUT *)LUTFromURL:(NSURL *)fileURL {
     return [self LUTFromData:[NSData dataWithContentsOfURL:fileURL]];
 }

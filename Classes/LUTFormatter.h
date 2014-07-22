@@ -119,6 +119,8 @@ typedef NS_ENUM(NSInteger, LUTFormatterRole) {
 
 + (BOOL)isValidWriterForLUTType:(LUT *)lut;
 
++ (BOOL)isDestructiveWithOptions:(NSDictionary *)options;
+
 + (LUTFormatterOutputType)outputType;
 
 + (NSArray *)allOptions;
