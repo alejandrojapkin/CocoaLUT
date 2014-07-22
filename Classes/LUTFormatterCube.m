@@ -85,7 +85,6 @@
                 }
             }
             else if ([line rangeOfString:@"LUT_3D_INPUT_RANGE"].location != NSNotFound) {
-                passthroughFileOptions[@"fileTypeVariant"] = @"Resolve";
                 if (data[@"inputLowerBound"] != nil || data[@"inputUpperBound"] != nil){
                     @throw [NSException exceptionWithName:@"CubeLUTParseError"
                                                    reason:@"Input Bounds already defined."
@@ -96,6 +95,13 @@
                 if(splitLine.count == 3 && stringIsValidNumber(splitLine[1]) && stringIsValidNumber(splitLine[2])){
                     data[@"inputLowerBound"] = @([splitLine[1] doubleValue]);
                     data[@"inputUpperBound"] = @([splitLine[2] doubleValue]);
+
+                    if ([splitLine[1] length] >= 14) {
+                        passthroughFileOptions[@"fileTypeVariant"] = @"High Precision";
+                    }
+                    else{
+                        passthroughFileOptions[@"fileTypeVariant"] = @"Resolve";
+                    }
                 }
                 else{
                     @throw [NSException exceptionWithName:@"CubeLUTParseError"
@@ -104,7 +110,7 @@
                 }
             }
             else if ([line rangeOfString:@"LUT_1D_INPUT_RANGE"].location != NSNotFound) {
-                passthroughFileOptions[@"fileTypeVariant"] = @"Resolve";
+
                 if (data[@"inputLowerBound"] != nil || data[@"inputUpperBound"] != nil){
                     @throw [NSException exceptionWithName:@"CubeLUTParseError"
                                                    reason:@"Input Bounds already defined."
@@ -115,6 +121,13 @@
                 if(splitLine.count == 3 && stringIsValidNumber(splitLine[1]) && stringIsValidNumber(splitLine[2])){
                     data[@"inputLowerBound"] = @([splitLine[1] doubleValue]);
                     data[@"inputUpperBound"] = @([splitLine[2] doubleValue]);
+
+                    if ([splitLine[1] length] >= 14) {
+                        passthroughFileOptions[@"fileTypeVariant"] = @"High Precision";
+                    }
+                    else{
+                        passthroughFileOptions[@"fileTypeVariant"] = @"Resolve";
+                    }
                 }
                 else{
                     @throw [NSException exceptionWithName:@"CubeLUTParseError"
@@ -293,16 +306,20 @@
         [string appendString:[NSString stringWithFormat:@"TITLE \"%@\"\n", lut.title]];
     }
 
-
     //metadata and description write
     [string appendString: [LUTMetadataFormatter stringFromMetadata:lut.metadata description:lut.descriptionText]];
     [string appendString:@"\n"];
+
+    BOOL highPrecision = [options[@"fileTypeVariant"] isEqualToString:@"High Precision"];
 
     if(isLUT1D(lut)){
         //maybe implement writing a CUBE as 1D here?
         [string appendString:[NSString stringWithFormat:@"LUT_1D_SIZE %i\n", (int)lutSize]];
 
-        if ([options[@"fileTypeVariant"] isEqualToString:@"Resolve"]) {
+        if (highPrecision) {
+            [string appendString:[NSString stringWithFormat:@"LUT_1D_INPUT_RANGE %.12f %.12f\n", [lut inputLowerBound], [lut inputUpperBound]]];
+        }
+        else if ([options[@"fileTypeVariant"] isEqualToString:@"Resolve"]) {
             [string appendString:[NSString stringWithFormat:@"LUT_1D_INPUT_RANGE %.6f %.6f\n", [lut inputLowerBound], [lut inputUpperBound]]];
         }
         else if ([options[@"fileTypeVariant"] isEqualToString:@"Iridas/Adobe"]) {
@@ -315,7 +332,13 @@
 
         for (int i = 0; i < lutSize; i++){
             LUTColor *color = [lut colorAtR:i g:i b:i];
-            [string appendString:[NSString stringWithFormat:@"%.10f %.10f %.10f", color.red, color.green, color.blue]];
+            if (highPrecision){
+                [string appendString:[NSString stringWithFormat:@"%.12f %.12f %.12f", color.red, color.green, color.blue]];
+            }
+            else{
+                [string appendString:[NSString stringWithFormat:@"%.10f %.10f %.10f", color.red, color.green, color.blue]];
+            }
+
             if(i != lutSize - 1) {
                 [string appendString:@"\n"];
             }
@@ -325,8 +348,11 @@
     else if(isLUT3D(lut)){
         [string appendString:[NSString stringWithFormat:@"LUT_3D_SIZE %i\n", (int)lutSize]];
 
-        if ([options[@"fileTypeVariant"] isEqualToString:@"Resolve"]) {
-        [string appendString:[NSString stringWithFormat:@"LUT_3D_INPUT_RANGE %.6f %.6f\n", [lut inputLowerBound], [lut inputUpperBound]]];
+        if (highPrecision) {
+            [string appendString:[NSString stringWithFormat:@"LUT_3D_INPUT_RANGE %.12f %.12f\n", [lut inputLowerBound], [lut inputUpperBound]]];
+        }
+        else if ([options[@"fileTypeVariant"] isEqualToString:@"Resolve"]) {
+            [string appendString:[NSString stringWithFormat:@"LUT_3D_INPUT_RANGE %.6f %.6f\n", [lut inputLowerBound], [lut inputUpperBound]]];
         }
         else if ([options[@"fileTypeVariant"] isEqualToString:@"Iridas/Adobe"]) {
             [string appendString:[NSString stringWithFormat:@"DOMAIN_MIN %.6f %.6f %.6f\n", [lut inputLowerBound], [lut inputLowerBound], [lut inputLowerBound]]];
@@ -343,7 +369,13 @@
 
             LUTColor *color = [lut colorAtR:redIndex g:greenIndex b:blueIndex];
 
-            [string appendString:[NSString stringWithFormat:@"%.6f %.6f %.6f", color.red, color.green, color.blue]];
+            if (highPrecision) {
+                [string appendString:[NSString stringWithFormat:@"%.12f %.12f %.12f", color.red, color.green, color.blue]];
+            }
+            else{
+                [string appendString:[NSString stringWithFormat:@"%.6f %.6f %.6f", color.red, color.green, color.blue]];
+            }
+
 
             if(i != arrayLength - 1) {
                 [string appendString:@"\n"];
@@ -365,7 +397,9 @@
 
     NSDictionary *iridasAdobeOptions = @{@"fileTypeVariant":@"Iridas/Adobe"};
 
-    return @[resolveOptions, nukeOptions, iridasAdobeOptions];
+    NSDictionary *highPrecisionOptions = @{@"fileTypeVariant":@"High Precision"};
+
+    return @[resolveOptions, nukeOptions, iridasAdobeOptions, highPrecisionOptions];
 }
 
 + (NSArray *)conformanceLUTActionsForLUT:(LUT *)lut options:(NSDictionary *)options{
