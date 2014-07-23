@@ -155,7 +155,8 @@
 }
 
 + (NSDictionary *)constantConstraints{
-    return @{@"outputBounds":@[@0, @1]};
+    return @{@"outputBounds":@[@0, @1],
+             @"lutSize":@[@2, @64]};
 }
 
 + (NSArray *)allOptions{

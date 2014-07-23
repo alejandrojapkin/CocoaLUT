@@ -289,6 +289,19 @@ static NSMutableArray *allFormatters;
                 }
             }
         }
+        if(formatterConstantConstraints[@"lutSize"] != nil){
+            NSArray *array = formatterConstantConstraints[@"lutSize"];
+            if(array[1] != [NSNull null]){
+                if(lut.size > [array[1] integerValue]){
+                    [arrayOfActions addObject:[LUTAction actionWithLUTByResizingToSize:[array[1] integerValue]]];
+                }
+            }
+            else if (array[0] != [NSNull null]) {
+                if(lut.size < [array[0] integerValue]){
+                    [arrayOfActions addObject:[LUTAction actionWithLUTByResizingToSize:[array[0] integerValue]]];
+                }
+            }
+        }
     }
 
     if(exposedOptions.count != 0){
