@@ -141,28 +141,19 @@ static NSMutableArray *allFormatters;
 }
 
 + (NSDictionary *)defaultOptions{
-    return nil;
+    return @{[self formatterID]: @{}};
 }
 
 + (BOOL)optionsAreValid:(NSDictionary *)options{
     NSDictionary *defaultOptionsExposed = [self defaultOptions][[self formatterID]];
     NSDictionary *optionsExposed = options[[self formatterID]];
-    if (optionsExposed == nil && defaultOptionsExposed.count == 0) {
-        return YES;
+    if (optionsExposed == nil) {
+        return NO;
     }
     if (optionsExposed.count == 0 && defaultOptionsExposed.count == 0) {
         return YES;
     }
-    if(optionsExposed == nil && defaultOptionsExposed == nil){
-        return YES;
-    }
-    else if(optionsExposed != nil && defaultOptionsExposed == nil){
-        return NO;
-    }
-    else if(optionsExposed == nil && defaultOptionsExposed != nil){
-        return NO;
-    }
-    else if(optionsExposed != nil && defaultOptionsExposed != nil){
+    else if(optionsExposed.count != 0 && defaultOptionsExposed.count != 0){
 
         NSArray *allOptions = [self allOptions];
 
@@ -254,7 +245,7 @@ static NSMutableArray *allFormatters;
        @throw [NSException exceptionWithName:@"LUTActionsForLUTError" reason:[NSString stringWithFormat:@"Provided options don't pass the spec: %@", options] userInfo:nil];
     }
 
-    NSDictionary *exposedOptions = options == nil ? nil : options[[self formatterID]];
+    NSDictionary *exposedOptions = options[[self formatterID]];
     NSDictionary *formatterConstantConstraints = [self constantConstraints];
 
     if(formatterConstantConstraints != nil){
@@ -300,7 +291,7 @@ static NSMutableArray *allFormatters;
         }
     }
 
-    if(exposedOptions != nil){
+    if(exposedOptions.count != 0){
         if(exposedOptions[@"lutSize"] != nil){
             NSInteger resizeSize = [exposedOptions[@"lutSize"] integerValue];
             if(resizeSize != lut.size){
