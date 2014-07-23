@@ -56,7 +56,7 @@
 
     NSMutableString *string = [NSMutableString stringWithString:@""];
 
-    LUT1D *lut1D = LUTAsLUT1D(lut, pow(2,12));
+    LUT1D *lut1D = (LUT1D *)lut;
 
 
     for (int i = 0; i < pow(2,12); i++){
@@ -68,6 +68,22 @@
 
     return string;
 
+}
+
++ (NSArray *)allOptions{
+
+    NSDictionary *options = @{@"fileTypeVariant":@"OLUT",
+                              @"lutSize": M13OrderedDictionaryFromOrderedArrayWithDictionaries(@[@{@"4096": @(4096)}])};
+
+    return @[options];
+
+}
+
++ (NSDictionary *)defaultOptions{
+    NSDictionary *dictionary = @{@"fileTypeVariant":@"OLUT",
+                                 @"lutSize": @(4096)};
+
+    return @{[self formatterID]: dictionary};
 }
 
 + (LUTFormatterOutputType)outputType{

@@ -57,7 +57,7 @@
 
     NSMutableString *string = [NSMutableString stringWithString:@""];
 
-    LUT1D *lut1D = LUTAsLUT1D(lut, pow(2,14));
+    LUT1D *lut1D = (LUT1D *)lut;
 
     for (int i = 0; i < pow(2,14); i++){
         int red = (int)(clamp01([lut1D valueAtR:i])*(double)pow(2,14));
@@ -74,6 +74,22 @@
 
 + (LUTFormatterOutputType)outputType{
     return LUTFormatterOutputType1D;
+}
+
++ (NSArray *)allOptions{
+
+    NSDictionary *options = @{@"fileTypeVariant":@"ILUT",
+                              @"lutSize": M13OrderedDictionaryFromOrderedArrayWithDictionaries(@[@{@"16384": @(16384)}])};
+
+    return @[options];
+
+}
+
++ (NSDictionary *)defaultOptions{
+    NSDictionary *dictionary = @{@"fileTypeVariant":@"ILUT",
+                                 @"lutSize": @(16384)};
+
+    return @{[self formatterID]: dictionary};
 }
 
 + (NSString *)utiString{
