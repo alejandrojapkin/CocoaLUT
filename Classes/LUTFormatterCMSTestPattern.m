@@ -23,7 +23,7 @@
 + (NSImage *)imageFromLUT:(LUT *)lut
                  bitdepth:(NSUInteger)bitdepth {
 
-    LUT3D *lut3D = LUTAsLUT3D(lut, clampUpperBound([lut size], 64));
+    LUT3D *lut3D = (LUT3D *)lut;
 
     int cubeSize = (int)[lut3D size];
     int height = round(sqrt(cubeSize)*(double)cubeSize);

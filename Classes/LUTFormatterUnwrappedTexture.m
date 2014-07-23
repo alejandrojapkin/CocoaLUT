@@ -27,7 +27,7 @@
 + (NSImage *)imageFromLUT:(LUT *)lut
                  bitdepth:(NSUInteger)bitdepth {
 
-    LUT3D *lut3D = LUTAsLUT3D(lut, clampUpperBound([lut size], 64));
+    LUT3D *lut3D = (LUT3D *)lut;
 
     CGFloat width  = [lut3D size] * [lut3D size];
     CGFloat height = [lut3D size];
