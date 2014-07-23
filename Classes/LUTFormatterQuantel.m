@@ -90,7 +90,7 @@
 
 +(NSString *)stringFromLUT:(LUT *)lut withOptions:(NSDictionary *)options{
     if(![self optionsAreValid:options]){
-        @throw [NSException exceptionWithName:@"ClipsterWriteError" reason:[NSString stringWithFormat:@"Options don't pass the spec: %@", options] userInfo:nil];
+        @throw [NSException exceptionWithName:@"QuantelWriteError" reason:[NSString stringWithFormat:@"Options don't pass the spec: %@", options] userInfo:nil];
     }
     else{
         options = options[[self formatterID]];
