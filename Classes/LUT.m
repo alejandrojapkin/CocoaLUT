@@ -47,10 +47,52 @@
     return [[formatter class] LUTFromURL:url];
 }
 
+- (BOOL)writeToURL:(NSURL *)url
+        atomically:(BOOL)atomically
+       formatterID:(NSString *)formatterID
+           options:(NSDictionary *)options
+        conformLUT:(BOOL)conformLUT{
+    LUTFormatter *formatter = [LUTFormatter LUTFormatterWithID:formatterID];
+
+    //validation
+    if(formatter == nil){
+        NSLog(@"Formatter can't be nil.");
+        return NO;
+    }
+    if([[formatter class] isValidWriterForLUTType:self] == NO){
+        NSLog(@"%@ is not a valid writer for LUT (%@) with options: %@.", [[formatter class] formatterName], self, options);
+        return NO;
+    }
+    if (options == nil) {
+        options = [[formatter class] defaultOptions];
+    }
+
+    //----
+
+    NSArray *actionsForConformance = [[formatter class] conformanceLUTActionsForLUT:self options:options];
+
+    if (actionsForConformance.count != 0 && conformLUT == NO) {
+        NSLog(@"LUT requires conformance before saving.");
+        return NO;
+    }
+    LUT *outputLUT = [self copy];
+    for(LUTAction *action in actionsForConformance){
+        outputLUT = [action LUTByUsingActionBlockOnLUT:outputLUT];
+    }
+
+    NSData *lutData = [outputLUT dataFromLUTWithFormatterID:formatterID options:options];
+
+    return [lutData writeToURL:url atomically:atomically];
+}
+
 - (NSData *)dataFromLUTWithFormatterID:(NSString *)formatterID
                                options:(NSDictionary *)options{
     LUTFormatter *formatter = [LUTFormatter LUTFormatterWithID:formatterID];
 
+    if (options == nil) {
+        NSLog(@"Options can't be nil.");
+        return nil;
+    }
     if(formatter == nil){
         NSLog(@"Formatter can't be nil.");
         return nil;
