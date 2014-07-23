@@ -18,6 +18,7 @@
 		3BFB66D9195BE49E00AE52EC /* iridas.cube in Resources */ = {isa = PBXBuildFile; fileRef = 3BFB66D2195BE49E00AE52EC /* iridas.cube */; };
 		3BFB66DA195BE49E00AE52EC /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 3BFB66D3195BE49E00AE52EC /* LICENSE */; };
 		3D4A21D84CE74C84A1CCEBE9 /* libPods-CocoaLUTTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C332C2F4418541818D65F478 /* libPods-CocoaLUTTests.a */; };
+		F23F458419806F410014001E /* TransformAccuracyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F23F458319806F410014001E /* TransformAccuracyTests.m */; };
 		F2C2558A195D29690063DED5 /* ReadWriteTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F2C25589195D29690063DED5 /* ReadWriteTests.m */; };
 /* End PBXBuildFile section */
 
@@ -37,6 +38,7 @@
 		3BFB66D3195BE49E00AE52EC /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		70516F50A4B64FACA1F81F7F /* Pods-CocoaLUTTests.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CocoaLUTTests.xcconfig"; path = "Pods/Pods-CocoaLUTTests.xcconfig"; sourceTree = "<group>"; };
 		C332C2F4418541818D65F478 /* libPods-CocoaLUTTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-CocoaLUTTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		F23F458319806F410014001E /* TransformAccuracyTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TransformAccuracyTests.m; sourceTree = "<group>"; };
 		F2C25589195D29690063DED5 /* ReadWriteTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReadWriteTests.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -87,6 +89,7 @@
 				3BFB66C7195BE49100AE52EC /* ParserTests.m */,
 				F2C25589195D29690063DED5 /* ReadWriteTests.m */,
 				3BFB66BC195BE44A00AE52EC /* Supporting Files */,
+				F23F458319806F410014001E /* TransformAccuracyTests.m */,
 			);
 			path = CocoaLUTTests;
 			sourceTree = "<group>";
@@ -243,6 +246,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3BFB66C8195BE49100AE52EC /* ParserTests.m in Sources */,
+				F23F458419806F410014001E /* TransformAccuracyTests.m in Sources */,
 				F2C2558A195D29690063DED5 /* ReadWriteTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
