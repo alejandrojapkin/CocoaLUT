@@ -189,7 +189,8 @@
 }
 
 + (NSDictionary *)defaultOptions{
-    NSDictionary *dictionary = @{@"integerMaxOutput": @((int)(pow(2, 16) - 1)),
+    NSDictionary *dictionary = @{@"fileTypeVariant": @"Quantel",
+                                 @"integerMaxOutput": @((int)(pow(2, 16) - 1)),
                                  @"lutSize": @(33)};
     
     return @{[self formatterID]: dictionary};
