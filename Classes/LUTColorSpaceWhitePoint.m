@@ -29,6 +29,13 @@
                                                        name:name];
 }
 
+- (GLKVector3)tristimulusValues{
+    double capY = 1.0;
+    double capX = (capY/self.whiteChromaticityY) * self.whiteChromaticityX;
+    double capZ = (capY/self.whiteChromaticityY) * (1.0 - self.whiteChromaticityX - self.whiteChromaticityY);
+    return GLKVector3Make(capX, capY, capZ);
+}
+
 + (NSArray *)knownWhitePoints{
     NSArray *allKnownWhitePoints = @[[self d65WhitePoint],
                                   [self d60WhitePoint],

@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <GLKit/GLKit.h>
 #import <M13OrderedDictionary/M13OrderedDictionary.h>
 
 @interface LUTColorSpaceWhitePoint : NSObject <NSCopying>
@@ -18,6 +19,7 @@
 + (instancetype)whitePointWithWhiteChromaticityX:(double)whiteChromaticityX
                               whiteChromaticityY:(double)whiteChromaticityY
                                             name:(NSString *)name;
+- (GLKVector3)tristimulusValues;
 
 + (NSArray *)knownWhitePoints;
 
