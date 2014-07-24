@@ -155,13 +155,16 @@ forwardFootlambertCompensation:(double)flCompensation
 + (LUT3D *)convertLUT3D:(LUT3D *)lut fromColorSpace:(LUTColorSpace *)sourceColorSpace
              whitePoint:(LUTColorSpaceWhitePoint *)sourceWhitePoint
            toColorSpace:(LUTColorSpace *)destinationColorSpace
-             whitePoint:(LUTColorSpaceWhitePoint *)destinationWhitePoint{
+             whitePoint:(LUTColorSpaceWhitePoint *)destinationWhitePoint
+         bradfordMatrix:(BOOL)useBradfordMatrix{
     //NSLog(@"Source NPM: %@\n Destination NPM: %@", NSStringFromGLKMatrix3(sourceColorSpace.npm), NSStringFromGLKMatrix3(destinationColorSpace.npm));
 
     GLKMatrix3 transformationMatrix = [self transformationMatrixFromColorSpace:sourceColorSpace
                                                                     whitePoint:sourceWhitePoint
                                                                   toColorSpace:destinationColorSpace
-                                                                    whitePoint:destinationWhitePoint];
+                                                                    whitePoint:destinationWhitePoint
+                                                                bradfordMatrix:useBradfordMatrix];
+
     //NSLog(@"Transformation Matrix: %@", NSStringFromGLKMatrix3(transformationMatrix));
 
     LUT3D *transformedLUT = [LUT3D LUTOfSize:[lut size] inputLowerBound:[lut inputLowerBound] inputUpperBound:[lut inputUpperBound]];
@@ -197,11 +200,47 @@ forwardFootlambertCompensation:(double)flCompensation
 + (GLKMatrix3)transformationMatrixFromColorSpace:(LUTColorSpace *)sourceColorSpace
                                       whitePoint:(LUTColorSpaceWhitePoint *)sourceWhitePoint
                                     toColorSpace:(LUTColorSpace *)destinationColorSpace
-                                      whitePoint:(LUTColorSpaceWhitePoint *)destinationWhitePoint{
-   bool isInvertible;
-   GLKMatrix3 transformationMatrix = GLKMatrix3Multiply(GLKMatrix3Invert([self npmFromColorSpace:destinationColorSpace whitePoint:destinationWhitePoint], &isInvertible), [self npmFromColorSpace:sourceColorSpace whitePoint:sourceWhitePoint]);
-   NSAssert(isInvertible == YES, @"Transformation Matrix can't be generated because matrix is not invertible");
-   return transformationMatrix;
+                                      whitePoint:(LUTColorSpaceWhitePoint *)destinationWhitePoint
+                                  bradfordMatrix:(BOOL)useBradfordMatrix{
+    bool isInvertible;
+    GLKMatrix3 destinationNPMInverted = GLKMatrix3Invert([self npmFromColorSpace:destinationColorSpace whitePoint:destinationWhitePoint], &isInvertible);
+
+    NSAssert(isInvertible == YES, @"Transformation Matrix can't be generated because destination NPM is not invertible.");
+
+    GLKMatrix3 transformationMatrix;
+
+    if (useBradfordMatrix) {
+        GLKVector3 sourceConeResponseDomain = GLKMatrix3MultiplyVector3([self bradfordConeResponseMatrix], sourceWhitePoint.tristimulusValues);
+        GLKVector3 destinationConeResponseDomain = GLKMatrix3MultiplyVector3([self bradfordConeResponseMatrix], destinationWhitePoint.tristimulusValues);
+
+        GLKMatrix3 intermediateConeResponseDomainMatrix =
+        GLKMatrix3Make(destinationConeResponseDomain.x/sourceConeResponseDomain.x, 0, 0,
+                       0, destinationConeResponseDomain.y/sourceConeResponseDomain.y, 0,
+                       0, 0, destinationConeResponseDomain.z/sourceConeResponseDomain.z);
+        GLKMatrix3 bradfordMatrix = GLKMatrix3Multiply(GLKMatrix3Multiply([self bradfordConeResponseMatrixInverse], intermediateConeResponseDomainMatrix), [self bradfordConeResponseMatrix]);
+
+        //NSLog(@"Bradford Matrix: %@", NSStringFromGLKMatrix3(bradfordMatrix));
+
+
+        transformationMatrix = GLKMatrix3Multiply(GLKMatrix3Multiply(destinationNPMInverted, bradfordMatrix), [self npmFromColorSpace:sourceColorSpace whitePoint:sourceWhitePoint]);
+    }
+    else{
+        transformationMatrix = GLKMatrix3Multiply(destinationNPMInverted, [self npmFromColorSpace:sourceColorSpace whitePoint:sourceWhitePoint]);
+    }
+
+    return transformationMatrix;
+}
+
++ (GLKMatrix3)bradfordConeResponseMatrix{
+    return GLKMatrix3Make(0.8951000,  -0.7502000, 0.0389000,
+                          0.2664000,  1.7135000,  -0.0685000,
+                          -0.1614000, 0.0367000,  1.0296000);
+}
+
++ (GLKMatrix3)bradfordConeResponseMatrixInverse{
+    return GLKMatrix3Make(0.9869929, 0.4323053,  -0.0085287,
+                          -0.1470543,  0.5183603,  0.0400428,
+                          0.1599627,  0.0492912,  0.9684867);
 }
 
 + (NSArray *)knownColorSpaces{

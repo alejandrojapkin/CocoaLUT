@@ -44,12 +44,14 @@
 + (LUT3D *)convertLUT3D:(LUT3D *)lut fromColorSpace:(LUTColorSpace *)sourceColorSpace
              whitePoint:(LUTColorSpaceWhitePoint *)sourceWhitePoint
            toColorSpace:(LUTColorSpace *)destinationColorSpace
-             whitePoint:(LUTColorSpaceWhitePoint *)destinationWhitePoint;
+             whitePoint:(LUTColorSpaceWhitePoint *)destinationWhitePoint
+         bradfordMatrix:(BOOL)useBradfordMatrix;
 
 + (GLKMatrix3)transformationMatrixFromColorSpace:(LUTColorSpace *)sourceColorSpace
                                       whitePoint:(LUTColorSpaceWhitePoint *)sourceWhitePoint
                                     toColorSpace:(LUTColorSpace *)destinationColorSpace
-                                      whitePoint:(LUTColorSpaceWhitePoint *)destinationWhitePoint;
+                                      whitePoint:(LUTColorSpaceWhitePoint *)destinationWhitePoint
+                                  bradfordMatrix:(BOOL)useBradfordMatrix;
 
 + (GLKMatrix3)npmFromColorSpace:(LUTColorSpace *)colorSpace
                      whitePoint:(LUTColorSpaceWhitePoint *)whitePoint;
