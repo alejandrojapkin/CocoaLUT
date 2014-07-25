@@ -10,6 +10,7 @@
 #import <GLKit/GLKit.h>
 #import "CocoaLUT.h"
 #import "LUTColorSpaceWhitePoint.h"
+#import "LUTColorTransferFunction.h"
 
 @interface LUTColorSpace : NSObject <NSCopying>
 
@@ -46,6 +47,12 @@
            toColorSpace:(LUTColorSpace *)destinationColorSpace
              whitePoint:(LUTColorSpaceWhitePoint *)destinationWhitePoint
          bradfordMatrix:(BOOL)useBradfordMatrix;
+
++ (LUT3D *)convertColorTemperatureFromLUT3D:(LUT3D *)lut
+                           sourceColorSpace:(LUTColorSpace *)sourceColorSpace
+                     sourceTransferFunction:(LUTColorTransferFunction *)sourceTransferFunction
+                     sourceColorTemperature:(double)sourceColorTemperature
+                destinationColorTemperature:(double)destinationColorTemperature;
 
 + (GLKMatrix3)transformationMatrixFromColorSpace:(LUTColorSpace *)sourceColorSpace
                                       whitePoint:(LUTColorSpaceWhitePoint *)sourceWhitePoint
