@@ -158,6 +158,9 @@ forwardFootlambertCompensation:(double)flCompensation
              whitePoint:(LUTColorSpaceWhitePoint *)destinationWhitePoint
          bradfordMatrix:(BOOL)useBradfordMatrix{
     //NSLog(@"Source NPM: %@\n Destination NPM: %@", NSStringFromGLKMatrix3(sourceColorSpace.npm), NSStringFromGLKMatrix3(destinationColorSpace.npm));
+    if(useBradfordMatrix && (sourceColorSpace.forcesNPM || destinationColorSpace.forcesNPM)){
+        @throw [NSException exceptionWithName:@"ColorSpaceConversionError" reason:@"Can't use the bradford matrix when using a colorspace that forces the NPM." userInfo:nil];
+    }
 
     GLKMatrix3 transformationMatrix = [self transformationMatrixFromColorSpace:sourceColorSpace
                                                                     whitePoint:sourceWhitePoint
