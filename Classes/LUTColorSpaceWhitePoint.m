@@ -46,11 +46,65 @@
     return allKnownWhitePoints;
 }
 
++ (NSArray *)knownColorTemperatureWhitePoints{
+    return @[[self whitePointFromColorTemperature:2900 customName:@"Incandescent (2900K)"],
+             [self whitePointFromColorTemperature:3200 customName:@"Tungsten (3200K)"],
+             [self whitePointFromColorTemperature:4400 customName:@"Mixed (4400K)"],
+             [self whitePointFromColorTemperature:5600 customName:@"Daylight (5600K)"]];
+}
+
+
+
 - (instancetype)copyWithZone:(NSZone *)zone{
     return [self.class whitePointWithWhiteChromaticityX:self.whiteChromaticityX
                                      whiteChromaticityY:self.whiteChromaticityY
                                                    name:[self.name copyWithZone:zone]];
 }
+
+//http://en.wikipedia.org/wiki/Planckian_locus#Approximation
++ (instancetype)whitePointFromColorTemperature:(double)colorTemperature{
+    if (colorTemperature < 1667 || colorTemperature > 25000) {
+        return nil;
+    }
+    else{
+        //calculate x
+        double xC;
+        if (colorTemperature >= 1667 && colorTemperature <= 4000) {
+            xC = -0.2661239*(pow(10, 9)/pow(colorTemperature, 3)) - 0.2343580*(pow(10, 6)/pow(colorTemperature, 2)) + 0.8776956*(pow(10, 3)/colorTemperature) + 0.179910;
+        }
+        else{
+            //temp > 4000 and <= 25000
+            xC = -3.0258469*(pow(10, 9)/pow(colorTemperature, 3)) + 2.1070379*(pow(10, 6)/pow(colorTemperature, 2)) + 0.2226347*(pow(10, 3)/colorTemperature) + 0.240390;
+        }
+
+        //calculate y
+        double yC;
+
+        if (colorTemperature >= 1667 && colorTemperature <= 2222) {
+            yC = -1.1063814*pow(xC, 3) - 1.34811020*pow(xC, 2) + 2.18555832*xC - 0.20219683;
+        }
+        else if (colorTemperature > 2222 && colorTemperature <= 4000){
+            yC = -0.9549476*pow(xC, 3) - 1.37418593*pow(xC, 2) + 2.09137015*xC - 0.16748867;
+        }
+        else{
+            //temp > 4000 and <= 25000
+            yC = 3.0817580*pow(xC, 3) - 5.87338670*pow(xC, 2) + 3.75112997*xC - 0.37001483;
+        }
+
+        return [self whitePointWithWhiteChromaticityX:xC
+                                   whiteChromaticityY:yC
+                                                 name:[NSString stringWithFormat:@"%iK", (int)colorTemperature]];
+    }
+}
+
++ (instancetype)whitePointFromColorTemperature:(double)colorTemperature
+                                    customName:(NSString *)name{
+    LUTColorSpaceWhitePoint *wp = [self whitePointFromColorTemperature:colorTemperature];
+    wp.name = name;
+    return wp;
+}
+
+
 
 + (instancetype)d65WhitePoint{
     return [self whitePointWithWhiteChromaticityX:0.31271

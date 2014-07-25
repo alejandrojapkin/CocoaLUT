@@ -22,6 +22,11 @@
 - (GLKVector3)tristimulusValues;
 
 + (NSArray *)knownWhitePoints;
++ (NSArray *)knownColorTemperatureWhitePoints;
+
++ (instancetype)whitePointFromColorTemperature:(double)colorTemperature;
++ (instancetype)whitePointFromColorTemperature:(double)colorTemperature
+                                    customName:(NSString *)name;
 
 + (instancetype)d65WhitePoint;
 + (instancetype)d60WhitePoint;
