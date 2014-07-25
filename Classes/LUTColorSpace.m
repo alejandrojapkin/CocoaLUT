@@ -252,6 +252,7 @@ forwardFootlambertCompensation:(double)flCompensation
                                      [self sGamut3CineColorSpace],
                                      [self sGamutColorSpace],
                                      [self acesGamutColorSpace],
+                                     [self dciXYZColorSpace],
                                      [self xyzColorSpace]];
 
     return allKnownColorSpaces;
@@ -346,12 +347,24 @@ forwardFootlambertCompensation:(double)flCompensation
                                            blueChromaticityY:-0.07700
                                                         name:@"ACES Gamut"];
 }
-+ (instancetype)xyzColorSpace{
++ (instancetype)dciXYZColorSpace{
     return [LUTColorSpace LUTColorSpaceWithNPM:GLKMatrix3MakeWithRows(GLKVector3Make(1.0, 0.0, 0.0),
                                                                       GLKVector3Make(0.0, 1.0, 0.0),
                                                                       GLKVector3Make(0.0, 0.0, 1.0))
             forwardFootlambertCompensation:0.916555
                                           name:@"DCI-XYZ"];
+}
+
++ (instancetype)xyzColorSpace{
+    return [LUTColorSpace LUTColorSpaceWithDefaultWhitePoint:[LUTColorSpaceWhitePoint xyzWhitePoint]
+                                            redChromaticityX:1
+                                            redChromaticityY:0
+                                          greenChromaticityX:0
+                                          greenChromaticityY:1
+                                           blueChromaticityX:0
+                                           blueChromaticityY:0
+                              forwardFootlambertCompensation:0.916555
+                                                        name:@"CIE-XYZ"];
 }
 
 @end

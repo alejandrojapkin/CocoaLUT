@@ -66,6 +66,7 @@
 + (instancetype)sGamut3CineColorSpace;
 + (instancetype)sGamutColorSpace;
 + (instancetype)acesGamutColorSpace;
++ (instancetype)dciXYZColorSpace;
 + (instancetype)xyzColorSpace;
 
 
