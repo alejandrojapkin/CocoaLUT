@@ -32,7 +32,7 @@ The goal of this project is to have a fast, modern Objective-C (and soon, Swift)
   - ICC/ColorSync Profiles (.icc, .icm, .pf, .prof) as a 3D LUT *(OS X only)*
 - Has a format-independent internal data structure. You can create LUTs and use them in-memory.
 - Apply LUTs to NSImage, CIImage, and UIImage
-- Generate Core Image Filters (CIFilter / CIColorCube) from LUTs
+- Generate Core Image Filters ([VVLUT1DFilter](https://github.com/videovillage/VVLUT1DFilter) / CIColorCube) from LUTs
 - Generate visualizations for LUTs with Scene Kit
 - Resize LUTs
 - Reverse LUTs
