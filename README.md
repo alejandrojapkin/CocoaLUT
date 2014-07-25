@@ -19,10 +19,12 @@ The goal of this project is to have a fast, modern Objective-C (and soon, Swift)
   - Autodesk Lustre / Nuke 3D LUT (.3dl)
   - Quantel 3D LUT (.txt)
   - DVS Clipster 3D LUT (.xml, .txt)
+  - Nucoda CMS LUT (.cms)
   - Unwrapped Texture LUT Image (.tiff, .dpx, .png)
   - CMS Test Pattern LUT Image (.tiff, .dpx, .png)
 - Reads and writes 1D LUTs
   - DaVinci Resolve Cube LUT (.cube)
+  - Nucoda CMS LUT (.cms)
   - DaVinci Resolve 1D LUT (.ilut, .olut)
   - Discreet 1D LUT (.lut)
 - Reads non-LUT formats as LUTs
@@ -36,6 +38,7 @@ The goal of this project is to have a fast, modern Objective-C (and soon, Swift)
 - Reverse LUTs
 - Extract the color shift from a 3D LUT
 - Extract the contrast shift from a 3D LUT
+- Convert the color space or color temperature of a LUT
 
 ## Installation
 
