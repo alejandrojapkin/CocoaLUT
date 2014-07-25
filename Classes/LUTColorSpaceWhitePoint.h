@@ -27,6 +27,7 @@
 + (instancetype)d60WhitePoint;
 + (instancetype)d55WhitePoint;
 + (instancetype)dciWhitePoint;
++ (instancetype)xyzWhitePoint;
 
 
 @end
