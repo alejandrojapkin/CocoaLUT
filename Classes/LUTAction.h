@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "CocoaLUT.h"
+#import "LUTColorSpace.h"
 
 @interface LUTAction : NSObject <NSCopying>
 
@@ -31,6 +32,11 @@
 
 +(instancetype)actionWithLUTByClampingLowerBound:(double)lowerBound
                                       upperBound:(double)upperBound;
+
++(instancetype)actionWithLUT3DByConvertingColorTemperatureFromSourceColorSpace:(LUTColorSpace *)sourceColorSpace
+                                                        sourceTransferFunction:(LUTColorTransferFunction *)sourceTransferFunction
+                                                        sourceColorTemperature:(LUTColorSpaceWhitePoint *)sourceColorTemperature
+                                                   destinationColorTemperature:(LUTColorSpaceWhitePoint *)destinationColorTemperature;
 
 +(instancetype)actionWithLUTByRemappingValuesWithInputLow:(double)inputLow
                                                 inputHigh:(double)inputHigh

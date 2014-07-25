@@ -84,6 +84,30 @@
     return outString;
 }
 
++(instancetype)actionWithLUT3DByConvertingColorTemperatureFromSourceColorSpace:(LUTColorSpace *)sourceColorSpace
+                                                        sourceTransferFunction:(LUTColorTransferFunction *)sourceTransferFunction
+                                                        sourceColorTemperature:(LUTColorSpaceWhitePoint *)sourceColorTemperature
+                                                   destinationColorTemperature:(LUTColorSpaceWhitePoint *)destinationColorTemperature{
+
+    M13OrderedDictionary *actionMetadata =
+    M13OrderedDictionaryFromOrderedArrayWithDictionaries(@[@{@"id":@"ConvertColorTemperature"},
+                                                           @{@"sourceColorSpace": sourceColorSpace.name},
+                                                           @{@"sourceTransferFunction": sourceTransferFunction.name},
+                                                           @{@"sourceColorTemperature": sourceColorTemperature.name},
+                                                           @{@"destinationColorTemperature": destinationColorTemperature.name}]);
+
+    return [self actionWithBlock:^LUT *(LUT *lut) {
+        return [LUTColorSpace convertColorTemperatureFromLUT3D:(LUT3D *)lut
+                                              sourceColorSpace:sourceColorSpace
+                                        sourceTransferFunction:sourceTransferFunction
+                                        sourceColorTemperature:sourceColorTemperature
+                                   destinationColorTemperature:destinationColorTemperature];
+    }
+                      actionName:[NSString stringWithFormat:@"Change Color Temperature"]
+                  actionMetadata:actionMetadata];
+
+}
+
 +(instancetype)actionWithLUTByChangingInputLowerBound:(double)inputLowerBound
                                       inputUpperBound:(double)inputUpperBound{
     M13OrderedDictionary *actionMetadata =
