@@ -52,8 +52,8 @@
 + (LUT3D *)convertColorTemperatureFromLUT3D:(LUT3D *)lut
                            sourceColorSpace:(LUTColorSpace *)sourceColorSpace
                      sourceTransferFunction:(LUTColorTransferFunction *)sourceTransferFunction
-                     sourceColorTemperature:(double)sourceColorTemperature
-                destinationColorTemperature:(double)destinationColorTemperature;
+                     sourceColorTemperature:(LUTColorSpaceWhitePoint *)sourceColorTemperature
+                destinationColorTemperature:(LUTColorSpaceWhitePoint *)destinationColorTemperature;
 
 + (GLKMatrix3)transformationMatrixFromColorSpace:(LUTColorSpace *)sourceColorSpace
                                       whitePoint:(LUTColorSpaceWhitePoint *)sourceWhitePoint

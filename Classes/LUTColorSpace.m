@@ -204,17 +204,17 @@ forwardFootlambertCompensation:(double)flCompensation
 + (LUT3D *)convertColorTemperatureFromLUT3D:(LUT3D *)lut
                            sourceColorSpace:(LUTColorSpace *)sourceColorSpace
                      sourceTransferFunction:(LUTColorTransferFunction *)sourceTransferFunction
-                     sourceColorTemperature:(double)sourceColorTemperature
-                destinationColorTemperature:(double)destinationColorTemperature{
+                     sourceColorTemperature:(LUTColorSpaceWhitePoint *)sourceColorTemperature
+                destinationColorTemperature:(LUTColorSpaceWhitePoint *)destinationColorTemperature{
     LUT3D *linearizedLUT = (LUT3D *)[LUTColorTransferFunction transformedLUTFromLUT:lut
                                                  fromColorTransferFunction:sourceTransferFunction
                                                    toColorTransferFunction:[LUTColorTransferFunction linearTransferFunction]];
 
     LUT3D *linearizedColorSpaceConvertedLUT = [self convertLUT3D:linearizedLUT
                                                   fromColorSpace:sourceColorSpace
-                                                      whitePoint:[LUTColorSpaceWhitePoint whitePointFromColorTemperature:sourceColorTemperature]
+                                                      whitePoint:sourceColorTemperature
                                                     toColorSpace:sourceColorSpace
-                                                      whitePoint:[LUTColorSpaceWhitePoint whitePointFromColorTemperature:destinationColorTemperature]
+                                                      whitePoint:destinationColorTemperature
                                                   bradfordMatrix:NO];
 
     return (LUT3D *)[LUTColorTransferFunction transformedLUTFromLUT:linearizedColorSpaceConvertedLUT
