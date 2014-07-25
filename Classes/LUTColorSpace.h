@@ -10,7 +10,8 @@
 #import <GLKit/GLKit.h>
 #import "CocoaLUT.h"
 #import "LUTColorSpaceWhitePoint.h"
-#import "LUTColorTransferFunction.h"
+
+@class LUTColorTransferFunction;
 
 @interface LUTColorSpace : NSObject <NSCopying>
 

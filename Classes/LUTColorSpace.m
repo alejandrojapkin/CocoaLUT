@@ -7,6 +7,7 @@
 //
 
 #import "LUTColorSpace.h"
+#import "LUTColorTransferFunction.h"
 
 
 @interface LUTColorSpace ()
