@@ -9,6 +9,7 @@
 #import "LUT1D.h"
 #if defined(COCOAPODS_POD_AVAILABLE_VVLUT1DFilter)
 #import <VVLUT1DFilter/VVLUT1DFilter.h>
+#import <VVLUT1DFilter/VVLUT1DFilterWithColorSpace.h>
 #endif
 
 @interface LUT1D ()
@@ -341,7 +342,15 @@
 
     NSData *inputData = [NSData dataWithBytes:lutArray length:dataSize];
 
-    CIFilter *lutFilter = [CIFilter filterWithName:@"VVLUT1DFilter"];
+    CIFilter *lutFilter;
+
+    if (colorSpace) {
+        lutFilter = [CIFilter filterWithName:@"VVLUT1DFilterWithColorSpace"];
+        [lutFilter setValue:(__bridge id)(colorSpace) forKey:@"inputColorSpace"];
+    }
+    else {
+        lutFilter = [CIFilter filterWithName:@"VVLUT1DFilter"];
+    }
 
     [lutFilter setValue:inputData forKey:@"inputData"];
     [lutFilter setValue:@(COCOALUT_VVLUT1DFILTER_SIZE) forKey:@"inputSize"];
