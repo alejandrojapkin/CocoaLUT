@@ -49,7 +49,13 @@
             components = arrayWithEmptyElementsRemoved(components);
             integerMaxOutput = [components[components.count - 1] intValue];
             cubeSize = components.count;
-            passthroughFileOptions[@"fileTypeVariant"] = @"Nuke";
+            if (integerMaxOutput == 1023) {
+                integerMaxOutput = 4095;
+                passthroughFileOptions[@"fileTypeVariant"] = @"Smoke";
+            }
+            else{
+                passthroughFileOptions[@"fileTypeVariant"] = @"Nuke";
+            }
             break;
         }
 
@@ -132,7 +138,7 @@
 
     fileTypeVariant = options[@"fileTypeVariant"];
     integerMaxOutput = [options[@"integerMaxOutput"] integerValue];
-    lutSize = [options[@"lutSize"] integerValue];
+    lutSize = lut.size;
     //----------------
 
 
@@ -140,8 +146,13 @@
     [string appendString:@"\n"];
 
     //write header
-    if([fileTypeVariant isEqualToString:@"Nuke"]){
-        [string appendString:[indicesIntegerArray(0, (int)integerMaxOutput, (int)lutSize) componentsJoinedByString:@" "]];
+    if([fileTypeVariant isEqualToString:@"Nuke"] || [fileTypeVariant isEqualToString:@"Smoke"]){
+        if ([fileTypeVariant isEqualToString:@"Nuke"]) {
+            [string appendString:[indicesIntegerArray(0, (int)integerMaxOutput, (int)lutSize) componentsJoinedByString:@" "]];
+        }
+        else if ([fileTypeVariant isEqualToString:@"Smoke"]){
+            [string appendString:[indicesIntegerArray(0, 1023, (int)lutSize) componentsJoinedByString:@" "]];
+        }
         [string appendString:@"\n"];
     }
     else if([fileTypeVariant isEqualToString:@"Lustre"]){
@@ -222,7 +233,7 @@
 }
 
 + (NSString *)formatterName{
-    return @"Nuke/Lustre 3D LUT";
+    return @"Autodesk 3D LUT";
 }
 
 + (NSString *)formatterID{
@@ -254,7 +265,11 @@
                   @"lutSize": M13OrderedDictionaryFromOrderedArrayWithDictionaries(@[@{@"32": @(32)},
                                                                                      @{@"64": @(64)}])};
 
-    return @[lustreOptions, nukeOptions];
+    NSDictionary *smokeOptions =
+    @{@"fileTypeVariant":@"Smoke",
+      @"integerMaxOutput": M13OrderedDictionaryFromOrderedArrayWithDictionaries(@[@{@"12-bit": @(pow(2, 12) - 1)}])};
+
+    return @[lustreOptions, nukeOptions, smokeOptions];
 }
 
 + (NSDictionary *)defaultOptions{
