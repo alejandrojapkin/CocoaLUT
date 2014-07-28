@@ -51,7 +51,7 @@
             cubeSize = components.count;
             if (integerMaxOutput == 1023) {
                 integerMaxOutput = 4095;
-                passthroughFileOptions[@"fileTypeVariant"] = @"Smoke";
+                passthroughFileOptions[@"fileTypeVariant"] = @"Legacy";
             }
             else{
                 passthroughFileOptions[@"fileTypeVariant"] = @"Nuke";
@@ -66,7 +66,9 @@
         @throw exception;
     }
 
-    passthroughFileOptions[@"lutSize"] = @(cubeSize);
+    if (![passthroughFileOptions[@"fileTypeVariant"] isEqualToString:@"Legacy"]) {
+        passthroughFileOptions[@"lutSize"] = @(cubeSize);
+    }
     passthroughFileOptions[@"integerMaxOutput"] = @(integerMaxOutput);
 
 
@@ -146,11 +148,11 @@
     [string appendString:@"\n"];
 
     //write header
-    if([fileTypeVariant isEqualToString:@"Nuke"] || [fileTypeVariant isEqualToString:@"Smoke"]){
+    if([fileTypeVariant isEqualToString:@"Nuke"] || [fileTypeVariant isEqualToString:@"Legacy"]){
         if ([fileTypeVariant isEqualToString:@"Nuke"]) {
             [string appendString:[indicesIntegerArray(0, (int)integerMaxOutput, (int)lutSize) componentsJoinedByString:@" "]];
         }
-        else if ([fileTypeVariant isEqualToString:@"Smoke"]){
+        else if ([fileTypeVariant isEqualToString:@"Legacy"]){
             [string appendString:[indicesIntegerArray(0, 1023, (int)lutSize) componentsJoinedByString:@" "]];
         }
         [string appendString:@"\n"];
@@ -265,11 +267,11 @@
                   @"lutSize": M13OrderedDictionaryFromOrderedArrayWithDictionaries(@[@{@"32": @(32)},
                                                                                      @{@"64": @(64)}])};
 
-    NSDictionary *smokeOptions =
-    @{@"fileTypeVariant":@"Smoke",
+    NSDictionary *legacyOptions =
+    @{@"fileTypeVariant":@"Legacy",
       @"integerMaxOutput": M13OrderedDictionaryFromOrderedArrayWithDictionaries(@[@{@"12-bit": @(pow(2, 12) - 1)}])};
 
-    return @[lustreOptions, nukeOptions, smokeOptions];
+    return @[lustreOptions, nukeOptions, legacyOptions];
 }
 
 + (NSDictionary *)defaultOptions{
