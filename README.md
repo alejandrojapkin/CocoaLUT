@@ -16,7 +16,7 @@ The goal of this project is to have a fast, modern Objective-C (and soon, Swift)
 
 - Reads and writes 3D LUTs
   - DaVinci Resolve Cube LUT (.cube)
-  - Autodesk Lustre / Nuke 3D LUT (.3dl)
+  - Autodesk 3D LUT (.3dl)
   - Quantel 3D LUT (.txt)
   - DVS Clipster 3D LUT (.xml, .txt)
   - Nucoda CMS LUT (.cms)
