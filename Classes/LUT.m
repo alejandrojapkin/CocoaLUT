@@ -56,7 +56,7 @@
 
     //validation
     if(formatter == nil){
-        NSLog(@"Formatter can't be nil.");
+        NSLog(@"Formatter not found for ID \"%@\".", formatterID);
         return NO;
     }
     if([[formatter class] isValidWriterForLUTType:self] == NO){
@@ -72,7 +72,14 @@
     NSArray *actionsForConformance = [[formatter class] conformanceLUTActionsForLUT:self options:options];
 
     if (actionsForConformance.count != 0 && conformLUT == NO) {
-        NSLog(@"LUT requires conformance before saving.");
+        NSMutableString *conformanceInfo = [[NSMutableString alloc] init];
+        for (int i = 0; i < actionsForConformance.count; i++) {
+            [conformanceInfo appendString:((LUTAction *)actionsForConformance[0]).actionName];
+            if (i+1 != actionsForConformance.count) {
+                [conformanceInfo appendString:@"\n"];
+            }
+        }
+        NSLog(@"LUT requires conformance before saving. Info:\n%@", conformanceInfo);
         return NO;
     }
     LUT *outputLUT = [self copy];
@@ -81,6 +88,11 @@
     }
 
     NSData *lutData = [outputLUT dataFromLUTWithFormatterID:formatterID options:options];
+
+    if (lutData == nil) {
+        NSLog(@"Formatter couldn't create data from LUT.");
+        return NO;
+    }
 
     return [lutData writeToURL:url atomically:atomically];
 }
