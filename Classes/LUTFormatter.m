@@ -34,6 +34,30 @@ static NSMutableArray *allFormatters;
     return array;
 }
 
++ (NSArray *)lut1DFormatterFileExtensions{
+    NSMutableArray *array = [NSMutableArray array];
+    for(LUTFormatter *formatter in allFormatters){
+        if ([formatter.class outputType] == LUTFormatterOutputType1D) {
+            for(NSString *fileExtension in [formatter.class fileExtensions]){
+                [array addObject:fileExtension];
+            }
+        }
+    }
+    return array;
+}
+
++ (NSArray *)lut3DFormatterFileExtensions{
+    NSMutableArray *array = [NSMutableArray array];
+    for(LUTFormatter *formatter in allFormatters){
+        if ([formatter.class outputType] == LUTFormatterOutputType3D) {
+            for(NSString *fileExtension in [formatter.class fileExtensions]){
+                [array addObject:fileExtension];
+            }
+        }
+    }
+    return array;
+}
+
 + (NSArray *)LUTFormattersForFileExtension:(NSString *)fileExtension{
     NSMutableArray *formatters = [NSMutableArray array];
     for(LUTFormatter *formatter in allFormatters){
