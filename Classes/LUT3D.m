@@ -76,6 +76,25 @@
     return extractedLUT;
 }
 
+- (instancetype)LUT3DByExtractingColorShiftContrastReferredWithReverseStrictness:(BOOL)strictness{
+    LUT1D *selfLUT1D = [self LUT1D];
+
+    if([selfLUT1D isReversibleWithStrictness:strictness] == NO){
+        return nil;
+    }
+
+    LUT1D *reversed1D = [[selfLUT1D LUTByResizingToSize:2048] LUT1DByReversingWithStrictness:strictness];
+
+    if(reversed1D == nil){
+        return nil;
+    }
+
+    LUT3D *extractedLUT = (LUT3D *)[reversed1D LUTByCombiningWithLUT:self];
+    [extractedLUT copyMetaPropertiesFromLUT:self];
+
+    return extractedLUT;
+}
+
 - (instancetype)LUT3DByExtractingContrastOnly{
     return [[self LUT1D] LUT3DOfSize:[self size]];
 }

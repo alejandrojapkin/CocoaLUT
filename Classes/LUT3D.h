@@ -27,6 +27,7 @@ typedef NS_ENUM(NSInteger, LUTMonoConversionMethod) {
 @interface LUT3D : LUT
 
 - (instancetype)LUT3DByExtractingColorOnlyWith1DReverseStrictness:(BOOL)strictness;
+- (instancetype)LUT3DByExtractingColorShiftContrastReferredWithReverseStrictness:(BOOL)strictness;
 - (instancetype)LUT3DByExtractingContrastOnly;
 - (instancetype)LUT3DByConvertingToMonoWithConversionMethod:(LUTMonoConversionMethod)conversionMethod;
 - (instancetype)LUT3DBySwizzling1DChannelsWithMethod:(LUT1DSwizzleChannelsMethod)method
