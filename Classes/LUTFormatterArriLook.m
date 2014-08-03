@@ -97,14 +97,34 @@
         [lut3D setColor:color r:r g:g b:b];
     }];
 
-    lut3D.passthroughFileOptions = @{[self formatterID]:@{}};
+    lut3D.passthroughFileOptions = @{[self formatterID]:@{@"fileTypeVariant":@"Arri",
+                                                          @"mixCurvesMethod":@(LUT1DSwizzleChannelsMethodAverageRGB),
+                                                          @"lutSize":@4096}};
 
     return lut3D;
 }
 
++ (NSString *)stringFromLUT:(LUT *)lut withOptions:(NSDictionary *)options{
+    NSMutableString *string = [[NSMutableString alloc] init];
+
+    [string appendString:@"<!-- ARRI Digital Camera Look File -->\n<!-- This XML format is used to import color settings into the camera(\"look file\")-->\n<adicam version=\"1.0\" camera=\"alexa\">\n\t<Saturation>\n\t\t1.000000\n\t</Saturation>\n\t<PrinterLight>\n\t\t0.000000 0.000000 0.000000\n\t</PrinterLight>\n\t<SOPNode>\n\t\t<Slope>1.000000 1.000000 1.000000</Slope>\n\t\t<Offset>0.000000 0.000000 0.000000</Offset>\n\t\t<Power>1.000000 1.000000 1.000000</Power>\n\t</SOPNode>\n\t<ToneMapLut rows=\"4096\" cols=\"1\">\n"];
+
+    LUT1D *lut1D = (LUT1D *)lut;
+
+    NSArray *redCurve = [lut1D rgbCurveArray][0];
+
+    for (int i = 0; i < 4096; i++) {
+        [string appendString:[NSString stringWithFormat:@"\t%i\n", (int)([redCurve[i] doubleValue]*4095.0)]];
+    }
+
+    [string appendString:@"\t</ToneMapLut>\n</adicam>"];
+
+    return string;
+}
+
 
 + (LUTFormatterOutputType)outputType{
-    return LUTFormatterOutputTypeNone;
+    return LUTFormatterOutputType1D;
 }
 
 + (BOOL)isValidReaderForURL:(NSURL *)fileURL{
@@ -116,6 +136,46 @@
         return YES;
     }
     return NO;
+}
+
++ (NSArray *)conformanceLUTActionsForLUT:(LUT *)lut options:(NSDictionary *)options{
+    NSMutableArray *actions = [NSMutableArray arrayWithArray:[super conformanceLUTActionsForLUT:lut options:options]];
+
+    if (actions == nil) {
+        actions = [[NSMutableArray alloc] init];
+    }
+
+    NSDictionary *exposedOptions = options[[self formatterID]];
+
+    LUT1DSwizzleChannelsMethod method = [[LUT1D LUT1DSwizzleChannelsMethods][exposedOptions[@"mixCurvesMethod"]] integerValue];
+
+    [actions addObject:[LUTAction actionWithLUTBySwizzlingWithMethod:method]];
+
+    return actions;
+}
+
++ (NSDictionary *)constantConstraints{
+    return @{@"inputBounds":@[@0, @1],
+             @"outputBounds":@[@0, @1]};
+}
+
++ (NSArray *)allOptions{
+
+    NSDictionary *arriOptions =
+    @{@"fileTypeVariant":@"Arri",
+      @"mixCurvesMethod": [LUT1D LUT1DSwizzleChannelsMethods],
+      @"lutSize":M13OrderedDictionaryFromOrderedArrayWithDictionaries(@[@{@"4096": @(4096)}])};
+
+
+    return @[arriOptions];
+}
+
++ (NSDictionary *)defaultOptions{
+    NSDictionary *dictionary = @{@"fileTypeVariant": @"Arri",
+                                 @"mixCurvesMethod": @(LUT1DSwizzleChannelsMethodAverageRGB),
+                                 @"lutSize":@4096};
+
+    return @{[self formatterID]: dictionary};
 }
 
 + (NSString *)formatterName{
@@ -131,7 +191,7 @@
 }
 
 + (BOOL)canWrite{
-    return NO;
+    return YES;
 }
 
 + (NSString *)utiString{
