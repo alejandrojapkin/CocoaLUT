@@ -84,6 +84,34 @@
     return outString;
 }
 
++(instancetype)actionWithLUTBySwizzlingWithMethod:(LUT1DSwizzleChannelsMethod)method{
+
+    M13OrderedDictionary *methods = [LUT1D LUT1DSwizzleChannelsMethods];
+
+    NSString *methodName;
+    for(NSString *key in methods.allKeys){
+        if ([methods[key] isEqualToNumber:@(method)]) {
+            methodName = key;
+        }
+    }
+
+    M13OrderedDictionary *actionMetadata =
+    M13OrderedDictionaryFromOrderedArrayWithDictionaries(@[@{@"id":@"MixCurves"},
+                                                           @{@"method":methodName}]);
+
+    return [LUTAction actionWithBlock:^LUT *(LUT *lut) {
+        if (isLUT1D(lut)) {
+            return [(LUT1D *)lut LUT1DBySwizzling1DChannelsWithMethod:method];
+        }
+        else{
+            return [(LUT3D *)lut LUT3DBySwizzling1DChannelsWithMethod:method strictness:NO];
+
+        }
+    }
+                           actionName:[NSString stringWithFormat:@"Mix Curves (%@)", methodName]
+                       actionMetadata:actionMetadata];
+}
+
 +(instancetype)actionWithLUT3DByConvertingColorTemperatureFromSourceColorSpace:(LUTColorSpace *)sourceColorSpace
                                                         sourceTransferFunction:(LUTColorTransferFunction *)sourceTransferFunction
                                                         sourceColorTemperature:(LUTColorSpaceWhitePoint *)sourceColorTemperature
@@ -192,6 +220,8 @@
                            actionName:[NSString stringWithFormat:@"Scale Output RGB"]
                        actionMetadata:actionMetadata];
 }
+
+
 
 +(instancetype)actionWithLUTByScalingTo01{
     M13OrderedDictionary *actionMetadata =

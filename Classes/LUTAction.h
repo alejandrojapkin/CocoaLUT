@@ -33,6 +33,8 @@
 +(instancetype)actionWithLUTByClampingLowerBound:(double)lowerBound
                                       upperBound:(double)upperBound;
 
++(instancetype)actionWithLUTBySwizzlingWithMethod:(LUT1DSwizzleChannelsMethod)method;
+
 +(instancetype)actionWithLUT3DByConvertingColorTemperatureFromSourceColorSpace:(LUTColorSpace *)sourceColorSpace
                                                         sourceTransferFunction:(LUTColorTransferFunction *)sourceTransferFunction
                                                         sourceColorTemperature:(LUTColorSpaceWhitePoint *)sourceColorTemperature
