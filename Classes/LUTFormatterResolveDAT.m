@@ -41,6 +41,10 @@
         }
     }
 
+    if (cubeSize == -1) {
+        cubeSize = 33;
+    }
+
     LUT3D *lut = [LUT3D LUTOfSize:cubeSize inputLowerBound:0 inputUpperBound:1];
 
     NSUInteger currentCubeIndex = 0;
