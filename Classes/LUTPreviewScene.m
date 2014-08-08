@@ -14,13 +14,24 @@
 @interface LUTColorNode: SCNNode
 @property LUTColor *identityColor;
 @property LUTColor *transformedColor;
+@property (assign, nonatomic) double animationPercentage;
+@property NSUInteger r;
+@property NSUInteger g;
+@property NSUInteger b;
+
+-(void)updatePosition;
+
 @end
 
 @implementation LUTColorNode
-- (void)changeToAnimationPercentage:(float)animationPercentage{
-//    LUTColor *lerpedColor = [self.identityColor lerpTo:self.transformedColor amount:animationPercentage];
-    self.position = SCNVector3Make(lerp1d(self.identityColor.red, self.transformedColor.red, animationPercentage), lerp1d(self.identityColor.green, self.transformedColor.green, animationPercentage), lerp1d(self.identityColor.blue, self.transformedColor.blue, animationPercentage));
-//    self.geometry.firstMaterial.diffuse.contents = lerpedColor.NSColor;
+- (void)setAnimationPercentage:(double)animationPercentage{
+    _animationPercentage = animationPercentage;
+    [self updatePosition];
+}
+
+
+-(void)updatePosition{
+    self.position = SCNVector3Make(lerp1d(self.identityColor.red, self.transformedColor.red, self.animationPercentage), lerp1d(self.identityColor.green, self.transformedColor.green, self.animationPercentage), lerp1d(self.identityColor.blue, self.transformedColor.blue, self.animationPercentage));
 }
 @end
 
@@ -30,7 +41,15 @@
 
 - (void)setSceneWithLUT:(LUT *)lut{
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        LUTPreviewScene *scene = [LUTPreviewScene sceneForLUT:lut];
+
+        LUTPreviewScene *scene;
+        if (((SCNView *)self.view).scene) {
+            scene = [(LUTPreviewScene *)((SCNView *)self.view).scene sceneWithUpdatedLUT:lut];
+        }
+        else{
+            scene = [LUTPreviewScene sceneForLUT:lut];
+        }
+
 
         dispatch_async(dispatch_get_main_queue(), ^{
             ((SCNView *)self.view).scene = scene;
@@ -42,7 +61,7 @@
 
 - (void)setAnimationPercentage:(double)animationPercentage{
     _animationPercentage = animationPercentage;
-    [(LUTPreviewScene *)((SCNView *)self.view).scene updateNodesToPercentage:animationPercentage];
+    [(LUTPreviewScene *)((SCNView *)self.view).scene setAnimationPercentage:animationPercentage];
 }
 
 @end
@@ -50,9 +69,10 @@
 
 @implementation LUTPreviewScene
 
-- (void)updateNodesToPercentage:(double)percentage{
+- (void)setAnimationPercentage:(double)animationPercentage{
+    _animationPercentage = animationPercentage;
     for(LUTColorNode *node in self.dotGroup.childNodes){
-        [node changeToAnimationPercentage:percentage];
+        node.animationPercentage = _animationPercentage;
     }
 }
 
@@ -80,12 +100,26 @@
     [self.rootNode addChildNode:_axes];
 }
 
+- (instancetype)sceneWithUpdatedLUT:(LUT *)lut{
+    LUT3D *lut3D = LUTAsLUT3D(lut, MIN(LATTICE_MAX_SIZE, lut.size));
+    if(lut3D.size != self.lut.size || fabs(self.lut.maximumOutputValue - lut3D.maximumOutputValue) > 1.0 || fabs(self.lut.minimumOutputValue - lut3D.minimumOutputValue) > 1.0){
+        return [self.class sceneForLUT:lut];
+    }
+    else{
+        for(LUTColorNode *node in self.dotGroup.childNodes){
+            node.transformedColor = [lut3D colorAtR:node.r g:node.g b:node.b];
+            [node updatePosition];
+        }
+        return self;
+    }
+}
+
 + (instancetype)sceneForLUT:(LUT *)lut {
     LUT3D *lut3D = LUTAsLUT3D(lut, MIN(LATTICE_MAX_SIZE, lut.size));
 
     LUTPreviewScene *scene = [self scene];
 
-
+    scene.lut = lut3D;
 
     double radius;
     double initialAnimationPercentage;
@@ -131,7 +165,10 @@
         LUTColorNode *node = (LUTColorNode*)[LUTColorNode nodeWithGeometry:dot];
         node.identityColor = identityColor;
         node.transformedColor = transformedColor;
-        [node changeToAnimationPercentage:initialAnimationPercentage];
+        node.animationPercentage = initialAnimationPercentage;
+        node.r = r;
+        node.g = g;
+        node.b = b;
 
         @synchronized(dotGroup) {
 

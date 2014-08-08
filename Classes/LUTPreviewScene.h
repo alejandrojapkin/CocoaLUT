@@ -28,10 +28,11 @@
 @property (strong, nonatomic) SCNNode *dotGroup;
 @property (strong, nonatomic) SCNNode *cubeOutline;
 @property (strong, nonatomic) SCNNode *axes;
-
-- (void)updateNodesToPercentage:(double)percentage;
+@property (assign, nonatomic) double animationPercentage;
+@property (strong) LUT3D *lut;
 
 + (instancetype)sceneForLUT:(LUT *)lut;
+- (instancetype)sceneWithUpdatedLUT:(LUT *)lut;
 
 
 @end
