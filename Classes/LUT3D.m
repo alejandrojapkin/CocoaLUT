@@ -57,7 +57,7 @@
     return newLUT;
 }
 
-- (instancetype)LUT3DByExtractingColorOnlyWith1DReverseStrictness:(BOOL)strictness{
+- (instancetype)LUT3DByExtractingColorShiftContrastReferredWithReverseStrictness:(BOOL)strictness{
     LUT1D *selfLUT1D = [self LUT1D];
 
     if([selfLUT1D isReversibleWithStrictness:strictness] == NO){
@@ -76,7 +76,7 @@
     return extractedLUT;
 }
 
-- (instancetype)LUT3DByExtractingColorShiftContrastReferredWithReverseStrictness:(BOOL)strictness{
+- (instancetype)LUT3DByExtractingColorOnlyWith1DReverseStrictness:(BOOL)strictness{
     LUT1D *selfLUT1D = [self LUT1D];
 
     if([selfLUT1D isReversibleWithStrictness:strictness] == NO){
