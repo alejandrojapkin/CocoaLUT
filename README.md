@@ -28,7 +28,7 @@ The goal of this project is to have a fast, modern Objective-C (and soon, Swift)
   - Nucoda CMS LUT (.cms)
   - DaVinci Resolve 1D LUT (.ilut, .olut)
   - Discreet 1D LUT (.lut)
-  - Arri Look Arri Look 1D tone map only (.xml) 
+  - Arri Look 1D tone map only (.xml) 
 - Reads non-LUT formats as LUTs
   - Arri Look (.xml) as a 3D LUT
   - ICC/ColorSync Profiles (.icc, .icm, .pf, .prof) as a 3D LUT *(OS X only)*
