@@ -13,7 +13,7 @@
 
 @interface LUTColorNode: SCNNode
 @property LUTColor *identityColor;
-@property LUTColor *transformedColor;
+@property (strong, nonatomic) LUTColor *transformedColor;
 @property (assign, nonatomic) double animationPercentage;
 @property NSUInteger r;
 @property NSUInteger g;
@@ -107,7 +107,8 @@
     }
     else{
         for(LUTColorNode *node in self.dotGroup.childNodes){
-            node.transformedColor = [lut3D colorAtR:node.r g:node.g b:node.b];
+            LUTColor *transformedColor = [lut3D colorAtR:node.r g:node.g b:node.b];
+            node.transformedColor = transformedColor;
             [node updatePosition];
         }
         return self;
@@ -160,7 +161,7 @@
         SCNBox *dot = [SCNBox boxWithWidth:2.0*radius height:2.0*radius length:2.0*radius chamferRadius:radius];
         dot.chamferSegmentCount = 1.0; //efficient for rendering but makes it look like a polygon
 
-        dot.firstMaterial.diffuse.contents = [transformedColor remappedFromInputLow:lut3D.inputLowerBound inputHigh:lut3D.inputUpperBound outputLow:0 outputHigh:1 bounded:NO].systemColor;
+        dot.firstMaterial.diffuse.contents = [identityColor remappedFromInputLow:lut3D.inputLowerBound inputHigh:lut3D.inputUpperBound outputLow:0 outputHigh:1 bounded:NO].systemColor;
 
         LUTColorNode *node = (LUTColorNode*)[LUTColorNode nodeWithGeometry:dot];
         node.identityColor = identityColor;
