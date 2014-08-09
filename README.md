@@ -20,6 +20,7 @@ The goal of this project is to have a fast, modern Objective-C (and soon, Swift)
   - Quantel 3D LUT (.txt)
   - DVS Clipster 3D LUT (.xml, .txt)
   - Nucoda CMS LUT (.cms)
+  - Resolve DAT 3D LUT (.dat)
   - Unwrapped Texture LUT Image (.tiff, .dpx, .png)
   - CMS Test Pattern LUT Image (.tiff, .dpx, .png)
 - Reads and writes 1D LUTs
@@ -27,6 +28,7 @@ The goal of this project is to have a fast, modern Objective-C (and soon, Swift)
   - Nucoda CMS LUT (.cms)
   - DaVinci Resolve 1D LUT (.ilut, .olut)
   - Discreet 1D LUT (.lut)
+  - Arri Look Arri Look 1D tone map only (.xml) 
 - Reads non-LUT formats as LUTs
   - Arri Look (.xml) as a 3D LUT
   - ICC/ColorSync Profiles (.icc, .icm, .pf, .prof) as a 3D LUT *(OS X only)*
@@ -35,7 +37,7 @@ The goal of this project is to have a fast, modern Objective-C (and soon, Swift)
 - Generate Core Image Filters ([VVLUT1DFilter](https://github.com/videovillage/VVLUT1DFilter) / CIColorCube) from LUTs
 - Generate visualizations for LUTs with Scene Kit
 - Resize LUTs
-- Reverse LUTs
+- Reverse 1D LUTs
 - Extract the color shift from a 3D LUT
 - Extract the contrast shift from a 3D LUT
 - Convert the color space or color temperature of a LUT
