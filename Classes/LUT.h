@@ -7,6 +7,10 @@
 //
 
 #import <Foundation/Foundation.h>
+#if defined(COCOAPODS_POD_AVAILABLE_GPUImage)
+#import <GPUImage/GPUImage.h>
+#import "GPUImageCocoaLUTFilter.h"
+#endif
 
 @class LUTFormatter;
 @class LUTColor;

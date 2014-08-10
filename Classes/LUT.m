@@ -472,6 +472,14 @@
 }
 
 #if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR
+
+- (GPUImageCocoaLUTFilter *)GPUImageCocoaLUTFilter {
+    return [[GPUImageCocoaLUTFilter alloc] initWithLUT:self];
+}
+
+#endif
+
+#if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR
 - (UIImage *)processUIImage:(UIImage *)image withColorSpace:(CGColorSpaceRef)colorSpace {
     return [[UIImage alloc] initWithCIImage:[self processCIImage:image.CIImage]];
 }
