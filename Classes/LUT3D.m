@@ -88,8 +88,10 @@
     if(reversed1D == nil){
         return nil;
     }
+    reversed1D = [reversed1D LUTByChangingInputLowerBound:self.inputLowerBound inputUpperBound:self.inputUpperBound]; //convenience
 
     LUT3D *extractedLUT = (LUT3D *)[reversed1D LUTByCombiningWithLUT:self];
+
     [extractedLUT copyMetaPropertiesFromLUT:self];
 
     return extractedLUT;
