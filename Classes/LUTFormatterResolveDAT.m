@@ -121,6 +121,27 @@
     return LUTFormatterOutputType3D;
 }
 
++ (BOOL)isValidReaderForURL:(NSURL *)fileURL{
+    if ([super isValidReaderForURL:fileURL] == NO) {
+        return NO;
+    }
+    NSString *string = [[NSString alloc] initWithData:[NSData dataWithContentsOfURL:fileURL] encoding:NSUTF8StringEncoding];
+    if (string == nil) {
+        return NO;
+    }
+    if([string rangeOfString:@"3DLUTSIZE"].location != NSNotFound){
+        return YES;
+    }
+    else{
+        NSArray *lines = [string componentsSeparatedByCharactersInSet:NSCharacterSet.newlineCharacterSet];
+        NSUInteger firstLUTLine = findFirstLUTLineInLinesWithWhitespaceSeparators(lines, 3, 0);
+        if (firstLUTLine == 0) {
+            return YES;
+        }
+    }
+    return NO;
+}
+
 + (NSString *)formatterName{
     return @"Resolve DAT 3D LUT";
 }
@@ -138,7 +159,7 @@
 }
 
 + (NSString *)utiString{
-    return @"com.blackmagicdesign.dat";
+    return @"public.dat-lut";
 }
 
 + (NSArray *)fileExtensions{
