@@ -6,9 +6,9 @@
 //
 //
 
-#import "GPUImageFilter.h"
 #if defined(COCOAPODS_POD_AVAILABLE_GPUImage)
 #import <GPUImage/GPUImage.h>
+#import "GPUImageFilter.h"
 
 @class LUT;
 
