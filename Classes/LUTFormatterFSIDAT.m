@@ -108,18 +108,18 @@ struct LUTFormatterFSIDAT_FileHeader{
     fileHeader.magic = 0x42340299;
     fileHeader.ver = 0x01000002;
     fileHeader.length = 1048576;
-    strcpy(fileHeader.reserved, "");
+    strncpy(fileHeader.reserved, "", sizeof(fileHeader.reserved));
 
     //set variables in header
     if (lut.metadata[@"version"]) {
-       strcpy(fileHeader.version, [lut.metadata[@"version"] UTF8String]);
+       strncpy(fileHeader.version, [lut.metadata[@"version"] UTF8String], sizeof(fileHeader.version));
     }
     else{
-        strcpy(fileHeader.version, "");
+        strncpy(fileHeader.version, "", sizeof(fileHeader.version));
     }
     
-    strcpy(fileHeader.model, lut.title ? [lut.title UTF8String] : "");
-    strcpy(fileHeader.description, lut.descriptionText ? [lut.descriptionText UTF8String] : "");
+    strncpy(fileHeader.model, lut.title ? [lut.title UTF8String] : "", sizeof(fileHeader.model));
+    strncpy(fileHeader.description, lut.descriptionText ? [lut.descriptionText UTF8String] : "", sizeof(fileHeader.description));
 
 
     //LUT checksum
