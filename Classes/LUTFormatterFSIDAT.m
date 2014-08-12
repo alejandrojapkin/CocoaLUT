@@ -53,6 +53,9 @@ struct LUTFormatterFSIDAT_FileHeader{
 
         [lut setColor:color r:redIndex g:greenIndex b:blueIndex];
     }
+
+    free(lutBytes);
+
     NSString *versionString = [NSString stringWithCString:fileHeader.version encoding:NSUTF8StringEncoding];
     if (versionString) {
         lut.metadata = [NSMutableDictionary dictionaryWithObjectsAndKeys:@"version", versionString, nil];
@@ -67,6 +70,7 @@ struct LUTFormatterFSIDAT_FileHeader{
 
     NSString *headerDescription = [NSString stringWithCString:fileHeader.description encoding:NSUTF8StringEncoding];
     lut.descriptionText = headerDescription ? headerDescription : @"";
+
 
     return lut;
 }
@@ -138,6 +142,7 @@ struct LUTFormatterFSIDAT_FileHeader{
     NSMutableData *data = [NSMutableData dataWithBytes:&fileHeader length:sizeof(fileHeader)];
     [data appendBytes:lutBytes length:1048576];
 
+    free(lutBytes);
     return data;
 }
 

@@ -340,7 +340,7 @@
         lutArray[i*4+3] = 1.0;
     }
 
-    NSData *inputData = [NSData dataWithBytes:lutArray length:dataSize];
+    NSData *inputData = [NSData dataWithBytesNoCopy:lutArray length:dataSize];
 
     CIFilter *lutFilter;
 
