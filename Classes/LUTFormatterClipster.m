@@ -24,7 +24,7 @@
     NSUInteger cubeSize = [[xml attributes][@"N"] integerValue];
     NSUInteger bitDepth = [[xml attributes][@"BitDepth"] integerValue];
 
-    NSUInteger integerMaxOutput = pow(2, bitDepth) - 1;
+    NSUInteger integerMaxOutput = maxIntegerFromBitdepth(bitDepth);
 
     NSMutableDictionary *passthroughFileOptions = [NSMutableDictionary dictionary];
 
@@ -165,7 +165,7 @@
 + (NSArray *)allOptions{
 
     NSDictionary *options = @{@"fileTypeVariant":@"Clipster",
-                              @"integerMaxOutput": M13OrderedDictionaryFromOrderedArrayWithDictionaries(@[@{@"16-bit": @(pow(2, 16) - 1)}]),
+                              @"integerMaxOutput": M13OrderedDictionaryFromOrderedArrayWithDictionaries(@[@{@"16-bit": @(maxIntegerFromBitdepth(16))}]),
       @"lutSize": M13OrderedDictionaryFromOrderedArrayWithDictionaries(@[@{@"17": @(17)}])};
 
     return @[options];
@@ -174,7 +174,7 @@
 
 + (NSDictionary *)defaultOptions{
     NSDictionary *dictionary = @{@"fileTypeVariant":@"Clipster",
-                                 @"integerMaxOutput": @((int)(pow(2, 16) - 1)),
+                                 @"integerMaxOutput": @(maxIntegerFromBitdepth(16)),
                                  @"lutSize": @(17)};
 
     return @{[self formatterID]: dictionary};

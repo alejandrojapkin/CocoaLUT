@@ -39,7 +39,7 @@
         if ([line rangeOfString:@"Mesh"].location != NSNotFound) {
             NSArray *components = [line componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
             NSInteger inputDepth = [components[1] integerValue];
-            integerMaxOutput = pow(2, [components[2] integerValue]) - 1;
+            integerMaxOutput = maxIntegerFromBitdepth([components[2] integerValue]);
             cubeSize = pow(2, inputDepth) + 1;
             passthroughFileOptions[@"fileTypeVariant"] = @"Lustre";
             break;
@@ -252,22 +252,22 @@
 
     NSDictionary *lustreOptions =
                 @{@"fileTypeVariant":@"Lustre",
-                  @"integerMaxOutput": M13OrderedDictionaryFromOrderedArrayWithDictionaries(@[@{@"12-bit": @(pow(2, 12) - 1)},
-                                                                                              @{@"16-bit": @(pow(2, 16) - 1)}]),
+                  @"integerMaxOutput": M13OrderedDictionaryFromOrderedArrayWithDictionaries(@[@{@"12-bit": @(maxIntegerFromBitdepth(12))},
+                                                                                              @{@"16-bit": @(maxIntegerFromBitdepth(16))}]),
                   @"lutSize": M13OrderedDictionaryFromOrderedArrayWithDictionaries(@[@{@"17": @(17)},
                                                                                      @{@"33": @(33)},
                                                                                      @{@"65": @(65)}])};
 
     NSDictionary *nukeOptions =
                 @{@"fileTypeVariant":@"Nuke",
-                  @"integerMaxOutput": M13OrderedDictionaryFromOrderedArrayWithDictionaries(@[@{@"12-bit": @(pow(2, 16) - 1)},
-                                                                                              @{@"16-bit": @(pow(2, 16) - 1)}]),
+                  @"integerMaxOutput": M13OrderedDictionaryFromOrderedArrayWithDictionaries(@[@{@"12-bit": @(maxIntegerFromBitdepth(12))},
+                                                                                              @{@"16-bit": @(maxIntegerFromBitdepth(16))}]),
                   @"lutSize": M13OrderedDictionaryFromOrderedArrayWithDictionaries(@[@{@"32": @(32)},
                                                                                      @{@"64": @(64)}])};
 
     NSDictionary *legacyOptions =
     @{@"fileTypeVariant":@"Legacy",
-      @"integerMaxOutput": M13OrderedDictionaryFromOrderedArrayWithDictionaries(@[@{@"12-bit": @(pow(2, 12) - 1)}]),
+      @"integerMaxOutput": M13OrderedDictionaryFromOrderedArrayWithDictionaries(@[@{@"12-bit": @(maxIntegerFromBitdepth(12))}]),
       @"lutSize": M13OrderedDictionaryFromOrderedArrayWithDictionaries(@[@{@"17": @(17)}])};
 
     return @[lustreOptions, nukeOptions, legacyOptions];

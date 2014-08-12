@@ -252,6 +252,10 @@ NSInteger findFirstLUTLineInLines(NSArray *lines, NSString *seperator, int numVa
     return NSNotFound;
 }
 
+NSUInteger maxIntegerFromBitdepth(NSUInteger bitdepth){
+    return pow(2, bitdepth) - 1;
+}
+
 NSInteger findFirstLUTLineInLinesWithWhitespaceSeparators(NSArray *lines, int numValues, int startLine){
 
     for (int i = startLine; i < lines.count; i++){

@@ -178,8 +178,8 @@
 + (NSArray *)allOptions{
 
     NSDictionary *options = @{@"fileTypeVariant":@"Quantel",
-                              @"integerMaxOutput": M13OrderedDictionaryFromOrderedArrayWithDictionaries(@[@{@"12-bit": @(pow(2, 12) - 1)},
-  @{@"16-bit": @(pow(2, 16) - 1)}]),
+                              @"integerMaxOutput": M13OrderedDictionaryFromOrderedArrayWithDictionaries(@[@{@"12-bit": @(maxIntegerFromBitdepth(12))},
+  @{@"16-bit": @(maxIntegerFromBitdepth(16))}]),
                               @"lutSize": M13OrderedDictionaryFromOrderedArrayWithDictionaries(@[@{@"17": @(17)},
                                                                                                  @{@"33": @(33)},
                                                                                                  @{@"65": @(65)}])};
@@ -190,7 +190,7 @@
 
 + (NSDictionary *)defaultOptions{
     NSDictionary *dictionary = @{@"fileTypeVariant": @"Quantel",
-                                 @"integerMaxOutput": @((int)(pow(2, 16) - 1)),
+                                 @"integerMaxOutput": @(maxIntegerFromBitdepth(16)),
                                  @"lutSize": @(33)};
     
     return @{[self formatterID]: dictionary};

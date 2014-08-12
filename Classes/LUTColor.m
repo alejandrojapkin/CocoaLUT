@@ -26,7 +26,7 @@
 }
 
 + (instancetype)colorFromIntegersWithBitDepth:(NSUInteger)bitdepth red:(NSUInteger)r green:(NSUInteger)g blue:(NSUInteger)b {
-    NSUInteger maxBits = pow(2, bitdepth) - 1;
+    NSUInteger maxBits = maxIntegerFromBitdepth(bitdepth);
     return [LUTColor colorWithRed:nsremapint01(r, maxBits) green:nsremapint01(g, maxBits) blue:nsremapint01(b, maxBits)];
 }
 

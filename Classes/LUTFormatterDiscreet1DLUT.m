@@ -136,15 +136,15 @@
 
     NSDictionary *discreetOptions =
     @{@"fileTypeVariant":@"Discreet",
-      @"integerMaxOutput": M13OrderedDictionaryFromOrderedArrayWithDictionaries(@[@{@"12-bit": @(pow(2, 12) - 1)},
-                                                                                  @{@"16-bit": @(pow(2, 16) - 1)}])};
+      @"integerMaxOutput": M13OrderedDictionaryFromOrderedArrayWithDictionaries(@[@{@"12-bit": @(maxIntegerFromBitdepth(12))},
+                                                                                  @{@"16-bit": @(maxIntegerFromBitdepth(16))}])};
 
     return @[discreetOptions];
 }
 
 + (NSDictionary *)defaultOptions{
     NSDictionary *dictionary = @{@"fileTypeVariant": @"Discreet",
-                                 @"integerMaxOutput": @((int)(pow(2, 12) - 1))};
+                                 @"integerMaxOutput": @(maxIntegerFromBitdepth(12))};
     return @{[self formatterID]:dictionary};
 }
 

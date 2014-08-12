@@ -32,7 +32,7 @@
         }
     }
 
-    NSUInteger maxCodeValue = pow(2,12) - 1;
+    NSUInteger maxCodeValue = maxIntegerFromBitdepth(12);
 
     for (NSString *line in trimmedLines) {
         NSArray *splitLine = [line componentsSeparatedByString:@","];
@@ -58,11 +58,11 @@
 
     LUT1D *lut1D = (LUT1D *)lut;
 
-
+    NSUInteger maxIntegerOutput = maxIntegerFromBitdepth(12);
     for (int i = 0; i < pow(2,12); i++){
-        int red = (int)(clamp01([lut1D valueAtR:i])*(double)pow(2,12));
-        int green = (int)(clamp01([lut1D valueAtG:i])*(double)pow(2,12));
-        int blue = (int)(clamp01([lut1D valueAtB:i])*(double)pow(2,12));
+        int red = (int)(clamp01([lut1D valueAtR:i])*(double)maxIntegerOutput);
+        int green = (int)(clamp01([lut1D valueAtG:i])*(double)maxIntegerOutput);
+        int blue = (int)(clamp01([lut1D valueAtB:i])*(double)maxIntegerOutput);
         [string appendString:[NSString stringWithFormat:@"%d,%d,%d,%d,%d,%d\n", red, green, blue, red, green, blue]];
     }
 

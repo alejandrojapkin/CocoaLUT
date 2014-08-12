@@ -36,6 +36,7 @@ void timer(NSString* name, void (^block)());
 NSArray* indicesDoubleArray(double startValue, double endValue, int numIndices);
 NSArray* indicesIntegerArray(int startValue, int endValue, int numIndices);
 double roundValueToNearest(double value, double nearestValue);
+NSUInteger maxIntegerFromBitdepth(NSUInteger bitdepth);
 
 NSArray* arrayWithEmptyElementsRemoved(NSArray *array);
 NSArray* arrayWithComponentsSeperatedByNewlineWithEmptyElementsRemoved(NSString *string);
