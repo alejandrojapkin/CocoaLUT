@@ -66,9 +66,7 @@
         @throw exception;
     }
 
-    if (![passthroughFileOptions[@"fileTypeVariant"] isEqualToString:@"Legacy"]) {
-        passthroughFileOptions[@"lutSize"] = @(cubeSize);
-    }
+    passthroughFileOptions[@"lutSize"] = @(cubeSize);
     passthroughFileOptions[@"integerMaxOutput"] = @(integerMaxOutput);
 
 
@@ -269,7 +267,8 @@
 
     NSDictionary *legacyOptions =
     @{@"fileTypeVariant":@"Legacy",
-      @"integerMaxOutput": M13OrderedDictionaryFromOrderedArrayWithDictionaries(@[@{@"12-bit": @(pow(2, 12) - 1)}])};
+      @"integerMaxOutput": M13OrderedDictionaryFromOrderedArrayWithDictionaries(@[@{@"12-bit": @(pow(2, 12) - 1)}]),
+      @"lutSize": M13OrderedDictionaryFromOrderedArrayWithDictionaries(@[@{@"17": @(17)}])};
 
     return @[lustreOptions, nukeOptions, legacyOptions];
 }
