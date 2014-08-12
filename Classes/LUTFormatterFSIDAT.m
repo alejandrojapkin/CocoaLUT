@@ -20,14 +20,6 @@ struct LUTFormatterFSIDAT_FileHeader{
     unsigned char header_checksum; // file header sum
 };
 
-//
-//  LUTFormatterResolveDAT.m
-//  Pods
-//
-//  Created by Greg Cotten on 8/6/14.
-//
-//
-
 @implementation LUTFormatterFSIDAT
 
 
@@ -79,13 +71,7 @@ struct LUTFormatterFSIDAT_FileHeader{
     return lut;
 }
 
-//char model[16]; // 16Bytes, monitor model. No match required for DIT LUT.
-//char version[16]; // 16Bytes, data version, eg. “1.0.11”
-//unsigned int data_checksum; // 4Bytes, data sum
-//unsigned int length; // 4Bytes, data length = 1048576
-//char description[16]; //16Bytes, 3dlut description info, e.g. “LightSpace(c)”
-//char reserved[63]; // reserved
-//unsigned char header_checksum; // file header sum
+
 
 + (NSData *)dataFromLUT:(LUT *)lut withOptions:(NSDictionary *)options{
     if (![self optionsAreValid:options]) {
