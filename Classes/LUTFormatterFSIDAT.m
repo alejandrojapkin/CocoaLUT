@@ -94,7 +94,7 @@ struct LUTFormatterFSIDAT_FileHeader{
         LUTColor *color = [lut colorAtR:redIndex g:greenIndex b:blueIndex];
 
 
-        unsigned int rgbPacked = (int)(color.red * 1008.0) | ((int)(color.green * 1008.0) << 10) | ((int)(color.blue * 1008.0) << 20);
+        unsigned int rgbPacked = (unsigned int)(color.red * 1008.0) | ((unsigned int)(color.green * 1008.0) << 10) | ((unsigned int)(color.blue * 1008.0) << 20);
 
         lutBytes[currentCubeIndex] = rgbPacked;
     }
