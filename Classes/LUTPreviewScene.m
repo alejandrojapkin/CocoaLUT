@@ -43,17 +43,19 @@
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
 
         LUTPreviewScene *scene;
+        double newAnimationPercentage = self.animationPercentage;
         if (((SCNView *)self.view).scene) {
             scene = [(LUTPreviewScene *)((SCNView *)self.view).scene sceneWithUpdatedLUT:lut];
         }
         else{
             scene = [LUTPreviewScene sceneForLUT:lut];
+            newAnimationPercentage = 1.0;
         }
 
 
         dispatch_async(dispatch_get_main_queue(), ^{
             ((SCNView *)self.view).scene = scene;
-            self.animationPercentage = 1.0;
+            self.animationPercentage = newAnimationPercentage;
         });
     });
 
