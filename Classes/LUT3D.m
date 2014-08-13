@@ -118,7 +118,7 @@
     if(![[self LUT1D] isReversibleWithStrictness:strictness]){
         return nil;
     }
-    LUT3D *extractedColorLUT = [self LUT3DByExtractingColorOnlyWith1DReverseStrictness:strictness];
+    LUT3D *extractedColorLUT = [self LUT3DByExtractingColorShiftContrastReferredWithReverseStrictness:strictness];
     LUT1D *contrastLUT = [[self LUT1D] LUT1DBySwizzling1DChannelsWithMethod:method];
     LUT3D *newLUT = (LUT3D *)[extractedColorLUT LUTByCombiningWithLUT:contrastLUT];
     [newLUT copyMetaPropertiesFromLUT:self];
