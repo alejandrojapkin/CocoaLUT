@@ -18,6 +18,7 @@
 
 typedef NS_ENUM(NSInteger, LUT1DSwizzleChannelsMethod) {
     LUT1DSwizzleChannelsMethodAverageRGB,
+    LUT1DSwizzleChannelsMethodRec709WeightedRGB,
     LUT1DSwizzleChannelsMethodEdgesRGB,
     LUT1DSwizzleChannelsMethodRedCopiedToRGB,
     LUT1DSwizzleChannelsMethodGreenCopiedToRGB,

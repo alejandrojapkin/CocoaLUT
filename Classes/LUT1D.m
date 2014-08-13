@@ -165,6 +165,7 @@
 
 + (M13OrderedDictionary *)LUT1DSwizzleChannelsMethods{
     return M13OrderedDictionaryFromOrderedArrayWithDictionaries(@[@{@"Averaged RGB":@(LUT1DSwizzleChannelsMethodAverageRGB)},
+                                                                  @{@"Rec. 709 Weighted RGB":@(LUT1DSwizzleChannelsMethodRec709WeightedRGB)},
                                                                   @{@"Copy Red Channel":@(LUT1DSwizzleChannelsMethodRedCopiedToRGB)},
                                                                   @{@"Copy Green Channel":@(LUT1DSwizzleChannelsMethodGreenCopiedToRGB)},
                                                                   @{@"Copy Blue Channel":@(LUT1DSwizzleChannelsMethodBlueCopiedToRGB)}]);
@@ -179,6 +180,12 @@
             LUTColor *color = [self colorAtR:r g:g b:b];
             double averageValue = (color.red+color.green+color.blue)/3.0;
             [swizzledLUT setColor:[LUTColor colorWithRed:averageValue green:averageValue blue:averageValue] r:r g:g b:b];
+        }
+        else if(method == LUT1DSwizzleChannelsMethodRec709WeightedRGB){
+            LUTColor *color = [self colorAtR:r g:g b:b];
+            //  ex: REC709 luma: 0.212636821677 R + 0.715182981841 G + 0.0721801964814 B
+            double weightedValue = (0.2126*color.red+0.7152*color.green+0.0722*color.blue);
+            [swizzledLUT setColor:[LUTColor colorWithRed:weightedValue green:weightedValue blue:weightedValue] r:r g:g b:b];
         }
         else if(method == LUT1DSwizzleChannelsMethodRedCopiedToRGB){
             LUTColor *color = [self colorAtR:r g:g b:b];
