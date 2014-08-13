@@ -471,7 +471,7 @@
     return [filter valueForKey:@"outputImage"];
 }
 
-#if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR
+#if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR) && defined(COCOAPODS_POD_AVAILABLE_GPUImage)
 
 - (GPUImageCocoaLUTFilter *)GPUImageCocoaLUTFilter {
     return [[GPUImageCocoaLUTFilter alloc] initWithLUT:self];
