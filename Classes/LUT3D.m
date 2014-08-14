@@ -69,8 +69,10 @@
     if(reversed1D == nil){
         return nil;
     }
+    reversed1D = [reversed1D LUTByChangingInputLowerBound:self.inputLowerBound inputUpperBound:self.inputUpperBound]; //convenience
 
-    LUT3D *extractedLUT = (LUT3D *)[self LUTByCombiningWithLUT:reversed1D];
+    LUT3D *extractedLUT = (LUT3D *)[reversed1D LUTByCombiningWithLUT:self];
+
     [extractedLUT copyMetaPropertiesFromLUT:self];
 
     return extractedLUT;
@@ -88,10 +90,8 @@
     if(reversed1D == nil){
         return nil;
     }
-    reversed1D = [reversed1D LUTByChangingInputLowerBound:self.inputLowerBound inputUpperBound:self.inputUpperBound]; //convenience
 
-    LUT3D *extractedLUT = (LUT3D *)[reversed1D LUTByCombiningWithLUT:self];
-
+    LUT3D *extractedLUT = (LUT3D *)[self LUTByCombiningWithLUT:reversed1D];
     [extractedLUT copyMetaPropertiesFromLUT:self];
 
     return extractedLUT;
@@ -118,7 +118,7 @@
     if(![[self LUT1D] isReversibleWithStrictness:strictness]){
         return nil;
     }
-    LUT3D *extractedColorLUT = [self LUT3DByExtractingColorShiftContrastReferredWithReverseStrictness:strictness];
+    LUT3D *extractedColorLUT = [self LUT3DByExtractingColorOnlyWith1DReverseStrictness:strictness];
     LUT1D *contrastLUT = [[self LUT1D] LUT1DBySwizzling1DChannelsWithMethod:method];
     LUT3D *newLUT = (LUT3D *)[extractedColorLUT LUTByCombiningWithLUT:contrastLUT];
     [newLUT copyMetaPropertiesFromLUT:self];
