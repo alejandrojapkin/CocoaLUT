@@ -31,7 +31,7 @@ struct LUTFormatterFSIDAT_FileHeader{
     struct LUTFormatterFSIDAT_FileHeader fileHeader;
     [data getBytes:&fileHeader length:128];
 
-    unsigned int * lutBytes = malloc(1048576);
+    unsigned int lutBytes[1048576];
 
     [data getBytes:lutBytes range:NSMakeRange(128, 1048576)];
 
@@ -53,8 +53,6 @@ struct LUTFormatterFSIDAT_FileHeader{
 
         [lut setColor:color r:redIndex g:greenIndex b:blueIndex];
     }
-
-    free(lutBytes);
 
     NSString *versionString = [NSString stringWithCString:fileHeader.version encoding:NSUTF8StringEncoding];
     if (versionString) {
@@ -84,7 +82,7 @@ struct LUTFormatterFSIDAT_FileHeader{
 
 
     //pack LUT in bytes
-    unsigned int * lutBytes = malloc(1048576);
+    unsigned int lutBytes[1048576];
 
     for (int currentCubeIndex = 0; currentCubeIndex < 64*64*64; currentCubeIndex++) {
         NSUInteger redIndex = currentCubeIndex % 64;
@@ -142,7 +140,6 @@ struct LUTFormatterFSIDAT_FileHeader{
     NSMutableData *data = [NSMutableData dataWithBytes:&fileHeader length:sizeof(fileHeader)];
     [data appendBytes:lutBytes length:1048576];
 
-    free(lutBytes);
     return data;
 }
 
