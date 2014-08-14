@@ -22,6 +22,7 @@ The goal of this project is to have a fast, modern Objective-C (and soon, Swift)
   - DVS Clipster 3D LUT (.xml, .txt)
   - Nucoda CMS LUT (.cms)
   - Resolve DAT 3D LUT (.dat)
+  - DaVinci 3D LUT (.davlut)
   - Unwrapped Texture LUT Image (.tiff, .dpx, .png)
   - CMS Test Pattern LUT Image (.tiff, .dpx, .png)
 - Reads and writes 1D LUTs
