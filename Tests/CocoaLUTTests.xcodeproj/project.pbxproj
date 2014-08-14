@@ -19,7 +19,28 @@
 		3BFB66DA195BE49E00AE52EC /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 3BFB66D3195BE49E00AE52EC /* LICENSE */; };
 		3D4A21D84CE74C84A1CCEBE9 /* libPods-CocoaLUTTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C332C2F4418541818D65F478 /* libPods-CocoaLUTTests.a */; };
 		F23F458419806F410014001E /* TransformAccuracyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F23F458319806F410014001E /* TransformAccuracyTests.m */; };
+		F256883D199C30C600CBBD4E /* ReadIdentityTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F256883C199C30C600CBBD4E /* ReadIdentityTests.m */; };
+		F256883F199C312D00CBBD4E /* identity_FSI64.dat in Resources */ = {isa = PBXBuildFile; fileRef = F256883E199C312D00CBBD4E /* identity_FSI64.dat */; };
+		F2568847199C381F00CBBD4E /* identity_CMSTestPattern33.tiff in Resources */ = {isa = PBXBuildFile; fileRef = F2568842199C381F00CBBD4E /* identity_CMSTestPattern33.tiff */; };
+		F2568848199C381F00CBBD4E /* identity_DVSClipster17.xml in Resources */ = {isa = PBXBuildFile; fileRef = F2568843199C381F00CBBD4E /* identity_DVSClipster17.xml */; };
+		F2568849199C381F00CBBD4E /* identity_NucodaCMS33.cms in Resources */ = {isa = PBXBuildFile; fileRef = F2568844199C381F00CBBD4E /* identity_NucodaCMS33.cms */; };
+		F256884A199C381F00CBBD4E /* identity_Quantel33.txt in Resources */ = {isa = PBXBuildFile; fileRef = F2568845199C381F00CBBD4E /* identity_Quantel33.txt */; };
+		F256884B199C381F00CBBD4E /* identity_UnwrappedCube33.tiff in Resources */ = {isa = PBXBuildFile; fileRef = F2568846199C381F00CBBD4E /* identity_UnwrappedCube33.tiff */; };
 		F2C2558A195D29690063DED5 /* ReadWriteTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F2C25589195D29690063DED5 /* ReadWriteTests.m */; };
+		F2E213C3199C3075008117E5 /* identity_DaVinci17.davlut in Resources */ = {isa = PBXBuildFile; fileRef = F2E213B3199C3075008117E5 /* identity_DaVinci17.davlut */; };
+		F2E213C4199C3075008117E5 /* identity_DaVinci33.dat in Resources */ = {isa = PBXBuildFile; fileRef = F2E213B4199C3075008117E5 /* identity_DaVinci33.dat */; };
+		F2E213C5199C3075008117E5 /* identity_DaVinci33.davlut in Resources */ = {isa = PBXBuildFile; fileRef = F2E213B5199C3075008117E5 /* identity_DaVinci33.davlut */; };
+		F2E213C6199C3075008117E5 /* identity_DaVinciResolve33.cube in Resources */ = {isa = PBXBuildFile; fileRef = F2E213B6199C3075008117E5 /* identity_DaVinciResolve33.cube */; };
+		F2E213C7199C3075008117E5 /* identity_Discreet1D.lut in Resources */ = {isa = PBXBuildFile; fileRef = F2E213B7199C3075008117E5 /* identity_Discreet1D.lut */; };
+		F2E213C8199C3075008117E5 /* identity_Lustre17.3dl in Resources */ = {isa = PBXBuildFile; fileRef = F2E213B8199C3075008117E5 /* identity_Lustre17.3dl */; };
+		F2E213C9199C3075008117E5 /* identity_Lustre17_12bits.3dl in Resources */ = {isa = PBXBuildFile; fileRef = F2E213B9199C3075008117E5 /* identity_Lustre17_12bits.3dl */; };
+		F2E213CA199C3075008117E5 /* identity_Nuke32_12bits.3dl in Resources */ = {isa = PBXBuildFile; fileRef = F2E213BA199C3075008117E5 /* identity_Nuke32_12bits.3dl */; };
+		F2E213CB199C3075008117E5 /* identity_Nuke32_16bits.3dl in Resources */ = {isa = PBXBuildFile; fileRef = F2E213BB199C3075008117E5 /* identity_Nuke32_16bits.3dl */; };
+		F2E213CC199C3075008117E5 /* identity_Nuke32_16bits.ilut in Resources */ = {isa = PBXBuildFile; fileRef = F2E213BC199C3075008117E5 /* identity_Nuke32_16bits.ilut */; };
+		F2E213CD199C3075008117E5 /* identity_Nuke32_16bits.lut in Resources */ = {isa = PBXBuildFile; fileRef = F2E213BD199C3075008117E5 /* identity_Nuke32_16bits.lut */; };
+		F2E213CF199C3075008117E5 /* identity_resolve_ilut_14x4.ilut in Resources */ = {isa = PBXBuildFile; fileRef = F2E213BF199C3075008117E5 /* identity_resolve_ilut_14x4.ilut */; };
+		F2E213D0199C3075008117E5 /* identity_resolve_olut_12x6.olut in Resources */ = {isa = PBXBuildFile; fileRef = F2E213C0199C3075008117E5 /* identity_resolve_olut_12x6.olut */; };
+		F2E213D1199C3075008117E5 /* identity_Smoke17_12bits.3dl in Resources */ = {isa = PBXBuildFile; fileRef = F2E213C1199C3075008117E5 /* identity_Smoke17_12bits.3dl */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -39,7 +60,28 @@
 		70516F50A4B64FACA1F81F7F /* Pods-CocoaLUTTests.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CocoaLUTTests.xcconfig"; path = "Pods/Pods-CocoaLUTTests.xcconfig"; sourceTree = "<group>"; };
 		C332C2F4418541818D65F478 /* libPods-CocoaLUTTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-CocoaLUTTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F23F458319806F410014001E /* TransformAccuracyTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TransformAccuracyTests.m; sourceTree = "<group>"; };
+		F256883C199C30C600CBBD4E /* ReadIdentityTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReadIdentityTests.m; sourceTree = "<group>"; };
+		F256883E199C312D00CBBD4E /* identity_FSI64.dat */ = {isa = PBXFileReference; lastKnownFileType = file; path = identity_FSI64.dat; sourceTree = "<group>"; };
+		F2568842199C381F00CBBD4E /* identity_CMSTestPattern33.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = identity_CMSTestPattern33.tiff; sourceTree = "<group>"; };
+		F2568843199C381F00CBBD4E /* identity_DVSClipster17.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = identity_DVSClipster17.xml; sourceTree = "<group>"; };
+		F2568844199C381F00CBBD4E /* identity_NucodaCMS33.cms */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = identity_NucodaCMS33.cms; sourceTree = "<group>"; };
+		F2568845199C381F00CBBD4E /* identity_Quantel33.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = identity_Quantel33.txt; sourceTree = "<group>"; };
+		F2568846199C381F00CBBD4E /* identity_UnwrappedCube33.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = identity_UnwrappedCube33.tiff; sourceTree = "<group>"; };
 		F2C25589195D29690063DED5 /* ReadWriteTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReadWriteTests.m; sourceTree = "<group>"; };
+		F2E213B3199C3075008117E5 /* identity_DaVinci17.davlut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = identity_DaVinci17.davlut; sourceTree = "<group>"; };
+		F2E213B4199C3075008117E5 /* identity_DaVinci33.dat */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = identity_DaVinci33.dat; sourceTree = "<group>"; };
+		F2E213B5199C3075008117E5 /* identity_DaVinci33.davlut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = identity_DaVinci33.davlut; sourceTree = "<group>"; };
+		F2E213B6199C3075008117E5 /* identity_DaVinciResolve33.cube */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = identity_DaVinciResolve33.cube; sourceTree = "<group>"; };
+		F2E213B7199C3075008117E5 /* identity_Discreet1D.lut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = identity_Discreet1D.lut; sourceTree = "<group>"; };
+		F2E213B8199C3075008117E5 /* identity_Lustre17.3dl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = identity_Lustre17.3dl; sourceTree = "<group>"; };
+		F2E213B9199C3075008117E5 /* identity_Lustre17_12bits.3dl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = identity_Lustre17_12bits.3dl; sourceTree = "<group>"; };
+		F2E213BA199C3075008117E5 /* identity_Nuke32_12bits.3dl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = identity_Nuke32_12bits.3dl; sourceTree = "<group>"; };
+		F2E213BB199C3075008117E5 /* identity_Nuke32_16bits.3dl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = identity_Nuke32_16bits.3dl; sourceTree = "<group>"; };
+		F2E213BC199C3075008117E5 /* identity_Nuke32_16bits.ilut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = identity_Nuke32_16bits.ilut; sourceTree = "<group>"; };
+		F2E213BD199C3075008117E5 /* identity_Nuke32_16bits.lut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = identity_Nuke32_16bits.lut; sourceTree = "<group>"; };
+		F2E213BF199C3075008117E5 /* identity_resolve_ilut_14x4.ilut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = identity_resolve_ilut_14x4.ilut; sourceTree = "<group>"; };
+		F2E213C0199C3075008117E5 /* identity_resolve_olut_12x6.olut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = identity_resolve_olut_12x6.olut; sourceTree = "<group>"; };
+		F2E213C1199C3075008117E5 /* identity_Smoke17_12bits.3dl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = identity_Smoke17_12bits.3dl; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -87,6 +129,7 @@
 			isa = PBXGroup;
 			children = (
 				3BFB66C7195BE49100AE52EC /* ParserTests.m */,
+				F256883C199C30C600CBBD4E /* ReadIdentityTests.m */,
 				F2C25589195D29690063DED5 /* ReadWriteTests.m */,
 				3BFB66BC195BE44A00AE52EC /* Supporting Files */,
 				F23F458319806F410014001E /* TransformAccuracyTests.m */,
@@ -107,6 +150,7 @@
 		3BFB66C9195BE49E00AE52EC /* Test LUTs */ = {
 			isa = PBXGroup;
 			children = (
+				F2E213B1199C3075008117E5 /* identity */,
 				3BFB66CA195BE49E00AE52EC /* OpenColorIO */,
 			);
 			path = "Test LUTs";
@@ -140,6 +184,33 @@
 				3BFB66D2195BE49E00AE52EC /* iridas.cube */,
 			);
 			path = cube;
+			sourceTree = "<group>";
+		};
+		F2E213B1199C3075008117E5 /* identity */ = {
+			isa = PBXGroup;
+			children = (
+				F2E213B3199C3075008117E5 /* identity_DaVinci17.davlut */,
+				F256883E199C312D00CBBD4E /* identity_FSI64.dat */,
+				F2E213B4199C3075008117E5 /* identity_DaVinci33.dat */,
+				F2E213B5199C3075008117E5 /* identity_DaVinci33.davlut */,
+				F2E213B6199C3075008117E5 /* identity_DaVinciResolve33.cube */,
+				F2E213B7199C3075008117E5 /* identity_Discreet1D.lut */,
+				F2E213B8199C3075008117E5 /* identity_Lustre17.3dl */,
+				F2E213B9199C3075008117E5 /* identity_Lustre17_12bits.3dl */,
+				F2E213BA199C3075008117E5 /* identity_Nuke32_12bits.3dl */,
+				F2E213BB199C3075008117E5 /* identity_Nuke32_16bits.3dl */,
+				F2E213BC199C3075008117E5 /* identity_Nuke32_16bits.ilut */,
+				F2568842199C381F00CBBD4E /* identity_CMSTestPattern33.tiff */,
+				F2568843199C381F00CBBD4E /* identity_DVSClipster17.xml */,
+				F2568844199C381F00CBBD4E /* identity_NucodaCMS33.cms */,
+				F2568845199C381F00CBBD4E /* identity_Quantel33.txt */,
+				F2568846199C381F00CBBD4E /* identity_UnwrappedCube33.tiff */,
+				F2E213BD199C3075008117E5 /* identity_Nuke32_16bits.lut */,
+				F2E213BF199C3075008117E5 /* identity_resolve_ilut_14x4.ilut */,
+				F2E213C0199C3075008117E5 /* identity_resolve_olut_12x6.olut */,
+				F2E213C1199C3075008117E5 /* identity_Smoke17_12bits.3dl */,
+			);
+			path = identity;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -195,12 +266,32 @@
 			buildActionMask = 2147483647;
 			files = (
 				3BFB66D7195BE49E00AE52EC /* crosstalk.cube in Resources */,
+				F2E213C9199C3075008117E5 /* identity_Lustre17_12bits.3dl in Resources */,
 				3BFB66D6195BE49E00AE52EC /* halfred_truelight_log.3dl in Resources */,
 				3BFB66DA195BE49E00AE52EC /* LICENSE in Resources */,
+				F2E213CA199C3075008117E5 /* identity_Nuke32_12bits.3dl in Resources */,
+				F2E213C5199C3075008117E5 /* identity_DaVinci33.davlut in Resources */,
+				F256884A199C381F00CBBD4E /* identity_Quantel33.txt in Resources */,
+				F2E213C8199C3075008117E5 /* identity_Lustre17.3dl in Resources */,
+				F2E213D1199C3075008117E5 /* identity_Smoke17_12bits.3dl in Resources */,
 				3BFB66D5195BE49E00AE52EC /* halfred_truelight.3dl in Resources */,
 				3BFB66D9195BE49E00AE52EC /* iridas.cube in Resources */,
 				3BFB66D8195BE49E00AE52EC /* halfred_iridas.cube in Resources */,
+				F2568849199C381F00CBBD4E /* identity_NucodaCMS33.cms in Resources */,
 				3BFB66D4195BE49E00AE52EC /* crosstalk.3dl in Resources */,
+				F2E213CF199C3075008117E5 /* identity_resolve_ilut_14x4.ilut in Resources */,
+				F2E213C4199C3075008117E5 /* identity_DaVinci33.dat in Resources */,
+				F2E213C6199C3075008117E5 /* identity_DaVinciResolve33.cube in Resources */,
+				F2E213CD199C3075008117E5 /* identity_Nuke32_16bits.lut in Resources */,
+				F2E213D0199C3075008117E5 /* identity_resolve_olut_12x6.olut in Resources */,
+				F256883F199C312D00CBBD4E /* identity_FSI64.dat in Resources */,
+				F256884B199C381F00CBBD4E /* identity_UnwrappedCube33.tiff in Resources */,
+				F2568848199C381F00CBBD4E /* identity_DVSClipster17.xml in Resources */,
+				F2E213C7199C3075008117E5 /* identity_Discreet1D.lut in Resources */,
+				F2E213CC199C3075008117E5 /* identity_Nuke32_16bits.ilut in Resources */,
+				F2E213C3199C3075008117E5 /* identity_DaVinci17.davlut in Resources */,
+				F2568847199C381F00CBBD4E /* identity_CMSTestPattern33.tiff in Resources */,
+				F2E213CB199C3075008117E5 /* identity_Nuke32_16bits.3dl in Resources */,
 				3BFB66C0195BE44A00AE52EC /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -248,6 +339,7 @@
 				3BFB66C8195BE49100AE52EC /* ParserTests.m in Sources */,
 				F23F458419806F410014001E /* TransformAccuracyTests.m in Sources */,
 				F2C2558A195D29690063DED5 /* ReadWriteTests.m in Sources */,
+				F256883D199C30C600CBBD4E /* ReadIdentityTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
