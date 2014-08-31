@@ -60,8 +60,8 @@ Do you need something like this in Python? Try [pylut](http://github.com/gregcot
 
 ## Authors
 
-- Wil Gieseler (@wilg)
-- Greg Cotten (@gregcotten)
+- [Wil Gieseler](https://github.com/wilg) (@wilg)
+- [Greg Cotten](https://github.com/gregcotten) (@gregcotten)
 
 ## License
 
