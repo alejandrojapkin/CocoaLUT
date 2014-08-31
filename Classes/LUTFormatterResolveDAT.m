@@ -95,7 +95,12 @@
     NSUInteger lutSize = lut.size;
     NSUInteger arrayLength = lutSize * lutSize * lutSize;
 
-    [string appendString:[NSString stringWithFormat:@"3DLUTSIZE %i\n\n", (int)lutSize]];
+    if (lutSize != 33) {
+        [string appendString:[NSString stringWithFormat:@"3DLUTSIZE %i\n\n", (int)lutSize]];
+    }
+    //33 size LUTs don't use keyword "3DLUTSIZE"
+
+
 
     for (int i = 0; i < arrayLength; i++) {
         int blueIndex = i % lutSize;
