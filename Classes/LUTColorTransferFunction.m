@@ -109,7 +109,7 @@
              [self gammaTransferFunctionWithGamma:2.2],
              [self gammaTransferFunctionWithGamma:2.4],
              [self gammaTransferFunctionWithGamma:2.6],
-             [self rec709TransferFunction],
+             [self bt1886TransferFunction],
              [self sRGBTransferFunction],
              [self alexaLogCV3TransferFunctionWithEI:800],
              [self sLogTransferFunction],
@@ -143,14 +143,14 @@
             name:[NSString stringWithFormat:@"Gamma %g", gamma]];
 }
 
-+ (instancetype)rec709TransferFunction{
++ (instancetype)bt1886TransferFunction{
     return [LUTColorTransferFunction LUTColorTransferFunctionWithTransformedToLinearBlock1D:^double(double value){
                                                                                             value = clamp(value, 0.0, 1.0);
                                                                                             return (value <= .081) ? value/4.5 : pow((value+.099)/1.099, 2.2);}
                                                                  linearToTransformedBlock1D:^double(double value){
                                                                                             double output = (value <= .018) ? 4.5*value : 1.099*pow(value, 1.0/2.2) - .099;
                                                                                             return clamp(output, 0.0, 1.0);}
-                                                                                       name:@"Rec. 709"];
+                                                                                       name:@"BT.1886"];
 }
 
 + (instancetype)sRGBTransferFunction{
