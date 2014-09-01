@@ -208,17 +208,15 @@
     if(![self isReversibleWithStrictness:strictness]){
         return nil;
     }
-    NSArray *rgbCurves = @[self.redCurve, self.greenCurve, self.blueCurve];
+
+    LUT1D *usedLUT = self.size >= 2048 ? self : [self LUTByResizingToSize:2048];
+
+    NSArray *rgbCurves = @[usedLUT.redCurve, usedLUT.greenCurve, usedLUT.blueCurve];
 
     NSMutableArray *newRGBCurves = [[NSMutableArray alloc] init];
 
-    NSMutableArray *allCurvesCombined = [[NSMutableArray alloc] init];
-    [allCurvesCombined addObjectsFromArray:self.redCurve];
-    [allCurvesCombined addObjectsFromArray:self.greenCurve];
-    [allCurvesCombined addObjectsFromArray:self.blueCurve];
-
-    double newLowerBound = [[allCurvesCombined valueForKeyPath:@"@min.doubleValue"] doubleValue];
-    double newUpperBound = [[allCurvesCombined valueForKeyPath:@"@max.doubleValue"] doubleValue];
+    double newLowerBound = self.minimumOutputValue;
+    double newUpperBound = self.maximumOutputValue;
 
     for(NSMutableArray *curve in rgbCurves){
         NSMutableArray *newCurve = [[NSMutableArray alloc] init];
@@ -227,22 +225,22 @@
         double maxValue = [[curve valueForKeyPath:@"@max.self"] doubleValue];
 
 
-        for(int i = 0; i < [self size]; i++){
-            double remappedIndex = remap(i, 0, [self size]-1, newLowerBound, newUpperBound);
+        for(int i = 0; i < usedLUT.size; i++){
+            double remappedIndex = remap(i, 0, usedLUT.size-1, newLowerBound, newUpperBound);
 
             if (remappedIndex <= minValue){
-                [newCurve addObject:@([self inputLowerBound])];
+                [newCurve addObject:@(usedLUT.inputLowerBound)];
             }
             else if(remappedIndex >= maxValue){
-                [newCurve addObject:@([self inputUpperBound])];
+                [newCurve addObject:@(usedLUT.inputUpperBound)];
             }
             else{
-                for(int j = 0; j < [self size]; j++){
+                for(int j = 0; j < usedLUT.size; j++){
                     double currentValue = [curve[j] doubleValue];
                     if (currentValue > remappedIndex){
                         double previousValue = [curve[j-1] doubleValue]; //smaller or equal to remappedIndex
-                        double lowerValue = remap(j-1, 0, [self size]-1, [self inputLowerBound], [self inputUpperBound]);
-                        double higherValue = remap(j, 0, [self size]-1, [self inputLowerBound], [self inputUpperBound]);
+                        double lowerValue = remap(j-1, 0, usedLUT.size-1, usedLUT.inputLowerBound, usedLUT.inputUpperBound);
+                        double higherValue = remap(j, 0, usedLUT.size-1, usedLUT.inputLowerBound, usedLUT.inputUpperBound);
                         [newCurve addObject:@(lerp1d(lowerValue, higherValue,(remappedIndex - previousValue)/(currentValue - previousValue)))];
                         break;
                     }
@@ -269,6 +267,18 @@
                                   lowerBound:newLowerBound
                                   upperBound:newUpperBound];
     [newLUT copyMetaPropertiesFromLUT:self];
+
+    if (self.inputLowerBound < newLUT.inputLowerBound || self.inputUpperBound > newLUT.inputUpperBound){
+        //if the original LUT encompasses a greater bound in some way, make the output LUT fill that bound too
+        double inputLowerBound = self.inputLowerBound < newLUT.inputLowerBound ? self.inputLowerBound : newLUT.inputUpperBound;
+        double inputUpperBound = self.inputUpperBound > newLUT.inputUpperBound ? self.inputUpperBound : newLUT.inputUpperBound;
+
+        newLUT = [newLUT LUTByChangingInputLowerBound:inputLowerBound inputUpperBound:inputUpperBound];
+    }
+
+    if (self.size != newLUT.size) {
+        newLUT = [newLUT LUTByResizingToSize:self.size];
+    }
 
     return newLUT;
 }
