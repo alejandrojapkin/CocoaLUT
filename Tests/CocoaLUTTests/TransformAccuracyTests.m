@@ -8,6 +8,7 @@
 
 #import <XCTest/XCTest.h>
 #import <CocoaLUT/CocoaLUT.h>
+#import <CocoaLUT/LUTColorTransferFunction.h>
 
 @interface TransformAccuracyTests : XCTestCase
 
@@ -32,6 +33,25 @@
     lut = [lut LUTByResizingToSize:33];
 
     XCTAssert([identity equalsLUT:lut], @"3D Resize precision error.");
+}
+
+- (void)testReverse1DIdentity{
+    LUT1D *identity = [LUT1D LUTIdentityOfSize:1024 inputLowerBound:0 inputUpperBound:1];
+
+    XCTAssert([[identity LUT1DByReversingWithStrictness:YES] equalsLUT:identity], @"LUT1D identity reversed isn't equal to the identity.");
+    ;
+
+}
+
+- (void)testReverse1DComplex{
+    LUT1D *identity = [LUT1D LUTIdentityOfSize:1024 inputLowerBound:0 inputUpperBound:1];
+    LUT1D *linearToGamma26 = (LUT1D *)[LUTColorTransferFunction transformedLUTFromLUT:identity
+                          fromColorTransferFunction:[LUTColorTransferFunction linearTransferFunction]
+                            toColorTransferFunction:[LUTColorTransferFunction gammaTransferFunctionWithGamma:2.6]];
+
+    XCTAssert([[[linearToGamma26 LUT1DByReversingWithStrictness:YES] LUT1DByReversingWithStrictness:YES] equalsLUT:linearToGamma26], @"LUT1D twice reversed isn't equal to itself.");
+
+    XCTAssert([[linearToGamma26 LUTByCombiningWithLUT:[linearToGamma26 LUT1DByReversingWithStrictness:YES]] equalsIdentityLUT], @"LUT1D + LUT1D Reverse isn't equal to identity.");
 }
 
 @end
