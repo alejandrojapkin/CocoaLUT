@@ -47,7 +47,8 @@
 
 
 - (BOOL)isReversibleWithStrictness:(BOOL)strict;
-- (instancetype)LUT1DByReversingWithStrictness:(BOOL)strictness;
+- (instancetype)LUT1DByReversingWithStrictness:(BOOL)strictness
+                         autoAdjustInputBounds:(BOOL)autoAdjustInputBounds;
 
 - (instancetype)LUT1DBySwizzling1DChannelsWithMethod:(LUT1DSwizzleChannelsMethod)method;
 
