@@ -64,7 +64,7 @@
         return nil;
     }
 
-    LUT1D *reversed1D = [[selfLUT1D LUTByResizingToSize:2048] LUT1DByReversingWithStrictness:strictness];
+    LUT1D *reversed1D = [[selfLUT1D LUTByResizingToSize:2048] LUT1DByReversingWithStrictness:strictness autoAdjustInputBounds:YES];
 
     if(reversed1D == nil){
         return nil;
@@ -78,14 +78,14 @@
     return extractedLUT;
 }
 
-- (instancetype)LUT3DByExtractingColorOnlyWith1DReverseStrictness:(BOOL)strictness{
+- (instancetype)LUT3DByExtractingColorShiftWithReverseStrictness:(BOOL)strictness{
     LUT1D *selfLUT1D = [self LUT1D];
 
     if([selfLUT1D isReversibleWithStrictness:strictness] == NO){
         return nil;
     }
 
-    LUT1D *reversed1D = [[selfLUT1D LUTByResizingToSize:2048] LUT1DByReversingWithStrictness:strictness];
+    LUT1D *reversed1D = [[selfLUT1D LUTByResizingToSize:2048] LUT1DByReversingWithStrictness:strictness autoAdjustInputBounds:YES];
 
     if(reversed1D == nil){
         return nil;
@@ -118,7 +118,7 @@
     if(![[self LUT1D] isReversibleWithStrictness:strictness]){
         return nil;
     }
-    LUT3D *extractedColorLUT = [self LUT3DByExtractingColorOnlyWith1DReverseStrictness:strictness];
+    LUT3D *extractedColorLUT = [self LUT3DByExtractingColorShiftWithReverseStrictness:strictness];
     LUT1D *contrastLUT = [[self LUT1D] LUT1DBySwizzling1DChannelsWithMethod:method];
     LUT3D *newLUT = (LUT3D *)[extractedColorLUT LUTByCombiningWithLUT:contrastLUT];
     [newLUT copyMetaPropertiesFromLUT:self];
