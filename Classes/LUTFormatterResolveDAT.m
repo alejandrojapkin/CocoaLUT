@@ -61,15 +61,15 @@
                 }
 
                 // Valid cube line
-                LUTColorValue blueValue = ((NSString *)splitLine[0]).doubleValue;
+                LUTColorValue redValue = ((NSString *)splitLine[0]).doubleValue;
                 LUTColorValue greenValue = ((NSString *)splitLine[1]).doubleValue;
-                LUTColorValue redValue = ((NSString *)splitLine[2]).doubleValue;
+                LUTColorValue blueValue = ((NSString *)splitLine[2]).doubleValue;
 
                 LUTColor *color = [LUTColor colorWithRed:redValue green:greenValue blue:blueValue];
 
-                NSUInteger redIndex = currentCubeIndex % cubeSize;
+                NSUInteger blueIndex = currentCubeIndex % cubeSize;
                 NSUInteger greenIndex = ( (currentCubeIndex % (cubeSize * cubeSize)) / (cubeSize) );
-                NSUInteger blueIndex = currentCubeIndex / (cubeSize * cubeSize);
+                NSUInteger redIndex = currentCubeIndex / (cubeSize * cubeSize);
 
                 [lut setColor:color r:redIndex g:greenIndex b:blueIndex];
 
@@ -105,7 +105,7 @@
     for (int i = 0; i < arrayLength; i++) {
         int blueIndex = i % lutSize;
         int greenIndex = ((i % (lutSize * lutSize)) / (lutSize) );
-        int redIndex= i / (lutSize * lutSize);
+        int redIndex = i / (lutSize * lutSize);
 
         LUTColor *color = [lut colorAtR:redIndex g:greenIndex b:blueIndex];
 
