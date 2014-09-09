@@ -271,7 +271,7 @@
 
     if (autoAdjustInputBounds && (self.inputLowerBound < newLUT.inputLowerBound || self.inputUpperBound > newLUT.inputUpperBound)){
         //if the original LUT encompasses a greater bound in some way, make the output LUT fill that bound too
-        double inputLowerBound = self.inputLowerBound < newLUT.inputLowerBound ? self.inputLowerBound : newLUT.inputUpperBound;
+        double inputLowerBound = self.inputLowerBound < newLUT.inputLowerBound ? self.inputLowerBound : newLUT.inputLowerBound;
         double inputUpperBound = self.inputUpperBound > newLUT.inputUpperBound ? self.inputUpperBound : newLUT.inputUpperBound;
 
         newLUT = [newLUT LUTByChangingInputLowerBound:inputLowerBound inputUpperBound:inputUpperBound];
