@@ -169,7 +169,7 @@
                                         lutURL:(NSURL *)lutURL{
     M13OrderedDictionary *actionMetadata =
     M13OrderedDictionaryFromOrderedArrayWithDictionaries(@[@{@"id":@"Combine"},
-                                                           @{@"lutURL": [lutURL copy]}]);
+                                                           @{@"lutPath": [lutURL path]}]);
     return [LUTAction actionWithBlock:^LUT *(LUT *lut) {
         return [lut LUTByCombiningWithLUT:lutToCombine];
     }
