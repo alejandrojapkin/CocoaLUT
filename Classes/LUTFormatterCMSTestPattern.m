@@ -127,6 +127,15 @@
         return NO;
     }
     else{
+        NSColor *masterColor = [imageRep colorAtX:0 y:0];
+        for(int y = 0; y < 7; y++){
+            for (int x = 0; x < 7; x++) {
+                NSColor *color = [imageRep colorAtX:x y:y];
+                if (color.redComponent != masterColor.redComponent || color.greenComponent != masterColor.greenComponent || color.blueComponent != masterColor.blueComponent) {
+                    return NO;
+                }
+            }
+        }
         return YES;
     }
 }
