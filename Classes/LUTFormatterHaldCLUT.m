@@ -64,12 +64,13 @@
     int cubeIndex = 0;
     for (int y = 0; y < height; y++) {
         for (int x = 0; x < width; x++) {
+            int remappedX = x == 0 ? width-1 : x-1;
             int redIndex = cubeIndex % lut3D.size;
             int greenIndex = (cubeIndex % (lut3D.size * lut3D.size)) / (lut3D.size);
             int blueIndex = cubeIndex / (lut3D.size * lut3D.size);
 
             NSColor *color = [[lut3D colorAtR:redIndex g:greenIndex b:blueIndex].systemColor colorUsingColorSpaceName:NSDeviceRGBColorSpace];
-            [imageRep setColor:color atX:x y:y];
+            [imageRep setColor:color atX:remappedX y:y];
 
             cubeIndex++;
         }
@@ -102,11 +103,13 @@
     int cubeIndex = 0;
     for (int y = 0; y < imageRep.pixelsHigh; y++) {
         for (int x = 0; x < imageRep.pixelsHigh; x++) {
+            int remappedX = x == 0 ? (int)imageRep.pixelsHigh-1 : x-1;
+
             int redIndex = cubeIndex % lut3D.size;
             int greenIndex = (cubeIndex % (lut3D.size * lut3D.size)) / (lut3D.size);
             int blueIndex = cubeIndex / (lut3D.size * lut3D.size);
 
-            [lut3D setColor:[LUTColor colorWithSystemColor:[imageRep colorAtX:x y:y]] r:redIndex g:greenIndex b:blueIndex];
+            [lut3D setColor:[LUTColor colorWithSystemColor:[imageRep colorAtX:remappedX y:y]] r:redIndex g:greenIndex b:blueIndex];
 
             cubeIndex++;
         }
