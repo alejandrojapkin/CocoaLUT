@@ -25,6 +25,7 @@ The goal of this project is to have a fast, modern Objective-C (and soon, Swift)
   - DaVinci 3D LUT (.davlut)
   - Unwrapped Texture LUT Image (.tiff, .dpx, .png)
   - CMS Test Pattern LUT Image (.tiff, .dpx, .png)
+  - Hald CLUT Image (.tiff, .dpx, .png)
 - Reads and writes 1D LUTs
   - DaVinci Resolve Cube LUT (.cube)
   - Nucoda CMS LUT (.cms)
