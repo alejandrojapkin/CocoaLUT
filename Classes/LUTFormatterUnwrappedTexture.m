@@ -60,6 +60,22 @@
     return image;
 }
 
++ (BOOL)isValidReaderForURL:(NSURL *)fileURL{
+    if (![super isValidReaderForURL:fileURL]) {
+        return NO;
+    }
+
+    NSImage *image = [[NSImage alloc] initWithContentsOfURL:fileURL];
+    NSBitmapImageRep* imageRep = [NSBitmapImageRep imageRepWithData:[image TIFFRepresentation]];
+
+    if (imageRep.pixelsWide != imageRep.pixelsHigh * imageRep.pixelsHigh) {
+        return NO;
+    }
+    else{
+        return YES;
+    }
+}
+
 + (LUT *)LUTFromImage:(NSImage *)image {
 
     NSBitmapImageRep *imageRep = [NSBitmapImageRep imageRepWithData:[image TIFFRepresentation]];

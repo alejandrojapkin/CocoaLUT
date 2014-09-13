@@ -110,6 +110,27 @@
     return lut;
 }
 
++ (BOOL)isValidReaderForURL:(NSURL *)fileURL{
+    if (![super isValidReaderForURL:fileURL]) {
+        return NO;
+    }
+
+    NSImage *image = [[NSImage alloc] initWithContentsOfURL:fileURL];
+    NSBitmapImageRep* imageRep = [NSBitmapImageRep imageRepWithData:[image TIFFRepresentation]];
+
+    int cubeSize = (int)(round(pow((imageRep.pixelsHigh/7)*(imageRep.pixelsHigh/7), 1.0/3.0)));
+
+    int height = round(sqrt(cubeSize)*(double)cubeSize);
+    int width  = ceil(((double)pow(cubeSize,3))/(double)height);
+
+    if (imageRep.pixelsWide != width*7 || imageRep.pixelsHigh != height*7) {
+        return NO;
+    }
+    else{
+        return YES;
+    }
+}
+
 #endif
 
 

@@ -110,22 +110,6 @@
 
 #endif
 
-+(BOOL)isValidReaderForURL:(NSURL *)fileURL{
-    if([super isValidReaderForURL:fileURL] == NO){
-        return NO;
-    }
-
-    LUT *lut;
-    @try {
-        lut = [self LUTFromURL:fileURL];
-    }
-    @catch (NSException *exception) {
-        //NSLog(@"Exception reading file: %@: %@", exception.name, exception);
-        return NO;
-    }
-    return YES;
-}
-
 + (LUTFormatterOutputType)outputType{
     return LUTFormatterOutputType3D;
 }
