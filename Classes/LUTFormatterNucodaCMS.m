@@ -379,7 +379,10 @@
 
     //metadata and description write
     [string appendString: [LUTMetadataFormatter stringFromMetadata:lut.metadata description:lut.descriptionText]];
-    [string appendString:@"\n"];
+    if (string.length > 0) {
+        [string appendString:@"\n"];
+    }
+
 
     NSUInteger nucodaVersion = 0;
     if ([options[@"fileTypeVariant"] isEqualToString:@"Nucoda v1"]) {
@@ -392,11 +395,17 @@
         nucodaVersion = 3;
     }
 
-    [string appendString:[NSString stringWithFormat:@"NUCODA_3D_CUBE %i\n\n", (int)nucodaVersion]];
-
     if (lut.title && lut.title.length > 0) {
         [string appendString:[NSString stringWithFormat:@"TITLE \"%@\"\n\n", lut.title]];
     }
+    else{
+        //write a blank title
+        [string appendString:@"TITLE \" \"\n\n"];
+    }
+
+    [string appendString:[NSString stringWithFormat:@"NUCODA_3D_CUBE %i\n\n", (int)nucodaVersion]];
+
+
 
     if (isLUT1D(lut)) {
         [string appendString:[NSString stringWithFormat:@"LUT_1D_SIZE %i\n", (int)lut.size]];
