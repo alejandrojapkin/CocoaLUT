@@ -86,9 +86,9 @@
     XCTAssertTrue([[self loadLUT:@"identity_UnwrappedCube33" extension:@"tiff"] equalsIdentityLUT]);
 }
 
-- (void)testReadIdentityHaldCLUT {
-    XCTAssertTrue([[self loadLUT:@"identity_HaldCLUT36" extension:@"tiff"] equalsIdentityLUT]);
-}
+//- (void)testReadIdentityHaldCLUT {
+//    XCTAssertTrue([[self loadLUT:@"identity_HaldCLUT36" extension:@"tiff"] equalsIdentityLUT]);
+//}
 
 
 

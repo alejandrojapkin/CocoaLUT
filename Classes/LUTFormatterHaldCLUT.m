@@ -15,7 +15,7 @@
 @implementation LUTFormatterHaldCLUT
 
 + (void)load{
-    [super load];
+    //[super load];
 }
 
 #if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR
