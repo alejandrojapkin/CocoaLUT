@@ -303,32 +303,32 @@
     NSUInteger lutSize = [lut size];
 
     if (lut.title && lut.title.length > 0) {
-        [string appendString:[NSString stringWithFormat:@"TITLE \"%@\"\n", lut.title]];
+        [string appendString:[NSString stringWithFormat:@"TITLE \"%@\"\r\n", lut.title]];
     }
 
     //metadata and description write
     [string appendString: [LUTMetadataFormatter stringFromMetadata:lut.metadata description:lut.descriptionText]];
-    [string appendString:@"\n"];
+    [string appendString:@"\r\n"];
 
     BOOL highPrecision = [options[@"fileTypeVariant"] isEqualToString:@"High Precision"];
 
     if(isLUT1D(lut)){
         //maybe implement writing a CUBE as 1D here?
-        [string appendString:[NSString stringWithFormat:@"LUT_1D_SIZE %i\n", (int)lutSize]];
+        [string appendString:[NSString stringWithFormat:@"LUT_1D_SIZE %i\r\n", (int)lutSize]];
 
         if (highPrecision) {
-            [string appendString:[NSString stringWithFormat:@"LUT_1D_INPUT_RANGE %.12f %.12f\n", [lut inputLowerBound], [lut inputUpperBound]]];
+            [string appendString:[NSString stringWithFormat:@"LUT_1D_INPUT_RANGE %.12f %.12f\r\n", [lut inputLowerBound], [lut inputUpperBound]]];
         }
         else if ([options[@"fileTypeVariant"] isEqualToString:@"Resolve"]) {
-            [string appendString:[NSString stringWithFormat:@"LUT_1D_INPUT_RANGE %.6f %.6f\n", [lut inputLowerBound], [lut inputUpperBound]]];
+            [string appendString:[NSString stringWithFormat:@"LUT_1D_INPUT_RANGE %.6f %.6f\r\n", [lut inputLowerBound], [lut inputUpperBound]]];
         }
         else if ([options[@"fileTypeVariant"] isEqualToString:@"Iridas/Adobe"]) {
-            [string appendString:[NSString stringWithFormat:@"DOMAIN_MIN %f %f %f\n", [lut inputLowerBound], [lut inputLowerBound], [lut inputLowerBound]]];
-            [string appendString:[NSString stringWithFormat:@"DOMAIN_MAX %f %f %f\n", [lut inputUpperBound], [lut inputUpperBound], [lut inputUpperBound]]];
+            [string appendString:[NSString stringWithFormat:@"DOMAIN_MIN %f %f %f\r\n", [lut inputLowerBound], [lut inputLowerBound], [lut inputLowerBound]]];
+            [string appendString:[NSString stringWithFormat:@"DOMAIN_MAX %f %f %f\r\n", [lut inputUpperBound], [lut inputUpperBound], [lut inputUpperBound]]];
         }
 
 
-        [string appendString:@"\n"];
+        [string appendString:@"\r\n"];
 
         for (int i = 0; i < lutSize; i++){
             LUTColor *color = [lut colorAtR:i g:i b:i];
@@ -340,26 +340,26 @@
             }
 
             if(i != lutSize - 1) {
-                [string appendString:@"\n"];
+                [string appendString:@"\r\n"];
             }
         }
 
     }
     else if(isLUT3D(lut)){
-        [string appendString:[NSString stringWithFormat:@"LUT_3D_SIZE %i\n", (int)lutSize]];
+        [string appendString:[NSString stringWithFormat:@"LUT_3D_SIZE %i\r\n", (int)lutSize]];
 
         if (highPrecision) {
-            [string appendString:[NSString stringWithFormat:@"LUT_3D_INPUT_RANGE %.12f %.12f\n", [lut inputLowerBound], [lut inputUpperBound]]];
+            [string appendString:[NSString stringWithFormat:@"LUT_3D_INPUT_RANGE %.12f %.12f\r\n", [lut inputLowerBound], [lut inputUpperBound]]];
         }
         else if ([options[@"fileTypeVariant"] isEqualToString:@"Resolve"]) {
-            [string appendString:[NSString stringWithFormat:@"LUT_3D_INPUT_RANGE %.6f %.6f\n", [lut inputLowerBound], [lut inputUpperBound]]];
+            [string appendString:[NSString stringWithFormat:@"LUT_3D_INPUT_RANGE %.6f %.6f\r\n", [lut inputLowerBound], [lut inputUpperBound]]];
         }
         else if ([options[@"fileTypeVariant"] isEqualToString:@"Iridas/Adobe"]) {
-            [string appendString:[NSString stringWithFormat:@"DOMAIN_MIN %.6f %.6f %.6f\n", [lut inputLowerBound], [lut inputLowerBound], [lut inputLowerBound]]];
-            [string appendString:[NSString stringWithFormat:@"DOMAIN_MAX %.6f %.6f %.6f\n", [lut inputUpperBound], [lut inputUpperBound], [lut inputUpperBound]]];
+            [string appendString:[NSString stringWithFormat:@"DOMAIN_MIN %.6f %.6f %.6f\r\n", [lut inputLowerBound], [lut inputLowerBound], [lut inputLowerBound]]];
+            [string appendString:[NSString stringWithFormat:@"DOMAIN_MAX %.6f %.6f %.6f\r\n", [lut inputUpperBound], [lut inputUpperBound], [lut inputUpperBound]]];
         }
 
-        [string appendString:@"\n"];
+        [string appendString:@"\r\n"];
 
         NSUInteger arrayLength = lutSize * lutSize * lutSize;
         for (int i = 0; i < arrayLength; i++) {
@@ -378,7 +378,7 @@
 
 
             if(i != arrayLength - 1) {
-                [string appendString:@"\n"];
+                [string appendString:@"\r\n"];
             }
 
         }

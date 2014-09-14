@@ -72,7 +72,7 @@
     double greenPower = [powerSplitLine[1] doubleValue];
     double bluePower = [powerSplitLine[2] doubleValue];
 
-    //NSLog(@"slope %@\noffset %@\npower %@", slopeSplitLine, offsetSplitLine, powerSplitLine);
+    //NSLog(@"slope %@\r\noffset %@\r\npower %@", slopeSplitLine, offsetSplitLine, powerSplitLine);
 
     LUT3D *lut3D = [LUT3D LUTIdentityOfSize:33 inputLowerBound:0.0 inputUpperBound:1.0];
 
@@ -107,17 +107,17 @@
 + (NSString *)stringFromLUT:(LUT *)lut withOptions:(NSDictionary *)options{
     NSMutableString *string = [[NSMutableString alloc] init];
 
-    [string appendString:@"<!-- ARRI Digital Camera Look File -->\n<!-- This XML format is used to import color settings into the camera(\"look file\")-->\n<adicam version=\"1.0\" camera=\"alexa\">\n\t<Saturation>\n\t\t1.000000\n\t</Saturation>\n\t<PrinterLight>\n\t\t0.000000 0.000000 0.000000\n\t</PrinterLight>\n\t<SOPNode>\n\t\t<Slope>1.000000 1.000000 1.000000</Slope>\n\t\t<Offset>0.000000 0.000000 0.000000</Offset>\n\t\t<Power>1.000000 1.000000 1.000000</Power>\n\t</SOPNode>\n\t<ToneMapLut rows=\"4096\" cols=\"1\">\n"];
+    [string appendString:@"<!-- ARRI Digital Camera Look File -->\r\n<!-- This XML format is used to import color settings into the camera(\"look file\")-->\r\n<adicam version=\"1.0\" camera=\"alexa\">\r\n\t<Saturation>\r\n\t\t1.000000\r\n\t</Saturation>\r\n\t<PrinterLight>\r\n\t\t0.000000 0.000000 0.000000\r\n\t</PrinterLight>\r\n\t<SOPNode>\r\n\t\t<Slope>1.000000 1.000000 1.000000</Slope>\r\n\t\t<Offset>0.000000 0.000000 0.000000</Offset>\r\n\t\t<Power>1.000000 1.000000 1.000000</Power>\r\n\t</SOPNode>\r\n\t<ToneMapLut rows=\"4096\" cols=\"1\">\r\n"];
 
     LUT1D *lut1D = (LUT1D *)lut;
 
     NSArray *redCurve = [lut1D rgbCurveArray][0];
 
     for (int i = 0; i < 4096; i++) {
-        [string appendString:[NSString stringWithFormat:@"\t%i\n", (int)([redCurve[i] doubleValue]*4095.0)]];
+        [string appendString:[NSString stringWithFormat:@"\t%i\r\n", (int)([redCurve[i] doubleValue]*4095.0)]];
     }
 
-    [string appendString:@"\t</ToneMapLut>\n</adicam>"];
+    [string appendString:@"\t</ToneMapLut>\r\n</adicam>"];
 
     return string;
 }

@@ -108,12 +108,12 @@
     lutSize = [options[@"lutSize"] integerValue];
 
 
-    NSMutableString *string = [NSMutableString stringWithFormat:@"max value %i\nvertices %i\n", (int)integerMaxOutput, (int)lutSize];
+    NSMutableString *string = [NSMutableString stringWithFormat:@"max value %i\r\nvertices %i\r\n", (int)integerMaxOutput, (int)lutSize];
 
-    [string appendString:@"blue is fastest changing\n"];
-    [string appendString:@"red is slowest changing\n\n"];
-    [string appendString:@"cube data\n"];
-    [string appendString:@"R G B\n"];
+    [string appendString:@"blue is fastest changing\r\n"];
+    [string appendString:@"red is slowest changing\r\n\r\n"];
+    [string appendString:@"cube data\r\n"];
+    [string appendString:@"R G B\r\n"];
 
     NSUInteger arrayLength = lutSize * lutSize * lutSize;
     for (int i = 0; i < arrayLength; i++) {
@@ -127,7 +127,7 @@
         [string appendString:[NSString stringWithFormat:@"%i %i %i", (int)(color.red*(double)integerMaxOutput), (int)(color.green*(double)integerMaxOutput), (int)(color.blue*(double)integerMaxOutput)]];
 
         if(i != arrayLength - 1) {
-            [string appendString:@"\n"];
+            [string appendString:@"\r\n"];
         }
         
     }

@@ -96,7 +96,7 @@
     NSUInteger arrayLength = lutSize * lutSize * lutSize;
 
     if (lutSize != 33) {
-        [string appendString:[NSString stringWithFormat:@"3DLUTSIZE %i\n\n", (int)lutSize]];
+        [string appendString:[NSString stringWithFormat:@"3DLUTSIZE %i\r\n\r\n", (int)lutSize]];
     }
     //33 size LUTs don't use keyword "3DLUTSIZE"
 
@@ -113,7 +113,7 @@
 
 
         if(i != arrayLength - 1) {
-            [string appendString:@"\n"];
+            [string appendString:@"\r\n"];
         }
 
     }
