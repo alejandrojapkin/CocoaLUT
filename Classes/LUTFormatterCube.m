@@ -310,21 +310,24 @@
     [string appendString: [LUTMetadataFormatter stringFromMetadata:lut.metadata description:lut.descriptionText]];
     [string appendString:@"\r\n"];
 
-    BOOL highPrecision = [options[@"fileTypeVariant"] isEqualToString:@"High Precision"];
 
     if(isLUT1D(lut)){
         //maybe implement writing a CUBE as 1D here?
         [string appendString:[NSString stringWithFormat:@"LUT_1D_SIZE %i\r\n", (int)lutSize]];
+        NSString *formatString;
 
-        if (highPrecision) {
+        if ([options[@"fileTypeVariant"] isEqualToString:@"High Precision"]) {
             [string appendString:[NSString stringWithFormat:@"LUT_1D_INPUT_RANGE %.12f %.12f\r\n", [lut inputLowerBound], [lut inputUpperBound]]];
+            formatString = @"%.12f %.12f %.12f";
         }
         else if ([options[@"fileTypeVariant"] isEqualToString:@"Resolve"]) {
             [string appendString:[NSString stringWithFormat:@"LUT_1D_INPUT_RANGE %.6f %.6f\r\n", [lut inputLowerBound], [lut inputUpperBound]]];
+            formatString = @"%.10f %.10f %.10f";
         }
         else if ([options[@"fileTypeVariant"] isEqualToString:@"Iridas/Adobe"]) {
             [string appendString:[NSString stringWithFormat:@"DOMAIN_MIN %f %f %f\r\n", [lut inputLowerBound], [lut inputLowerBound], [lut inputLowerBound]]];
             [string appendString:[NSString stringWithFormat:@"DOMAIN_MAX %f %f %f\r\n", [lut inputUpperBound], [lut inputUpperBound], [lut inputUpperBound]]];
+            formatString = @"%.6f %.6f %.6f";
         }
 
 
@@ -332,12 +335,8 @@
 
         for (int i = 0; i < lutSize; i++){
             LUTColor *color = [lut colorAtR:i g:i b:i];
-            if (highPrecision){
-                [string appendString:[NSString stringWithFormat:@"%.12f %.12f %.12f", color.red, color.green, color.blue]];
-            }
-            else{
-                [string appendString:[NSString stringWithFormat:@"%.10f %.10f %.10f", color.red, color.green, color.blue]];
-            }
+
+            [string appendString:[NSString stringWithFormat:formatString, color.red, color.green, color.blue]];
 
             if(i != lutSize - 1) {
                 [string appendString:@"\r\n"];
@@ -347,16 +346,20 @@
     }
     else if(isLUT3D(lut)){
         [string appendString:[NSString stringWithFormat:@"LUT_3D_SIZE %i\r\n", (int)lutSize]];
-
-        if (highPrecision) {
+        NSString *formatString;
+        if ([options[@"fileTypeVariant"] isEqualToString:@"High Precision"]) {
             [string appendString:[NSString stringWithFormat:@"LUT_3D_INPUT_RANGE %.12f %.12f\r\n", [lut inputLowerBound], [lut inputUpperBound]]];
+            formatString = @"%.12f %.12f %.12f";
         }
         else if ([options[@"fileTypeVariant"] isEqualToString:@"Resolve"]) {
-            [string appendString:[NSString stringWithFormat:@"LUT_3D_INPUT_RANGE %.6f %.6f\r\n", [lut inputLowerBound], [lut inputUpperBound]]];
+            [string appendString:[NSString stringWithFormat:@"LUT_3D_INPUT_RANGE %.10f %.10f\r\n", [lut inputLowerBound], [lut inputUpperBound]]];
+            formatString = @"%.10f %.10f %.10f";
         }
         else if ([options[@"fileTypeVariant"] isEqualToString:@"Iridas/Adobe"]) {
             [string appendString:[NSString stringWithFormat:@"DOMAIN_MIN %.6f %.6f %.6f\r\n", [lut inputLowerBound], [lut inputLowerBound], [lut inputLowerBound]]];
             [string appendString:[NSString stringWithFormat:@"DOMAIN_MAX %.6f %.6f %.6f\r\n", [lut inputUpperBound], [lut inputUpperBound], [lut inputUpperBound]]];
+
+            formatString = @"%.6f %.6f %.6f";
         }
 
         [string appendString:@"\r\n"];
@@ -369,13 +372,7 @@
 
             LUTColor *color = [lut colorAtR:redIndex g:greenIndex b:blueIndex];
 
-            if (highPrecision) {
-                [string appendString:[NSString stringWithFormat:@"%.12f %.12f %.12f", color.red, color.green, color.blue]];
-            }
-            else{
-                [string appendString:[NSString stringWithFormat:@"%.6f %.6f %.6f", color.red, color.green, color.blue]];
-            }
-
+            [string appendString:[NSString stringWithFormat:formatString, color.red, color.green, color.blue]];
 
             if(i != arrayLength - 1) {
                 [string appendString:@"\r\n"];
