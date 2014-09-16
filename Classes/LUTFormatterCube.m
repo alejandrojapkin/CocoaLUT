@@ -307,8 +307,13 @@
     }
 
     //metadata and description write
-    [string appendString: [LUTMetadataFormatter stringFromMetadata:lut.metadata description:lut.descriptionText]];
-    [string appendString:@"\r\n"];
+    NSString *metadataString = [LUTMetadataFormatter stringFromMetadata:lut.metadata description:lut.descriptionText];
+
+    if (metadataString.length > 0) {
+        [string appendString: metadataString];
+        [string appendString:@"\r\n"];
+    }
+
 
 
     if(isLUT1D(lut)){
