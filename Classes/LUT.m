@@ -413,7 +413,7 @@
 - (id)copyWithZone:(NSZone *)zone {
     LUT *copiedLUT = [[self class] LUTOfSize:[self size] inputLowerBound:[self inputLowerBound] inputUpperBound:[self inputUpperBound]];
     [copiedLUT setMetadata:[[self metadata] mutableCopyWithZone:zone]];
-    copiedLUT.descriptionText = [[self description] mutableCopyWithZone:zone];
+    copiedLUT.descriptionText = [[self descriptionText] mutableCopyWithZone:zone];
     [copiedLUT setTitle:[[self title] mutableCopyWithZone:zone]];
     [copiedLUT setPassthroughFileOptions:[[self passthroughFileOptions] mutableCopyWithZone:zone]];
     return copiedLUT;
