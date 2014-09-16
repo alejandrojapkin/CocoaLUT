@@ -22,7 +22,8 @@
 
 
 - (void)testReadIdentityResolveCube {
-    XCTAssertTrue([[self loadLUT:@"identity_DaVinciResolve33" extension:@"cube"] equalsIdentityLUT]);
+    XCTAssertTrue([[self loadLUT:@"identity_DaVinciResolve33_3D" extension:@"cube"] equalsIdentityLUT]);
+    XCTAssertTrue([[self loadLUT:@"identity_DaVinciResolve1024_1D" extension:@"cube"] equalsIdentityLUT]);
 }
 
 - (void)testReadIdentity3DLLustre {
