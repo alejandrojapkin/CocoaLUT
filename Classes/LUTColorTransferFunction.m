@@ -20,19 +20,24 @@
 -(instancetype)copyWithZone:(NSZone *)zone{
     return [self.class LUTColorTransferFunctionWithTransformedToLinearBlock:[self.transformedToLinearBlock copy]
                                                    linearToTransformedBlock:[self.linearToTransformedBlock copy]
-                                                                       name:[self.name copyWithZone:zone]];
+                                                                       name:[self.name copyWithZone:zone]
+                                                                       type:self.transferFunctionType];
 }
 
 -(instancetype)initWithTransformedToLinearBlock:( LUTColor* ( ^ )(double red, double green, double blue) )transformedToLinearBlock
                        linearToTransformedBlock:( LUTColor* ( ^ )(double red, double green, double blue) )linearToTransformedBlock
-                                           name:(NSString *)name{
+                                           name:(NSString *)name
+                                           type:(LUTColorTransferFunctionType)transferFunctionType{
     if (self = [super init]){
         self.transformedToLinearBlock = transformedToLinearBlock;
         self.linearToTransformedBlock = linearToTransformedBlock;
         self.name = name;
+        self.transferFunctionType = transferFunctionType;
     }
     return self;
 }
+
+
 
 +(instancetype)LUTColorTransferFunctionWithRedLinearToTransformedExpressionString:(NSString *)redLinearToTransformedExpressionString
                                          greenLinearToTransformedExpressionString:(NSString *)greenLinearToTransformedExpressionString
@@ -40,21 +45,25 @@
                                            redTransformedToLinearExpressionString:(NSString *)redTransformedToLinearExpressionString
                                          greenTransformedToLinearExpressionString:(NSString *)greenTransformedToLinearExpressionString
                                           blueTransformedToLinearExpressionString:(NSString *)blueTransformedToLinearExpressionString
-                                                                             name:(NSString *)name{
+                                                                             name:(NSString *)name
+                                                                             type:(LUTColorTransferFunctionType)transferFunctionType{
     return nil;
 }
 
 +(instancetype)LUTColorTransferFunctionWithTransformedToLinearBlock:( LUTColor* ( ^ )(double red, double green, double blue) )transformedToLinearBlock
                                            linearToTransformedBlock:( LUTColor* ( ^ )(double red, double green, double blue) )linearToTransformedBlock
-                                                               name:(NSString *)name{
+                                                               name:(NSString *)name
+                                                               type:(LUTColorTransferFunctionType)transferFunctionType{
     return [[self alloc] initWithTransformedToLinearBlock:transformedToLinearBlock
                                          linearToTransformedBlock:linearToTransformedBlock
-                                                     name:name];
+                                                     name:name
+                                                     type:transferFunctionType];
 }
 
 +(instancetype)LUTColorTransferFunctionWithTransformedToLinearBlock1D:( double ( ^ )(double value) )transformedToLinearBlock1D
                                            linearToTransformedBlock1D:( double ( ^ )(double value) )linearToTransformedBlock1D
-                                                                 name:(NSString *)name{
+                                                                 name:(NSString *)name
+                                                                 type:(LUTColorTransferFunctionType)transferFunctionType{
     return [LUTColorTransferFunction LUTColorTransferFunctionWithTransformedToLinearBlock:^LUTColor*(double red, double green, double blue) {
                                                                                             return [LUTColor colorWithRed:transformedToLinearBlock1D(red)
                                                                                                                     green:transformedToLinearBlock1D(green)
@@ -63,7 +72,8 @@
                                                                                             return [LUTColor colorWithRed:linearToTransformedBlock1D(red)
                                                                                                                     green:linearToTransformedBlock1D(green)
                                                                                                                      blue:linearToTransformedBlock1D(blue)];}
-                                                                                     name:name];
+                                                                                     name:name
+                                                                                     type:transferFunctionType];
 }
 
 -(LUTColor *)transformedToLinearFromColor:(LUTColor *)transformedColor{
@@ -72,6 +82,10 @@
 
 -(LUTColor *)linearToTransformedFromColor:(LUTColor *)linearColor{
     return self.linearToTransformedBlock(linearColor.red, linearColor.green, linearColor.blue);
+}
+
+-(BOOL)isCompatibleWithTransferFunction:(LUTColorTransferFunction *)transferFunction{
+    return self.transferFunctionType == transferFunction.transferFunctionType || self.transferFunctionType == LUTColorTransferFunctionTypeAny || transferFunction.transferFunctionType == LUTColorTransferFunctionTypeAny;
 }
 
 + (LUT *)transformedLUTFromLUT:(LUT *)sourceLUT
@@ -126,7 +140,8 @@
         return value;}
                                                                  linearToTransformedBlock1D:^double(double value) {
                                                                      return value;}
-                                                                                       name:@"Linear"];
+                                                                                       name:@"Linear"
+                                                                                       type:LUTColorTransferFunctionTypeAny];
 }
 
 +(instancetype)gammaTransferFunctionWithGamma:(double)gamma{
@@ -140,7 +155,8 @@
                                                                                                 return value;
                                                                                              }
                                                                                             return pow(value, 1.0/gamma);}
-            name:[NSString stringWithFormat:@"Gamma %g", gamma]];
+                                                                                       name:[NSString stringWithFormat:@"Gamma %g", gamma]
+                                                                                       type:LUTColorTransferFunctionType01];
 }
 
 + (instancetype)bt1886TransferFunction{
@@ -150,7 +166,8 @@
                                                                  linearToTransformedBlock1D:^double(double value){
                                                                                             double output = (value <= .018) ? 4.5*value : 1.099*pow(value, 1.0/2.2) - .099;
                                                                                             return clamp(output, 0.0, 1.0);}
-                                                                                       name:@"BT.1886"];
+                                                                                       name:@"BT.1886"
+                                                                                       type:LUTColorTransferFunctionType01];
 }
 
 + (instancetype)sRGBTransferFunction{
@@ -161,7 +178,8 @@
                                                                                             value = clampLowerBound(value, 0.0);
                                                                                             double output = (value <= .0031308) ? 12.92*value : 1.055*pow(value, 1.0/2.4) - .055;
                                                                                             return clamp(output, 0.0, 1.0);}
-                                                                                       name:@"sRGB"];
+                                                                                       name:@"sRGB"
+                                                                                       type:LUTColorTransferFunctionType01];
 }
 
 + (instancetype)cineonTransferFunction{
@@ -171,7 +189,8 @@
                                                                  linearToTransformedBlock1D:^double(double value){
                                                                      double output = (300.0*log(value+27.0/2473.0) + 685.0*log(10.0))/(1023.0*log(10.0));
                                                                      return clamp(output, 0.0, 1.0);}
-                                                                                       name:@"Cineon"];
+                                                                                       name:@"Cineon"
+                                                                                       type:LUTColorTransferFunctionTypeSceneLinear];
 }
 
 + (instancetype)redLogFilmTransferFunction{
@@ -181,7 +200,8 @@
                                                                  linearToTransformedBlock1D:^double(double value){
                                                                      double output = (300.0*log(value+27.0/2473.0) + 685.0*log(10.0))/(1023.0*log(10.0));
                                                                      return clamp(output, 0.0, 1.0);}
-                                                                                       name:@"REDLogFilm"];
+                                                                                       name:@"REDLogFilm"
+                                                                                       type:LUTColorTransferFunctionTypeSceneLinear];
 }
 
 + (instancetype)JPLogTransferFunction{
@@ -198,7 +218,8 @@
                                                                      double output = pdxLogReference +
                                                                      log10(value)*pdxNegativeGamma/pdxDensityPerCodeValue;
                                                                      return clamp(output/1023.0, 0.0, 1.0);}
-                                                                                       name:@"JPLog"];
+                                                                                       name:@"JPLog"
+                                                                                       type:LUTColorTransferFunctionTypeSceneLinear];
 }
 
 + (instancetype)alexaLogCV3TransferFunctionWithEI:(double)EI{
@@ -251,7 +272,8 @@
 
                                                                                             double output = (value > cut) ? c * log10(a * value + b) + d: e * value + f;
                                                                                             return clamp(output, 0.0, 1.0);}
-                                                                                       name:[NSString stringWithFormat:@"AlexaV3LogC EI %i", (int)EI]];
+                                                                                       name:[NSString stringWithFormat:@"AlexaV3LogC EI %i", (int)EI]
+                                                                                       type:LUTColorTransferFunctionTypeSceneLinear];
 
 }
 
@@ -266,7 +288,8 @@
                                                                                             double valueAsIRE = .529136*log10(10.1596*value+1)+.0730597;
                                                                                             double output = (876.0*valueAsIRE + 64.0)/1023.0;
                                                                                             return clamp(output, 0.0, 1.0);}
-                                                                                       name:@"CanonLog"];
+                                                                                       name:@"CanonLog"
+                                                                                       type:LUTColorTransferFunctionTypeSceneLinear];
 }
 
 + (instancetype)sLogTransferFunction{
@@ -290,7 +313,8 @@
                                                                      return clamp(output, 0, 1);
                                                                  }
 
-                                                                                       name:@"S-Log"];
+                                                                                       name:@"S-Log"
+                                                                                       type:LUTColorTransferFunctionTypeSceneLinear];
 }
 
 
@@ -316,7 +340,8 @@
          return clamp(output, 0, 1);
                                                                  }
 
-                                                                                       name:@"S-Log2"];
+                                                                                       name:@"S-Log2"
+                                                                                       type:LUTColorTransferFunctionTypeSceneLinear];
 }
 
 + (instancetype)sLog3TransferFunction {
@@ -340,7 +365,8 @@
                                                                      return clamp(output, 0, 1);
                                                                  }
 
-                                                                                       name:@"S-Log3"];
+                                                                                       name:@"S-Log3"
+                                                                                       type:LUTColorTransferFunctionTypeSceneLinear];
 }
 
 + (NSBundle *)transferFunctionsLUTResourceBundle{
@@ -378,7 +404,8 @@
                                                                  linearToTransformedBlock1D:^double(double value){
      return [linearToBMDFilm colorAtColor:[LUTColor colorWithRed:value green:value blue:value]].red;}
 
-                                                                                       name:@"BMDFilm"];
+                                                                                       name:@"BMDFilm"
+                                                                                       type:LUTColorTransferFunctionTypeSceneLinear];
 }
 
 + (instancetype)bmdFilm4KTransferFunction{
@@ -405,7 +432,8 @@
 
                                                                      return [linearToBMDFilm4K colorAtColor:[LUTColor colorWithRed:value green:value blue:value]].red;}
 
-                                                                                       name:@"BMDFilm4K"];
+                                                                                       name:@"BMDFilm4K"
+                                                                                       type:LUTColorTransferFunctionTypeSceneLinear];
 }
 
 @end

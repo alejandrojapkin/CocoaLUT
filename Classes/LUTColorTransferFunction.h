@@ -11,9 +11,16 @@
 
 @class LUTColor;
 
+typedef NS_ENUM(NSInteger, LUTColorTransferFunctionType) {
+    LUTColorTransferFunctionTypeSceneLinear,
+    LUTColorTransferFunctionType01,
+    LUTColorTransferFunctionTypeAny
+};
+
 @interface LUTColorTransferFunction : NSObject <NSCopying>
 
 @property (strong) NSString *name;
+@property (assign) LUTColorTransferFunctionType transferFunctionType;
 
 +(instancetype)LUTColorTransferFunctionWithRedLinearToTransformedExpressionString:(NSString *)redLinearToTransformedExpressionString
                                          greenLinearToTransformedExpressionString:(NSString *)greenLinearToTransformedExpressionString
@@ -21,11 +28,13 @@
                                            redTransformedToLinearExpressionString:(NSString *)redTransformedToLinearExpressionStrin
                                          greenTransformedToLinearExpressionString:(NSString *)greenTransformedToLinearExpressionString
                                           blueTransformedToLinearExpressionString:(NSString *)blueTransformedToLinearExpressionString
-                                                                             name:(NSString *)name;
+                                                                             name:(NSString *)name
+                                                                             type:(LUTColorTransferFunctionType)transferFunctionType;
 
 +(instancetype)LUTColorTransferFunctionWithTransformedToLinearBlock:( LUTColor* ( ^ )(double red, double green, double blue) )transformedToLinearBlock
                                            linearToTransformedBlock:( LUTColor* ( ^ )(double red, double green, double blue) )linearToTransformedBlock
-                                                               name:(NSString *)name;
+                                                               name:(NSString *)name
+                                                               type:(LUTColorTransferFunctionType)transferFunctionType;
 
 +(NSArray *)knownColorTransferFunctions;
 
@@ -43,5 +52,7 @@
 
 -(LUTColor *)transformedToLinearFromColor:(LUTColor *)transformedColor;
 -(LUTColor *)linearToTransformedFromColor:(LUTColor *)linearColor;
+
+-(BOOL)isCompatibleWithTransferFunction:(LUTColorTransferFunction *)transferFunction;
 
 @end
