@@ -119,6 +119,7 @@
 
     return @[[self linearTransferFunction],
              [self cineonTransferFunction],
+             [self JPLogTransferFunction],
              [self redLogFilmTransferFunction],
              [self gammaTransferFunctionWithGamma:2.2],
              [self gammaTransferFunctionWithGamma:2.4],
