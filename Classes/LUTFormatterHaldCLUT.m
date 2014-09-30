@@ -124,7 +124,7 @@
     NSBitmapImageRep* imageRep = [NSBitmapImageRep imageRepWithData:[image TIFFRepresentation]];
 
     int lutSize = round(pow(pow(imageRep.pixelsWide, 2.0), 1.0/3.0));
-    if (sqrt(lutSize) != (double)((int)sqrt(lutSize))) {
+    if (sqrt(lutSize) != (double)((int)sqrt(lutSize)) || lutSize > 64) {
         return NO;
     }
     else{
