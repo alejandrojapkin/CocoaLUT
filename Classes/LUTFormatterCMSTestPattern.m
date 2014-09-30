@@ -142,11 +142,6 @@
 
 #endif
 
-
-+ (NSString *)utiString{
-    return @"public.cms-test-pattern-lut";
-}
-
 + (NSString *)formatterName{
     return @"CMS Test Pattern Image 3D LUT";
 }

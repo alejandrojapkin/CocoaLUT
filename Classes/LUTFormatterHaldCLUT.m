@@ -158,10 +158,6 @@
     return @{[self formatterID] : defaultsExposed};
 }
 
-+ (NSString *)utiString{
-    return @"public.hald-clut";
-}
-
 + (NSString *)formatterName{
     return @"Hald CLUT";
 }

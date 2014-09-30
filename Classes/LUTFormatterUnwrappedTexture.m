@@ -101,10 +101,6 @@
 }
 #endif
 
-+ (NSString *)utiString{
-    return @"public.unwrapped-cube-lut";
-}
-
 + (NSString *)formatterName{
     return @"Unwrapped Cube Image 3D LUT";
 }

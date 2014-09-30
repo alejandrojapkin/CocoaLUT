@@ -174,5 +174,9 @@
     return @{[self formatterID]: dictionary};
 }
 
++ (NSString *)utiString{
+    return @"public.image";
+}
+
 
 @end
