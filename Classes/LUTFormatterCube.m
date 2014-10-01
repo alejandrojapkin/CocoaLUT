@@ -393,7 +393,7 @@
 
 + (NSArray *)allOptions{
 
-    NSDictionary *nukeOptions = @{@"fileTypeVariant":@"Nuke"};
+    NSDictionary *nukeOptions = @{@"fileTypeVariant":@"Nuke/Autodesk"};
 
     NSDictionary *resolveOptions = @{@"fileTypeVariant":@"Resolve"};
 
