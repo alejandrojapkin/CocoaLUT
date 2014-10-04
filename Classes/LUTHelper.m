@@ -122,6 +122,14 @@ NSArray* indicesIntegerArray(int startValue, int endValue, int numIndices){
     return indices;
 }
 
+NSArray* indicesIntegerArrayLegacy(int startValue, int endValue, int numIndices){
+    NSMutableArray *indicesArray = [NSMutableArray arrayWithArray:indicesIntegerArray(startValue, endValue+1, numIndices)];
+
+    [indicesArray replaceObjectAtIndex:indicesArray.count-1 withObject:@(endValue)];
+
+    return indicesArray;
+}
+
 void timer(NSString* name, void (^block)()) {
     NSLog(@"Starting %@", name);
     NSDate *startTime = [NSDate date];

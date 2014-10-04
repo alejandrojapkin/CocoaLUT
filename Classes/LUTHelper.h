@@ -33,8 +33,11 @@ double smootherstep(double beginning, double end, double percentage);
 double smoothstep(double beginning, double end, double percentage);
 float distancecalc(float x1, float y1, float z1, float x2, float y2, float z2);
 void timer(NSString* name, void (^block)());
+
 NSArray* indicesDoubleArray(double startValue, double endValue, int numIndices);
 NSArray* indicesIntegerArray(int startValue, int endValue, int numIndices);
+NSArray* indicesIntegerArrayLegacy(int startValue, int endValue, int numIndices);
+
 double roundValueToNearest(double value, double nearestValue);
 NSUInteger maxIntegerFromBitdepth(NSUInteger bitdepth);
 

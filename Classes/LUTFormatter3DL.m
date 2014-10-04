@@ -151,7 +151,7 @@
             [string appendString:[indicesIntegerArray(0, (int)integerMaxOutput, (int)lutSize) componentsJoinedByString:@" "]];
         }
         else if ([fileTypeVariant isEqualToString:@"Legacy"]){
-            [string appendString:[indicesIntegerArray(0, 1024, (int)lutSize) componentsJoinedByString:@" "]];
+            [string appendString:[indicesIntegerArrayLegacy(0, 1023, (int)lutSize) componentsJoinedByString:@" "]];
         }
         [string appendString:@"\r\n"];
     }
