@@ -164,7 +164,7 @@
         }
         [string appendString:@"3DMESH\r\n"];
         [string appendString:[NSString stringWithFormat:@"Mesh %d %d\r\n", (int)sizeToDepth, (int)log2(integerMaxOutput+1)]];
-        [string appendString:[indicesIntegerArray(0, 1024, (int) lutSize) componentsJoinedByString:@" "]];
+        [string appendString:[indicesIntegerArrayLegacy(0, 1023, (int) lutSize) componentsJoinedByString:@" "]];
         [string appendString:@"\r\n"];
 
     }
