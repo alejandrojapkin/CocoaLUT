@@ -96,11 +96,16 @@
                     data[@"inputLowerBound"] = @([splitLine[1] doubleValue]);
                     data[@"inputUpperBound"] = @([splitLine[2] doubleValue]);
 
-                    if ([splitLine[1] length] >= 14) {
+                    NSUInteger rightSideLength = [[splitLine[1] componentsSeparatedByString:@"."][1] length];
+
+                    if (rightSideLength == 12) {
                         passthroughFileOptions[@"fileTypeVariant"] = @"High Precision";
                     }
-                    else{
+                    else if(rightSideLength == 10){
                         passthroughFileOptions[@"fileTypeVariant"] = @"Resolve";
+                    }
+                    else if(rightSideLength == 6){
+                        passthroughFileOptions[@"fileTypeVariant"] = @"Resolve Legacy";
                     }
                 }
                 else{
@@ -122,11 +127,16 @@
                     data[@"inputLowerBound"] = @([splitLine[1] doubleValue]);
                     data[@"inputUpperBound"] = @([splitLine[2] doubleValue]);
 
-                    if ([splitLine[1] length] >= 14) {
+                    NSUInteger rightSideLength = [[splitLine[1] componentsSeparatedByString:@"."][1] length];
+
+                    if (rightSideLength == 12) {
                         passthroughFileOptions[@"fileTypeVariant"] = @"High Precision";
                     }
-                    else{
+                    else if(rightSideLength == 10){
                         passthroughFileOptions[@"fileTypeVariant"] = @"Resolve";
+                    }
+                    else if(rightSideLength == 6){
+                        passthroughFileOptions[@"fileTypeVariant"] = @"Resolve Legacy";
                     }
                 }
                 else{
@@ -329,6 +339,10 @@
             [string appendString:[NSString stringWithFormat:@"LUT_1D_INPUT_RANGE %.6f %.6f\r\n", [lut inputLowerBound], [lut inputUpperBound]]];
             formatString = @"%.10f %.10f %.10f";
         }
+        else if ([options[@"fileTypeVariant"] isEqualToString:@"Resolve Legacy"]) {
+            [string appendString:[NSString stringWithFormat:@"LUT_1D_INPUT_RANGE %.6f %.6f\r\n", [lut inputLowerBound], [lut inputUpperBound]]];
+            formatString = @"%.6f %.6f %.6f";
+        }
         else if ([options[@"fileTypeVariant"] isEqualToString:@"Iridas/Adobe"]) {
             [string appendString:[NSString stringWithFormat:@"DOMAIN_MIN %f %f %f\r\n", [lut inputLowerBound], [lut inputLowerBound], [lut inputLowerBound]]];
             [string appendString:[NSString stringWithFormat:@"DOMAIN_MAX %f %f %f\r\n", [lut inputUpperBound], [lut inputUpperBound], [lut inputUpperBound]]];
@@ -359,6 +373,10 @@
         else if ([options[@"fileTypeVariant"] isEqualToString:@"Resolve"]) {
             [string appendString:[NSString stringWithFormat:@"LUT_3D_INPUT_RANGE %.10f %.10f\r\n", [lut inputLowerBound], [lut inputUpperBound]]];
             formatString = @"%.10f %.10f %.10f";
+        }
+        else if ([options[@"fileTypeVariant"] isEqualToString:@"Resolve Legacy"]) {
+            [string appendString:[NSString stringWithFormat:@"LUT_3D_INPUT_RANGE %.6f %.6f\r\n", [lut inputLowerBound], [lut inputUpperBound]]];
+            formatString = @"%.6f %.6f %.6f";
         }
         else if ([options[@"fileTypeVariant"] isEqualToString:@"Nuke/Autodesk"]){
             formatString = @"%.6f %.6f %.6f";
@@ -400,11 +418,13 @@
 
     NSDictionary *resolveOptions = @{@"fileTypeVariant":@"Resolve"};
 
+    NSDictionary *resolveLegacyOptions = @{@"fileTypeVariant":@"Resolve Legacy"};
+
     NSDictionary *iridasAdobeOptions = @{@"fileTypeVariant":@"Iridas/Adobe"};
 
     NSDictionary *highPrecisionOptions = @{@"fileTypeVariant":@"High Precision"};
 
-    return @[resolveOptions, nukeOptions, iridasAdobeOptions, highPrecisionOptions];
+    return @[resolveOptions, resolveLegacyOptions, nukeOptions, iridasAdobeOptions, highPrecisionOptions];
 }
 
 + (NSArray *)conformanceLUTActionsForLUT:(LUT *)lut options:(NSDictionary *)options{
