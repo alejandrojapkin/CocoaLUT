@@ -360,6 +360,9 @@
             [string appendString:[NSString stringWithFormat:@"LUT_3D_INPUT_RANGE %.10f %.10f\r\n", [lut inputLowerBound], [lut inputUpperBound]]];
             formatString = @"%.10f %.10f %.10f";
         }
+        else if ([options[@"fileTypeVariant"] isEqualToString:@"Nuke/Autodesk"]){
+            formatString = @"%.6f %.6f %.6f";
+        }
         else if ([options[@"fileTypeVariant"] isEqualToString:@"Iridas/Adobe"]) {
             [string appendString:[NSString stringWithFormat:@"DOMAIN_MIN %.6f %.6f %.6f\r\n", [lut inputLowerBound], [lut inputLowerBound], [lut inputLowerBound]]];
             [string appendString:[NSString stringWithFormat:@"DOMAIN_MAX %.6f %.6f %.6f\r\n", [lut inputUpperBound], [lut inputUpperBound], [lut inputUpperBound]]];
