@@ -322,8 +322,8 @@ struct LUTFormatterFSIDAT_FileHeader{
 }
 
 + (NSDictionary *)defaultOptions{
-    NSDictionary *dictionary = @{@"fileTypeVariant":@"v2",
-                                 @"lutSize": @(17)};
+    NSDictionary *dictionary = @{@"fileTypeVariant":@"v1",
+                                 @"lutSize": @(64)};
     
     return @{[self formatterID]: dictionary};
 }
