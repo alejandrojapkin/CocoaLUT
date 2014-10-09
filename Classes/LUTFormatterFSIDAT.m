@@ -10,7 +10,7 @@
 
 struct LUTFormatterFSIDAT_FileHeader{
     unsigned int magic; // 4Bytes, must be 0x42340299
-    unsigned int ver; // 4Bytes, 0x01000002 or 0x20000000
+    unsigned int ver; // 4Bytes, 0x01000002 or 0x02000000
     char model[16]; // 16Bytes, monitor model. No match required for DIT LUT.
     char version[16]; // 16Bytes, data version, eg. “1.0.11”
     unsigned int data_checksum; // 4Bytes, data sum
@@ -33,7 +33,7 @@ struct LUTFormatterFSIDAT_FileHeader{
 
     LUT3D *lut;
 
-    if (fileHeader.ver < 0x20000000) {
+    if (fileHeader.ver < 0x02000000) {
         unsigned int lutBytes[64*64*64];
 
         [data getBytes:lutBytes range:NSMakeRange(128, sizeof(lutBytes))];
@@ -60,7 +60,7 @@ struct LUTFormatterFSIDAT_FileHeader{
         lut.passthroughFileOptions = @{[self formatterID]: @{@"fileTypeVariant": @"v1",
                                                              @"lutSize": @(64)}};
     }
-    else if (fileHeader.ver == 0x20000000) {
+    else if (fileHeader.ver == 0x02000000) {
         unsigned int lutBytes[17*17*17];
 
         [data getBytes:lutBytes range:NSMakeRange(128, sizeof(lutBytes))];
@@ -69,7 +69,7 @@ struct LUTFormatterFSIDAT_FileHeader{
 
         for (int currentCubeIndex = 0; currentCubeIndex < 17*17*17; currentCubeIndex++) {
             // Valid cube line
-            unsigned int rgbPacked = lutBytes[currentCubeIndex];
+            unsigned int rgbPacked = CFSwapInt32(lutBytes[currentCubeIndex]);
 
             LUTColorValue redValue = (double)(rgbPacked & 1023) / 1023.0;
             LUTColorValue greenValue = (double)((rgbPacked >> 10) & 1023) / 1023.0;
@@ -140,9 +140,9 @@ struct LUTFormatterFSIDAT_FileHeader{
         LUTColor *color = [lut colorAtR:redIndex g:greenIndex b:blueIndex];
 
 
-        unsigned int rgbPacked = (unsigned int)(color.red * 1023.0) | ((unsigned int)(color.green * 1023.0) << 10) | ((unsigned int)(color.blue * 1023.0) << 20);
+        unsigned int rgbPacked = (unsigned int)round(color.red * 1023.0) | ((unsigned int)round(color.green * 1023.0) << 10) | ((unsigned int)round(color.blue * 1023.0) << 20);
 
-        lutBytes[currentCubeIndex] = rgbPacked;
+        lutBytes[currentCubeIndex] = CFSwapInt32(rgbPacked);
     }
 
     //--end LUT
@@ -152,7 +152,7 @@ struct LUTFormatterFSIDAT_FileHeader{
 
     //set constants in header
     fileHeader.magic = 0x42340299;
-    fileHeader.ver = 0x20000000;
+    fileHeader.ver = 0x02000000;
     fileHeader.length = 17*17*17*4;
     strncpy(fileHeader.reserved, "", sizeof(fileHeader.reserved));
 
