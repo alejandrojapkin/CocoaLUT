@@ -33,7 +33,7 @@ struct LUTFormatterFSIDAT_FileHeader{
 
     LUT3D *lut;
 
-    if (fileHeader.ver == 0x01000002) {
+    if (fileHeader.ver < 0x20000000) {
         unsigned int lutBytes[64*64*64];
 
         [data getBytes:lutBytes range:NSMakeRange(128, sizeof(lutBytes))];
