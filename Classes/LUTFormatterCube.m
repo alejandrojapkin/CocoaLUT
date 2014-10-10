@@ -335,6 +335,9 @@
             [string appendString:[NSString stringWithFormat:@"LUT_1D_INPUT_RANGE %.12f %.12f\r\n", [lut inputLowerBound], [lut inputUpperBound]]];
             formatString = @"%.12f %.12f %.12f";
         }
+        else if ([options[@"fileTypeVariant"] isEqualToString:@"Nuke/Autodesk"]){
+            formatString = @"%.6f %.6f %.6f";
+        }
         else if ([options[@"fileTypeVariant"] isEqualToString:@"Resolve"]) {
             [string appendString:[NSString stringWithFormat:@"LUT_1D_INPUT_RANGE %.6f %.6f\r\n", [lut inputLowerBound], [lut inputUpperBound]]];
             formatString = @"%.10f %.10f %.10f";
