@@ -322,21 +322,21 @@
 + (instancetype)sLog2TransferFunction {
     return [LUTColorTransferFunction LUTColorTransferFunctionWithTransformedToLinearBlock1D:^double(double value){
         value = clamp(value, 0.0, 1.0);
-        double valueAsInt = (4095.0*value);
-        if (valueAsInt < 360.0){
-            return ((( valueAsInt - 256.0) / (3760.0 - 256.0) - 0.030001222851889303) / 3.53881278538813) * 0.9;
+        double valueAsInt = (1023.0*value);
+        if (valueAsInt < 90.0/1023.0){
+            return ((valueAsInt-64.0)/(940.0-64.0)-0.030001222851889303)/3.53881278538813*0.9;
         }
         else{
-            return (219. * (pow(10., (((valueAsInt - 256.0) / (3760.0 - 256.0) - 0.616596 - 0.03) / 0.432699)) - 0.037584) / 155.0);
+            return (219.0*(pow(10.0, (((valueAsInt-64.0)/(940.0-64.0)-0.616596-0.03)/0.432699))-0.037584)/155.0)*0.9;
         }
 }
                                                                  linearToTransformedBlock1D:^double(double value){
          double output;
-         if(value < -0.0000816013){
-             output = (13777.8*value + 361.124)/4096.0;
+         if(value < -0.0261851){
+             output = (3444.44*value+90.2811)/1023.0;
          }
          else{
-             output = (658.467 * log(32.5886*value + 1.73054))/4096.0;
+             output = (164.617*log(1.73054+36.2095*value)) / 1023.0;
          }
          return clamp(output, 0, 1);
                                                                  }
