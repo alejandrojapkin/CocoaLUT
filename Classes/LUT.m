@@ -430,7 +430,7 @@
     //good for viewing, not good for render
     //return [self coreImageFilterWithColorSpace:[[[NSScreen mainScreen] colorSpace] CGColorSpace]];
     #endif
-    CGColorSpaceRelease(colorspace);
+    //CGColorSpaceRelease(colorspace);
     return filter;
 }
 
