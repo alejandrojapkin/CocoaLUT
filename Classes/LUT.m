@@ -420,14 +420,18 @@
 }
 
 - (CIFilter *)coreImageFilterWithCurrentColorSpace {
+    CIFilter *filter;
+    CGColorSpaceRef colorspace = CGColorSpaceCreateDeviceRGB();
     #if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR
-    return [self coreImageFilterWithColorSpace:CGColorSpaceCreateDeviceRGB()];
+    filter = [self coreImageFilterWithColorSpace:colorspace];
     #elif TARGET_OS_MAC
     //good for render, not good for viewing
-    return [self coreImageFilterWithColorSpace:CGColorSpaceCreateDeviceRGB()];
+    filter = [self coreImageFilterWithColorSpace:colorspace];
     //good for viewing, not good for render
     //return [self coreImageFilterWithColorSpace:[[[NSScreen mainScreen] colorSpace] CGColorSpace]];
     #endif
+    CGColorSpaceRelease(colorspace);
+    return filter;
 }
 
 - (CIFilter *)coreImageFilterWithColorSpace:(CGColorSpaceRef)colorSpace {
