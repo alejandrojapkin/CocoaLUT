@@ -50,6 +50,7 @@ NSInteger findFirstLUTLineInLines(NSArray *lines, NSString *seperator, int numVa
 NSInteger findFirstLUTLineInLinesWithWhitespaceSeparators(NSArray *lines, int numValues, int startLine);
 
 NSNumberFormatter* sharedNumberFormatter();
+NSCharacterSet* sharedInvertedNumericCharacterSet();
 BOOL stringIsValidNumber(NSString *string);
 
 BOOL isLUT1D(LUT* lut);
