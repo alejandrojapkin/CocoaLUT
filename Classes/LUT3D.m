@@ -113,6 +113,36 @@
     return lut1D;
 }
 
+- (instancetype)LUT3DByApplyingColorMatrixColumnMajorM00:(double)m00
+                                                     m01:(double)m01
+                                                     m02:(double)m02
+                                                     m10:(double)m10
+                                                     m11:(double)m11
+                                                     m12:(double)m12
+                                                     m20:(double)m20
+                                                     m21:(double)m21
+                                                     m22:(double)m22{
+    LUT3D *newLUT = [LUT3D LUTOfSize:[self size] inputLowerBound:[self inputLowerBound] inputUpperBound:[self inputUpperBound]];
+    [newLUT copyMetaPropertiesFromLUT:self];
+
+    [newLUT LUTLoopWithBlock:^(size_t r, size_t g, size_t b) {
+        [newLUT setColor:[[self colorAtR:r g:g b:b] colorByApplyingColorMatrixColumnMajorM00:m00
+                                                                                         m01:m01
+                                                                                         m02:m02
+                                                                                         m10:m10
+                                                                                         m11:m11
+                                                                                         m12:m12
+                                                                                         m20:m20
+                                                                                         m21:m21
+                                                                                         m22:m22]
+                       r:r
+                       g:g
+                       b:b];
+    }];
+
+    return newLUT;
+}
+
 - (instancetype)LUT3DBySwizzling1DChannelsWithMethod:(LUT1DSwizzleChannelsMethod)method
                                         strictness:(BOOL)strictness{
     if(![[self LUT1D] isReversibleWithStrictness:strictness]){

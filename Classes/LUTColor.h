@@ -98,6 +98,16 @@ typedef double LUTColorValue;
                                      outputHigh:(LUTColor *)outputHighColor
                                         bounded:(BOOL)bounded;
 
+- (LUTColor *)colorByApplyingColorMatrixColumnMajorM00:(double)m00
+                                                   m01:(double)m01
+                                                   m02:(double)m02
+                                                   m10:(double)m10
+                                                   m11:(double)m11
+                                                   m12:(double)m12
+                                                   m20:(double)m20
+                                                   m21:(double)m21
+                                                   m22:(double)m22;
+
 - (LUTColor *)colorByMultiplyingByNumber:(double)number;
 - (LUTColor *)colorByMultiplyingColor:(LUTColor *)offsetColor;
 - (LUTColor *)colorByAddingColor:(LUTColor *)offsetColor;

@@ -8,6 +8,7 @@
 
 #import "LUTColor.h"
 #import "LUTHelper.h"
+#import <GLKit/GLKit.h>
 
 #define LUT_COLOR_EQUALITY_ERROR_MARGIN .0005
 
@@ -185,6 +186,21 @@
                                  blue:remap(self.blue, inputLowColor.blue, inputHighColor.blue, outputLowColor.blue, outputHighColor.blue)];
     }
     
+}
+
+- (LUTColor *)colorByApplyingColorMatrixColumnMajorM00:(double)m00
+                                                   m01:(double)m01
+                                                   m02:(double)m02
+                                                   m10:(double)m10
+                                                   m11:(double)m11
+                                                   m12:(double)m12
+                                                   m20:(double)m20
+                                                   m21:(double)m21
+                                                   m22:(double)m22{
+    GLKMatrix3 matrix = GLKMatrix3Make(m00, m01, m02, m10, m11, m12, m20, m21, m22);
+    GLKVector3 result = GLKMatrix3MultiplyVector3(matrix, GLKVector3Make(self.red, self.green, self.blue));
+
+    return [LUTColor colorWithRed:result.x green:result.y blue:result.z];
 }
 
 - (double)distanceToColor:(LUTColor *)otherColor{

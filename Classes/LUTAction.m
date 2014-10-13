@@ -177,6 +177,45 @@
                        actionMetadata:actionMetadata];
 }
 
++(instancetype)actionWithLUT3DByApplyingColorMatrixColumnMajorM00:(double)m00
+                                                              m01:(double)m01
+                                                              m02:(double)m02
+                                                              m10:(double)m10
+                                                              m11:(double)m11
+                                                              m12:(double)m12
+                                                              m20:(double)m20
+                                                              m21:(double)m21
+                                                              m22:(double)m22{
+
+    M13OrderedDictionary *actionMetadata =
+    M13OrderedDictionaryFromOrderedArrayWithDictionaries(@[@{@"id":@"ApplyColorMatrix"},
+                                                           @{@"m00": @(m00)},
+                                                           @{@"m01": @(m01)},
+                                                           @{@"m02": @(m02)},
+                                                           @{@"m10": @(m10)},
+                                                           @{@"m11": @(m11)},
+                                                           @{@"m12": @(m12)},
+                                                           @{@"m20": @(m20)},
+                                                           @{@"m21": @(m21)},
+                                                           @{@"m22": @(m22)}]);
+
+    return [LUTAction actionWithBlock:^LUT *(LUT *lut) {
+        return [(LUT3D *)lut LUT3DByApplyingColorMatrixColumnMajorM00:m00
+                                                                  m01:m01
+                                                                  m02:m02
+                                                                  m10:m10
+                                                                  m11:m11
+                                                                  m12:m12
+                                                                  m20:m20
+                                                                  m21:m21
+                                                                  m22:m22];
+    }
+                           actionName:[NSString stringWithFormat:@"Apply Color Matrix"]
+                       actionMetadata:actionMetadata];
+
+}
+
+
 +(instancetype)actionWithLUTByRemappingValuesWithInputLow:(double)inputLow
                                                 inputHigh:(double)inputHigh
                                                 outputLow:(double)outputLow
