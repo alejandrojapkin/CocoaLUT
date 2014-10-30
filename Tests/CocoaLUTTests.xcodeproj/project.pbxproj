@@ -59,8 +59,9 @@
 		3BFB66D1195BE49E00AE52EC /* halfred_iridas.cube */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = halfred_iridas.cube; sourceTree = "<group>"; };
 		3BFB66D2195BE49E00AE52EC /* iridas.cube */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = iridas.cube; sourceTree = "<group>"; };
 		3BFB66D3195BE49E00AE52EC /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
-		70516F50A4B64FACA1F81F7F /* Pods-CocoaLUTTests.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CocoaLUTTests.xcconfig"; path = "Pods/Pods-CocoaLUTTests.xcconfig"; sourceTree = "<group>"; };
+		BB6C5D06C5730D37A4CBB1D3 /* Pods-CocoaLUTTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CocoaLUTTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-CocoaLUTTests/Pods-CocoaLUTTests.debug.xcconfig"; sourceTree = "<group>"; };
 		C332C2F4418541818D65F478 /* libPods-CocoaLUTTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-CocoaLUTTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		C5C0107A5E37FA8088AABEAB /* Pods-CocoaLUTTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CocoaLUTTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-CocoaLUTTests/Pods-CocoaLUTTests.release.xcconfig"; sourceTree = "<group>"; };
 		F212837319C7C46E00DDA26C /* identity_HaldCLUT36.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = identity_HaldCLUT36.tiff; sourceTree = "<group>"; };
 		F212837519C7C52100DDA26C /* identity_DaVinciResolve1024_1D.cube */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = identity_DaVinciResolve1024_1D.cube; sourceTree = "<group>"; };
 		F23F458319806F410014001E /* TransformAccuracyTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TransformAccuracyTests.m; sourceTree = "<group>"; };
@@ -101,6 +102,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0A5CA9A1CD3B8F647EF3669C /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				BB6C5D06C5730D37A4CBB1D3 /* Pods-CocoaLUTTests.debug.xcconfig */,
+				C5C0107A5E37FA8088AABEAB /* Pods-CocoaLUTTests.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 		3BFB66AB195BE42700AE52EC = {
 			isa = PBXGroup;
 			children = (
@@ -108,7 +118,7 @@
 				3BFB66C9195BE49E00AE52EC /* Test LUTs */,
 				3BFB66B8195BE44A00AE52EC /* Frameworks */,
 				3BFB66B7195BE44A00AE52EC /* Products */,
-				70516F50A4B64FACA1F81F7F /* Pods-CocoaLUTTests.xcconfig */,
+				0A5CA9A1CD3B8F647EF3669C /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -247,7 +257,7 @@
 		3BFB66AC195BE42700AE52EC /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0510;
+				LastUpgradeCheck = 0610;
 			};
 			buildConfigurationList = 3BFB66AF195BE42700AE52EC /* Build configuration list for PBXProject "CocoaLUTTests" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -319,7 +329,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Pods-CocoaLUTTests-resources.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-CocoaLUTTests/Pods-CocoaLUTTests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		2CAE76B913E242FE9696157C /* Check Pods Manifest.lock */ = {
@@ -368,6 +378,7 @@
 		3BFB66B0195BE42700AE52EC /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ONLY_ACTIVE_ARCH = YES;
 			};
 			name = Debug;
 		};
@@ -379,7 +390,7 @@
 		};
 		3BFB66C5195BE44A00AE52EC /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 70516F50A4B64FACA1F81F7F /* Pods-CocoaLUTTests.xcconfig */;
+			baseConfigurationReference = BB6C5D06C5730D37A4CBB1D3 /* Pods-CocoaLUTTests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -394,6 +405,7 @@
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
@@ -429,7 +441,7 @@
 		};
 		3BFB66C6195BE44A00AE52EC /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 70516F50A4B64FACA1F81F7F /* Pods-CocoaLUTTests.xcconfig */;
+			baseConfigurationReference = C5C0107A5E37FA8088AABEAB /* Pods-CocoaLUTTests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -444,6 +456,7 @@
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0510"
+   LastUpgradeVersion = "0610"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "9C4967E7C93443FBB62E15EE"
+               BlueprintIdentifier = "634C58DFD49F56AA704E072A"
                BuildableName = "libPods-CocoaLUTTests.a"
                BlueprintName = "Pods-CocoaLUTTests"
                ReferencedContainer = "container:Pods/Pods.xcodeproj">
@@ -49,6 +49,15 @@
       ignoresPersistentStateOnLaunch = "NO"
       debugDocumentVersioning = "YES"
       allowLocationSimulation = "YES">
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "634C58DFD49F56AA704E072A"
+            BuildableName = "libPods-CocoaLUTTests.a"
+            BlueprintName = "Pods-CocoaLUTTests"
+            ReferencedContainer = "container:Pods/Pods.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
       <AdditionalOptions>
       </AdditionalOptions>
    </LaunchAction>
