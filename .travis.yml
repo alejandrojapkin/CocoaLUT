@@ -4,7 +4,7 @@ xcode_scheme: CocoaLUTTests
 before_script:
   - sudo easy_install cpp-coveralls
 before_install:
-  - gem install cocoapods -v '0.32.1' --no-rdoc --no-ri
+  - gem install cocoapods --no-rdoc --no-ri
   - pod repo remove master
   - pod setup
 install:
