@@ -104,7 +104,7 @@
                     else if(rightSideLength == 10){
                         passthroughFileOptions[@"fileTypeVariant"] = @"Resolve";
                     }
-                    else if(rightSideLength == 6){
+                    else{
                         passthroughFileOptions[@"fileTypeVariant"] = @"Resolve Legacy";
                     }
                 }
@@ -135,7 +135,7 @@
                     else if(rightSideLength == 10){
                         passthroughFileOptions[@"fileTypeVariant"] = @"Resolve";
                     }
-                    else if(rightSideLength == 6){
+                    else{
                         passthroughFileOptions[@"fileTypeVariant"] = @"Resolve Legacy";
                     }
                 }
@@ -209,7 +209,7 @@
     double inputUpperBound;
 
     if(data[@"inputLowerBound"] == nil && data[@"inputUpperBound"] == nil){
-        passthroughFileOptions[@"fileTypeVariant"] = @"Nuke";
+        passthroughFileOptions[@"fileTypeVariant"] = @"Resolve Legacy";
         inputLowerBound = 0;
         inputUpperBound = 1;
     }
@@ -335,15 +335,18 @@
             [string appendString:[NSString stringWithFormat:@"LUT_1D_INPUT_RANGE %.12f %.12f\r\n", [lut inputLowerBound], [lut inputUpperBound]]];
             formatString = @"%.12f %.12f %.12f";
         }
-        else if ([options[@"fileTypeVariant"] isEqualToString:@"Nuke/Autodesk"]){
-            formatString = @"%.6f %.6f %.6f";
-        }
         else if ([options[@"fileTypeVariant"] isEqualToString:@"Resolve"]) {
             [string appendString:[NSString stringWithFormat:@"LUT_1D_INPUT_RANGE %.6f %.6f\r\n", [lut inputLowerBound], [lut inputUpperBound]]];
             formatString = @"%.10f %.10f %.10f";
         }
         else if ([options[@"fileTypeVariant"] isEqualToString:@"Resolve Legacy"]) {
-            [string appendString:[NSString stringWithFormat:@"LUT_1D_INPUT_RANGE %.6f %.6f\r\n", [lut inputLowerBound], [lut inputUpperBound]]];
+            if ([lut inputLowerBound] == 0.0 || [lut inputUpperBound] == 1.0) {
+                //do nothing
+            }
+            else{
+                [string appendString:[NSString stringWithFormat:@"LUT_1D_INPUT_RANGE %.6f %.6f\r\n", [lut inputLowerBound], [lut inputUpperBound]]];
+            }
+            
             formatString = @"%.6f %.6f %.6f";
         }
         else if ([options[@"fileTypeVariant"] isEqualToString:@"Iridas/Adobe"]) {
@@ -378,10 +381,13 @@
             formatString = @"%.10f %.10f %.10f";
         }
         else if ([options[@"fileTypeVariant"] isEqualToString:@"Resolve Legacy"]) {
-            [string appendString:[NSString stringWithFormat:@"LUT_3D_INPUT_RANGE %.6f %.6f\r\n", [lut inputLowerBound], [lut inputUpperBound]]];
-            formatString = @"%.6f %.6f %.6f";
-        }
-        else if ([options[@"fileTypeVariant"] isEqualToString:@"Nuke/Autodesk"]){
+            if ([lut inputLowerBound] == 0.0 || [lut inputUpperBound] == 1.0) {
+                //do nothing
+            }
+            else{
+                [string appendString:[NSString stringWithFormat:@"LUT_3D_INPUT_RANGE %f %f\r\n", [lut inputLowerBound], [lut inputUpperBound]]];
+            }
+            
             formatString = @"%.6f %.6f %.6f";
         }
         else if ([options[@"fileTypeVariant"] isEqualToString:@"Iridas/Adobe"]) {
@@ -417,8 +423,6 @@
 
 + (NSArray *)allOptions{
 
-    NSDictionary *nukeOptions = @{@"fileTypeVariant":@"Nuke/Autodesk"};
-
     NSDictionary *resolveOptions = @{@"fileTypeVariant":@"Resolve"};
 
     NSDictionary *resolveLegacyOptions = @{@"fileTypeVariant":@"Resolve Legacy"};
@@ -427,21 +431,7 @@
 
     NSDictionary *highPrecisionOptions = @{@"fileTypeVariant":@"High Precision"};
 
-    return @[resolveOptions, resolveLegacyOptions, nukeOptions, iridasAdobeOptions, highPrecisionOptions];
-}
-
-+ (NSArray *)conformanceLUTActionsForLUT:(LUT *)lut options:(NSDictionary *)options{
-    NSMutableArray *array = [NSMutableArray arrayWithArray:[super conformanceLUTActionsForLUT:lut options:options]];
-    //options are validated by superclass, no need to do that here.
-
-    NSDictionary *exposedOptions = options[[self formatterID]];
-    if ([exposedOptions[@"fileTypeVariant"] isEqualToString:@"Nuke"]) {
-        if(lut.inputLowerBound != 0 || lut.inputUpperBound != 1){
-            [array addObject:[LUTAction actionWithLUTByChangingInputLowerBound:0 inputUpperBound:1]];
-        }
-    }
-
-    return array.count == 0 ? nil : array;
+    return @[resolveOptions, resolveLegacyOptions, iridasAdobeOptions, highPrecisionOptions];
 }
 
 + (NSDictionary *)defaultOptions{
@@ -480,7 +470,8 @@
 }
 
 + (NSDictionary *)constantConstraints{
-    return @{@"outputBounds":@[[NSNull null], [NSNull null]]};
+    return @{@"inputBounds":@[[NSNull null], [NSNull null]],
+             @"outputBounds":@[[NSNull null], [NSNull null]]};
 }
 
 @end
