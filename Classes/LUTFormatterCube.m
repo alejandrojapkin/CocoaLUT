@@ -209,7 +209,24 @@
     double inputUpperBound;
 
     if(data[@"inputLowerBound"] == nil && data[@"inputUpperBound"] == nil){
-        passthroughFileOptions[@"fileTypeVariant"] = @"Resolve Legacy";
+        
+        
+        NSArray *splitLine = [lines[cubeLinesStartIndex] componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+        if ([splitLine[0] rangeOfString:@"."].location == NSNotFound ) {
+            passthroughFileOptions[@"fileTypeVariant"] = @"Resolve Legacy";
+        }
+        else{
+            NSUInteger rightSideLength = [[splitLine[0] componentsSeparatedByString:@"."][1] length];
+            
+            if(rightSideLength == 10){
+                passthroughFileOptions[@"fileTypeVariant"] = @"Resolve";
+            }
+            else{
+                passthroughFileOptions[@"fileTypeVariant"] = @"Resolve Legacy";
+            }
+        }
+        
+        
         inputLowerBound = 0;
         inputUpperBound = 1;
     }
@@ -336,11 +353,16 @@
             formatString = @"%.12f %.12f %.12f";
         }
         else if ([options[@"fileTypeVariant"] isEqualToString:@"Resolve"]) {
-            [string appendString:[NSString stringWithFormat:@"LUT_1D_INPUT_RANGE %.6f %.6f\r\n", [lut inputLowerBound], [lut inputUpperBound]]];
+            if ([lut inputLowerBound] == 0.0 && [lut inputUpperBound] == 1.0) {
+                //do nothing
+            }
+            else{
+                [string appendString:[NSString stringWithFormat:@"LUT_1D_INPUT_RANGE %.10f %.10f\r\n", [lut inputLowerBound], [lut inputUpperBound]]];
+            }
             formatString = @"%.10f %.10f %.10f";
         }
         else if ([options[@"fileTypeVariant"] isEqualToString:@"Resolve Legacy"]) {
-            if ([lut inputLowerBound] == 0.0 || [lut inputUpperBound] == 1.0) {
+            if ([lut inputLowerBound] == 0.0 && [lut inputUpperBound] == 1.0) {
                 //do nothing
             }
             else{
@@ -377,15 +399,21 @@
             formatString = @"%.12f %.12f %.12f";
         }
         else if ([options[@"fileTypeVariant"] isEqualToString:@"Resolve"]) {
-            [string appendString:[NSString stringWithFormat:@"LUT_3D_INPUT_RANGE %.10f %.10f\r\n", [lut inputLowerBound], [lut inputUpperBound]]];
-            formatString = @"%.10f %.10f %.10f";
-        }
-        else if ([options[@"fileTypeVariant"] isEqualToString:@"Resolve Legacy"]) {
-            if ([lut inputLowerBound] == 0.0 || [lut inputUpperBound] == 1.0) {
+            if ([lut inputLowerBound] == 0.0 && [lut inputUpperBound] == 1.0) {
                 //do nothing
             }
             else{
-                [string appendString:[NSString stringWithFormat:@"LUT_3D_INPUT_RANGE %f %f\r\n", [lut inputLowerBound], [lut inputUpperBound]]];
+                [string appendString:[NSString stringWithFormat:@"LUT_3D_INPUT_RANGE %.10f %.10f\r\n", [lut inputLowerBound], [lut inputUpperBound]]];
+            }
+            
+            formatString = @"%.10f %.10f %.10f";
+        }
+        else if ([options[@"fileTypeVariant"] isEqualToString:@"Resolve Legacy"]) {
+            if ([lut inputLowerBound] == 0.0 && [lut inputUpperBound] == 1.0) {
+                //do nothing
+            }
+            else{
+                [string appendString:[NSString stringWithFormat:@"LUT_3D_INPUT_RANGE %.6f %.6f\r\n", [lut inputLowerBound], [lut inputUpperBound]]];
             }
             
             formatString = @"%.6f %.6f %.6f";
