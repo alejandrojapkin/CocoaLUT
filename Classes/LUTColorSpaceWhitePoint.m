@@ -40,6 +40,7 @@
     NSArray *allKnownWhitePoints = @[[self d65WhitePoint],
                                      [self d60WhitePoint],
                                      [self d55WhitePoint],
+                                     [self d50WhitePoint],
                                      [self dciWhitePoint],
                                      [self xyzWhitePoint]];
 
@@ -122,6 +123,12 @@
     return [self whitePointWithWhiteChromaticityX:0.33242
                                whiteChromaticityY:0.34743
                                              name:@"D55"];
+}
+
++ (instancetype)d50WhitePoint{
+    return [self whitePointWithWhiteChromaticityX:0.34567
+                               whiteChromaticityY:0.35850
+                                             name:@"D50"];
 }
 
 + (instancetype)dciWhitePoint{
