@@ -275,8 +275,6 @@ forwardFootlambertCompensation:(double)flCompensation
     NSArray *allKnownColorSpaces = @[[self rec709ColorSpace],
                                      [self dciP3ColorSpace],
                                      [self rec2020ColorSpace],
-                                     [self adobeRGBColorSpace],
-                                     [self proPhotoRGBColorSpace],
                                      [self alexaWideGamutColorSpace],
                                      [self sGamut3CineColorSpace],
                                      [self sGamutColorSpace],
@@ -287,7 +285,9 @@ forwardFootlambertCompensation:(double)flCompensation
                                      [self dragonColorColorSpace],
                                      [self acesGamutColorSpace],
                                      [self dciXYZColorSpace],
-                                     [self xyzColorSpace]];
+                                     [self xyzColorSpace],
+                                     [self adobeRGBColorSpace],
+                                     [self proPhotoRGBColorSpace]];
 
     return allKnownColorSpaces;
 }
