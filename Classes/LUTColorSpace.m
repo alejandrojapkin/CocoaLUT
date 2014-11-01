@@ -276,6 +276,7 @@ forwardFootlambertCompensation:(double)flCompensation
                                      [self dciP3ColorSpace],
                                      [self rec2020ColorSpace],
                                      [self adobeRGBColorSpace],
+                                     [self proPhotoRGBColorSpace],
                                      [self alexaWideGamutColorSpace],
                                      [self sGamut3CineColorSpace],
                                      [self sGamutColorSpace],
@@ -356,6 +357,17 @@ forwardFootlambertCompensation:(double)flCompensation
                                   blueChromaticityX:0.083009416684
                                   blueChromaticityY:-0.050780628080
                                                name:@"DRAGONcolor"];
+}
+
++ (instancetype)proPhotoRGBColorSpace{
+    return [self LUTColorSpaceWithDefaultWhitePoint:[LUTColorSpaceWhitePoint d65WhitePoint]
+                                   redChromaticityX:0.7347
+                                   redChromaticityY:0.2653
+                                 greenChromaticityX:0.1596
+                                 greenChromaticityY:0.8404
+                                  blueChromaticityX:0.0366
+                                  blueChromaticityY:0.0001
+                                               name:@"ProPhoto RGB"];
 }
 
 + (instancetype)adobeRGBColorSpace{
