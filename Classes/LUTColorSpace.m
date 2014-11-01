@@ -279,6 +279,11 @@ forwardFootlambertCompensation:(double)flCompensation
                                      [self alexaWideGamutColorSpace],
                                      [self sGamut3CineColorSpace],
                                      [self sGamutColorSpace],
+                                     [self bmccColorSpace],
+                                     [self redColorColorSpace],
+                                     [self redColor2ColorSpace],
+                                     [self redColor3ColorSpace],
+                                     [self dragonColorColorSpace],
                                      [self acesGamutColorSpace],
                                      [self dciXYZColorSpace],
                                      [self xyzColorSpace]];
@@ -296,6 +301,61 @@ forwardFootlambertCompensation:(double)flCompensation
                                   blueChromaticityX:0.15
                                   blueChromaticityY:0.06
                                                name:@"Rec. 709"];
+}
+
++ (instancetype)bmccColorSpace{
+    return [self LUTColorSpaceWithDefaultWhitePoint:[LUTColorSpaceWhitePoint d65WhitePoint]
+                                   redChromaticityX:0.901885370853
+                                   redChromaticityY:0.249059467640
+                                 greenChromaticityX:0.280038809783
+                                 greenChromaticityY:1.535129255560
+                                  blueChromaticityX:0.078873341398
+                                  blueChromaticityY:-0.082629719848
+                                               name:@"BMCC"];
+}
+
++ (instancetype)redColorColorSpace{
+    return [self LUTColorSpaceWithDefaultWhitePoint:[LUTColorSpaceWhitePoint d65WhitePoint]
+                                   redChromaticityX:0.682235759294
+                                   redChromaticityY:0.320973856307
+                                 greenChromaticityX:0.295705729612
+                                 greenChromaticityY:0.613311106957
+                                  blueChromaticityX:0.134524597085
+                                  blueChromaticityY:0.034410956920
+                                               name:@"REDcolor"];
+}
+
++ (instancetype)redColor2ColorSpace{
+    return [self LUTColorSpaceWithDefaultWhitePoint:[LUTColorSpaceWhitePoint d65WhitePoint]
+                                   redChromaticityX:0.858485322390
+                                   redChromaticityY:0.316594954144
+                                 greenChromaticityX:0.292084791425
+                                 greenChromaticityY:0.667838655872
+                                  blueChromaticityX:0.097651412967
+                                  blueChromaticityY:-0.026565653796
+                                               name:@"REDcolor2"];
+}
+
++ (instancetype)redColor3ColorSpace{
+    return [self LUTColorSpaceWithDefaultWhitePoint:[LUTColorSpaceWhitePoint d65WhitePoint]
+                                   redChromaticityX:0.682450885401
+                                   redChromaticityY:0.320302618634
+                                 greenChromaticityX:0.291813306036
+                                 greenChromaticityY:0.672642663443
+                                  blueChromaticityX:0.109533374066
+                                  blueChromaticityY:-0.006916855752
+                                               name:@"REDcolor3"];
+}
+
++ (instancetype)dragonColorColorSpace{
+    return [self LUTColorSpaceWithDefaultWhitePoint:[LUTColorSpaceWhitePoint d65WhitePoint]
+                                   redChromaticityX:0.733696621349
+                                   redChromaticityY:0.319213119879
+                                 greenChromaticityX:0.290807268864
+                                 greenChromaticityY:0.689667987865
+                                  blueChromaticityX:0.083009416684
+                                  blueChromaticityY:-0.050780628080
+                                               name:@"DRAGONcolor"];
 }
 
 + (instancetype)adobeRGBColorSpace{
