@@ -288,6 +288,10 @@ NSArray* arrayWithEmptyElementsRemoved(NSArray *array){
     return [array filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"SELF != ''"]];
 }
 
+NSArray* arrayWithComponentsSeperatedByWhitespaceWithEmptyElementsRemoved(NSString *string){
+    return arrayWithEmptyElementsRemoved([string componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]);
+}
+
 NSArray* arrayWithComponentsSeperatedByNewlineAndWhitespaceWithEmptyElementsRemoved(NSString *string){
     return arrayWithEmptyElementsRemoved([string componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]]);
 }

@@ -27,9 +27,10 @@
     BOOL __block isLUT3D = NO;
     BOOL __block isLUT1D = NO;
 
-    NSUInteger cubeLinesStartIndex = findFirstLUTLineInLines(lines, @" ", 3, 0);
+    NSUInteger cubeLinesStartIndex = findFirstLUTLineInLinesWithWhitespaceSeparators(lines, 3, 0);
 
-    if(cubeLinesStartIndex == -1){
+
+    if(cubeLinesStartIndex == NSNotFound){
         @throw [NSException exceptionWithName:@"LUTParserError" reason:@"Couldn't find start of LUT data lines." userInfo:nil];
     }
 
@@ -42,6 +43,8 @@
     for(NSString *untrimmedLine in headerLines){
         NSString *titleMatch;
         NSString *line = [untrimmedLine stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+        NSArray *splitLine = arrayWithComponentsSeperatedByWhitespaceWithEmptyElementsRemoved(line);
+        
         if([line rangeOfString:@"#"].location == NSNotFound){
             if ([line rangeOfString:@"LUT_3D_SIZE"].location != NSNotFound) {
                 isLUT3D = YES;
@@ -51,8 +54,7 @@
                                                    reason:@"Size parameter already once."
                                                  userInfo:nil];
                 }
-
-                NSArray *splitLine = [line componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+                
                 if(splitLine.count == 2 && stringIsValidNumber(splitLine[1])){
                     data[@"cubeSize"] = @([splitLine[1] integerValue]);
 
@@ -72,8 +74,6 @@
                                                  userInfo:nil];
                 }
 
-                NSArray *splitLine = [line componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-
                 if(splitLine.count == 2 && stringIsValidNumber(splitLine[1])){
                     data[@"cubeSize"] = @([splitLine[1] integerValue]);
 
@@ -90,7 +90,6 @@
                                                    reason:@"Input Bounds already defined."
                                                  userInfo:nil];
                 }
-                NSArray *splitLine = [line componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
 
                 if(splitLine.count == 3 && stringIsValidNumber(splitLine[1]) && stringIsValidNumber(splitLine[2])){
                     data[@"inputLowerBound"] = @([splitLine[1] doubleValue]);
@@ -121,7 +120,7 @@
                                                    reason:@"Input Bounds already defined."
                                                  userInfo:nil];
                 }
-                NSArray *splitLine = [line componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+                
 
                 if(splitLine.count == 3 && stringIsValidNumber(splitLine[1]) && stringIsValidNumber(splitLine[2])){
                     data[@"inputLowerBound"] = @([splitLine[1] doubleValue]);
@@ -154,7 +153,7 @@
                                                    reason:@"Input Bound already defined."
                                                  userInfo:nil];
                 }
-                NSArray *splitLine = [line componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+                
                 if(splitLine.count == 4 && [splitLine[1] doubleValue] == [splitLine[2] doubleValue] && [splitLine[1] doubleValue] == [splitLine[3] doubleValue] && stringIsValidNumber(splitLine[1])){
                     data[@"inputLowerBound"] = @([splitLine[1] doubleValue]);
                 }
@@ -173,7 +172,7 @@
                                                    reason:@"Input Bound already defined."
                                                  userInfo:nil];
                 }
-                NSArray *splitLine = [line componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+                
                 if(splitLine.count == 4 && [splitLine[1] doubleValue] == [splitLine[2] doubleValue] && [splitLine[1] doubleValue] == [splitLine[3] doubleValue] && stringIsValidNumber(splitLine[1])){
                     data[@"inputUpperBound"] = @([splitLine[1] doubleValue]);
                 }
@@ -244,8 +243,7 @@
         for (NSString *line in [lines subarrayWithRange:NSMakeRange(cubeLinesStartIndex, lines.count - cubeLinesStartIndex)]) {
 
             if (line.length > 0 && [line rangeOfString:@"#"].location == NSNotFound) {
-                NSArray *splitLine = [line componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-                splitLine = arrayWithEmptyElementsRemoved(splitLine);
+                NSArray *splitLine = arrayWithComponentsSeperatedByWhitespaceWithEmptyElementsRemoved(line);
                 if (splitLine.count == 3) {
                     for(NSString *checkLine in splitLine){
                         if(stringIsValidNumber(checkLine) == NO){

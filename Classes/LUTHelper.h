@@ -42,6 +42,7 @@ double roundValueToNearest(double value, double nearestValue);
 NSUInteger maxIntegerFromBitdepth(NSUInteger bitdepth);
 
 NSArray* arrayWithEmptyElementsRemoved(NSArray *array);
+NSArray* arrayWithComponentsSeperatedByWhitespaceWithEmptyElementsRemoved(NSString *string);
 NSArray* arrayWithComponentsSeperatedByNewlineWithEmptyElementsRemoved(NSString *string);
 NSArray* arrayWithComponentsSeperatedByNewlineAndWhitespaceWithEmptyElementsRemoved(NSString *string);
 NSString* substringBetweenTwoStrings(NSString *originString, NSString *firstString, NSString *secondString);
