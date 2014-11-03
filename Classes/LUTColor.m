@@ -20,9 +20,9 @@
 
 + (instancetype)colorWithRed:(LUTColorValue)r green:(LUTColorValue)g blue:(LUTColorValue)b {
     LUTColor *color = [[LUTColor alloc] init];
-    color.red = isnan(r) ? 0 : r;
-    color.green = isnan(g) ? 0 : g;
-    color.blue = isnan(b) ? 0 : b;
+    color.red = !isfinite(r) ? 0 : r;
+    color.green = !isfinite(g) ? 0 : g;
+    color.blue = !isfinite(b) ? 0 : b;
     return color;
 }
 
@@ -33,6 +33,18 @@
 
 + (instancetype)colorFromIntegersWithMaxOutputValue:(NSUInteger)maxOutputValue red:(NSUInteger)r green:(NSUInteger)g blue:(NSUInteger)b {
     return [LUTColor colorWithRed:nsremapint01(r, maxOutputValue) green:nsremapint01(g, maxOutputValue) blue:nsremapint01(b, maxOutputValue)];
+}
+
+- (void)setRed:(LUTColorValue)red{
+    _red = !isfinite(red) ? 0 : red;
+}
+
+- (void)setGreen:(LUTColorValue)green{
+    _green = !isfinite(green) ? 0 : green;
+}
+
+- (void)setBlue:(LUTColorValue)blue{
+    _blue = !isfinite(blue) ? 0 : blue;
 }
 
 - (LUTColor *)clampedWithLowerBound:(double)lowerBound

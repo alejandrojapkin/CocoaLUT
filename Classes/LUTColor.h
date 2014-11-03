@@ -27,17 +27,17 @@ typedef double LUTColorValue;
 /**
  *  The value of the red channel of the color. Values should be between 0 and 1
  */
-@property (assign) LUTColorValue red;
+@property (assign, nonatomic) LUTColorValue red;
 
 /**
  *  The value of the green channel of the color. Values should be between 0 and 1
  */
-@property (assign) LUTColorValue green;
+@property (assign, nonatomic) LUTColorValue green;
 
 /**
  *  The value of the blue channel of the color. Values should be between 0 and 1
  */
-@property (assign) LUTColorValue blue;
+@property (assign, nonatomic) LUTColorValue blue;
 
 - (NSArray *)rgbArray;
 
