@@ -76,10 +76,10 @@
         for (int i = 0; i < actionsForConformance.count; i++) {
             [conformanceInfo appendString:((LUTAction *)actionsForConformance[0]).actionName];
             if (i+1 != actionsForConformance.count) {
-                [conformanceInfo appendString:@"\r\n"];
+                [conformanceInfo appendString:@"\n"];
             }
         }
-        NSLog(@"LUT requires conformance before saving. Info:\r\n%@", conformanceInfo);
+        NSLog(@"LUT requires conformance before saving. Info:\n%@", conformanceInfo);
         return NO;
     }
     LUT *outputLUT = [self copy];

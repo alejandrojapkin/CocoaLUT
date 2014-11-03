@@ -63,7 +63,7 @@
         int red = (int)(clamp01([lut1D valueAtR:i])*(double)maxIntegerOutput);
         int green = (int)(clamp01([lut1D valueAtG:i])*(double)maxIntegerOutput);
         int blue = (int)(clamp01([lut1D valueAtB:i])*(double)maxIntegerOutput);
-        [string appendString:[NSString stringWithFormat:@"%d,%d,%d,%d,%d,%d\r\n", red, green, blue, red, green, blue]];
+        [string appendString:[NSString stringWithFormat:@"%d,%d,%d,%d,%d,%d\n", red, green, blue, red, green, blue]];
     }
 
     return string;

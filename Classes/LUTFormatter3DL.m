@@ -143,7 +143,7 @@
 
 
     [string appendString: [LUTMetadataFormatter stringFromMetadata:lut.metadata description:lut.descriptionText]];
-    [string appendString:@"\r\n"];
+    [string appendString:@"\n"];
 
     //write header
     if([fileTypeVariant isEqualToString:@"Nuke"] || [fileTypeVariant isEqualToString:@"Legacy"]){
@@ -153,7 +153,7 @@
         else if ([fileTypeVariant isEqualToString:@"Legacy"]){
             [string appendString:[indicesIntegerArrayLegacy(0, 1023, (int)lutSize) componentsJoinedByString:@" "]];
         }
-        [string appendString:@"\r\n"];
+        [string appendString:@"\n"];
     }
     else if([fileTypeVariant isEqualToString:@"Lustre"]){
         double sizeToDepth = log2(lutSize-1);
@@ -162,14 +162,14 @@
             @throw exception;
 
         }
-        [string appendString:@"3DMESH\r\n"];
-        [string appendString:[NSString stringWithFormat:@"Mesh %d %d\r\n", (int)sizeToDepth, (int)log2(integerMaxOutput+1)]];
+        [string appendString:@"3DMESH\n"];
+        [string appendString:[NSString stringWithFormat:@"Mesh %d %d\n", (int)sizeToDepth, (int)log2(integerMaxOutput+1)]];
         [string appendString:[indicesIntegerArrayLegacy(0, 1023, (int) lutSize) componentsJoinedByString:@" "]];
-        [string appendString:@"\r\n"];
+        [string appendString:@"\n"];
 
     }
 
-    [string appendString:@"\r\n"];
+    [string appendString:@"\n"];
 
 
 
@@ -198,7 +198,7 @@
         [string appendString:[NSString stringWithFormat:@"%@ %@ %@", redFormatted, greenFormatted, blueFormatted]];
 
         if(i != arrayLength - 1) {
-            [string appendString:@"\r\n"];
+            [string appendString:@"\n"];
         }
 
     }

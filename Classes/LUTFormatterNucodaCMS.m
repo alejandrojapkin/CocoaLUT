@@ -342,7 +342,7 @@
             LUTColor *color = [lut colorAtR:i g:i b:i];
             [string appendString:[NSString stringWithFormat:@"%.6f  %.6f  %.6f", color.red, color.green, color.blue]];
             if(i != lut.size - 1) {
-                [string appendString:@"\r\n"];
+                [string appendString:@"\n"];
             }
         }
 
@@ -361,7 +361,7 @@
             [string appendString:[NSString stringWithFormat:@"%.6f  %.6f  %.6f", color.red, color.green, color.blue]];
 
             if(i != arrayLength - 1) {
-                [string appendString:@"\r\n"];
+                [string appendString:@"\n"];
             }
             
         }
@@ -383,7 +383,7 @@
 
     //metadata and description write
     [string appendString: [LUTMetadataFormatter stringFromMetadata:lut.metadata description:lut.descriptionText]];
-    [string appendString:@" \r\n"];
+    [string appendString:@" \n"];
 
     NSUInteger nucodaVersion = 0;
     if ([options[@"fileTypeVariant"] isEqualToString:@"Nucoda v1"]) {
@@ -396,31 +396,31 @@
         nucodaVersion = 3;
     }
 
-    [string appendString:[NSString stringWithFormat:@"NUCODA_3D_CUBE %i\r\n\r\n", (int)nucodaVersion]];
+    [string appendString:[NSString stringWithFormat:@"NUCODA_3D_CUBE %i\n\n", (int)nucodaVersion]];
 
     if (lut.title && lut.title.length > 0) {
-        [string appendString:[NSString stringWithFormat:@"TITLE \"%@\"\r\n\r\n", lut.title]];
+        [string appendString:[NSString stringWithFormat:@"TITLE \"%@\"\n\n", lut.title]];
     }
 
     if (isLUT1D(lut)) {
-        [string appendString:[NSString stringWithFormat:@"LUT_1D_SIZE %i\r\n", (int)lut.size]];
+        [string appendString:[NSString stringWithFormat:@"LUT_1D_SIZE %i\n", (int)lut.size]];
         if (nucodaVersion == 3) {
-            [string appendString:[NSString stringWithFormat:@"LUT_1D_INPUT_RANGE %.3f %.3f\r\n", lut.inputLowerBound, lut.inputUpperBound]];
+            [string appendString:[NSString stringWithFormat:@"LUT_1D_INPUT_RANGE %.3f %.3f\n", lut.inputLowerBound, lut.inputUpperBound]];
         }
     }
     else{
         //3D
-        [string appendString:[NSString stringWithFormat:@"LUT_3D_SIZE %i\r\n", (int)lut.size]];
+        [string appendString:[NSString stringWithFormat:@"LUT_3D_SIZE %i\n", (int)lut.size]];
         if (nucodaVersion == 3) {
-            [string appendString:[NSString stringWithFormat:@"LUT_3D_INPUT_RANGE %.3f %.3f\r\n", lut.inputLowerBound, lut.inputUpperBound]];
+            [string appendString:[NSString stringWithFormat:@"LUT_3D_INPUT_RANGE %.3f %.3f\n", lut.inputLowerBound, lut.inputUpperBound]];
         }
     }
 
-    [string appendString:@"\r\n"];
+    [string appendString:@"\n"];
 
     [string appendString:[self lutStringFromLUT:lut]];
 
-    [string appendString:@"\r\n"];
+    [string appendString:@"\n"];
 
     return string;
 }

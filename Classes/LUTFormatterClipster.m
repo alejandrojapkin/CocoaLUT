@@ -95,13 +95,13 @@
     NSUInteger bitDepth = (NSUInteger)(log(integerMaxOutput+1)/log(2));
 
 
-    NSMutableString *xmlString = [NSMutableString stringWithFormat:@"<LUT3D name=\'%@\' N=\'%i\' BitDepth=\'%i\'>\r\n", lut.title, (int)lutSize, (int)bitDepth];
+    NSMutableString *xmlString = [NSMutableString stringWithFormat:@"<LUT3D name=\'%@\' N=\'%i\' BitDepth=\'%i\'>\n", lut.title, (int)lutSize, (int)bitDepth];
 
     NSUInteger arrayLength = lut.size * lut.size * lut.size;
 
 
 
-    [xmlString appendString:@"<values>\r\n"];
+    [xmlString appendString:@"<values>\n"];
     for (int i = 0; i < arrayLength; i++) {
         int redIndex = i / (lutSize * lutSize);
         int greenIndex = ((i % (lutSize * lutSize)) / (lutSize) );
@@ -113,11 +113,11 @@
         [xmlString appendString:[NSString stringWithFormat:@"%i %i %i", (int)(color.red*(double)integerMaxOutput), (int)(color.green*(double)integerMaxOutput), (int)(color.blue*(double)integerMaxOutput)]];
 
         if(i != arrayLength - 1) {
-            [xmlString appendString:@"\r\n"];
+            [xmlString appendString:@"\n"];
         }
         
     }
-    [xmlString appendString:@"</values>\r\n"];
+    [xmlString appendString:@"</values>\n"];
     [xmlString appendString:@"</LUT3D>"];
     return xmlString;
 }

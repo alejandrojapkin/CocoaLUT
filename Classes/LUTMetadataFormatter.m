@@ -36,7 +36,7 @@
 
             if (!isKeyValue) {
                 [description appendString:comment];
-                [description appendString:@"\r\n"];
+                [description appendString:@"\n"];
             }
         }
     }
@@ -51,14 +51,14 @@
 
     if (description && description.length > 0) {
         for (NSString *line in [description componentsSeparatedByCharactersInSet:NSCharacterSet.newlineCharacterSet]) {
-            [string appendString:[NSString stringWithFormat:@"# %@\r\n", line]];
+            [string appendString:[NSString stringWithFormat:@"# %@\n", line]];
         }
-        [string appendString:@"\r\n"];
+        [string appendString:@"\n"];
     }
 
     if (metadata && metadata.count > 0) {
         for (NSString *key in metadata) {
-            [string appendString:[NSString stringWithFormat:@"# %@: %@\r\n", key, metadata[key]]];
+            [string appendString:[NSString stringWithFormat:@"# %@: %@\n", key, metadata[key]]];
         }
     }
 
