@@ -400,12 +400,70 @@
 
 //000
 
-- (bool) equalsIdentityLUT{
+- (bool)equalsIdentityLUT{
     return [self equalsLUT:[[self class] LUTIdentityOfSize:[self size] inputLowerBound:[self inputLowerBound] inputUpperBound:[self inputUpperBound]]];
 }
 
 - (bool)equalsLUT:(LUT *)comparisonLUT{
     @throw [NSException exceptionWithName:@"NotImplemented" reason:[NSString stringWithFormat:@"\"%s\" Not Implemented", __func__] userInfo:nil];
+}
+
+- (bool)equalsLUTEssence:(LUT *)comparisonLUT
+             compareType:(bool)compareType
+             compareSize:(bool)compareSize
+      compareInputBounds:(bool)compareInputBounds{
+    if (compareType && ((isLUT1D(self) && !isLUT1D(comparisonLUT)) || (isLUT3D(self) && !isLUT3D(comparisonLUT)))) {
+        return NO;
+    }
+    if (compareSize && self.size != comparisonLUT.size) {
+        return NO;
+    }
+    if (compareInputBounds && (self.inputLowerBound != comparisonLUT.inputLowerBound || self.inputUpperBound != comparisonLUT.inputUpperBound)) {
+        return NO;
+    }
+    return YES;
+}
+
+- (LUTColor *)meanAbsoluteError:(LUT *)comparisonLUT{
+    if (![self equalsLUTEssence:comparisonLUT
+                    compareType:YES
+                    compareSize:YES
+             compareInputBounds:YES]) {
+        return nil;
+    }
+    
+    
+    LUT *absoluteErrorLUT = [self.class LUTOfSize:self.size inputLowerBound:self.inputLowerBound inputUpperBound:self.inputUpperBound];
+    
+    [absoluteErrorLUT LUTLoopWithBlock:^(size_t r, size_t g, size_t b) {
+        LUTColor *selfColor = [self colorAtR:r g:g b:b];
+        LUTColor *comparisonColor = [self colorAtR:r g:g b:b];
+        
+        LUTColor *absoluteErrorColor = [LUTColor colorWithRed:abs(selfColor.red - comparisonColor.red) green:abs(selfColor.green - comparisonColor.green) blue:abs(selfColor.blue - comparisonColor.blue)];
+        
+        [absoluteErrorLUT setColor:absoluteErrorColor r:r g:g b:b];
+    }];
+    
+    double redAbsoluteError = 0.0;
+    double greenAbsoluteError = 0.0;
+    double blueAbsoluteError = 0.0;
+    
+    for (int r = 0; r < self.size; r++) {
+        for (int g = 0; g < self.size; g++) {
+            for (int b = 0; b < self.size; b++) {
+                LUTColor *selfColor = [self colorAtR:r g:g b:b];
+                LUTColor *comparisonColor = [self colorAtR:r g:g b:b];
+                
+                redAbsoluteError += abs(selfColor.red - comparisonColor.red);
+                greenAbsoluteError += abs(selfColor.green - comparisonColor.green);
+                blueAbsoluteError += abs(selfColor.blue - comparisonColor.blue);
+            }
+        }
+    }
+    
+    double numPoints = self.size*self.size*self.size;
+    
+    return [LUTColor colorWithRed:redAbsoluteError/numPoints green:greenAbsoluteError/numPoints blue:blueAbsoluteError/numPoints];
 }
 
 

@@ -151,6 +151,11 @@ typedef NS_ENUM(NSInteger, LUTImageRenderPath) {
 
 - (bool)equalsLUT:(LUT *)comparisonLUT;
 
+- (bool)equalsLUTEssence:(LUT *)comparisonLUT
+             compareType:(bool)compareType
+             compareSize:(bool)compareSize
+      compareInputBounds:(bool)compareInputBounds;
+
 
 - (LUTColor *)identityColorAtR:(double)redPoint g:(double)greenPoint b:(double)bluePoint;
 
