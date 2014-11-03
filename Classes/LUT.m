@@ -424,44 +424,43 @@
     return YES;
 }
 
-- (LUTColor *)meanAbsoluteError:(LUT *)comparisonLUT{
+// http://en.wikipedia.org/wiki/Symmetric_mean_absolute_percentage_error
+- (LUTColor *)symetricalMeanAbsolutePercentageError:(LUT *)comparisonLUT{
     if (![self equalsLUTEssence:comparisonLUT
                     compareType:YES
                     compareSize:YES
              compareInputBounds:YES]) {
-        return nil;
+        return [LUTColor colorWithRed:0 green:0 blue:0];
     }
-    
-    
-    LUT *absoluteErrorLUT = [self.class LUTOfSize:self.size inputLowerBound:self.inputLowerBound inputUpperBound:self.inputUpperBound];
-    
-    [absoluteErrorLUT LUTLoopWithBlock:^(size_t r, size_t g, size_t b) {
-        LUTColor *selfColor = [self colorAtR:r g:g b:b];
-        LUTColor *comparisonColor = [self colorAtR:r g:g b:b];
-        
-        LUTColor *absoluteErrorColor = [LUTColor colorWithRed:abs(selfColor.red - comparisonColor.red) green:abs(selfColor.green - comparisonColor.green) blue:abs(selfColor.blue - comparisonColor.blue)];
-        
-        [absoluteErrorLUT setColor:absoluteErrorColor r:r g:g b:b];
-    }];
     
     double redAbsoluteError = 0.0;
     double greenAbsoluteError = 0.0;
     double blueAbsoluteError = 0.0;
     
+    double redAdd = 0.0;
+    double greenAdd = 0.0;
+    double blueAdd = 0.0;
+    
+    double numPoints = self.size*self.size*self.size;
+    
     for (int r = 0; r < self.size; r++) {
         for (int g = 0; g < self.size; g++) {
             for (int b = 0; b < self.size; b++) {
                 LUTColor *selfColor = [self colorAtR:r g:g b:b];
-                LUTColor *comparisonColor = [self colorAtR:r g:g b:b];
+                LUTColor *comparisonColor = [comparisonLUT colorAtR:r g:g b:b];
                 
-                redAbsoluteError += abs(selfColor.red - comparisonColor.red);
-                greenAbsoluteError += abs(selfColor.green - comparisonColor.green);
-                blueAbsoluteError += abs(selfColor.blue - comparisonColor.blue);
+                redAdd = fabs(selfColor.red - comparisonColor.red)/(selfColor.red + comparisonColor.red);
+                greenAdd = fabs(selfColor.green - comparisonColor.green)/(selfColor.green + comparisonColor.green);
+                blueAdd = fabs(selfColor.blue - comparisonColor.blue)/(selfColor.blue + comparisonColor.blue);
+                
+                redAbsoluteError += !isfinite(redAdd) ? 0 : redAdd;
+                greenAbsoluteError += !isfinite(greenAdd) ? 0 : greenAdd;
+                blueAbsoluteError += !isfinite(blueAdd) ? 0 : blueAdd;
             }
         }
     }
     
-    double numPoints = self.size*self.size*self.size;
+    
     
     return [LUTColor colorWithRed:redAbsoluteError/numPoints green:greenAbsoluteError/numPoints blue:blueAbsoluteError/numPoints];
 }
