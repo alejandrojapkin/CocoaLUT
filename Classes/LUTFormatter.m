@@ -88,17 +88,6 @@ static NSMutableArray *allFormatters;
     return nil;
 }
 
-+ (LUTFormatter *)LUTFormatterValidForReadingExtension:(NSString *)extension
-{
-    NSArray *formatters = [self LUTFormattersForFileExtension:extension.lowercaseString];
-    for(LUTFormatter* formatter in formatters){
-        if([[formatter class] isValidReaderForExtension:extension]){
-            return formatter;
-        }
-    }
-    return nil;
-}
-
 + (NSArray *)LUTFormattersValidForWritingLUTType:(LUT *)lut{
     NSMutableArray *array = [NSMutableArray array];
     for(LUTFormatter* formatter in allFormatters){
@@ -107,19 +96,6 @@ static NSMutableArray *allFormatters;
         }
     }
     return array;
-}
-
-+ (BOOL)isValidReaderForExtension:(NSString *)extension
-{
-    if ([self canRead] == NO) {
-        return NO;
-    }
-
-    if([[self fileExtensions] containsObject:extension.lowercaseString]){
-        return YES;
-    }
-    
-    return NO;
 }
 
 + (BOOL)isValidReaderForURL:(NSURL *)fileURL{

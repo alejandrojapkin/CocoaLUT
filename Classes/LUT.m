@@ -47,9 +47,9 @@
     return [[formatter class] LUTFromURL:url];
 }
 
-+ (instancetype)LUTFromData:(NSData *)data havingExtension:(NSString *)extension
++ (instancetype)LUTFromData:(NSData *)data formatterID:(NSString *)formatterID
 {
-    LUTFormatter *formatter = [LUTFormatter LUTFormatterValidForReadingExtension:extension];
+    LUTFormatter *formatter = [LUTFormatter LUTFormatterWithID:formatterID];
     if(formatter == nil){
         return nil;
     }

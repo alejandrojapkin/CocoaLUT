@@ -71,7 +71,7 @@ typedef NS_ENUM(NSInteger, LUTImageRenderPath) {
  *	Loads a `LUT` from NSData, using the formatter that handles a specific extension
  *
  *	@param data      The data to load
- *	@param extension The file extension for selecting the correct formatter
+ *	@param formatterID The formatter ID for selecting the correct formatter
  *
  *  @return A new `LUT` with the contents of the data.
  */
