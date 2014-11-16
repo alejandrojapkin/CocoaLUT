@@ -44,6 +44,8 @@ typedef NS_ENUM(NSInteger, LUTFormatterRole) {
 
 + (LUTFormatter *)LUTFormatterValidForReadingURL:(NSURL *)fileURL;
 
++ (LUTFormatter *)LUTFormatterValidForReadingExtension:(NSString *)extension;
+
 + (NSArray *)LUTFormattersValidForWritingLUTType:(LUT *)lut;
 
 + (NSArray *)allFormattersFileExtensions;
@@ -120,6 +122,8 @@ typedef NS_ENUM(NSInteger, LUTFormatterRole) {
 + (NSString *)stringFromLUT:(LUT *)lut withOptions:(NSDictionary *)options;
 
 + (BOOL)isValidReaderForURL:(NSURL *)fileURL;
+
++ (BOOL)isValidReaderForExtension:(NSString *)extension;
 
 + (BOOL)isValidWriterForLUTType:(LUT *)lut;
 
