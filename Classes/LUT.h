@@ -75,7 +75,7 @@ typedef NS_ENUM(NSInteger, LUTImageRenderPath) {
  *
  *  @return A new `LUT` with the contents of the data.
  */
-+ (instancetype)LUTFromData:(NSData *)data havingExtension:(NSString *)extension;
++ (instancetype)LUTFromData:(NSData *)data formatterID:(NSString *)formatterID;
 
 - (BOOL)writeToURL:(NSURL *)url
         atomically:(BOOL)atomically
