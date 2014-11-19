@@ -16,7 +16,9 @@ struct LUTFormatterFSIDAT_FileHeader{
     unsigned int data_checksum; // 4Bytes, data sum
     unsigned int length; // 4Bytes, data length = 1048576 (v1) or 19652 (v2)
     char description[16]; //16Bytes, 3dlut description info, e.g. “LightSpace(c)”
-    char reserved[63]; // reserved
+    unsigned int reserved2; // 4Bytes, reserved
+    char name[16]; // 16Bytes, information or name of lut
+    char reserved[43]; // 43 Bytes, reserved
     unsigned char header_checksum; // file header sum
 };
 
@@ -91,16 +93,19 @@ struct LUTFormatterFSIDAT_FileHeader{
     else{
         @throw [NSException exceptionWithName:@"FSIDATLUTReadError" reason:@"Incompatible Version" userInfo:nil];
     }
+    
+    NSString *nameString = [NSString stringWithCString:fileHeader.name encoding:NSUTF8StringEncoding] ?: @"";
+    
+    lut.title = nameString;
 
-    NSString *headerTitle = [NSString stringWithCString:fileHeader.model encoding:NSUTF8StringEncoding];
-    lut.title = headerTitle ? headerTitle : @"";
+    NSString *modelString = [NSString stringWithCString:fileHeader.model encoding:NSUTF8StringEncoding] ?: @"";
 
     NSString *headerDescription = [NSString stringWithCString:fileHeader.description encoding:NSUTF8StringEncoding];
     lut.descriptionText = headerDescription ? headerDescription : @"";
 
     NSString *versionString = [NSString stringWithCString:fileHeader.version encoding:NSUTF8StringEncoding];
     if (versionString) {
-        lut.metadata = [NSMutableDictionary dictionaryWithObjectsAndKeys:@"version", versionString, nil];
+        lut.metadata = [NSMutableDictionary dictionaryWithObjectsAndKeys:@"version", versionString, @"model", modelString, nil];
     }
 
     return lut;
@@ -163,8 +168,15 @@ struct LUTFormatterFSIDAT_FileHeader{
     else{
         strncpy(fileHeader.version, "", sizeof(fileHeader.version));
     }
+    
+    if (lut.metadata[@"model"]) {
+        strncpy(fileHeader.model, [lut.metadata[@"model"] UTF8String], sizeof(fileHeader.model));
+    }
+    else{
+        strncpy(fileHeader.model, "", sizeof(fileHeader.model));
+    }
 
-    strncpy(fileHeader.model, lut.title ? [lut.title UTF8String] : "", sizeof(fileHeader.model));
+    strncpy(fileHeader.name, lut.title ? [lut.title UTF8String] : "", sizeof(fileHeader.name));
     strncpy(fileHeader.description, lut.descriptionText ? [lut.descriptionText UTF8String] : "", sizeof(fileHeader.description));
 
 
@@ -230,7 +242,14 @@ struct LUTFormatterFSIDAT_FileHeader{
         strncpy(fileHeader.version, "", sizeof(fileHeader.version));
     }
 
-    strncpy(fileHeader.model, lut.title ? [lut.title UTF8String] : "", sizeof(fileHeader.model));
+    if (lut.metadata[@"model"]) {
+        strncpy(fileHeader.model, [lut.metadata[@"model"] UTF8String], sizeof(fileHeader.model));
+    }
+    else{
+        strncpy(fileHeader.model, "", sizeof(fileHeader.model));
+    }
+    
+    strncpy(fileHeader.name, lut.title ? [lut.title UTF8String] : "", sizeof(fileHeader.name));
     strncpy(fileHeader.description, lut.descriptionText ? [lut.descriptionText UTF8String] : "", sizeof(fileHeader.description));
 
 
