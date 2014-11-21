@@ -22,6 +22,24 @@
 
 @implementation LUT1D
 
+- (instancetype)initWithCoder:(NSCoder *)aDecoder{
+    self = [super initWithCoder:aDecoder];
+    if(self){
+        self.redCurve = [aDecoder decodeObjectForKey:@"redCurve"];
+        self.greenCurve = [aDecoder decodeObjectForKey:@"greenCurve"];
+        self.blueCurve = [aDecoder decodeObjectForKey:@"blueCurve"];
+    }
+    
+    return self;
+}
+
+- (void)encodeWithCoder:(NSCoder *)aCoder{
+    [super encodeWithCoder:aCoder];
+    [aCoder encodeObject:self.redCurve forKey:@"redCurve"];
+    [aCoder encodeObject:self.greenCurve forKey:@"greenCurve"];
+    [aCoder encodeObject:self.blueCurve forKey:@"blueCurve"];
+}
+
 + (instancetype)LUT1DWithRedCurve:(NSMutableArray *)redCurve
                        greenCurve:(NSMutableArray *)greenCurve
                         blueCurve:(NSMutableArray *)blueCurve

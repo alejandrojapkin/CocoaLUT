@@ -23,6 +23,30 @@
     return self;
 }
 
+- (instancetype)initWithCoder:(NSCoder *)aDecoder{
+    if (self = [super init]) {
+        
+        self.metadata = [aDecoder decodeObjectForKey:@"metadata"];
+        self.passthroughFileOptions = [aDecoder decodeObjectForKey:@"passthroughFileOptions"];
+        self.size = [aDecoder decodeIntegerForKey:@"size"];
+        self.inputLowerBound = [aDecoder decodeDoubleForKey:@"inputLowerBound"];
+        self.inputUpperBound = [aDecoder decodeDoubleForKey:@"inputUpperBound"];
+        
+        if(self.inputLowerBound >= self.inputUpperBound){
+            @throw [NSException exceptionWithName:@"LUTCreationError" reason:@"Input Lower Bound >= Input Upper Bound" userInfo:nil];
+        }
+    }
+    return self;
+}
+
+- (void)encodeWithCoder:(NSCoder *)aCoder{
+    [aCoder encodeObject:self.metadata forKey:@"metadata"];
+    [aCoder encodeObject:self.passthroughFileOptions forKey:@"passthroughFileOptions"];
+    [aCoder encodeInteger:self.size forKey:@"size"];
+    [aCoder encodeDouble:self.inputLowerBound forKey:@"inputLowerBound"];
+    [aCoder encodeDouble:self.inputUpperBound forKey:@"inputUpperBound"];
+}
+
 - (instancetype)initWithSize:(NSUInteger)size
              inputLowerBound:(double)inputLowerBound
              inputUpperBound:(double)inputUpperBound{
@@ -54,6 +78,14 @@
         return nil;
     }
     return [[formatter class] LUTFromData:data];
+}
+
++ (instancetype)LUTFromDataRepresentation:(NSData *)data{
+    return [NSKeyedUnarchiver unarchiveObjectWithData:data];
+}
+
+- (NSData *)dataRepresentation{
+    return [NSKeyedArchiver archivedDataWithRootObject:self];
 }
 
 - (BOOL)writeToURL:(NSURL *)url

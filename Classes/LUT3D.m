@@ -14,6 +14,20 @@
 
 @implementation LUT3D
 
+- (instancetype)initWithCoder:(NSCoder *)aDecoder{
+    self = [super initWithCoder:aDecoder];
+    if(self){
+        self.latticeArray = [aDecoder decodeObjectForKey:@"latticeArray"];
+    }
+    
+    return self;
+}
+
+- (void)encodeWithCoder:(NSCoder *)aCoder{
+    [super encodeWithCoder:aCoder];
+    [aCoder encodeObject:self.latticeArray forKey:@"latticeArray"];
+}
+
 - (instancetype)initWithSize:(NSUInteger)size
              inputLowerBound:(double)inputLowerBound
              inputUpperBound:(double)inputUpperBound

@@ -39,6 +39,20 @@
 
 }
 
+- (void)testReadWriteSerializedDataRepresentation{
+    LUT1D *identityLUT1D = [LUT1D LUTIdentityOfSize:2048 inputLowerBound:0 inputUpperBound:1];
+    
+    LUT1D *read1D = [LUT1D LUTFromDataRepresentation:[identityLUT1D dataRepresentation]];
+    
+    XCTAssert([read1D equalsLUT:identityLUT1D]);
+    
+    LUT3D *identityLUT3D = [LUT3D LUTIdentityOfSize:33 inputLowerBound:0 inputUpperBound:1];
+    
+    LUT3D *read3D = [LUT3D LUTFromDataRepresentation:[identityLUT3D dataRepresentation]];
+    
+    XCTAssert([read3D equalsLUT:identityLUT3D]);
+}
+
 - (void)testReadWriteCube1D {
     LUT1D *identityLUT = [LUT1D LUTIdentityOfSize:2048 inputLowerBound:0 inputUpperBound:1];
 

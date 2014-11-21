@@ -22,7 +22,7 @@ typedef double LUTColorValue;
 /**
  *  Represents a color value on a 3D LUT lattice.
  */
-@interface LUTColor : NSObject <NSCopying>
+@interface LUTColor : NSObject <NSCopying, NSCoding>
 
 /**
  *  The value of the red channel of the color. Values should be between 0 and 1

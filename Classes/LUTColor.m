@@ -18,6 +18,21 @@
     return [LUTColor colorWithRed:self.red green:self.green blue:self.blue];
 }
 
+-(instancetype)initWithCoder:(NSCoder *)aDecoder{
+    if (self = [super init]) {
+        self.red = [[aDecoder decodeObjectForKey:@"red"] doubleValue];
+        self.green = [[aDecoder decodeObjectForKey:@"green"] doubleValue];
+        self.blue = [[aDecoder decodeObjectForKey:@"blue"] doubleValue];
+    }
+    return self;
+}
+
+- (void)encodeWithCoder:(NSCoder *)aCoder{
+    [aCoder encodeObject:@(self.red) forKey:@"red"];
+    [aCoder encodeObject:@(self.green) forKey:@"green"];
+    [aCoder encodeObject:@(self.blue) forKey:@"blue"];
+}
+
 + (instancetype)colorWithRed:(LUTColorValue)r green:(LUTColorValue)g blue:(LUTColorValue)b {
     LUTColor *color = [[LUTColor alloc] init];
     color.red = !isfinite(r) ? 0 : r;

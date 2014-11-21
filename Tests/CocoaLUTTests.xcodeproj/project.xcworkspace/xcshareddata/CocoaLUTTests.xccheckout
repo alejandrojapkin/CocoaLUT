@@ -10,29 +10,29 @@
 	<string>CocoaLUTTests</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
-		<key>145CE631-8B1C-499D-98F4-63D23F5BD0B9</key>
-		<string>https://github.com/wilg/CocoaLUT.git</string>
+		<key>0B31F11E5FE94C3909B543C942CE093FBC58FBD6</key>
+		<string>https://github.com/videovillage/CocoaLUT.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>Tests/CocoaLUTTests.xcodeproj/project.xcworkspace</string>
+	<string>Tests/CocoaLUTTests.xcodeproj</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
-		<key>145CE631-8B1C-499D-98F4-63D23F5BD0B9</key>
+		<key>0B31F11E5FE94C3909B543C942CE093FBC58FBD6</key>
 		<string>../../..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
-	<string>https://github.com/wilg/CocoaLUT.git</string>
+	<string>https://github.com/videovillage/CocoaLUT.git</string>
 	<key>IDESourceControlProjectVersion</key>
-	<integer>110</integer>
+	<integer>111</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
-	<string>145CE631-8B1C-499D-98F4-63D23F5BD0B9</string>
+	<string>0B31F11E5FE94C3909B543C942CE093FBC58FBD6</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>145CE631-8B1C-499D-98F4-63D23F5BD0B9</string>
+			<string>0B31F11E5FE94C3909B543C942CE093FBC58FBD6</string>
 			<key>IDESourceControlWCCName</key>
 			<string>CocoaLUT</string>
 		</dict>

@@ -35,7 +35,7 @@ typedef NS_ENUM(NSInteger, LUTImageRenderPath) {
 /**
  *  A three-dimensional color lookup table.
  */
-@interface LUT : NSObject <NSCopying>
+@interface LUT : NSObject <NSCopying, NSCoding>
 
 /**
  *  A lattice that represents the code values of the look up table.
@@ -76,6 +76,10 @@ typedef NS_ENUM(NSInteger, LUTImageRenderPath) {
  *  @return A new `LUT` with the contents of the data.
  */
 + (instancetype)LUTFromData:(NSData *)data formatterID:(NSString *)formatterID;
+
++ (instancetype)LUTFromDataRepresentation:(NSData *)data;
+
+- (NSData *)dataRepresentation;
 
 - (BOOL)writeToURL:(NSURL *)url
         atomically:(BOOL)atomically
