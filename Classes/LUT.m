@@ -19,6 +19,7 @@
 - (instancetype)init {
     if (self = [super init]) {
         self.metadata = [NSMutableDictionary dictionary];
+        self.passthroughFileOptions = @{};
     }
     return self;
 }
