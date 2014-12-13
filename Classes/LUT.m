@@ -472,7 +472,7 @@
                     compareType:YES
                     compareSize:YES
              compareInputBounds:YES]) {
-        return [LUTColor colorWithRed:0 green:0 blue:0];
+        return [LUTColor colorWithRed:1000000 green:1000000 blue:1000000];
     }
     
     double redAbsoluteError = 0.0;
