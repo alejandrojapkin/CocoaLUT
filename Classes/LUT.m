@@ -474,7 +474,6 @@
              compareInputBounds:YES]) {
         return [LUTColor colorWithRed:1000000 green:1000000 blue:1000000];
     }
-    
     double redAbsoluteError = 0.0;
     double greenAbsoluteError = 0.0;
     double blueAbsoluteError = 0.0;
@@ -483,24 +482,45 @@
     double greenAdd = 0.0;
     double blueAdd = 0.0;
     
-    double numPoints = self.size*self.size*self.size;
+    double numPoints;
     
-    for (int r = 0; r < self.size; r++) {
-        for (int g = 0; g < self.size; g++) {
-            for (int b = 0; b < self.size; b++) {
-                LUTColor *selfColor = [self colorAtR:r g:g b:b];
-                LUTColor *comparisonColor = [comparisonLUT colorAtR:r g:g b:b];
-                
-                redAdd = fabs(selfColor.red - comparisonColor.red)/(selfColor.red + comparisonColor.red);
-                greenAdd = fabs(selfColor.green - comparisonColor.green)/(selfColor.green + comparisonColor.green);
-                blueAdd = fabs(selfColor.blue - comparisonColor.blue)/(selfColor.blue + comparisonColor.blue);
-                
-                redAbsoluteError += !isfinite(redAdd) ? 0 : redAdd;
-                greenAbsoluteError += !isfinite(greenAdd) ? 0 : greenAdd;
-                blueAbsoluteError += !isfinite(blueAdd) ? 0 : blueAdd;
+    if (isLUT3D(self)) {
+        numPoints = self.size*self.size*self.size;
+        for (int r = 0; r < self.size; r++) {
+            for (int g = 0; g < self.size; g++) {
+                for (int b = 0; b < self.size; b++) {
+                    LUTColor *selfColor = [self colorAtR:r g:g b:b];
+                    LUTColor *comparisonColor = [comparisonLUT colorAtR:r g:g b:b];
+                    
+                    redAdd = fabs(selfColor.red - comparisonColor.red)/(selfColor.red + comparisonColor.red);
+                    greenAdd = fabs(selfColor.green - comparisonColor.green)/(selfColor.green + comparisonColor.green);
+                    blueAdd = fabs(selfColor.blue - comparisonColor.blue)/(selfColor.blue + comparisonColor.blue);
+                    
+                    redAbsoluteError += !isfinite(redAdd) ? 0 : redAdd;
+                    greenAbsoluteError += !isfinite(greenAdd) ? 0 : greenAdd;
+                    blueAbsoluteError += !isfinite(blueAdd) ? 0 : blueAdd;
+                }
             }
         }
     }
+    else{
+        //LUT1D
+        numPoints = self.size*3;
+        for (int x = 0; x < self.size; x++) {
+            LUTColor *selfColor = [self colorAtR:x g:x b:x];
+            LUTColor *comparisonColor = [comparisonLUT colorAtR:x g:x b:x];
+            
+            redAdd = fabs(selfColor.red - comparisonColor.red)/(selfColor.red + comparisonColor.red);
+            greenAdd = fabs(selfColor.green - comparisonColor.green)/(selfColor.green + comparisonColor.green);
+            blueAdd = fabs(selfColor.blue - comparisonColor.blue)/(selfColor.blue + comparisonColor.blue);
+            
+            redAbsoluteError += !isfinite(redAdd) ? 0 : redAdd;
+            greenAbsoluteError += !isfinite(greenAdd) ? 0 : greenAdd;
+            blueAbsoluteError += !isfinite(blueAdd) ? 0 : blueAdd;
+        }
+        
+    }
+    
     
     
     
