@@ -47,6 +47,51 @@
                                  latticeArray:[LUT3D blankLatticeArrayOfSize:size]];
 }
 
++ (instancetype)LUT3DFromFalseColorWithSize:(NSUInteger)size{
+    LUT3D *falseColorLUT = [LUT3D LUTOfSize:size inputLowerBound:0 inputUpperBound:1];
+    
+    LUTColor *purple = [LUTColor colorWithSystemColor:[SystemColor purpleColor]];
+    LUTColor *blue = [LUTColor colorWithSystemColor:[SystemColor blueColor]];
+    LUTColor *green = [LUTColor colorWithSystemColor:[SystemColor greenColor]];
+    LUTColor *pink = [LUTColor colorWithSystemColor:[SystemColor colorWithRed:1.0 green:.753 blue:.796 alpha:1.0]];
+    LUTColor *yellow = [LUTColor colorWithSystemColor:[SystemColor yellowColor]];
+    LUTColor *red = [LUTColor colorWithSystemColor:[SystemColor redColor]];
+    
+    
+    [falseColorLUT LUTLoopWithBlock:^(size_t r, size_t g, size_t b) {
+        double lum = [[falseColorLUT identityColorAtR:r g:g b:b] luminanceRec709];
+        
+        LUTColor *falseColor = [LUTColor colorWithRed:lum green:lum blue:lum];
+        
+        if (lum <= .025) {
+            falseColor = purple;
+        }
+        else if (lum > .025 && lum <= .04){
+            falseColor = blue;
+        }
+        else if (lum >= .38 && lum <= .42){
+            falseColor = green;
+        }
+        else if (lum >= .52 && lum <= .56){
+            falseColor = pink;
+        }
+        else if (lum >= .97 && lum <= .99){
+            falseColor = yellow;
+        }
+        else if (lum > .99 && lum <= .100){
+            falseColor = red;
+        }
+        
+        [falseColorLUT setColor:falseColor r:r g:g b:b];
+    }];
+    
+    return falseColorLUT;
+}
+
+- (instancetype)LUT3DByApplyingFalseColor{
+    return (LUT3D *)[self LUTByCombiningWithLUT:[LUT3D LUT3DFromFalseColorWithSize:self.size]];
+}
+
 - (void) LUTLoopWithBlock:( void ( ^ )(size_t r, size_t g, size_t b) )block{
     dispatch_apply([self size], dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0) , ^(size_t r){
         dispatch_apply([self size], dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0) , ^(size_t g){
