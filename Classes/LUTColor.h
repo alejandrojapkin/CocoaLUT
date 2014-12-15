@@ -66,6 +66,12 @@ typedef double LUTColorValue;
 + (instancetype)colorFromIntegersWithBitDepth:(NSUInteger)bitdepth red:(NSUInteger)r green:(NSUInteger)g blue:(NSUInteger)b;
 + (instancetype)colorFromIntegersWithMaxOutputValue:(NSUInteger)maxOutputValue red:(NSUInteger)r green:(NSUInteger)g blue:(NSUInteger)b;
 
+- (double)luminanceRec709;
+
+- (double)luminanceUsingLumaR:(double)lumaR
+                        lumaG:(double)lumaG
+                        lumaB:(double)lumaB;
+
 
 - (LUTColor *)contrastStretchWithCurrentMin:(double)currentMin
                                  currentMax:(double)currentMax

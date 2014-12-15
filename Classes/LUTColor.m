@@ -138,6 +138,17 @@
 
 }
 
+- (double)luminanceRec709{
+    return [self luminanceUsingLumaR:0.2126 lumaG:0.7152 lumaB:0.0722];
+}
+
+
+- (double)luminanceUsingLumaR:(double)lumaR
+                        lumaG:(double)lumaG
+                        lumaB:(double)lumaB{
+    return (self.red)*lumaR + (self.green)*lumaG + (self.blue)*lumaB;
+}
+
 
 //thanks http://en.wikipedia.org/wiki/ASC_CDL
 - (LUTColor *)colorByApplyingRedSlope:(double)redSlope
