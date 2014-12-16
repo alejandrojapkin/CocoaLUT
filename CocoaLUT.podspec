@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
   s.name         = "CocoaLUT"
   s.version      = "0.2.19-pre"
-  s.summary      = "LUT (3D lookup tables) for Cocoa applications."
+  s.summary      = "LUTs (1D and 3D color lookup tables) for Cocoa applications."
   s.homepage     = "http://github.com/videovillage/CocoaLUT"
   s.license      = 'MIT'
   s.author       = { "Wil Gieseler" => "wil@wilgieseler.com", "Greg Cotten" => "greg@gregcotten.com"}
