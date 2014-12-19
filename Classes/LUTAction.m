@@ -177,6 +177,18 @@
                        actionMetadata:actionMetadata];
 }
 
++(instancetype)actionWithLUTByCombiningBehindWithLUT:(LUT *)lutToCombineBehind
+                                              lutURL:(NSURL *)lutURL{
+    M13OrderedDictionary *actionMetadata =
+    M13OrderedDictionaryFromOrderedArrayWithDictionaries(@[@{@"id":@"CombineBehind"},
+                                                           @{@"lutPath": [lutURL path]}]);
+    return [LUTAction actionWithBlock:^LUT *(LUT *lut) {
+        return [lutToCombineBehind LUTByCombiningWithLUT:lut];
+    }
+                           actionName:[NSString stringWithFormat:@"Combine Behind LUT"]
+                       actionMetadata:actionMetadata];
+}
+
 +(instancetype)actionWithLUT3DByApplyingColorMatrixColumnMajorM00:(double)m00
                                                               m01:(double)m01
                                                               m02:(double)m02

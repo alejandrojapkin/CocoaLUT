@@ -63,6 +63,9 @@
 +(instancetype)actionWithLUTByCombiningWithLUT:(LUT *)lutToCombine
                                         lutURL:(NSURL *)lutURL;
 
++(instancetype)actionWithLUTByCombiningBehindWithLUT:(LUT *)lutToCombineBehind
+                                              lutURL:(NSURL *)lutURL;
+
 +(instancetype)actionWithLUTByScalingLegalToExtended;
 
 +(instancetype)actionWithLUTByScalingExtendedToLegal;
