@@ -282,7 +282,9 @@ forwardFootlambertCompensation:(double)flCompensation
                                      [self redColorColorSpace],
                                      [self redColor2ColorSpace],
                                      [self redColor3ColorSpace],
+                                     [self redColor4ColorSpace],
                                      [self dragonColorColorSpace],
+                                     [self dragonColor2ColorSpace],
                                      [self acesGamutColorSpace],
                                      [self dciXYZColorSpace],
                                      [self xyzColorSpace],
@@ -348,6 +350,17 @@ forwardFootlambertCompensation:(double)flCompensation
                                                name:@"REDcolor3"];
 }
 
++ (instancetype)redColor4ColorSpace{
+    return [self LUTColorSpaceWithDefaultWhitePoint:[LUTColorSpaceWhitePoint d65WhitePoint]
+                                   redChromaticityX:0.682432347
+                                   redChromaticityY:0.320314427
+                                 greenChromaticityX:0.291815909
+                                 greenChromaticityY:0.672638769
+                                  blueChromaticityX:0.144290202
+                                  blueChromaticityY:0.050547336
+                                               name:@"REDcolor4"];
+}
+
 + (instancetype)dragonColorColorSpace{
     return [self LUTColorSpaceWithDefaultWhitePoint:[LUTColorSpaceWhitePoint d65WhitePoint]
                                    redChromaticityX:0.733696621349
@@ -357,6 +370,17 @@ forwardFootlambertCompensation:(double)flCompensation
                                   blueChromaticityX:0.083009416684
                                   blueChromaticityY:-0.050780628080
                                                name:@"DRAGONcolor"];
+}
+
++ (instancetype)dragonColor2ColorSpace{
+    return [self LUTColorSpaceWithDefaultWhitePoint:[LUTColorSpaceWhitePoint d65WhitePoint]
+                                   redChromaticityX:0.733671536367
+                                   redChromaticityY:0.319227712042
+                                 greenChromaticityX:0.290804815281
+                                 greenChromaticityY:0.689668775507
+                                  blueChromaticityX:0.143989704285
+                                  blueChromaticityY:0.050047743857
+                                               name:@"DRAGONcolor2"];
 }
 
 + (instancetype)proPhotoRGBColorSpace{
