@@ -285,6 +285,7 @@ forwardFootlambertCompensation:(double)flCompensation
                                      [self redColor4ColorSpace],
                                      [self dragonColorColorSpace],
                                      [self dragonColor2ColorSpace],
+                                     [self vGamutColorSpace],
                                      [self acesGamutColorSpace],
                                      [self dciXYZColorSpace],
                                      [self xyzColorSpace],
@@ -459,6 +460,17 @@ forwardFootlambertCompensation:(double)flCompensation
                                            blueChromaticityX:0.10000
                                            blueChromaticityY:-0.05000
                                                         name:@"S-Gamut/S-Gamut3"];
+}
+
++ (instancetype)vGamutColorSpace{
+    return [LUTColorSpace LUTColorSpaceWithDefaultWhitePoint:[LUTColorSpaceWhitePoint d65WhitePoint]
+                                            redChromaticityX:0.730
+                                            redChromaticityY:0.280
+                                          greenChromaticityX:0.165
+                                          greenChromaticityY:0.840
+                                           blueChromaticityX:0.100
+                                           blueChromaticityY:-0.030
+                                                        name:@"V-Gamut"];
 }
 
 + (instancetype)acesGamutColorSpace{

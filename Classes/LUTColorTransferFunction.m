@@ -132,7 +132,8 @@
              [self sLog3TransferFunction],
              [self canonLogTransferFunction],
              [self bmdFilmTransferFunction],
-             [self bmdFilm4KTransferFunction]];
+             [self bmdFilm4KTransferFunction],
+             [self vLogTransferFunction]];
 }
 
 +(instancetype)linearTransferFunction{
@@ -202,6 +203,34 @@
                                                                      double output = (300.0*log(value+27.0/2473.0) + 685.0*log(10.0))/(1023.0*log(10.0));
                                                                      return clamp(output, 0.0, 1.0);}
                                                                                        name:@"REDLogFilm"
+                                                                                       type:LUTColorTransferFunctionTypeSceneLinear];
+}
+
++ (instancetype)vLogTransferFunction{
+    double cut1 = 0.01;
+    double cut2 = 0.181;
+    double b=0.00873;
+    double c=0.241514;
+    double d=0.598206;
+    return [LUTColorTransferFunction LUTColorTransferFunctionWithTransformedToLinearBlock1D:^double(double value){
+        value = clamp(value, 0.0, 1.0);
+        if(value < cut2){
+            return (value - 0.125) / 5.6;
+        }
+        else{
+            return pow(10.0, ((value-d)/c)) - b;
+        }
+    }
+                                                                 linearToTransformedBlock1D:^double(double value){
+                                                                     double output;
+                                                                     if (value < cut1) {
+                                                                         output = 5.6*value + 0.125;
+                                                                     }
+                                                                     else{
+                                                                         output = c*log10(value+b)+d;
+                                                                     }
+                                                                     return clamp(output, 0.0, 1.0);}
+                                                                                       name:@"V-Log"
                                                                                        type:LUTColorTransferFunctionTypeSceneLinear];
 }
 
