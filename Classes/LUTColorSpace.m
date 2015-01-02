@@ -285,6 +285,9 @@ forwardFootlambertCompensation:(double)flCompensation
                                      [self redColor4ColorSpace],
                                      [self dragonColorColorSpace],
                                      [self dragonColor2ColorSpace],
+                                     [self canonCinemaGamutColorSpace],
+                                     [self canonDCIP3PlusColorSpace],
+                                     [self dragonColor2ColorSpace],
                                      [self vGamutColorSpace],
                                      [self acesGamutColorSpace],
                                      [self dciXYZColorSpace],
@@ -305,6 +308,28 @@ forwardFootlambertCompensation:(double)flCompensation
                                   blueChromaticityX:0.15
                                   blueChromaticityY:0.06
                                                name:@"Rec. 709"];
+}
+
++ (instancetype)canonDCIP3PlusColorSpace{
+    return [self LUTColorSpaceWithDefaultWhitePoint:[LUTColorSpaceWhitePoint dciWhitePoint]
+                                   redChromaticityX:0.7400
+                                   redChromaticityY:0.2700
+                                 greenChromaticityX:0.2200
+                                 greenChromaticityY:0.7800
+                                  blueChromaticityX:0.0900
+                                  blueChromaticityY:-0.0900
+                                               name:@"Canon DCI-P3+"];
+}
+
++ (instancetype)canonCinemaGamutColorSpace{
+    return [self LUTColorSpaceWithDefaultWhitePoint:[LUTColorSpaceWhitePoint d65WhitePoint]
+                                   redChromaticityX:0.7400
+                                   redChromaticityY:0.2700
+                                 greenChromaticityX:0.1700
+                                 greenChromaticityY:1.1400
+                                  blueChromaticityX:0.0800
+                                  blueChromaticityY:-0.1000
+                                               name:@"Canon Cinema Gamut"];
 }
 
 + (instancetype)bmccColorSpace{
