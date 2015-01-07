@@ -20,6 +20,7 @@
 #import <CocoaLUT/LUTFormatterHaldCLUT.h>
 #import <CocoaLUT/LUTFormatterFSIDAT.h>
 #import <CocoaLUT/LUTFormatterResolveDAT.h>
+#import "TestHelper.h"
 
 
 @interface ReadWriteTests : XCTestCase

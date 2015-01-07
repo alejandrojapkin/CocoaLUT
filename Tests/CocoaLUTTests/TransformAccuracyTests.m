@@ -9,6 +9,7 @@
 #import <XCTest/XCTest.h>
 #import <CocoaLUT/CocoaLUT.h>
 #import <CocoaLUT/LUTColorTransferFunction.h>
+#import "TestHelper.h"
 
 @interface TransformAccuracyTests : XCTestCase
 
@@ -17,7 +18,7 @@
 @implementation TransformAccuracyTests
 
 
-- (void)testResizeAccuracy1D {
+- (void)testResizeAccuracy1DIdentity {
     LUT1D *identity = [LUT1D LUTIdentityOfSize:1024 inputLowerBound:0 inputUpperBound:1];
     LUT1D *lut = [identity LUTByResizingToSize:2048];
     lut = [lut LUTByResizingToSize:4096];
@@ -26,7 +27,7 @@
     XCTAssert([identity equalsLUT:lut], @"1D Resize precision error.");
 }
 
-- (void)testResizeAccuracy3D {
+- (void)testResizeAccuracy3DIdentity {
     LUT3D *identity = [LUT3D LUTIdentityOfSize:33 inputLowerBound:0 inputUpperBound:1];
     LUT3D *lut = [identity LUTByResizingToSize:64];
     lut = [lut LUTByResizingToSize:35];

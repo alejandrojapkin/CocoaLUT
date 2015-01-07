@@ -29,6 +29,7 @@
 		F256884A199C381F00CBBD4E /* identity_Quantel33.txt in Resources */ = {isa = PBXBuildFile; fileRef = F2568845199C381F00CBBD4E /* identity_Quantel33.txt */; };
 		F256884B199C381F00CBBD4E /* identity_UnwrappedCube33.tiff in Resources */ = {isa = PBXBuildFile; fileRef = F2568846199C381F00CBBD4E /* identity_UnwrappedCube33.tiff */; };
 		F2C2558A195D29690063DED5 /* ReadWriteTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F2C25589195D29690063DED5 /* ReadWriteTests.m */; };
+		F2CF3F361A5DB81C001CE594 /* TestHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = F2CF3F351A5DB81C001CE594 /* TestHelper.m */; };
 		F2E213C3199C3075008117E5 /* identity_DaVinci17.davlut in Resources */ = {isa = PBXBuildFile; fileRef = F2E213B3199C3075008117E5 /* identity_DaVinci17.davlut */; };
 		F2E213C4199C3075008117E5 /* identity_DaVinci33.dat in Resources */ = {isa = PBXBuildFile; fileRef = F2E213B4199C3075008117E5 /* identity_DaVinci33.dat */; };
 		F2E213C5199C3075008117E5 /* identity_DaVinci33.davlut in Resources */ = {isa = PBXBuildFile; fileRef = F2E213B5199C3075008117E5 /* identity_DaVinci33.davlut */; };
@@ -73,6 +74,8 @@
 		F2568845199C381F00CBBD4E /* identity_Quantel33.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = identity_Quantel33.txt; sourceTree = "<group>"; };
 		F2568846199C381F00CBBD4E /* identity_UnwrappedCube33.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = identity_UnwrappedCube33.tiff; sourceTree = "<group>"; };
 		F2C25589195D29690063DED5 /* ReadWriteTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReadWriteTests.m; sourceTree = "<group>"; };
+		F2CF3F351A5DB81C001CE594 /* TestHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestHelper.m; sourceTree = "<group>"; };
+		F2CF3F371A5DC716001CE594 /* TestHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TestHelper.h; sourceTree = "<group>"; };
 		F2E213B3199C3075008117E5 /* identity_DaVinci17.davlut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = identity_DaVinci17.davlut; sourceTree = "<group>"; };
 		F2E213B4199C3075008117E5 /* identity_DaVinci33.dat */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = identity_DaVinci33.dat; sourceTree = "<group>"; };
 		F2E213B5199C3075008117E5 /* identity_DaVinci33.davlut */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = identity_DaVinci33.davlut; sourceTree = "<group>"; };
@@ -147,6 +150,8 @@
 				F2C25589195D29690063DED5 /* ReadWriteTests.m */,
 				3BFB66BC195BE44A00AE52EC /* Supporting Files */,
 				F23F458319806F410014001E /* TransformAccuracyTests.m */,
+				F2CF3F371A5DC716001CE594 /* TestHelper.h */,
+				F2CF3F351A5DB81C001CE594 /* TestHelper.m */,
 			);
 			path = CocoaLUTTests;
 			sourceTree = "<group>";
@@ -358,6 +363,7 @@
 				F23F458419806F410014001E /* TransformAccuracyTests.m in Sources */,
 				F2C2558A195D29690063DED5 /* ReadWriteTests.m in Sources */,
 				F256883D199C30C600CBBD4E /* ReadIdentityTests.m in Sources */,
+				F2CF3F361A5DB81C001CE594 /* TestHelper.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
