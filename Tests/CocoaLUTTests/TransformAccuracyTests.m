@@ -47,9 +47,15 @@
     LUTColor *maxAbsoluteError = [lut33Resized65 maximumAbsoluteError:lut65];
     LUTColor *averageAbsoluteError = [lut33Resized65 averageAbsoluteError:lut65];
     
-    XCTAssert(sMAPE.red <= 0.010395 && sMAPE.green <= 0.010160 && sMAPE.blue <= 0.007201, @"3D Resize precision error."); //tetrahedral interpolation resize sMAPE
-    XCTAssert(maxAbsoluteError.red <= 0.132559 && maxAbsoluteError.green <= 0.114145 && maxAbsoluteError.blue <= 0.078125, @"3D Resize precision error."); //tetrahedral interpolation resize MAE
-    XCTAssert(averageAbsoluteError.red <= 0.001069 && averageAbsoluteError.green <= 0.000813 && averageAbsoluteError.blue <= 0.000516, @"3D Resize precision error."); //tetrahedral interpolation resize AAE
+    XCTAssert(sMAPE.red <= 0.010395 && sMAPE.green <= 0.010160 && sMAPE.blue <= 0.007201, @"3D Resize Up precision error."); //tetrahedral interpolation resize sMAPE
+    XCTAssert(maxAbsoluteError.red <= 0.132559 && maxAbsoluteError.green <= 0.114145 && maxAbsoluteError.blue <= 0.078125, @"3D Resize Up precision error."); //tetrahedral interpolation resize MAE
+    XCTAssert(averageAbsoluteError.red <= 0.001069 && averageAbsoluteError.green <= 0.000813 && averageAbsoluteError.blue <= 0.000516, @"3D Resize Up precision error."); //tetrahedral interpolation resize AAE
+    
+    
+    LUT3D *lut65Resized33 = [lut65 LUTByResizingToSize:33];
+    
+    XCTAssert([lut65Resized33 equalsLUT:lut33],@"3D Resize Down precision error.");
+    
     
 }
 
