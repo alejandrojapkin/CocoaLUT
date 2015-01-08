@@ -527,6 +527,113 @@
     return [LUTColor colorWithRed:redAbsoluteError/numPoints green:greenAbsoluteError/numPoints blue:blueAbsoluteError/numPoints];
 }
 
+- (LUTColor *)averageAbsoluteError:(LUT *)comparisonLUT{
+    if (![self equalsLUTEssence:comparisonLUT
+                    compareType:YES
+                    compareSize:YES
+             compareInputBounds:YES]) {
+        return [LUTColor colorWithRed:1000000 green:1000000 blue:1000000];
+    }
+    double redError = 0.0;
+    double greenError = 0.0;
+    double blueError = 0.0;
+    
+    double numPoints;
+    
+    if (isLUT3D(self)) {
+        numPoints = self.size*self.size*self.size;
+        for (int r = 0; r < self.size; r++) {
+            for (int g = 0; g < self.size; g++) {
+                for (int b = 0; b < self.size; b++) {
+                    LUTColor *selfColor = [self colorAtR:r g:g b:b];
+                    LUTColor *comparisonColor = [comparisonLUT colorAtR:r g:g b:b];
+                    
+                    LUTColor *diff = [selfColor colorBySubtractingColor:comparisonColor];
+                    LUTColor *absDiff = [LUTColor colorWithRed:fabs(diff.red) green:fabs(diff.green) blue:fabs(diff.blue)];
+                    
+                    redError += !isfinite(absDiff.red) ? 0 : absDiff.red;
+                    greenError += !isfinite(absDiff.green) ? 0 : absDiff.green;
+                    blueError += !isfinite(absDiff.blue) ? 0 : absDiff.blue;
+                }
+            }
+        }
+    }
+    else{
+        numPoints = self.size*3;
+        for (int x = 0; x < self.size; x++) {
+            LUTColor *selfColor = [self colorAtR:x g:x b:x];
+            LUTColor *comparisonColor = [comparisonLUT colorAtR:x g:x b:x];
+            
+            LUTColor *diff = [selfColor colorBySubtractingColor:comparisonColor];
+            LUTColor *absDiff = [LUTColor colorWithRed:fabs(diff.red) green:fabs(diff.green) blue:fabs(diff.blue)];
+            
+            redError += !isfinite(absDiff.red) ? 0 : absDiff.red;
+            greenError += !isfinite(absDiff.green) ? 0 : absDiff.green;
+            blueError += !isfinite(absDiff.blue) ? 0 : absDiff.blue;
+        }
+        
+    }
+    
+    return [LUTColor colorWithRed:redError/numPoints green:greenError/numPoints blue:blueError/numPoints];
+}
+
+
+- (LUTColor *)maximumAbsoluteError:(LUT *)comparisonLUT{
+    if (![self equalsLUTEssence:comparisonLUT
+                    compareType:YES
+                    compareSize:YES
+             compareInputBounds:YES]) {
+        return [LUTColor colorWithRed:1000000 green:1000000 blue:1000000];
+    }
+    double redMaxError = 0.0;
+    double greenMaxError = 0.0;
+    double blueMaxError = 0.0;
+    
+    if (isLUT3D(self)) {
+        for (int r = 0; r < self.size; r++) {
+            for (int g = 0; g < self.size; g++) {
+                for (int b = 0; b < self.size; b++) {
+                    LUTColor *selfColor = [self colorAtR:r g:g b:b];
+                    LUTColor *comparisonColor = [comparisonLUT colorAtR:r g:g b:b];
+                    
+                    LUTColor *diff = [selfColor colorBySubtractingColor:comparisonColor];
+                    
+                    if (fabs(diff.red) > redMaxError) {
+                        redMaxError = fabs(diff.red);
+                    }
+                    if (fabs(diff.green) > greenMaxError) {
+                        greenMaxError = fabs(diff.green);
+                    }
+                    if (fabs(diff.blue) > blueMaxError) {
+                        blueMaxError = fabs(diff.blue);
+                    }
+                }
+            }
+        }
+    }
+    else{
+        for (int x = 0; x < self.size; x++) {
+            LUTColor *selfColor = [self colorAtR:x g:x b:x];
+            LUTColor *comparisonColor = [comparisonLUT colorAtR:x g:x b:x];
+            
+            LUTColor *diff = [selfColor colorBySubtractingColor:comparisonColor];
+            
+            if (fabs(diff.red) > redMaxError) {
+                redMaxError = fabs(diff.red);
+            }
+            if (fabs(diff.green) > greenMaxError) {
+                greenMaxError = fabs(diff.green);
+            }
+            if (fabs(diff.blue) > blueMaxError) {
+                blueMaxError = fabs(diff.blue);
+            }
+        }
+        
+    }
+    
+    return [LUTColor colorWithRed:redMaxError green:greenMaxError blue:blueMaxError];
+}
+
 
 
 - (id)copyWithZone:(NSZone *)zone {

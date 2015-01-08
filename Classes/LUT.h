@@ -171,7 +171,8 @@ typedef NS_ENUM(NSInteger, LUTImageRenderPath) {
       compareInputBounds:(bool)compareInputBounds;
 
 - (LUTColor *)symetricalMeanAbsolutePercentageError:(LUT *)comparisonLUT;
-
+- (LUTColor *)maximumAbsoluteError:(LUT *)comparisonLUT;
+- (LUTColor *)averageAbsoluteError:(LUT *)comparisonLUT;
 
 - (LUTColor *)identityColorAtR:(double)redPoint g:(double)greenPoint b:(double)bluePoint;
 
