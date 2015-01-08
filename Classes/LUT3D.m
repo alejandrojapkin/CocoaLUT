@@ -381,10 +381,8 @@
     LUTColor *P011 = [self colorAtR:lowerRedPoint g:upperGreenPoint b:upperBluePoint];
     
     double QTDotB[8];
-    int tetraNo = 0;
     
     if (deltaX >= deltaY && deltaY >= deltaZ) {
-        tetraNo = 1;
         QTDotB[0] = 1.0 - deltaX;
         QTDotB[1] = 0;
         QTDotB[2] = 0;
@@ -395,7 +393,6 @@
         QTDotB[7] = deltaZ;
     }
     else if (deltaX >= deltaZ && deltaZ >= deltaY){
-        tetraNo = 2;
         QTDotB[0] = 1.0 - deltaX;
         QTDotB[1] = 0;
         QTDotB[2] = 0;
@@ -406,7 +403,6 @@
         QTDotB[7] = deltaY;
     }
     else if (deltaZ >= deltaX && deltaX >= deltaY){
-        tetraNo = 3;
         QTDotB[0] = 1.0 - deltaZ;
         QTDotB[1] = deltaZ - deltaX;
         QTDotB[2] = 0;
@@ -417,7 +413,6 @@
         QTDotB[7] = deltaY;
     }
     else if (deltaY >= deltaX && deltaX >= deltaZ){
-        tetraNo = 4;
         QTDotB[0] = 1.0 - deltaY;
         QTDotB[1] = 0;
         QTDotB[2] = deltaY - deltaX;
@@ -428,7 +423,6 @@
         QTDotB[7] = deltaZ;
     }
     else if (deltaY >= deltaZ && deltaZ >= deltaX){
-        tetraNo = 5;
         QTDotB[0] = 1.0 - deltaY;
         QTDotB[1] = 0;
         QTDotB[2] = deltaY - deltaZ;
@@ -439,7 +433,6 @@
         QTDotB[7] = deltaX;
     }
     else{
-        tetraNo = 6;
         QTDotB[0] = 1.0 - deltaZ;
         QTDotB[1] = deltaZ - deltaY;
         QTDotB[2] = 0;
