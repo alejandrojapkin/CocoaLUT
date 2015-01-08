@@ -9,6 +9,7 @@
 #import <XCTest/XCTest.h>
 #import <CocoaLUT/CocoaLUT.h>
 #import <CocoaLUT/LUTColorTransferFunction.h>
+#import <CocoaLUT/LUTColorSpace.h>
 #import "TestHelper.h"
 
 @interface TransformAccuracyTests : XCTestCase
@@ -34,6 +35,22 @@
     lut = [lut LUTByResizingToSize:33];
 
     XCTAssert([identity equalsLUT:lut], @"3D Resize precision error.");
+}
+
+- (void)testResizeAccuracy3DComplex {
+    LUT3D *lut33 = (LUT3D *)[TestHelper loadLUT:@"AlexaV3_K1S1_LogC2Video_Rec709_EE_33" extension:@"cube"];
+    LUT3D *lut33Resized65 = [lut33 LUTByResizingToSize:65];
+    
+    LUT3D *lut65 = (LUT3D *)[TestHelper loadLUT:@"AlexaV3_K1S1_LogC2Video_Rec709_EE_65" extension:@"cube"];
+    
+    LUTColor *sMAPE = [lut33Resized65 symetricalMeanAbsolutePercentageError:lut65];
+    LUTColor *maxAbsoluteError = [lut33Resized65 maximumAbsoluteError:lut65];
+    LUTColor *averageAbsoluteError = [lut33Resized65 averageAbsoluteError:lut65];
+    
+    XCTAssert(sMAPE.red <= 0.010395 && sMAPE.green <= 0.010160 && sMAPE.blue <= 0.007201, @"3D Resize precision error."); //tetrahedral interpolation resize sMAPE
+    XCTAssert(maxAbsoluteError.red <= 0.132559 && maxAbsoluteError.green <= 0.114145 && maxAbsoluteError.blue <= 0.078125, @"3D Resize precision error."); //tetrahedral interpolation resize MAE
+    XCTAssert(averageAbsoluteError.red <= 0.001069 && averageAbsoluteError.green <= 0.000813 && averageAbsoluteError.blue <= 0.000516, @"3D Resize precision error."); //tetrahedral interpolation resize AAE
+    
 }
 
 - (void)testReverse1DIdentity{
