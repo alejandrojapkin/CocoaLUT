@@ -307,9 +307,49 @@
     }
 }
 
-- (LUTColor *)colorAtInterpolatedR:(double)redPoint g:(double)greenPoint b:(double)bluePoint {
-    NSUInteger cubeSize = self.size;
 
+//- (LUTColor *)colorAtInterpolatedR:(double)redPoint g:(double)greenPoint b:(double)bluePoint {
+//    if ((redPoint < 0   || redPoint     > self.size - 1) ||
+//        (greenPoint < 0 || greenPoint   > self.size - 1) ||
+//        (bluePoint < 0  || bluePoint    > self.size - 1)) {
+//        @throw [NSException exceptionWithName:@"InvalidInputs"
+//                                       reason:[NSString stringWithFormat:@"Tried to access out-of-bounds lattice point r:%f g:%f b:%f", redPoint, greenPoint, bluePoint]
+//                                     userInfo:nil];
+//    }
+//
+//    double lowerRedPoint = floor(redPoint);
+//    double upperRedPoint = ceil(redPoint);
+//    
+//    double lowerGreenPoint = floor(greenPoint);
+//    double upperGreenPoint = ceil(greenPoint);
+//    
+//    double lowerBluePoint = floor(bluePoint);
+//    double upperBluePoint = ceil(bluePoint);
+//
+//    LUTColor *C000 = [self colorAtR:lowerRedPoint g:lowerGreenPoint b:lowerBluePoint];
+//    LUTColor *C010 = [self colorAtR:lowerRedPoint g:lowerGreenPoint b:upperBluePoint];
+//    LUTColor *C100 = [self colorAtR:upperRedPoint g:lowerGreenPoint b:lowerBluePoint];
+//    LUTColor *C001 = [self colorAtR:lowerRedPoint g:upperGreenPoint b:lowerBluePoint];
+//    LUTColor *C110 = [self colorAtR:upperRedPoint g:lowerGreenPoint b:upperBluePoint];
+//    LUTColor *C111 = [self colorAtR:upperRedPoint g:upperGreenPoint b:upperBluePoint];
+//    LUTColor *C101 = [self colorAtR:upperRedPoint g:upperGreenPoint b:lowerBluePoint];
+//    LUTColor *C011 = [self colorAtR:lowerRedPoint g:upperGreenPoint b:upperBluePoint];
+//
+//    LUTColor *C00  = [C000 lerpTo:C100 amount:1.0 - (upperRedPoint - redPoint)];
+//    LUTColor *C10  = [C010 lerpTo:C110 amount:1.0 - (upperRedPoint - redPoint)];
+//    LUTColor *C01  = [C001 lerpTo:C101 amount:1.0 - (upperRedPoint - redPoint)];
+//    LUTColor *C11  = [C011 lerpTo:C111 amount:1.0 - (upperRedPoint - redPoint)];
+//
+//    LUTColor *C1 = [C01 lerpTo:C11 amount:1.0 - (upperBluePoint - bluePoint)];
+//    LUTColor *C0 = [C00 lerpTo:C10 amount:1.0 - (upperBluePoint - bluePoint)];
+//
+//    LUTColor *final = [C0 lerpTo:C1 amount:1.0 - (upperGreenPoint - greenPoint)];
+//    
+//    
+//    return final;
+//}
+
+- (LUTColor *)colorAtInterpolatedR:(double)redPoint g:(double)greenPoint b:(double)bluePoint {
     if ((redPoint < 0   || redPoint     > self.size - 1) ||
         (greenPoint < 0 || greenPoint   > self.size - 1) ||
         (bluePoint < 0  || bluePoint    > self.size - 1)) {
@@ -317,34 +357,109 @@
                                        reason:[NSString stringWithFormat:@"Tried to access out-of-bounds lattice point r:%f g:%f b:%f", redPoint, greenPoint, bluePoint]
                                      userInfo:nil];
     }
-
-    double lowerRedPoint = clamp(floor(redPoint), 0, cubeSize-1);
-    double upperRedPoint = clamp(lowerRedPoint + 1, 0, cubeSize-1);
-
-    double lowerGreenPoint = clamp(floor(greenPoint), 0, cubeSize-1);
-    double upperGreenPoint = clamp(lowerGreenPoint + 1, 0, cubeSize-1);
-
-    double lowerBluePoint = clamp(floor(bluePoint), 0, cubeSize-1);
-    double upperBluePoint = clamp(lowerBluePoint + 1, 0, cubeSize-1);
-
-    LUTColor *C000 = [self colorAtR:lowerRedPoint g:lowerGreenPoint b:lowerBluePoint];
-    LUTColor *C010 = [self colorAtR:lowerRedPoint g:lowerGreenPoint b:upperBluePoint];
-    LUTColor *C100 = [self colorAtR:upperRedPoint g:lowerGreenPoint b:lowerBluePoint];
-    LUTColor *C001 = [self colorAtR:lowerRedPoint g:upperGreenPoint b:lowerBluePoint];
-    LUTColor *C110 = [self colorAtR:upperRedPoint g:lowerGreenPoint b:upperBluePoint];
-    LUTColor *C111 = [self colorAtR:upperRedPoint g:upperGreenPoint b:upperBluePoint];
-    LUTColor *C101 = [self colorAtR:upperRedPoint g:upperGreenPoint b:lowerBluePoint];
-    LUTColor *C011 = [self colorAtR:lowerRedPoint g:upperGreenPoint b:upperBluePoint];
-
-    LUTColor *C00  = [C000 lerpTo:C100 amount:1.0 - (upperRedPoint - redPoint)];
-    LUTColor *C10  = [C010 lerpTo:C110 amount:1.0 - (upperRedPoint - redPoint)];
-    LUTColor *C01  = [C001 lerpTo:C101 amount:1.0 - (upperRedPoint - redPoint)];
-    LUTColor *C11  = [C011 lerpTo:C111 amount:1.0 - (upperRedPoint - redPoint)];
-
-    LUTColor *C1 = [C01 lerpTo:C11 amount:1.0 - (upperBluePoint - bluePoint)];
-    LUTColor *C0 = [C00 lerpTo:C10 amount:1.0 - (upperBluePoint - bluePoint)];
-
-    return [C0 lerpTo:C1 amount:1.0 - (upperGreenPoint - greenPoint)];
+    
+    double lowerRedPoint = floor(redPoint);
+    double upperRedPoint = ceil(redPoint);
+    
+    double lowerGreenPoint = floor(greenPoint);
+    double upperGreenPoint = ceil(greenPoint);
+    
+    double lowerBluePoint = floor(bluePoint);
+    double upperBluePoint = ceil(bluePoint);
+    
+    double deltaX = redPoint - lowerRedPoint;
+    double deltaY = greenPoint - lowerGreenPoint;
+    double deltaZ = bluePoint - lowerBluePoint;
+    
+    LUTColor *P000 = [self colorAtR:lowerRedPoint g:lowerGreenPoint b:lowerBluePoint];
+    LUTColor *P001 = [self colorAtR:lowerRedPoint g:lowerGreenPoint b:upperBluePoint];
+    LUTColor *P100 = [self colorAtR:upperRedPoint g:lowerGreenPoint b:lowerBluePoint];
+    LUTColor *P010 = [self colorAtR:lowerRedPoint g:upperGreenPoint b:lowerBluePoint];
+    LUTColor *P101 = [self colorAtR:upperRedPoint g:lowerGreenPoint b:upperBluePoint];
+    LUTColor *P111 = [self colorAtR:upperRedPoint g:upperGreenPoint b:upperBluePoint];
+    LUTColor *P110 = [self colorAtR:upperRedPoint g:upperGreenPoint b:lowerBluePoint];
+    LUTColor *P011 = [self colorAtR:lowerRedPoint g:upperGreenPoint b:upperBluePoint];
+    
+    double QTDotB[8];
+    int tetraNo = 0;
+    
+    if (deltaX >= deltaY && deltaY >= deltaZ) {
+        tetraNo = 1;
+        QTDotB[0] = 1.0 - deltaX;
+        QTDotB[1] = 0;
+        QTDotB[2] = 0;
+        QTDotB[3] = 0;
+        QTDotB[4] = deltaX - deltaY;
+        QTDotB[5] = 0;
+        QTDotB[6] = deltaY - deltaZ;
+        QTDotB[7] = deltaZ;
+    }
+    else if (deltaX >= deltaZ && deltaZ >= deltaY){
+        tetraNo = 2;
+        QTDotB[0] = 1.0 - deltaX;
+        QTDotB[1] = 0;
+        QTDotB[2] = 0;
+        QTDotB[3] = 0;
+        QTDotB[4] = deltaX - deltaZ;
+        QTDotB[5] = deltaZ - deltaY;
+        QTDotB[6] = 0;
+        QTDotB[7] = deltaY;
+    }
+    else if (deltaZ >= deltaX && deltaX >= deltaY){
+        tetraNo = 3;
+        QTDotB[0] = 1.0 - deltaZ;
+        QTDotB[1] = deltaZ - deltaX;
+        QTDotB[2] = 0;
+        QTDotB[3] = 0;
+        QTDotB[4] = 0;
+        QTDotB[5] = deltaX - deltaY;
+        QTDotB[6] = 0;
+        QTDotB[7] = deltaY;
+    }
+    else if (deltaY >= deltaX && deltaX >= deltaZ){
+        tetraNo = 4;
+        QTDotB[0] = 1.0 - deltaY;
+        QTDotB[1] = 0;
+        QTDotB[2] = deltaY - deltaX;
+        QTDotB[3] = 0;
+        QTDotB[4] = 0;
+        QTDotB[5] = 0;
+        QTDotB[6] = deltaX - deltaZ;
+        QTDotB[7] = deltaZ;
+    }
+    else if (deltaY >= deltaZ && deltaZ >= deltaX){
+        tetraNo = 5;
+        QTDotB[0] = 1.0 - deltaY;
+        QTDotB[1] = 0;
+        QTDotB[2] = deltaY - deltaZ;
+        QTDotB[3] = deltaZ - deltaX;
+        QTDotB[4] = 0;
+        QTDotB[5] = 0;
+        QTDotB[6] = 0;
+        QTDotB[7] = deltaX;
+    }
+    else{
+        tetraNo = 6;
+        QTDotB[0] = 1.0 - deltaZ;
+        QTDotB[1] = deltaZ - deltaY;
+        QTDotB[2] = 0;
+        QTDotB[3] = deltaY - deltaX;
+        QTDotB[4] = 0;
+        QTDotB[5] = 0;
+        QTDotB[6] = 0;
+        QTDotB[7] = deltaX;
+    }
+    
+    double red = QTDotB[0]*P000.red + QTDotB[1]*P001.red + QTDotB[2]*P010.red + QTDotB[3]*P011.red + QTDotB[4]*P100.red + QTDotB[5]*P101.red + QTDotB[6]*P110.red + QTDotB[7]*P111.red;
+    
+    double green = QTDotB[0]*P000.green + QTDotB[1]*P001.green + QTDotB[2]*P010.green + QTDotB[3]*P011.green + QTDotB[4]*P100.green + QTDotB[5]*P101.green + QTDotB[6]*P110.green + QTDotB[7]*P111.green;
+    
+    double blue = QTDotB[0]*P000.blue + QTDotB[1]*P001.blue + QTDotB[2]*P010.blue + QTDotB[3]*P011.blue + QTDotB[4]*P100.blue + QTDotB[5]*P101.blue + QTDotB[6]*P110.blue + QTDotB[7]*P111.blue;
+    
+    
+    LUTColor *tetraFinal = [LUTColor colorWithRed:red green:green blue:blue];
+    
+    return tetraFinal;
 }
 
 
