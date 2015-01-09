@@ -16,6 +16,7 @@
 
 typedef NS_ENUM(NSInteger, LUTMonoConversionMethod) {
     LUTMonoConversionMethodAverageRGB,
+    LUTMonoConversionMethodRec709WeightedRGB,
     LUTMonoConversionMethodRedCopiedToRGB,
     LUTMonoConversionMethodGreenCopiedToRGB,
     LUTMonoConversionMethodBlueCopiedToRGB

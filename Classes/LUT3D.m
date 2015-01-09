@@ -225,6 +225,9 @@
     if(conversionMethod == LUTMonoConversionMethodAverageRGB){
         convertToMonoBlock = ^(LUTColor *color){double average = (color.red+color.green+color.blue)/3.0; return [LUTColor colorWithRed:average green:average blue:average];};
     }
+    else if (conversionMethod == LUTMonoConversionMethodRec709WeightedRGB){
+        convertToMonoBlock = ^(LUTColor *color){return [color colorByChangingSaturation:0 usingLumaR:0.2126 lumaG:0.7152 lumaB:0.0722];};
+    }
     else if (conversionMethod == LUTMonoConversionMethodRedCopiedToRGB){
         convertToMonoBlock = ^(LUTColor *color){return [LUTColor colorWithRed:color.red green:color.red blue:color.red];};
     }
@@ -234,6 +237,7 @@
     else if (conversionMethod == LUTMonoConversionMethodBlueCopiedToRGB){
         convertToMonoBlock = ^(LUTColor *color){return [LUTColor colorWithRed:color.blue green:color.blue blue:color.blue];};
     }
+    
 
 
     [newLUT LUTLoopWithBlock:^(size_t r, size_t g, size_t b) {
@@ -249,6 +253,7 @@
 
 + (M13OrderedDictionary *)LUTMonoConversionMethods{
     return M13OrderedDictionaryFromOrderedArrayWithDictionaries(@[@{@"Averaged RGB":@(LUTMonoConversionMethodAverageRGB)},
+                                                                  @{@"Rec. 709 Weighted RGB":@(LUTMonoConversionMethodRec709WeightedRGB)},
                                                                   @{@"Copy Red Channel":@(LUTMonoConversionMethodRedCopiedToRGB)},
                                                                   @{@"Copy Green Channel":@(LUTMonoConversionMethodGreenCopiedToRGB)},
                                                                   @{@"Copy Blue Channel":@(LUTMonoConversionMethodBlueCopiedToRGB)}]);
