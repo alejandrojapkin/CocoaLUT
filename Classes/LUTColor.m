@@ -20,17 +20,17 @@
 
 -(instancetype)initWithCoder:(NSCoder *)aDecoder{
     if (self = [super init]) {
-        self.red = [[aDecoder decodeObjectForKey:@"red"] doubleValue];
-        self.green = [[aDecoder decodeObjectForKey:@"green"] doubleValue];
-        self.blue = [[aDecoder decodeObjectForKey:@"blue"] doubleValue];
+        self.red = [aDecoder decodeDoubleForKey:@"red"];
+        self.green = [aDecoder decodeDoubleForKey:@"green"];
+        self.blue = [aDecoder decodeDoubleForKey:@"blue"];
     }
     return self;
 }
 
 - (void)encodeWithCoder:(NSCoder *)aCoder{
-    [aCoder encodeObject:@(self.red) forKey:@"red"];
-    [aCoder encodeObject:@(self.green) forKey:@"green"];
-    [aCoder encodeObject:@(self.blue) forKey:@"blue"];
+    [aCoder encodeDouble:self.red forKey:@"red"];
+    [aCoder encodeDouble:self.green forKey:@"green"];
+    [aCoder encodeDouble:self.blue forKey:@"blue"];
 }
 
 + (instancetype)colorWithRed:(LUTColorValue)r green:(LUTColorValue)g blue:(LUTColorValue)b {
