@@ -163,11 +163,11 @@
     NSUInteger lut1DSize = data[@"lut1DSize"] == nil ? 0 : [data[@"lut1DSize"] integerValue];
     NSUInteger lut3DSize = data[@"lut3DSize"] == nil ? 0 : [data[@"lut3DSize"] integerValue];
 
-    double lut1DInputLowerBound;
-    double lut1DInputUpperBound;
+    double lut1DInputLowerBound = 0;
+    double lut1DInputUpperBound = 0;
 
-    double lut3DInputLowerBound;
-    double lut3DInputUpperBound;
+    double lut3DInputLowerBound = 0;
+    double lut3DInputUpperBound = 0;
 
     if (nucodaVersion == 1 || nucodaVersion == 2) {
         lut1DInputLowerBound = 0;

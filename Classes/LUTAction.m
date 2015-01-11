@@ -97,7 +97,7 @@
 
     M13OrderedDictionary *actionMetadata =
     M13OrderedDictionaryFromOrderedArrayWithDictionaries(@[@{@"id":@"MixCurves"},
-                                                           @{@"method":methodName}]);
+                                                           @{@"method":methodName?:@"Unknown"}]);
 
     return [LUTAction actionWithBlock:^LUT *(LUT *lut) {
         if (isLUT1D(lut)) {
