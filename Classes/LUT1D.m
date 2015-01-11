@@ -25,9 +25,21 @@
 - (instancetype)initWithCoder:(NSCoder *)aDecoder{
     self = [super initWithCoder:aDecoder];
     if(self){
-        self.redCurve = [aDecoder decodeObjectForKey:@"redCurve"];
-        self.greenCurve = [aDecoder decodeObjectForKey:@"greenCurve"];
-        self.blueCurve = [aDecoder decodeObjectForKey:@"blueCurve"];
+        self.redCurve = [NSMutableArray array];
+        self.greenCurve = [NSMutableArray array];
+        self.blueCurve = [NSMutableArray array];
+        
+        NSData *redData = [aDecoder decodeObjectForKey:@"redCurveData"];
+        NSData *greenData = [aDecoder decodeObjectForKey:@"greenCurveData"];
+        NSData *blueData = [aDecoder decodeObjectForKey:@"blueCurveData"];
+        
+        if (redData.length != sizeof(double)*self.size || greenData.length != sizeof(double)*self.size || blueData.length != sizeof(double)*self.size) {
+            return nil;
+        }
+        
+        for (int i = 0; i < self.size; i++) {
+            [self setColor:[LUTColor colorWithRed:((double *)redData.bytes)[i] green:((double *)greenData.bytes)[i] blue:((double *)blueData.bytes)[i]] r:i g:i b:i];
+        }
     }
     
     return self;
@@ -35,9 +47,19 @@
 
 - (void)encodeWithCoder:(NSCoder *)aCoder{
     [super encodeWithCoder:aCoder];
-    [aCoder encodeObject:self.redCurve forKey:@"redCurve"];
-    [aCoder encodeObject:self.greenCurve forKey:@"greenCurve"];
-    [aCoder encodeObject:self.blueCurve forKey:@"blueCurve"];
+    double *redData = malloc(sizeof(double)*self.size);
+    double *greenData = malloc(sizeof(double)*self.size);
+    double *blueData = malloc(sizeof(double)*self.size);
+    
+    for (int i = 0; i < self.size; i++) {
+        redData[i] = [self.redCurve[i] doubleValue];
+        greenData[i] = [self.greenCurve[i] doubleValue];
+        blueData[i] = [self.blueCurve[i] doubleValue];
+    }
+    
+    [aCoder encodeObject:[NSData dataWithBytesNoCopy:redData length:sizeof(double)*self.size] forKey:@"redCurveData"];
+    [aCoder encodeObject:[NSData dataWithBytesNoCopy:greenData length:sizeof(double)*self.size] forKey:@"greenCurveData"];
+    [aCoder encodeObject:[NSData dataWithBytesNoCopy:blueData length:sizeof(double)*self.size] forKey:@"blueCurveData"];
 }
 
 + (instancetype)LUT1DWithRedCurve:(NSMutableArray *)redCurve

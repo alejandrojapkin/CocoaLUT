@@ -17,7 +17,23 @@
 - (instancetype)initWithCoder:(NSCoder *)aDecoder{
     self = [super initWithCoder:aDecoder];
     if(self){
-        self.latticeArray = [aDecoder decodeObjectForKey:@"latticeArray"];
+        self.latticeArray = [LUT3D blankLatticeArrayOfSize:self.size];
+        NSData *latticeData = [aDecoder decodeObjectForKey:@"latticeData"];
+        
+        if (latticeData.length != sizeof(double)*3*self.size*self.size*self.size) {
+            return nil;
+        }
+        
+        double *dataBytes = (double *)latticeData.bytes;
+        
+        for (int i = 0; i < 3*self.size*self.size*self.size; i+=3) {
+            int currentCubeIndex = i/3;
+            int redIndex = currentCubeIndex % self.size;
+            int greenIndex = ((currentCubeIndex % (self.size * self.size)) / (self.size) );
+            int blueIndex = currentCubeIndex / (self.size * self.size);
+            
+            [self setColor:[LUTColor colorWithRed:dataBytes[i] green:dataBytes[i+1] blue:dataBytes[i+2]] r:redIndex g:greenIndex b:blueIndex];
+        }
     }
     
     return self;
@@ -25,7 +41,21 @@
 
 - (void)encodeWithCoder:(NSCoder *)aCoder{
     [super encodeWithCoder:aCoder];
-    [aCoder encodeObject:self.latticeArray forKey:@"latticeArray"];
+    double *latticeData = malloc(sizeof(double)*3*self.size*self.size*self.size);
+    
+    for (int i = 0; i < 3*self.size*self.size*self.size; i+=3) {
+        int currentCubeIndex = i/3;
+        int redIndex = currentCubeIndex % self.size;
+        int greenIndex = ((currentCubeIndex % (self.size * self.size)) / (self.size) );
+        int blueIndex = currentCubeIndex / (self.size * self.size);
+        
+        LUTColor *color = [self colorAtR:redIndex g:greenIndex b:blueIndex];
+        latticeData[i] = color.red;
+        latticeData[i+1] = color.green;
+        latticeData[i+2] = color.blue;
+    }
+    
+    [aCoder encodeObject:[NSData dataWithBytesNoCopy:latticeData length:sizeof(double)*3*self.size*self.size*self.size] forKey:@"latticeData"];
 }
 
 - (instancetype)initWithSize:(NSUInteger)size
