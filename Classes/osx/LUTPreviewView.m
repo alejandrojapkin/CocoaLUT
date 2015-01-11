@@ -8,6 +8,10 @@
 
 #import "LUTPreviewView.h"
 #import <QuartzCore/QuartzCore.h>
+#if defined(COCOAPODS_POD_AVAILABLE_VVSceneLinearImageRep)
+#import <VVSceneLinearImageRep/NSImage+SceneLinear.h>
+#endif
+
 
 @interface LUTPreviewView () {}
 
@@ -106,11 +110,23 @@
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         NSImage *lutImage = self.previewImage;
         if (self.lut && lutImage) {
-            lutImage = [self.lut processNSImage:self.previewImage renderPath:LUTImageRenderPathCoreImage];
+            NSImage *usedImage = self.previewImage;
+            LUT *usedLUT = self.lut;
+            #if defined(COCOAPODS_POD_AVAILABLE_VVSceneLinearImageRep)
+            if ([self.previewImage isSceneLinear]) {
+                usedImage = [[self.previewImage imageInDeviceRGBColorSpace] imageByNormalizingSceneLinearData];
+                usedLUT = [self.lut LUTByChangingInputLowerBound:[usedImage minimumSceneValue] inputUpperBound:[usedImage maximumSceneValue]];
+            }
+            #endif
+            lutImage = [usedLUT processNSImage:usedImage renderPath:LUTImageRenderPathCoreImage];
         }
         dispatch_async(dispatch_get_main_queue(), ^{
             self.lutImageLayer.contents = lutImage;
+            #if defined(COCOAPODS_POD_AVAILABLE_VVSceneLinearImageRep)
+            self.normalImageLayer.contents = [self.previewImage isSceneLinear]?[self.previewImage imageInDeviceRGBColorSpace]:self.previewImage;
+            #else
             self.normalImageLayer.contents = self.previewImage;
+            #endif
         });
     });
 }
