@@ -115,7 +115,7 @@
 }
 
 -(void)setLut:(LUT1D *)lut{
-    _lut = lut;
+    _lut = lut.size>4096?[lut LUTByResizingToSize:4096]:lut;//temp fix until we figure out layers
     [self lutDidChange];
 
 }
