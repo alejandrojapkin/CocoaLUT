@@ -265,7 +265,7 @@
         double minValue = [[curve valueForKeyPath:@"@min.self"] doubleValue];
         double maxValue = [[curve valueForKeyPath:@"@max.self"] doubleValue];
 
-
+        int lastJ = 0;
         for(int i = 0; i < usedLUT.size; i++){
             double remappedIndex = remap(i, 0, usedLUT.size-1, newLowerBound, newUpperBound);
 
@@ -276,13 +276,14 @@
                 [newCurve addObject:@(usedLUT.inputUpperBound)];
             }
             else{
-                for(int j = 0; j < usedLUT.size; j++){
+                for(int j = lastJ; j < usedLUT.size; j++){
                     double currentValue = [curve[j] doubleValue];
                     if (currentValue > remappedIndex){
                         double previousValue = [curve[j-1] doubleValue]; //smaller or equal to remappedIndex
                         double lowerValue = remap(j-1, 0, usedLUT.size-1, usedLUT.inputLowerBound, usedLUT.inputUpperBound);
                         double higherValue = remap(j, 0, usedLUT.size-1, usedLUT.inputLowerBound, usedLUT.inputUpperBound);
                         [newCurve addObject:@(lerp1d(lowerValue, higherValue,(remappedIndex - previousValue)/(currentValue - previousValue)))];
+                        lastJ = j;
                         break;
                     }
                 }
@@ -311,8 +312,8 @@
 
     if (autoAdjustInputBounds && (self.inputLowerBound < newLUT.inputLowerBound || self.inputUpperBound > newLUT.inputUpperBound)){
         //if the original LUT encompasses a greater bound in some way, make the output LUT fill that bound too
-        double inputLowerBound = self.inputLowerBound < newLUT.inputLowerBound ? self.inputLowerBound : newLUT.inputLowerBound;
-        double inputUpperBound = self.inputUpperBound > newLUT.inputUpperBound ? self.inputUpperBound : newLUT.inputUpperBound;
+        double inputLowerBound = MIN(self.inputLowerBound, newLUT.inputLowerBound);
+        double inputUpperBound = MAX(self.inputUpperBound, newLUT.inputUpperBound);
 
         newLUT = [newLUT LUTByChangingInputLowerBound:inputLowerBound inputUpperBound:inputUpperBound];
     }
