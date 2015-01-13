@@ -287,7 +287,6 @@ forwardFootlambertCompensation:(double)flCompensation
                                      [self dragonColor2ColorSpace],
                                      [self canonCinemaGamutColorSpace],
                                      [self canonDCIP3PlusColorSpace],
-                                     [self dragonColor2ColorSpace],
                                      [self vGamutColorSpace],
                                      [self acesGamutColorSpace],
                                      [self dciXYZColorSpace],
