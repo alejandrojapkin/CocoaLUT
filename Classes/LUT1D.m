@@ -383,7 +383,7 @@
 
 - (CIFilter *)coreImageFilterWithColorSpace:(CGColorSpaceRef)colorSpace{
     #if defined(COCOAPODS_POD_AVAILABLE_VVLUT1DFilter)
-    LUT1D *usedLUT = [self LUTByResizingToSize:COCOALUT_VVLUT1DFILTER_SIZE];
+    LUT1D *usedLUT = self.size>COCOALUT_VVLUT1DFILTER_SIZE?[self LUTByResizingToSize:COCOALUT_VVLUT1DFILTER_SIZE]:self;
 
 //    if (usedLUT.inputLowerBound != 0.0 || usedLUT.inputUpperBound != 1.0) {
 //        usedLUT = [usedLUT LUTByChangingInputLowerBound:0 inputUpperBound:1];
@@ -412,7 +412,7 @@
     }
 
     [lutFilter setValue:inputData forKey:@"inputData"];
-    [lutFilter setValue:@(COCOALUT_VVLUT1DFILTER_SIZE) forKey:@"inputSize"];
+    [lutFilter setValue:@(usedLUT.size) forKey:@"inputSize"];
 
     return lutFilter;
 
