@@ -33,6 +33,18 @@
     [aCoder encodeDouble:self.blue forKey:@"blue"];
 }
 
++ (instancetype)colorWithZeroes{
+    return [self colorWithValue:0];
+}
+
++ (instancetype)colorWithOnes{
+    return [self colorWithValue:1];
+}
+
++ (instancetype)colorWithValue:(double)value{
+    return [self colorWithRed:value green:value blue:value];
+}
+
 + (instancetype)colorWithRed:(LUTColorValue)r green:(LUTColorValue)g blue:(LUTColorValue)b {
     LUTColor *color = [[LUTColor alloc] init];
     color.red = !isfinite(r) ? 0 : r;
@@ -48,6 +60,14 @@
 
 + (instancetype)colorFromIntegersWithMaxOutputValue:(NSUInteger)maxOutputValue red:(NSUInteger)r green:(NSUInteger)g blue:(NSUInteger)b {
     return [LUTColor colorWithRed:nsremapint01(r, maxOutputValue) green:nsremapint01(g, maxOutputValue) blue:nsremapint01(b, maxOutputValue)];
+}
+
+- (double)minimumValue{
+    return MIN(MIN(self.red, self.green), self.blue);
+}
+
+- (double)maximumValue{
+    return MAX(MAX(self.red, self.green), self.blue);
 }
 
 - (void)setRed:(LUTColorValue)red{

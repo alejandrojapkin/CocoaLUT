@@ -53,6 +53,13 @@ typedef double LUTColorValue;
  */
 + (instancetype)colorWithRed:(LUTColorValue)r green:(LUTColorValue)g blue:(LUTColorValue)b;
 
+
++ (instancetype)colorWithZeroes;
++ (instancetype)colorWithOnes;
++ (instancetype)colorWithValue:(double)value;
+
+
+
 /**
  *  Returns a new color with the provided integer channel values and a bit depth of the color system. Values will be converted to floating-point.
  *
@@ -77,6 +84,9 @@ typedef double LUTColorValue;
                                  currentMax:(double)currentMax
                                    finalMin:(double)finalMin
                                    finalMax:(double)finalMax;
+
+- (double)minimumValue;
+- (double)maximumValue;
 
 /**
  *  Returns a new color with channel values clipped below zero and above 1.
