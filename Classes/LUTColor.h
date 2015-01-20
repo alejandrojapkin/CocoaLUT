@@ -165,6 +165,7 @@ typedef double LUTColorValue;
  */
 - (SystemColor *)systemColor;
 
+- (NSString *)stringFormattedWithFloatingPointLength:(int)length;
 - (NSAttributedString *)colorizedAttributedStringWithFormat:(NSString *)formatString;
 
 @end

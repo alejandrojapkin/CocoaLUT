@@ -245,7 +245,11 @@
     return sqrt(pow(self.red - otherColor.red, 2) + pow(self.green - otherColor.green, 2) + pow(self.blue - otherColor.blue, 2));
 }
 
-
+- (NSString *)stringFormattedWithFloatingPointLength:(int)length{
+    NSString *formatString = [NSString stringWithFormat:@"%%.%if", length];
+    NSString *colorStringFormat = [NSString stringWithFormat:@"(%@, %@, %@)", formatString, formatString, formatString];
+    return [NSString stringWithFormat:colorStringFormat, self.red, self.green, self.blue];
+}
 
 - (NSString *)description{
     return [NSString stringWithFormat:@"(%.6f, %.6f, %.6f)", self.red, self.green, self.blue];
