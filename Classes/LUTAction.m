@@ -384,6 +384,20 @@
                                           actionMetadata:actionMetadata];
 }
 
++(instancetype)actionWithLUTByOffsettingWithColor:(LUTColor *)color{
+    M13OrderedDictionary *actionMetadata =
+    M13OrderedDictionaryFromOrderedArrayWithDictionaries(@[@{@"id":@"Offset"},
+                                                           @{@"redOffset": @(color.red)},
+                                                           @{@"greenOffset": @(color.green)},
+                                                           @{@"blueOffset": @(color.blue)}]);
+    
+    return [LUTAction actionWithBlock:^LUT *(LUT *lut) {
+        return [lut LUTByOffsettingWithColor:color];
+    }
+                           actionName:[NSString stringWithFormat:@"Offset with %@", [color stringFormattedWithFloatingPointLength:3]]
+                       actionMetadata:actionMetadata];
+}
+
 
 
 

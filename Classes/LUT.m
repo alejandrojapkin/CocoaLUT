@@ -243,6 +243,17 @@
     return newLUT;
 }
 
+- (instancetype)LUTByOffsettingWithColor:(LUTColor *)offsetColor{
+    LUT *newLUT = [[self class] LUTOfSize:[self size] inputLowerBound:[self inputLowerBound] inputUpperBound:[self inputUpperBound]];
+    [newLUT copyMetaPropertiesFromLUT:self];
+    
+    [newLUT LUTLoopWithBlock:^(size_t r, size_t g, size_t b) {
+        [newLUT setColor:[[self colorAtR:r g:g b:b] colorByAddingColor:offsetColor] r:r g:g b:b];
+    }];
+    
+    return newLUT;
+}
+
 - (instancetype)LUTByRemappingValuesWithInputLow:(double)inputLow
                                        inputHigh:(double)inputHigh
                                        outputLow:(double)outputLow

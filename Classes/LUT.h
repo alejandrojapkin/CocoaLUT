@@ -142,6 +142,7 @@ typedef NS_ENUM(NSInteger, LUTImageRenderPath) {
 
 - (instancetype)LUTByClampingUpperBoundOnly:(double)upperBound;
 
+- (instancetype)LUTByOffsettingWithColor:(LUTColor *)offsetColor;
 
 - (instancetype)LUTByRemappingValuesWithInputLow:(double)inputLow
                                        inputHigh:(double)inputHigh

@@ -78,4 +78,6 @@
 
 +(instancetype)actionWithLUTByResizingToSize:(NSUInteger)size;
 
++(instancetype)actionWithLUTByOffsettingWithColor:(LUTColor *)color;
+
 @end
