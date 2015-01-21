@@ -15,7 +15,7 @@
     #define _COCOALUT_
 
     #define COCOALUT_MAX_CICOLORCUBE_SIZE 64
-    #define COCOALUT_VVLUT1DFILTER_SIZE 65536
+    #define COCOALUT_MAX_VVLUT1DFILTER_SIZE 65536
 
     #import "LUTHelper.h"
     #import "LUT.h"
