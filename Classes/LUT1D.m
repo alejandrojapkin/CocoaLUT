@@ -385,9 +385,9 @@
     #if defined(COCOAPODS_POD_AVAILABLE_VVLUT1DFilter)
     LUT1D *usedLUT = self.size>COCOALUT_VVLUT1DFILTER_SIZE?[self LUTByResizingToSize:COCOALUT_VVLUT1DFILTER_SIZE]:self;
 
-//    if (usedLUT.inputLowerBound != 0.0 || usedLUT.inputUpperBound != 1.0) {
-//        usedLUT = [usedLUT LUTByChangingInputLowerBound:0 inputUpperBound:1];
-//    }
+    if (usedLUT.inputUpperBound - usedLUT.inputLowerBound != 1.0 && usedLUT.inputUpperBound - usedLUT.inputLowerBound < 2.0) {
+        usedLUT = [usedLUT LUTByChangingInputLowerBound:0 inputUpperBound:1];
+    }
 
     size_t dataSize = sizeof(float)*4*usedLUT.size;
     float* lutArray = (float *)malloc(dataSize);
